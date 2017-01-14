@@ -224,7 +224,7 @@ class Db extends Table {
      */
     protected function make() {
 
-        $tpl = new Mtpl(__DIR__ . '/html/template.html');
+        $tpl = new Mtpl(__DIR__ . '/../html/template.html');
 
         $token = sha1(uniqid());
         $this->session->table->__csrf_token = $token;
