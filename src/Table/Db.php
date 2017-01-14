@@ -562,6 +562,6 @@ class Db extends Table {
                 $tpl->assign("[#{$locution}#]", $translate);
             }
         }
-        $this->HTML .= $tpl->render();
+        return $tpl->render();
     }
 }
