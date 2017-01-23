@@ -16,7 +16,7 @@ class Handler extends Handlers {
      * @param  array $data
      * @throws Exception
      */
-    protected function setStatus($data) {
+    public function setStatus($data) {
 
         if ( ! $this->isValidRequest('table')) {
             throw new Exception('Not valid request');
@@ -65,7 +65,7 @@ class Handler extends Handlers {
      * @param  array $data
      * @throws Exception
      */
-    protected function setSearch($data) {
+    public function setSearch($data) {
 
         if ( ! $this->isValidRequest('table')) {
             throw new Exception('Not valid request');
@@ -84,7 +84,7 @@ class Handler extends Handlers {
      * @return bool
      * @throws Exception
      */
-    protected function setRecordPerPage($data) {
+    public function setRecordPerPage($data) {
 
         if ( ! $this->isValidRequest('table')) {
             throw new Exception('Not valid request');
@@ -101,7 +101,7 @@ class Handler extends Handlers {
     /**
      * @throws Exception
      */
-    protected function setClearSearch() {
+    public function setClearSearch() {
 
         if ( ! $this->isValidRequest('table')) {
             throw new Exception('Not valid request');
@@ -116,7 +116,7 @@ class Handler extends Handlers {
      * @param  array $data
      * @throws Exception
      */
-    protected function setOrder($data) {
+    public function setOrder($data) {
 
         if ( ! $this->isValidRequest('table')) {
             throw new Exception('Not valid request');
@@ -154,7 +154,7 @@ class Handler extends Handlers {
      * @param  array $data
      * @throws Exception
      */
-    protected function deleteData($data) {
+    public function deleteData($data) {
 
         if ( ! $this->isValidRequest('table')) {
             throw new Exception('Not valid request');
