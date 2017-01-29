@@ -226,9 +226,8 @@ class Db extends Table {
 
         $tpl = new Mtpl(__DIR__ . '/../html/template.html');
 
-        $token = sha1(uniqid());
-        $this->session->table->__csrf_token = $token;
-        $tpl->assign('[TOKEN]',    $token);
+        $this->session->table->__csrf_token = $this->token;
+        $tpl->assign('[TOKEN]',    $this->token);
         $tpl->assign('[TPL_DIR]',  $this->theme_src);
         $tpl->assign('[RESOURCE]', $this->resource);
 

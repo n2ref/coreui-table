@@ -412,6 +412,13 @@ table.combine-table .btn-success {
     border-color: #4cae4c;
     color: #fff;
 }
+table.combine-table .btn-success:active,
+table.combine-table .btn-success:focus,
+table.combine-table .btn-success:hover {
+    color: #fff;
+    background-color: #449d44;
+    border-color: #398439;
+}
 table.combine-table .btn-success:active {
     background-color: #449d44;
     border-color: #398439;
@@ -421,7 +428,10 @@ table.combine-table .btn-warning {
     border-color: #eea236;
     color: #fff;
 }
-table.combine-table .btn-warning:active {
+table.combine-table .btn-warning:active,
+table.combine-table .btn-warning:focus,
+table.combine-table .btn-warning:hover {
+    color: #fff;
     background-color: #ec971f;
     border-color: #d58512;
 }

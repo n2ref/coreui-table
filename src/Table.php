@@ -36,6 +36,7 @@ class Table {
     protected $sessData        = array();
     protected $record_count    = 0;
     protected $current_page    = 1;
+    protected $token           = null;
 
     protected $show_delete   = true;
     protected $is_used_fetch = false;
@@ -112,6 +113,10 @@ class Table {
         if ( ! isset($this->session->table)) {
             $this->session->table = new \stdClass();
         }
+
+        $this->token = ! empty($this->session->table) && ! empty($this->session->table->__csrf_token)
+            ? $this->session->table->__csrf_token
+            : sha1(uniqid('coreui', true));
 
         if (isset($this->session->table)) {
             // Количество записей
@@ -349,9 +354,8 @@ class Table {
 
         $tpl = new Mtpl(__DIR__ . '/html/template.html');
 
-        $token = sha1(uniqid());
-        $this->session->table->__csrf_token = $token;
-        $tpl->assign('[TOKEN]',    $token);
+        $this->session->table->__csrf_token = $this->token;
+        $tpl->assign('[TOKEN]',    $this->token);
         $tpl->assign('[TPL_DIR]',  $this->theme_src);
         $tpl->assign('[RESOURCE]', $this->resource);
 
