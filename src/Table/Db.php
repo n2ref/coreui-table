@@ -411,9 +411,7 @@ class Db extends Table {
                         $row = new Row($row);
                     }
                 }
-
-                $tpl->row->assign('[ID]', $row->id);
-                $tpl->row->assign('[#]',  $row_number);
+                $tpl->row->assign('[#]', $row_number);
 
 
                 if ($this->edit_url) {
@@ -460,7 +458,7 @@ class Db extends Table {
                             case 'status':
                                 $cell->setAppendAttr('onclick', 'event.cancelBubble=true;');
                                 if ( ! empty($this->table)) {
-                                    $switch_active = " onclick=\"combine.table.switchActive(this, '{$this->resource}', '{$row->id}');\"";
+                                    $switch_active = " onclick=\"combine.table.switchActive(this, '{$this->resource}', '{$row->{$this->primary_key}}');\"";
                                 } else {
                                     $switch_active = '';
                                 }
@@ -505,7 +503,7 @@ class Db extends Table {
 
 
                 if ($this->show_checkboxes) {
-                    $tpl->row->checkboxes->assign('[ID]', $row->id);
+                    $tpl->row->checkboxes->assign('[ID]', $row->{$this->primary_key});
                     $tpl->row->checkboxes->assign('[#]',  $row_index);
                     $row_index++;
                 }

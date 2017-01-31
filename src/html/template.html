@@ -238,11 +238,6 @@
 
             <!-- BEGIN header -->
             <tr class="table-header">
-                <!-- BEGIN checkboxes -->
-                <th width="1%">
-                    <input class="input" type="checkbox" onclick="combine.table.checkAll(this, '[RESOURCE]')"/>
-                </th>
-                <!-- END checkboxes -->
                 <!-- BEGIN cell -->
                     <!-- BEGIN sort -->
                     <th class="pointer" onclick="combine.table.order('[RESOURCE]', '[COLUMN_NUMBER]')">
@@ -261,20 +256,25 @@
                     </th>
                     <!-- END no_sort -->
                 <!-- END cell -->
+                <!-- BEGIN checkboxes -->
+                <th width="1%">
+                    <input class="input" type="checkbox" onclick="combine.table.checkAll(this, '[RESOURCE]')"/>
+                </th>
+                <!-- END checkboxes -->
             </tr>
             <!-- END header -->
         </thead>
         <tbody>
             <!-- BEGIN row -->
             <tr>
+                <!-- BEGIN col -->
+                <td>[VALUE]</td>
+                <!-- END col -->
                 <!-- BEGIN checkboxes -->
                 <td class="checked-row" onclick="event.cancelBubble=true;">
                     <input id="check-[RESOURCE]-[#]" type="checkbox" value="[ID]">
                 </td>
                 <!-- END checkboxes -->
-                <!-- BEGIN col -->
-                <td>[VALUE]</td>
-                <!-- END col -->
             </tr>
             <!-- END row -->
             <!-- BEGIN no_rows -->

@@ -45,8 +45,8 @@ class Handler extends Handlers {
             throw new Exception('Table not found');
         }
 
-        $primary_key = ! empty($session->db->primary_id)
-            ? $session->db->primary_id
+        $primary_key = ! empty($session->db->primary_key)
+            ? $session->db->primary_key
             : 'id';
 
         $primary_key = $this->db->quoteIdentifier($primary_key);
@@ -176,8 +176,8 @@ class Handler extends Handlers {
         }
 
         $table = $session->db->table;
-        $primary_key = ! empty($session->db->primary_id)
-            ? $session->db->primary_id
+        $primary_key = ! empty($session->db->primary_key)
+            ? $session->db->primary_key
             : 'id';
 
         $primary_key = $this->db->quoteIdentifier($primary_key);
