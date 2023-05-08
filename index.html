@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html id="page-content">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoreUI Table</title>
+
+    <link href="dist/page.min.css" rel="stylesheet"/>
+    <script src="dist/page.min.js"></script>
+
+    <link href="dist/coreui-table.min.css" rel="stylesheet"/>
+    <script src="dist/coreui-table.min.js"></script>
+
+    <script src="src/js/examples.js"></script>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#docs-sidenav">
+
+    <section class="text-left">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-5">
+                    <header>
+                        <nav class="navbar navbar-expand-lg navbar-default">
+                            <div class="container-fluid">
+                                <a class="navbar-brand" href="#">CoreUI</a>
+                                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+                                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                        <li class="nav-item"><a class="nav-link" href="https://shabuninil.github.io/coreui-panel">Panel</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="https://shabuninil.github.io/coreui-form">Form</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="https://shabuninil.github.io/coreui-tabs">Tabs</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="https://shabuninil.github.io/coreui-layout">Layout</a></li>
+                                        <li class="nav-item"><span class="nav-link active">Table</span></li>
+                                        <li class="nav-item"><a class="nav-link" href="https://shabuninil.github.io/coreui-info">Info</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="https://shabuninil.github.io/coreui-modal">Modal</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="https://shabuninil.github.io/coreui-notice">Notice</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="https://shabuninil.github.io/coreui-alert">Alert</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="https://shabuninil.github.io/coreui-confirm">Confirm</a></li>
+                                    </ul>
+
+                                    <ul class="nav navbar-nav navbar-right">
+                                        <li class="nav-item"><a class="nav-link" href="https://github.com/shabuninil/coreui-table">GitHub</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
+                    </header>
+                </div>
+                <div class="col-lg-2">
+                    <div id="docs-sidenav" class="hidden-xs hidden-sm hidden-md d-none d-lg-block"
+                         data-bs-spy="affix" data-bs-offset-top="90" data-bs-offset-bottom="70">
+                        <ul class="nav">
+                            <li><a href="#download">Download</a></li>
+                            <li>
+                                <a href="#examples">Examples</a>
+                                <ul class="nav">
+                                    <li><a href="#example-simple">Simple table</a></li>
+                                    <li><a href="#example-empty">Empty</a></li>
+                                    <li><a href="#example-ajax">Ajax</a></li>
+                                    <li><a href="#example-many-records">Many records</a></li>
+                                    <li><a href="#example-pages">Pages</a></li>
+                                    <li><a href="#example-column-types">Column types</a></li>
+                                    <li><a href="#example-controls">Controls</a></li>
+                                    <li><a href="#example-events">Events</a></li>
+                                    <li><a href="#example-fixed-columns">Fixed columns</a></li>
+                                    <li><a href="#example-all">All options</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#options">Options</a></li>
+                            <li><a href="#methods">Methods</a></li>
+                            <li><a href="#events">Events</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-10">
+                    <h2 id="download">Download</h2>
+                    <div>
+                        <p>
+                            You can download a minimized version of the library or get the full source code at github.com.
+                        </p>
+                        <a class="btn btn-secondary" href="https://github.com/shabuninil/coreui-table/archive/master.zip">Download source</a>
+                    </div>
+
+
+                    <h2 class="section-margin">Install with npm</h2>
+                    <pre><code class="bash">$ npm install coreui-table</code></pre>
+
+
+                    <h2 class="section-margin">Требования</h2>
+                    <p>
+                        Для корректной работы на странице необходимо наличие:
+                        <a href="https://getbootstrap.com/docs/5.3" target="_blank">Bootstrap 5</a>,
+                        <a href="https://jquery.com" target="_blank">jquery</a>
+                    </p>
+
+                    <h2 id="examples" class="section-margin">Examples</h2>
+                    <div>
+                        <h3 id="example-simple">Simple table</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-simple1"></div><br>
+                                <div id="table-simple2"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-simple1"&gt;&lt;/div&gt;
+    &lt;div id="table-simple2"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        let columns = [
+            { field: 'fname', label: 'First Name', width: '15%' },
+            { field: 'lname', label: 'Last Name',  width: '15%' },
+            { field: 'email', label: 'Email' },
+            { field: 'sdate', label: 'Start Date', width: 120, type: 'date' }
+        ];
+        let records = [
+            { id: "1", fname: 'Jane',   lname: 'Doe',     email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
+            { id: "2", fname: 'Stuart', lname: 'Motzart', email: 'frank@gmail.com', sdate: '2023-04-03' },
+            { id: "3", fname: 'Jin',    lname: 'Franson', email: 'peter@gmail.com', sdate: '2023-02-03' }
+        ];
+
+
+        CoreUI.table.create({
+            columns: columns,
+            records: records
+        }).render('table-simple1');
+
+
+        CoreUI.table.create({
+            show: {
+                columnHeaders: false
+            },
+            columns: columns,
+            records: records
+        }).render('table-simple2');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-empty">Empty</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-empty"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-empty"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            columns: [
+                { field: 'fname', label: 'First Name', width: '15%' },
+                { field: 'lname', label: 'Last Name',  width: '15%' },
+                { field: 'email', label: 'Email' },
+                { field: 'sdate', label: 'Start Date', width: 120, type: 'date' }
+            ],
+            records: [ ]
+        }).render('table-empty');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-ajax">Ajax</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-ajax"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-ajax"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            url: 'data/records.json',
+            method: 'GET',
+            maxHeight: 400,
+            show: {
+                columnHeaders: true,
+                total: true
+            },
+            controls: [
+                { type: "button", content: "Reload", attr: { class: 'btn btn-sm btn-secondary' },
+                    onClick: function (event, table) {
+                        table.reload();
+                    }
+                },
+                { type: "button", content: "Lock", attr: { class: 'btn btn-sm btn-secondary' },
+                    onClick: function (event, table) {
+                        table.lock();
+                    }
+                },
+                { type: "button", content: "Unlock", attr: { class: 'btn btn-sm btn-secondary' },
+                    onClick: function (event, table) {
+                        table.unlock();
+                    }
+                }
+            ],
+            columns: [
+                { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
+                { field: 'fname', label: 'First Name', width: '25%' },
+                { field: 'lname', label: 'Last Name', width: '25%' },
+                { field: 'sdate', label: 'Start Date' }
+            ]
+        }).render('table-ajax');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-many-records">Many records</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-many-records"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-many-records"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            url: 'data/many-records.json',
+            method: 'GET',
+            maxHeight: 500,
+            show: {
+                columnHeaders: true,
+                total: true
+            },
+            columns: [
+                { field: 'id',         label: 'ID',            width: 35 },
+                { field: 'name',       label: 'Name',          attr: { class: 'text-nowrap' } },
+                { field: 'age',        label: 'Age',           width: 40 },
+                { field: 'gender',     label: 'Gender',        width: 50 },
+                { field: 'color',      label: 'Color',         width: 60 },
+                { field: 'email',      label: 'Email',         width: 180, attr: { class: 'text-nowrap' } },
+                { field: 'phone',      label: 'Phone',         width: 200, attr: { class: 'text-nowrap' } },
+                { field: 'address',    label: 'Address',       attrHeader: { style : 'min-width: 250px'} },
+                { field: 'about',      label: 'About',         attrHeader: { style : 'min-width: 750px'} },
+                { field: 'registered', label: 'Register Date', type: 'datetime', format: 'DD.MM.YYYY hh:mm:ss', attr: { class: 'text-nowrap' } }
+            ]
+        }).render('table-many-records');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-pages">Pages</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-pages"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-pages"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            url: 'data/page[page].json',
+            method: 'GET',
+            page: 1,
+            recordsPerPage: 15,
+            recordsPerPageList: [ 25, 50, 100, 1000, 0 ], // 0 - all
+            pageParam: 'page',
+            recordsPerPageParam: 'count',
+            maxHeight: 400,
+            show: {
+                total: true,
+                columnHeaders: true,
+                pages: true,
+                pagesJump: true,
+                prePageList: true
+            },
+            controls: [
+                { type: "button", content: "Prev page", attr: { class: 'btn btn-sm btn-secondary' },
+                    onClick: function (event, table) {
+                        table.prevPage();
+                    }
+                },
+                { type: "button", content: "Next page", attr: { class: 'btn btn-sm btn-secondary' },
+                    onClick: function (event, table) {
+                        table.nextPage();
+                    }
+                }
+            ],
+            columns: [
+                { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
+                { field: 'fname',  label: 'First Name', width: '25%' },
+                { field: 'lname',  label: 'Last Name', width: '25%' },
+                { field: 'sdate',  label: 'Start Date' }
+            ]
+        }).render('table-pages');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-column-types">Column types</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-column-types"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-column-types"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            columns: [
+                { type: 'numbers',  width: 25, attr: { class: "border-end text-end" } },
+                { type: 'select' },
+                { type: 'text',     field: 'text',         label: 'Text' },
+                { type: 'number',   field: 'number',       label: 'Number',   width: 100 },
+                { type: 'html',     field: 'html',         label: 'Html',     width: 100 },
+                { type: 'date',     field: 'date',         label: 'Date',     format: 'DD.MM.YYYY',          width: 100  },
+                { type: 'datetime', field: 'datetime',     label: 'Datetime', format: 'DD.MM.YYYY hh:mm:ss', width: 140 },
+                { type: 'switch',   field: 'is_active_sw', label: 'Switch',   valueY: 'Y', valueN: 'N',      width: 50 },
+            ],
+            records: [
+                { text: 'Jane Doe',       number: 1000,    html: '&lt;span style="color: #f00"&gt;Text&lt;/span&gt; &lt;b&gt;bold&lt;/b&gt;',                date: '2023-04-03', datetime: '2023-12-03 12:04:10', is_active_sw: "N" },
+                { text: 'Stuart Motzart', number: 32,      html: '&lt;button class="btn btn-xs btn-outline-secondary"&gt;button&lt;/button&gt;', date: '2023-04-03', datetime: '2023-11-03 13:10:30', is_active_sw: "N" },
+                { text: 'Jin Franson',    number: 1122335, html: '&lt;a href="#"&gt;Link&lt;/a&gt;',                                             date: '2023-04-03', datetime: '2023-04-03 23:57:00', is_active_sw: "Y" },
+                { text: 'Susan Ottie',    number: -2343,   html: '&lt;i class="bi bi-star"&gt;&lt;/i&gt; icon',                                  date: '2023-09-03', datetime: '2023-10-03 05:15:37', is_active_sw: "Y" },
+            ]
+        }).render('table-column-types');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-controls">Controls</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-controls"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-controls"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            primaryKey: 'id',
+            controls: [
+                { type: "link",   content: "Link add", href: "#", attr: { class: 'btn btn-sm btn-success' } },
+                { type: "button", content: "Button delete",       attr: { class: 'btn btn-sm btn-warning' },
+                    onClick: function (event, table) {
+                        let recordsId = table.getSelected();
+
+                        if (recordsId.length > 0) {
+                            alert('Selected records: ' + recordsId.join(', '))
+                        } else {
+                            alert('No selected records');
+                        }
+                    }
+                },
+                { type: "button", content: "Selected records", attr: { class: 'btn btn-sm btn-secondary' },
+                    onClick: function (event, table) {
+                        let records = table.getSelectedRecords();
+
+                        if (records.length > 0) {
+                            alert('Selected records: ' + JSON.stringify(records))
+                        } else {
+                            alert('No selected records');
+                        }
+                    }
+                },
+                { type: "button", content: "Select row 2", attr: { class: 'btn btn-sm btn-secondary' },
+                    onClick: function (event, table) {
+                        table.selectRecord('2');
+                    }
+                },
+                { type: "button", content: "Unselect row 2", attr: { class: 'btn btn-sm btn-secondary' },
+                    onClick: function (event, table) {
+                        table.unselectRecord('2');
+                    }
+                },
+                { type: "button", content: "Select all", attr: { class: 'btn btn-sm btn-secondary' },
+                    onClick: function (event, table) {
+                        table.selectAll();
+                    }
+                },
+                { type: "button", content: "Unselect all", attr: { class: 'btn btn-sm btn-secondary' },
+                    onClick: function (event, table) {
+                        table.unselectAll();
+                    }
+                },
+                { type: "custom", content:
+                    '&lt;div class="form-check"&gt;' +
+                        '&lt;input class="form-check-input" type="checkbox" id="gridCheck"&gt;' +
+                        '&lt;label class="form-check-label" for="gridCheck"&gt;Custom contol&lt;/label&gt;' +
+                    '&lt;/div&gt;'
+                }
+            ],
+            columns: [
+                { type: 'numbers', width: 10, attr: { class: "border-end text-end" } },
+                { type: 'select' },
+                { field: 'name',  label: 'Name' },
+                { field: 'email', label: 'Email',      width: 150 },
+                { field: 'sdate', label: 'Start Date', width: 150, type: 'date', format: 'DD.MM.YYYY' }
+            ],
+            records: [
+                { id: "1", name: 'Jane Doe',       email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
+                { id: "2", name: 'Stuart Motzart', email: 'frank@gmail.com', sdate: '2023-04-03' },
+                { id: "3", name: 'Jin Franson',    email: 'peter@gmail.com', sdate: '2023-02-03' }
+            ]
+        }).render('table-controls');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-events">Events</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-events"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-events"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        let tableEvents = CoreUI.table.create({
+            primaryKey: 'id',
+            columns: [
+                { type: 'numbers', width: 10, attr: { class: "border-end text-end" } },
+                { type: 'select' },
+                { field: 'name',   label: 'Name' },
+                { field: 'email',  label: 'Email',        width: 150 },
+                { type: 'date',    field: 'sdate',        label: 'Start Date', width: 100,  format: 'DD.MM.YYYY' },
+                { type:  'switch', field: 'is_active_sw', label: 'On', valueY: 'Y', valueN: 'N',
+                    onChange: function (record, value) {
+                        alert("Switch record to " + value + ": " + JSON.stringify(record));
+                    }
+                }
+            ],
+            onClick: function (event, record) {
+                alert('Click record: ' + JSON.stringify(record))
+            },
+            records: [
+                { id: "1", name: 'Jane Doe',       email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
+                { id: "2", name: 'Stuart Motzart', email: 'frank@gmail.com', sdate: '2023-04-03' },
+                { id: "3", name: 'Jin Franson',    email: 'peter@gmail.com', sdate: '2023-02-03' }
+            ]
+        });
+
+        tableEvents.render('table-events')
+
+        tableEvents.on('select.coreui.table', function (record) {
+            alert('Select record: ' + JSON.stringify(record));
+        });
+        tableEvents.on('unselect.coreui.table', function (record) {
+            alert('Unselect record: ' + JSON.stringify(record));
+        });
+        tableEvents.on('select-all.coreui.table', function () {
+            alert('Select all records');
+        });
+        tableEvents.on('unselect-all.coreui.table', function () {
+            alert('Unselect all records');
+        });
+        tableEvents.on('shown.coreui.table', function () {
+            console.log('shown')
+        });
+        tableEvents.on('show-records.coreui.table', function () {
+            console.log('show-records')
+        });
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-fixed-columns">Fixed columns</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-fixed-columns"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-fixed-columns"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            height: 550,
+            columnGroups: [
+                [
+                    { label: 'Header 1', attr: { colspan: 17 } },
+                ],
+                [
+                    { label: '', attr: { colspan: 2 } },
+                    { label: 'Header 2', attr: { colspan: 15 } }
+                ]
+            ],
+            columns: [
+                { type: 'numbers', attr: { class: 'text-end' }, fixed: 'left' },
+                { type: 'select',  fixed: 'left' },
+                { type: 'text',    field: 'cell1',  label: 'Column 1',  attr: { style: 'min-width: 150px' }, fixed: 'left' },
+                { type: 'text',    field: 'cell2',  label: 'Column 2',  attr: { style: 'min-width: 150px' }, fixed: 'left' },
+                { type: 'text',    field: 'cell3',  label: 'Column 3',  attr: { style: 'min-width: 150px' } },
+                { type: 'text',    field: 'cell4',  label: 'Column 4',  attr: { style: 'min-width: 150px' } },
+                { type: 'text',    field: 'cell5',  label: 'Column 5',  attr: { style: 'min-width: 150px' } },
+                { type: 'text',    field: 'cell6',  label: 'Column 6',  attr: { style: 'min-width: 150px' } },
+                { type: 'text',    field: 'cell7',  label: 'Column 7',  attr: { style: 'min-width: 150px' } },
+                { type: 'text',    field: 'cell8',  label: 'Column 8',  attr: { style: 'min-width: 150px' } },
+                { type: 'text',    field: 'cell9',  label: 'Column 9',  attr: { style: 'min-width: 150px' } },
+                { type: 'text',    field: 'cell10', label: 'Column 10', attr: { style: 'min-width: 150px' } },
+                { type: 'text',    field: 'cell11', label: 'Column 11', attr: { style: 'min-width: 150px' } },
+                { type: 'text',    field: 'cell12', label: 'Column 12', attr: { style: 'min-width: 150px' } },
+                { type: 'text',    field: 'cell13', label: 'Column 13', attr: { style: 'min-width: 150px' } },
+                { type: 'text',    field: 'cell14', label: 'Column 14', attr: { style: 'min-width: 150px' } },
+                { type: 'text',    field: 'cell15', label: 'Column 15', attr: { style: 'min-width: 150px' }, fixed: 'right' },
+            ],
+            footer: [
+                [
+                    { label: 'Footer', attr: { colspan: 17 } },
+                ]
+            ],
+            records: [ ... ]
+        }).render('table-fixed-columns');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-all">All options</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-all"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-all"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        let tableAll = CoreUI.table.create({
+            id: "table-id",
+            class: 'table-bordered',
+            lang: "ru",
+            width: '100%',
+            minWidth: '100%',
+            maxWidth: '100%',
+            height: 550,
+            minHeight: 550,
+            maxHeight: 550,
+            show: {
+                columnHeaders: true,
+                total: true
+            },
+            fixedBody: false,
+            nowrap: true,
+            controls: [
+                { type: "link",   content: "Добавить", href: "#",                attr: { class: 'btn btn-sm btn-success' } },
+                { type: "button", content: "Удалить", onClick: function (e) { }, attr: { class: 'btn btn-sm btn-warning' } },
+                { type: "custom", content:
+                        '&lt;div class="form-check"&gt;' +
+                            '&lt;input class="form-check-input" type="checkbox" id="gridCheck"&gt;' +
+                            '&lt;label class="form-check-label" for="gridCheck"&gt;Check me&lt;/label&gt;' +
+                        '&lt;/div&gt;'
+                }
+            ],
+            columnGroups: [
+                [
+                    { label: '', attr: { rowspan: 2, colspan: 2 }  },
+                    { label: 'General Information', attr: { colspan: 7 } },
+                ],
+                [
+                    { label: 'Full name', attr: { colspan: 3 } },
+                    { label: 'Important Dates', attr: { colspan: 4, class: "text-center" } }
+                ]
+            ],
+            columns: [
+                { type: 'numbers', fixed: 'left' },
+                { type: 'select',  fixed: 'left' },
+                { type: 'text',    field: 'fname', label: 'First Name', width: '15%'},
+                { type: 'text',    field: 'lname', label: 'Last Name',  width: '15%'},
+                { type: 'text',    field: 'email', label: 'Email' },
+                { type: 'date',    field: 'sdate', label: 'Start Date', width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
+                { type: 'date',    field: 'edate', label: 'End Date',   width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
+                { type: 'number',  field: 'diff',  label: 'Diff Date',  width: 90,  attr: { class: 'text-end' }, attrHeader: { class: 'text-end' },
+                    render: function (record) {
+                        const date1 = new Date(record.sdate);
+                        const date2 = new Date(record.edate);
+                        const diffTime = Math.abs(date2 - date1);
+                        return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    }
+                },
+                { type: 'switch', field: 'is_active_sw', label: 'On', valueY: 'Y', valueN: 'N', fixed: 'right',
+                    onChange: function (record, value) {
+                        console.log(record);
+                        console.log(value);
+                    }
+                },
+            ],
+            footer: [
+                [
+                    { label: 'Total', attr: { colspan: 7, class: 'text-end' } },
+                    { label: '123', attr: { class: 'text-end' } },
+                    { label: '' },
+                ]
+            ],
+            onClick: function (record, event) {
+                console.log(record)
+            },
+            onClickUrl: "#/path/to/object/[id]",
+            records: [
+                { id: 1,  fname: 'Jane',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-12-03', is_active_sw: "N" },
+                { id: 2,  fname: 'Stuart',  lname: 'Motzart',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-11-03', is_active_sw: "N" },
+                { id: 3,  fname: 'Jin',     lname: 'Franson',     email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "Y" },
+                { id: 4,  fname: 'Susan',   lname: 'Ottie',       email: 'frank@gmail.com',    sdate: '2023-09-03', edate: '2023-10-03', is_active_sw: "Y" },
+                { id: 5,  fname: 'Kelly',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-06-24', is_active_sw: "Y" },
+                { id: 6,  fname: 'Francis', lname: 'Gatos',       email: 'jdoe@gmail.com',     sdate: '2023-02-03', edate: '2023-06-03', is_active_sw: "N" },
+                { id: 7,  fname: 'Mark',    lname: 'Welldo',      email: 'susan@gmail.com',    sdate: '2023-04-03', edate: '2023-06-23', is_active_sw: "N" },
+                { id: 8,  fname: 'Thomas',  lname: 'Bahh',        email: 'david@gmail.com',    sdate: '2023-04-03', edate: '2023-09-16', is_active_sw: "N" },
+                { id: 9,  fname: 'Sergei',  lname: 'Rachmaninov', email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
+                { id: 10, fname: 'Jill',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
+                { id: 11, fname: 'Frank',   lname: 'Motzart',     email: 'peterson@gmail.com', sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
+                { id: 12, fname: 'Peter',   lname: 'Franson',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-03', is_active_sw: "N" },
+                { id: 13, fname: 'Andrew',  lname: 'Ottie',       email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-06-19', is_active_sw: "N" },
+                { id: 14, fname: 'Manny',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-05', is_active_sw: "N" },
+                { id: 15, fname: 'Ben',     lname: 'Gatos',       email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-09-03', is_active_sw: "N" },
+                { id: 16, fname: 'Doer',    lname: 'Welldo',      email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-07', is_active_sw: "N" },
+                { id: 17, fname: 'Shashi',  lname: 'Bahh',        email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
+                { id: 18, fname: 'Av',      lname: 'Rachmaninov', email: 'joe@gmail.com',      sdate: '2023-09-03', edate: '2023-12-06', is_active_sw: "N" },
+                { id: 19, fname: 'John',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-09-03', edate: '2023-12-06', is_active_sw: "N" ,
+                    coreui: {
+                        attr: { class: 'table-row' },
+                        fields: {
+                            fname: {
+                                attr: { style: 'font-weight: bold', class: 'cell' },
+                            }
+                        },
+                    }
+                }
+            ]
+        });
+
+        $('#table-all').html(tableAll.render());
+        tableAll.initEvents();
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+                    </div>
+
+
+                    <h2 id="options" class="section-margin">Options</h2>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped js-options-table">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>type</th>
+                                <th>default</th>
+                                <th>description</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th>id</th> <td>string</td> <td><code>crc32b</code></td>
+                                <td>Идентификатор таблицы. Этот id будет указан вместо уникального значения</td>
+                            </tr>
+                            <tr>
+                                <th>class</th> <td>string</td> <td></td>
+                                <td>Значение для атрибута сlass для таблицы</td>
+                            </tr>
+                            <tr>
+                                <th>primaryKey</th> <td>string</td> <td><code>id</code></td>
+                                <td>Имя поля которое является первичным ключом в строках</td>
+                            </tr>
+                            <tr>
+                                <th>lang</th> <td>string</td> <td><code>ru</code></td>
+                                <td>Двухбуквенное обозначение языка</td>
+                            </tr>
+                            <tr>
+                                <th>width</th> <td>string|numeric</td> <td></td>
+                                <td>Ширина таблицы</td>
+                            </tr>
+                            <tr>
+                                <th>minWidth</th> <td>string|numeric</td> <td></td>
+                                <td>Минимальная ширина таблицы</td>
+                            </tr>
+                            <tr>
+                                <th>maxWidth</th> <td>string|numeric</td> <td></td>
+                                <td>Максимальная ширина таблицы</td>
+                            </tr>
+                            <tr>
+                                <th>height</th> <td>string|numeric</td> <td></td>
+                                <td>Высота таблицы таблицы</td>
+                            </tr>
+                            <tr>
+                                <th>minHeight</th> <td>string|numeric</td> <td></td>
+                                <td>Минимальная высота таблицы</td>
+                            </tr>
+                            <tr>
+                                <th>maxHeight</th> <td>string|numeric</td> <td></td>
+                                <td>Максимальная высота таблицы</td>
+                            </tr>
+                            <tr>
+                                <th>onClick</th> <td>function</td> <td></td>
+                                <td>Событие выполняемое при клике на строку</td>
+                            </tr>
+                            <tr>
+                                <th>onClickUrl</th> <td>string</td> <td></td>
+                                <td>Адрес открываемый при клике на строку</td>
+                            </tr>
+                            <tr>
+                                <th>page</th> <td>int</td> <td><code>1</code></td>
+                                <td>Текущая страница</td>
+                            </tr>
+                            <tr>
+                                <th>recordsPerPage</th> <td>int</td> <td><code>25</code></td>
+                                <td>Количество строк на странице</td>
+                            </tr>
+                            <tr>
+                                <th>recordsPerPageList</th> <td>array</td> <td><code>[25, 50, 100, 1000]</code></td>
+                                <td>Варианты для изменения количество строк на странице</td>
+                            </tr>
+                            <tr>
+                                <th>pageParam</th> <td>string</td> <td><code>page</code></td>
+                                <td>Имя параметра указывающего страницу для подстановки при переходе по страницам</td>
+                            </tr>
+                            <tr>
+                                <th>recordsPerPageParam</th> <td>string</td> <td><code>count</code></td>
+                                <td>Имя параметра указывающего количества срок на странице для подстановки при переходе по страницам</td>
+                            </tr>
+                            <tr>
+                                <th>method</th> <td>string</td> <td><code>GET</code></td>
+                                <td>Http метод выполняемый для загрузки строк</td>
+                            </tr>
+                            <tr>
+                                <th>url</th> <td>string</td> <td></td>
+                                <td>Адрес для загрузки строк</td>
+                            </tr>
+                            <tr>
+                                <th>show</th> <td>object</td>
+                                <td>
+                                    {
+                                        total: false,
+                                        columnHeaders: true,
+                                        pages: false,
+                                        pagesJump: false,
+                                        prePageList: false
+                                    }
+                                </td>
+                                <td>Параметры настраивающие отображаемые элементы таблицы</td>
+                            </tr>
+                            <tr>
+                                <th>controls</th> <td>array</td> <td> </td>
+                                <td>Массив настроек для отображения колонок таблицы и их свойств</td>
+                            </tr>
+                            <tr>
+                                <th>columnGroups</th> <td>array</td> <td> </td>
+                                <td>Массив настроек для отображения групп колонок таблицы и их свойств</td>
+                            </tr>
+                            <tr>
+                                <th>controls</th> <td>array</td> <td> </td>
+                                <td>Массив настроек для отображения элементов управления таблицей</td>
+                            </tr>
+                            <tr>
+                                <th>footer</th> <td>array</td> <td> </td>
+                                <td>Массив настроек для отображения нижней части таблицы</td>
+                            </tr>
+                            <tr>
+                                <th>records</th> <td>array</td> <td> </td>
+                                <td>Массив строк отображаемых в таблице</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <h2 id="methods" class="section-margin">Methods</h2>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped js-options-table">
+                            <thead>
+                            <tr>
+                                <th style="width: 40%">Method</th>
+                                <th>Description</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    let table = CoreUI.table.create( options )
+                                </td>
+                                <td>
+                                    Метод для создания экземпляра таблицы
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    let table = CoreUI.table.get( tableId )
+                                </td>
+                                <td>
+                                    Получение ранее созданного экземпляра таблицы
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.render( elementId )
+                                </td>
+                                <td>
+                                    Формирование html таблицы и размещение его если указан dom элемент.
+                                    Если элемент не указан, то метод возвращает сформированный html
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.initEvents()
+                                </td>
+                                <td>
+                                    Инициализирует события необходимые для корректной работы таблицы.
+                                    Требует обязательного вызова, если при рендере таблицы не был указан элемент для вставки
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.getId()
+                                </td>
+                                <td>
+                                    Получение id таблицы
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.lock()
+                                </td>
+                                <td>
+                                    Блокирует работу с таблицей и показывает сообщение о загрузке
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.unlock()
+                                </td>
+                                <td>
+                                    Разблокирует работу с таблицей
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.reload()
+                                </td>
+                                <td>
+                                    Перезагрузка строк в таблице, при условии, что ранее был указан адрес для загрузки
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.load( url, method )
+                                </td>
+                                <td>
+                                    Загрузка строк в таблице по указанному адресу и методу
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.prevPage()
+                                </td>
+                                <td>
+                                    Загрузка строк в таблице из предыдущей страницы
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.nextPage()
+                                </td>
+                                <td>
+                                    Загрузка строк в таблице из следующей страницы
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.goPage( page )
+                                </td>
+                                <td>
+                                    Загрузка строк в таблицу из указанной страницы
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.getRecord( primaryKey )
+                                </td>
+                                <td>
+                                    Получение объекта строки из таблицы по указанному primaryKey
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.getRecords()
+                                </td>
+                                <td>
+                                    Получение массива всех строк из таблицы
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.getSelected()
+                                </td>
+                                <td>
+                                    Получение всех выбранных строк из таблицы в виде массива primaryKey
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.getSelectedRecords()
+                                </td>
+                                <td>
+                                    Получение всех выбранных строк из таблицы в виде массива объектов строк
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.selectRecord( primaryKey )
+                                </td>
+                                <td>
+                                    Выделение указанной строки находящийся в таблице
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.unselectRecord( primaryKey )
+                                </td>
+                                <td>
+                                    Снятие выделения указанной строки находящийся в таблице
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.selectAll()
+                                </td>
+                                <td>
+                                    Выделение всех строк в таблице
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.unselectAll()
+                                </td>
+                                <td>
+                                    Снятие выделения всех строк в таблице
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    table.on( name, function )
+                                </td>
+                                <td>
+                                    Регистрация функции вызываемой при наступлении указанного события
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
+                    <br>
+
+
+                    <h2 id="events" class="section-margin">Events</h2>
+                    <div>
+                        <table class="table table-bordered table-striped bs-events-table">
+                            <thead>
+                            <tr>
+                                <th>Event Type</th>
+                                <th>Description</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="text-nowrap">shown.coreui.table</td>
+                                <td>
+                                    Показ таблицы на странице. Происходит один раз при отображении
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">show-records.coreui.table</td>
+                                <td>
+                                    Показ строк в таблице.
+                                    Происходит каждый раз при загрузке строк в таблицу.<br>
+                                    В качестве параметров передаются <code>table.on('show-records.coreui.table', function (table)</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">start-load-records.coreui.table</td>
+                                <td>
+                                    Выполняется каждый раз перед началом запроса для загрузки строк в таблицу.<br>
+                                    В качестве параметров передаются <code>table.on('start-load-records.coreui.table', function (table, xhr)</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">end-load-records.coreui.table</td>
+                                <td>
+                                    Выполняется каждый раз после запроса для загрузки строк в таблицу.<br>
+                                    В качестве параметров передаются <code>table.on('end-load-records.coreui.table', function (table, xhr, textStatus)</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">error-load-records.coreui.table</td>
+                                <td>
+                                    Выполняется каждый раз после не успешного запроса для загрузки строк в таблицу.<br>
+                                    В качестве параметров передаются <code>table.on('error-load-records.coreui.table', function (table, xhr, textStatus)</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">select-all.coreui.table</td>
+                                <td>
+                                    Происходит при выборе всех строк в таблице.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">unselect-all.coreui.table</td>
+                                <td>
+                                    Происходит при снятии выбора всех строк в таблице.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">select.coreui.table</td>
+                                <td>
+                                    Происходит при выборе одной строки в таблице.<br>
+                                    В качестве параметров передаются <code>table.on('select.coreui.table', function (record)</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">unselect.coreui.table</td>
+                                <td>
+                                    Происходит при выборе одной строки в таблице.<br>
+                                    В качестве параметров передаются <code>table.on('unselect.coreui.table', function (record)</code>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="buffer-content"></div>
+    </section>
+
+    <footer>
+        <section class="copyright">
+            <div class="container">
+                <span class="float-start">shabuninil24@gmail.com</span>
+                <span class="float-end">Code licensed under the GNU License</span>
+            </div>
+        </section>
+    </footer>
+</body>
+</html>

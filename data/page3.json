@@ -1,0 +1,11 @@
+{
+  "total": 36,
+  "records": [
+    { "id": 31, "fname": "Joseph", "lname": "Haydn", "sdate": "1732-1809" },
+    { "id": 32, "fname": "Ludwig Van", "lname": "Beethoven", "sdate": "1770-1827", "coreui": { "attr": { "style": "background-color: #C2F5B4" }}},
+    { "id": 33, "fname": "Wolfgang Amadeus", "lname": "Mozart", "sdate": "1756-1791" },
+    { "id": 34, "fname": "Johann Sebastian", "lname": "Bach", "sdate": "1685-1750" },
+    { "id": 35, "fname": "Richard", "lname": "Wagner", "sdate": "1685-1750" },
+    { "id": 36, "fname": "Joseph", "lname": "Haydn", "sdate": "1732-1809" }
+  ]
+}
