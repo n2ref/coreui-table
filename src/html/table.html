@@ -1,0 +1,47 @@
+
+<div id="coreui-table-<%= table.id %>" class="coreui-table"<%- render.attr %>
+     <% if (widthSizes) { %>style="<%= widthSizes.join(';') %>"<% } %>>
+    <% if (render.controls.length > 0) { %>
+        <div class="coreui-table__controls d-flex justify-content-start gap-2 flex-wrap mb-3 align-items-center">
+            <% $.each(render.controls, function(key, control) { %>
+                <div id="coreui-table-control-<%= control.id %>" class="coreui-table__control">
+                    <%- control.content %>
+                </div>
+            <% }); %>
+        </div>
+    <% } %>
+
+
+    <div class="coreui-table__container bg-white position-relative rounded-1 border border-1">
+        <% if (table.show.total) { %>
+        <div class="ps-2 lh-lg border-bottom">
+            <small><%= lang.total %>: <span class="coreui-table__count-total"><%= recordsTotal %></span></small>
+        </div>
+        <% } %>
+
+        <div class="coreui-table__wrapper table-responsive overflow-x-auto" <% if (heightSizes) { %>style="<%= heightSizes.join(';') %>"<% } %>>
+            <table class="table table-sm table-hover table-striped mb-0 <%= table.class %>">
+                <colgroup>
+                    <% $.each(render.columnGroups, function(key, columnGroup) { %>
+                    <col<% if (columnGroup.width) { %> style="width: <%= (columnGroup.width.toString() + columnGroup.unit) %>"<% } %>/>
+                    <% }); %>
+                </colgroup>
+                <% if (table.show.columnHeaders) { %>
+                <thead>
+                    <%- render.columnsHeader %>
+                    <%- render.columns %>
+                </thead>
+                <% } %>
+                <tbody class="border-secondary-subtle">
+                    <%- render.records %>
+                </tbody>
+                <% if (render.footer != '' || render.pages != '') { %>
+                <tfoot>
+                    <%- render.footer %>
+                    <%- render.pages %>
+                </tfoot>
+                <% } %>
+            </table>
+        </div>
+    </div>
+</div>

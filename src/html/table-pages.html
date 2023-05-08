@@ -1,0 +1,46 @@
+<tr class="bg-white">
+    <td colspan="<%= columnsCount %>">
+        <div class="d-flex justify-content-between">
+            <% if (table.show.pagesJump) { %>
+            <div class="coreui-table__page_go_container float-start">
+                <div class="input-group">
+                    <input type="number" class="form-control form-control-sm" min="1">
+                    <button class="coreui-table__page_go btn btn-sm btn-outline-secondary border-secondary-subtle" type="button">
+                        <i class="bi bi-chevron-compact-right"></i>
+                    </button>
+                </div>
+            </div>
+            <% } %>
+
+            <% if (table.show.pages) { %>
+            <div class="coreui-table__pages_container text-center">
+                <button type="button" class="btn btn-sm btn-outline-secondary coreui-table__page_prev"<% if ( ! prevPage) { %> disabled<% } %>>
+                    <i class="bi bi-chevron-compact-left"></i>
+                </button>
+
+                <small>
+                    <span class="coreui-table__page_current"><%= currentPage %></span>
+                    <%= lang.of %>
+                    <span class="coreui-table__pages_total"><%= pagesTotal %></span>
+                </small>
+
+                <button type="button" class="btn btn-sm btn-outline-secondary coreui-table__page_next"<% if ( ! nextPage) { %> disabled<% } %>>
+                    <i class="bi bi-chevron-compact-right"></i>
+                </button>
+            </div>
+            <% } %>
+
+            <% if (table.show.prePageList) { %>
+            <div class="coreui-table__pages_list_container float-end">
+                <select class="form-select form-select-sm">
+                    <% $.each(recordsPerPageList, function(key, count) { %>
+                    <option value="<%= count %>"<% if (recordsPerPage == count) { %>selected<% } %>>
+                        <% if (count == '0') { %><%= lang.all %><% } else { %><%= count %><% } %>
+                    </option>
+                    <% }); %>
+                </select>
+            </div>
+            <% } %>
+        </div>
+    </td>
+</tr>

@@ -1,0 +1,7 @@
+<% $.each(records, function(key, record) { %>
+    <tr<%- record.attr %> data-record-key="<%= key %>">
+        <% $.each(record.fields, function(key2, field) { %>
+            <td<%- field.attr %>><%- field.content %></td>
+        <% }); %>
+    </tr>
+<% }); %>
