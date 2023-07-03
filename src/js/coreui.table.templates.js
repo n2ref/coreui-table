@@ -102,7 +102,7 @@ window["CoreUI"]["table"]["tpl"]["table.html"] = "\n" +
     "        <% } %>\n" +
     "\n" +
     "        <div class=\"coreui-table__wrapper table-responsive overflow-x-auto\" <% if (heightSizes) { %>style=\"<%= heightSizes.join(';') %>\"<% } %>>\n" +
-    "            <table class=\"table table-sm table-hover table-striped mb-0 <%= table.class %>\">\n" +
+    "            <table class=\"table <% if (table.size) { %>table-<%= table.size %><% } %> <% if (table.hover) { %>table-hover<% } %> <% if (table.striped) { %>table-striped<% } %> mb-0 <%= table.class %>\">\n" +
     "                <colgroup>\n" +
     "                    <% $.each(render.columnGroups, function(key, columnGroup) { %>\n" +
     "                    <col<% if (columnGroup.width) { %> style=\"width: <%= (columnGroup.width.toString() + columnGroup.unit) %>\"<% } %>>\n" +
