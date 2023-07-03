@@ -4,6 +4,7 @@
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table.table-sm > tbody > tr > td {
     padding: 0.2rem 0.25rem;
 }
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td,
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td {
     font-size: 14px;
 }
