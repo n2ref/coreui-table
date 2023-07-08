@@ -155,6 +155,12 @@ pre {
 #docs-sidenav > .nav .nav li > a {padding-left: 30px;}
 #docs-sidenav > .nav .nav li > a.active {padding-left: 28px;}
 
+.btn-xs {
+    --bs-btn-font-size: .75rem;
+    --bs-btn-padding-y: 0rem;
+    --bs-btn-padding-x: 0.5rem;
+}
+
 @media (min-width: 768px) {
     header .nav-item {
         margin: -8px 0;
