@@ -149,11 +149,6 @@
 .coreui-table .coreui-table_pointer {
     cursor: pointer;
 }
-.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td .btn-xs {
-    --bs-btn-font-size: .75rem;
-    --bs-btn-padding-y: 0rem;
-    --bs-btn-padding-x: 0.5rem;
-}
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td > .form-switch {
     padding-left: 0;
 }
