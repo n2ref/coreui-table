@@ -37,7 +37,7 @@ CoreUI.table = {
             return null;
         }
 
-        if ($('#coreui-table-' + this._instances[id])[0]) {
+        if ( ! $('#coreui-table-' + id)[0]) {
             delete this._instances[id];
             return null;
         }

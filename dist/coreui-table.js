@@ -37,7 +37,7 @@ CoreUI.table = {
             return null;
         }
 
-        if ($('#coreui-table-' + this._instances[id])[0]) {
+        if ( ! $('#coreui-table-' + id)[0]) {
             delete this._instances[id];
             return null;
         }
@@ -1851,13 +1851,18 @@ CoreUI.table.columns.switch = {
                     let recordKey = $(this).val();
                     let isChecked = $(this).is(':checked');
                     let record    = table._getRecordByKey(recordKey);
+                    let result    = true;
 
                     if (typeof that._options.onChange === 'function') {
-                        that._options.onChange(record, isChecked);
+                        result = that._options.onChange(record, isChecked);
 
                     } else if (typeof that._options.onChange === 'string') {
                         let func = new Function('record', 'checked', that._options.onChange);
-                        func(record, isChecked);
+                        result = func(record, isChecked);
+                    }
+
+                    if ( ! result) {
+                        $(this).prop('checked', ! isChecked);
                     }
 
                     return false;
