@@ -1851,18 +1851,19 @@ CoreUI.table.columns.switch = {
                     let recordKey = $(this).val();
                     let isChecked = $(this).is(':checked');
                     let record    = table._getRecordByKey(recordKey);
-                    let result    = true;
 
                     if (typeof that._options.onChange === 'function') {
-                        result = that._options.onChange(record, isChecked);
+                        that._options.onChange(record, isChecked, this);
 
                     } else if (typeof that._options.onChange === 'string') {
-                        let func = new Function('record', 'checked', that._options.onChange);
-                        result = func(record, isChecked);
-                    }
+                        let id = '';
 
-                    if ( ! result) {
-                        $(this).prop('checked', ! isChecked);
+                        if (record.hasOwnProperty(table._options.primaryKey)) {
+                            id = record[table._options.primaryKey];
+                        }
+
+                        let func = new Function('record', 'checked', 'id', that._options.onChange);
+                        func(record, this, id);
                     }
 
                     return false;
