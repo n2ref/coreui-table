@@ -1361,6 +1361,20 @@ window["CoreUI"]["table"]["tpl"]["controls/button.html"] = "<button type=\"butto
 window["CoreUI"]["table"]["tpl"]["controls/link.html"] = "<a href=\"<%- control.href %>\"<%- render.attr %>><%- control.content %></a>"; 
 // END ;
 
+var coreuiTableUtils = {
+
+
+    /**
+     *
+     */
+    eval: function (code) {
+
+        (function () {
+            eval(code);
+        })();
+    }
+};
+
 CoreUI.table.columns.date = {
 
     _table: null,
@@ -1831,14 +1845,21 @@ CoreUI.table.columns.switch = {
 
             // События нажатия на переключатель
             if (that._options.hasOwnProperty('onChange') &&
-                typeof that._options.onChange === 'function'
+                (typeof that._options.onChange === 'function' || typeof that._options.onChange === 'string')
             ) {
                 $(containers + ' .coreui-table__switch[data-field="' + that._options.field + '"]').change(function (event) {
                     let recordKey = $(this).val();
                     let isChecked = $(this).is(':checked');
                     let record    = table._getRecordByKey(recordKey);
 
-                    that._options.onChange(record, isChecked);
+                    if (typeof that._options.onChange === 'function') {
+                        that._options.onChange(record, isChecked);
+
+                    } else if (typeof that._options.onChange === 'string') {
+                        let func = new Function('record', 'checked', that._options.onChange);
+                        func(record, isChecked);
+                    }
+
                     return false;
                 });
             }
@@ -1968,10 +1989,15 @@ CoreUI.table.controls.button = {
 
         let that = this;
 
-        if (typeof this._options.onClick === 'function') {
+        if (typeof this._options.onClick === 'function' || typeof this._options.onClick === 'string') {
             $('#coreui-table-' + this._table._options.id + ' #coreui-table-control-' + this._options.id + ' > button')
                 .click(function (event) {
-                    that._options.onClick(event, that._table);
+                    if (typeof that._options.onClick === 'function') {
+                        that._options.onClick(event, that._table);
+
+                    } else if (typeof that._options.onClick === 'string') {
+                        coreuiTableUtils.eval(that._options.onClick);
+                    }
                 });
         }
     },

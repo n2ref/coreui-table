@@ -38,10 +38,15 @@ CoreUI.table.controls.button = {
 
         let that = this;
 
-        if (typeof this._options.onClick === 'function') {
+        if (typeof this._options.onClick === 'function' || typeof this._options.onClick === 'string') {
             $('#coreui-table-' + this._table._options.id + ' #coreui-table-control-' + this._options.id + ' > button')
                 .click(function (event) {
-                    that._options.onClick(event, that._table);
+                    if (typeof that._options.onClick === 'function') {
+                        that._options.onClick(event, that._table);
+
+                    } else if (typeof that._options.onClick === 'string') {
+                        coreuiTableUtils.eval(that._options.onClick);
+                    }
                 });
         }
     },

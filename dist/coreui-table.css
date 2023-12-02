@@ -1,3 +1,7 @@
+:root {
+    --coreui-table-bg-head: #FAFAFA;
+}
+
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table {
     min-height: 55px;
 }
@@ -44,10 +48,12 @@
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table.table-bordered > thead > tr > td {
     border: 1px solid var(--bs-secondary-border-subtle);
+    background-color: var(--coreui-table-bg-head);
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:first-child,
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:first-child > td {
     border-top: none;
+    background-color: var(--coreui-table-bg-head);
 }
 
 
@@ -148,11 +154,6 @@
 }
 .coreui-table .coreui-table_pointer {
     cursor: pointer;
-}
-.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td .btn-xs {
-    --bs-btn-font-size: .75rem;
-    --bs-btn-padding-y: 0rem;
-    --bs-btn-padding-x: 0.5rem;
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td > .form-switch {
     padding-left: 0;

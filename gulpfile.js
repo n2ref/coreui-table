@@ -20,6 +20,7 @@ var conf = {
             'src/js/coreui.table.ejs.js',
             'src/js/coreui.table.instance.js',
             'src/js/coreui.table.templates.js',
+            'src/js/coreui.table.utils.js',
             'src/js/columns/*.js',
             'src/js/controls/*.js',
             'src/js/filters/*.js',

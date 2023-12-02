@@ -37,14 +37,21 @@ CoreUI.table.columns.switch = {
 
             // События нажатия на переключатель
             if (that._options.hasOwnProperty('onChange') &&
-                typeof that._options.onChange === 'function'
+                (typeof that._options.onChange === 'function' || typeof that._options.onChange === 'string')
             ) {
                 $(containers + ' .coreui-table__switch[data-field="' + that._options.field + '"]').change(function (event) {
                     let recordKey = $(this).val();
                     let isChecked = $(this).is(':checked');
                     let record    = table._getRecordByKey(recordKey);
 
-                    that._options.onChange(record, isChecked);
+                    if (typeof that._options.onChange === 'function') {
+                        that._options.onChange(record, isChecked);
+
+                    } else if (typeof that._options.onChange === 'string') {
+                        let func = new Function('record', 'checked', that._options.onChange);
+                        func(record, isChecked);
+                    }
+
                     return false;
                 });
             }
