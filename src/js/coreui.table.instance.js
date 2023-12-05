@@ -975,6 +975,8 @@ CoreUI.table.instance = {
             ? Math.ceil(this._recordsTotal / this._recordsPerPage)
             : 1;
 
+        this._options.records = records;
+
         that._recordsNumber = this._page === 1 ? 1 : ((this._page - 1) * this._recordsPerPage) + 1;
 
         if (records.length > 0) {
