@@ -1,5 +1,6 @@
+import coreuiTable from "../coreui.table";
 
-CoreUI.table.columns.select = {
+coreuiTable.columns.select = {
 
     _table: null,
     _options: {

@@ -1,5 +1,6 @@
+import coreuiTable from "../coreui.table";
 
-CoreUI.table.columns.switch = {
+coreuiTable.columns.switch = {
 
     _table: null,
     _options: {

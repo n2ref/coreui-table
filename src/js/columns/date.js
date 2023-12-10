@@ -1,5 +1,7 @@
 
-CoreUI.table.columns.date = {
+import coreuiTable from "../coreui.table";
+
+coreuiTable.columns.date = {
 
     _table: null,
     _options: {

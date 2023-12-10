@@ -1,5 +1,10 @@
 
-CoreUI.table.instance = {
+import '../../node_modules/ejs/ejs.min';
+import coreuiFormUtils from './coreui.table.utils';
+import coreuiFormTpl   from './coreui.table.templates';
+
+
+var coreuiTableInstance = {
 
     _options: {
         id: null,
@@ -61,7 +66,7 @@ CoreUI.table.instance = {
 
 
         if ( ! this._options.id) {
-            this._options.id = CoreUI.table._hashCode();
+            this._options.id = coreuiFormUtils.hashCode();
         }
 
         if (this._options.page > 0) {
@@ -322,11 +327,11 @@ CoreUI.table.instance = {
                 let attributes    = [];
 
                 if (columnOptions.fixed && typeof columnOptions.fixed === 'string') {
-                    columnOptions.attrHeader = CoreUI.table._mergeAttr(columnOptions.attrHeader, {
+                    columnOptions.attrHeader = coreuiFormUtils.mergeAttr(columnOptions.attrHeader, {
                         class: 'coreui-table__fixed_' + columnOptions.fixed
                     });
 
-                    columnOptions.attr = CoreUI.table._mergeAttr(columnOptions.attr, {
+                    columnOptions.attr = coreuiFormUtils.mergeAttr(columnOptions.attr, {
                         class: 'coreui-table__fixed_' + columnOptions.fixed
                     });
                 }
@@ -368,12 +373,12 @@ CoreUI.table.instance = {
                     that._recordsNumber++;
                 });
 
-                htmlRecords = CoreUI.table.ejs.render(CoreUI.table.tpl['table-records.html'], {
+                htmlRecords = ejs.render(coreuiFormTpl['table-records.html'], {
                     records: render.records,
                 });
 
             } else {
-                htmlRecords = CoreUI.table.ejs.render(CoreUI.table.tpl['table-records-empty.html'], {
+                htmlRecords = ejs.render(coreuiFormTpl['table-records-empty.html'], {
                     columnsCount: this._columns.length ? this._columns.length : 1,
                     lang: this._getLang(),
                 });
@@ -395,7 +400,7 @@ CoreUI.table.instance = {
                 this._options.recordsPerPageList.unshift(this._recordsPerPage);
             }
 
-            render.pages = CoreUI.table.ejs.render(CoreUI.table.tpl['table-pages.html'], {
+            render.pages = ejs.render(coreuiFormTpl['table-pages.html'], {
                 columnsCount: this._columns.length ? this._columns.length : 1,
                 table: this._options,
                 lang: this._getLang(),
@@ -437,7 +442,7 @@ CoreUI.table.instance = {
                     });
 
                     rows.push(
-                        CoreUI.table.ejs.render(CoreUI.table.tpl['table-columns.html'], {
+                        ejs.render(coreuiFormTpl['table-columns.html'], {
                             columns: cells,
                         })
                     );
@@ -475,7 +480,7 @@ CoreUI.table.instance = {
                     });
 
                     rows.push(
-                        CoreUI.table.ejs.render(CoreUI.table.tpl['table-columns-footer.html'], {
+                        ejs.render(coreuiFormTpl['table-columns-footer.html'], {
                             columns: cells,
                         })
                     );
@@ -486,12 +491,12 @@ CoreUI.table.instance = {
         }
 
 
-        let htmlColumns = CoreUI.table.ejs.render(CoreUI.table.tpl['table-columns.html'], {
+        let htmlColumns = ejs.render(coreuiFormTpl['table-columns.html'], {
             columns: render.columns,
         });
 
 
-        let html = CoreUI.table.ejs.render(CoreUI.table.tpl['table.html'], {
+        let html = ejs.render(coreuiFormTpl['table.html'], {
             table: this._options,
             lang: this._getLang(),
             widthSizes: widthSizes,
@@ -541,7 +546,7 @@ CoreUI.table.instance = {
         let container = $('#coreui-table-' + this._options.id + ' > .coreui-table__container');
 
         if (container[0] && ! container.find('.coreui-table-lock')[0]) {
-            let html =  CoreUI.table.ejs.render(CoreUI.table.tpl['table-loader.html'], {
+            let html =  ejs.render(coreuiFormTpl['table-loader.html'], {
                 lang: this._getLang()
             });
 
@@ -604,7 +609,7 @@ CoreUI.table.instance = {
                     typeof result.records === 'object' &&
                     Array.isArray(result.records)
                 ) {
-                    let total = result.hasOwnProperty('total') && CoreUI.table._isNumeric(result.total) ? result.total : null;
+                    let total = result.hasOwnProperty('total') && coreuiFormUtils.isNumeric(result.total) ? result.total : null;
                     that._viewRecords(result.records, total);
 
                 } else {
@@ -968,7 +973,7 @@ CoreUI.table.instance = {
      */
     _viewRecords: function (records, total) {
 
-        this._recordsTotal = CoreUI.table._isNumeric(total) ? parseInt(total) : records.length;
+        this._recordsTotal = coreuiFormUtils.isNumeric(total) ? parseInt(total) : records.length;
         let that           = this;
         let htmlRecords    = '';
         let totalPages     = this._recordsTotal > 0 && this._recordsPerPage > 0
@@ -987,12 +992,12 @@ CoreUI.table.instance = {
                 that._recordsNumber++;
             });
 
-            htmlRecords = CoreUI.table.ejs.render(CoreUI.table.tpl['table-records.html'], {
+            htmlRecords = ejs.render(coreuiFormTpl['table-records.html'], {
                 records: renderRecorders,
             });
 
         } else {
-            htmlRecords = CoreUI.table.ejs.render(CoreUI.table.tpl['table-records-empty.html'], {
+            htmlRecords = ejs.render(coreuiFormTpl['table-records-empty.html'], {
                 columnsCount: this._columns.length > 0 ? this._columns.length : 1,
                 lang: this._getLang(),
             });
@@ -1037,7 +1042,7 @@ CoreUI.table.instance = {
         }
 
         if (recordProps) {
-            recordAttr = CoreUI.table._mergeAttr(recordAttr, recordProps.attr);
+            recordAttr = coreuiFormUtils.mergeAttr(recordAttr, recordProps.attr);
         }
 
         let recordAttrResult = [];
@@ -1075,8 +1080,7 @@ CoreUI.table.instance = {
             : {};
 
         if (fieldProps && typeof fieldProps.attr === 'object' && ! Array.isArray(fieldProps.attr)) {
-            fieldAttr = CoreUI.table._mergeAttr(fieldAttr, fieldProps.attr);
-
+            fieldAttr = coreuiFormUtils.mergeAttr(fieldAttr, fieldProps.attr);
         }
 
         if (typeof columnOptions.render === 'function') {
@@ -1101,3 +1105,6 @@ CoreUI.table.instance = {
         };
     }
 }
+
+
+export default coreuiTableInstance;

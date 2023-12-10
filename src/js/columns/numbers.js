@@ -1,5 +1,6 @@
+import coreuiTable from "../coreui.table";
 
-CoreUI.table.columns.numbers = {
+coreuiTable.columns.numbers = {
 
     _table: null,
     _options: {

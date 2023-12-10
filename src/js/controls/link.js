@@ -1,5 +1,10 @@
 
-CoreUI.table.controls.link = {
+import '../../../node_modules/ejs/ejs.min';
+import coreuiTableTpl   from '../coreui.table.templates';
+import coreuiTableUtils from '../coreui.table.utils';
+import coreuiTable      from "../coreui.table";
+
+coreuiTable.controls.link = {
 
     _table: null,
     _options: {
@@ -25,7 +30,7 @@ CoreUI.table.controls.link = {
         this._table   = table;
 
         if ( ! this._options.id) {
-            this._options.id = CoreUI.table._hashCode();
+            this._options.id = coreuiTableUtils.hashCode();
         }
     },
 
@@ -64,7 +69,7 @@ CoreUI.table.controls.link = {
             this._render.attr = ' ' + attributes.join(' ');
         }
 
-        return CoreUI.table.ejs.render(CoreUI.table.tpl['controls/link.html'], {
+        return ejs.render(coreuiTableTpl['controls/link.html'], {
             control: this._options,
             render: this._render,
         });

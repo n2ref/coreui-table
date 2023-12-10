@@ -1,5 +1,8 @@
 
-CoreUI.table.controls.custom = {
+import coreuiTableUtils from '../coreui.table.utils';
+import coreuiTable      from "../coreui.table";
+
+coreuiTable.controls.custom = {
 
     _table: null,
     _options: {
@@ -20,7 +23,7 @@ CoreUI.table.controls.custom = {
         this._table   = table;
 
         if ( ! this._options.id) {
-            this._options.id = CoreUI.table._hashCode();
+            this._options.id = coreuiTableUtils.hashCode();
         }
     },
 

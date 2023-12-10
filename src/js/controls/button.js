@@ -1,5 +1,10 @@
 
-CoreUI.table.controls.button = {
+import '../../../node_modules/ejs/ejs.min';
+import coreuiTableTpl   from '../coreui.table.templates';
+import coreuiTableUtils from '../coreui.table.utils';
+import coreuiTable      from "../coreui.table";
+
+coreuiTable.controls.button = {
 
     _table: null,
     _options: {
@@ -26,7 +31,7 @@ CoreUI.table.controls.button = {
         this._table   = table;
 
         if ( ! this._options.id) {
-            this._options.id = CoreUI.table._hashCode();
+            this._options.id = coreuiTableUtils.hashCode();
         }
     },
 
@@ -45,7 +50,7 @@ CoreUI.table.controls.button = {
                         that._options.onClick(event, that._table);
 
                     } else if (typeof that._options.onClick === 'string') {
-                        coreuiTableUtils.eval(that._options.onClick);
+                        (new Function(that._options.onClick))();
                     }
                 });
         }
@@ -79,7 +84,7 @@ CoreUI.table.controls.button = {
         }
 
 
-        return CoreUI.table.ejs.render(CoreUI.table.tpl['controls/button.html'], {
+        return ejs.render(coreuiTableTpl['controls/button.html'], {
             control: this._options,
             render: this._render,
         });

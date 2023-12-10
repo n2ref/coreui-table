@@ -1,5 +1,6 @@
+import coreuiTable from "../coreui.table";
 
-CoreUI.table.columns.number = {
+coreuiTable.columns.number = {
 
     _table: null,
     _options: {
@@ -51,7 +52,7 @@ CoreUI.table.columns.number = {
             .replace(/[^0-9\-\.]/g, '')
             .replace(/[\s]{2,}/g, ' ');
 
-        content = content.replace(/(?<!(\.\d*|^.{0}))(?=(\d{3})+(?!\d))/g, "$1 ")
+        content = content.replace(/(?<!(\.\d*|^.{0}))(?=(\d{3})+(?!\d))/g, '$1 ')
             .replace(/\- /g, '-');
 
         return content;

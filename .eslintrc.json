@@ -1,7 +1,7 @@
 {
     "parserOptions": {
-        "ecmaVersion": 6,
-        "sourceType": "script",
+        "ecmaVersion": 9,
+        "sourceType": "module",
         "ecmaFeatures": {}
     },
     "rules": {
@@ -36,7 +36,6 @@
         "no-this-before-super": 2,
         "no-unexpected-multiline": 2,
         "no-unreachable": 2,
-        "no-unsafe-finally": 2,
         "no-unsafe-negation": 2,
         "no-unused-labels": 2,
         "no-useless-catch": 2,
