@@ -345,9 +345,9 @@ document.addEventListener('DOMContentLoaded', function () {
         width: '100%',
         minWidth: '100%',
         maxWidth: '100%',
-        height: 550,
-        minHeight: 550,
-        maxHeight: 550,
+        height: 540,
+        minHeight: 540,
+        maxHeight: 540,
         show: {
             columnHeaders: true,
             total: true
