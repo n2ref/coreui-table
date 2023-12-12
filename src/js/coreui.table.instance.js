@@ -11,9 +11,9 @@ var coreuiTableInstance = {
         class: '',
         primaryKey: 'id',
         lang: 'ru',
-        size: 'sm',
-        striped: true,
-        hover: true,
+        size: '',
+        striped: false,
+        hover: false,
         width: null,
         minWidth: null,
         maxWidth: null,
@@ -496,8 +496,33 @@ var coreuiTableInstance = {
         });
 
 
+        let classes = [];
+
+        if (typeof this._options.class === 'string' && this._options.class) {
+            classes.push(this._options.class);
+        }
+
+        if (typeof this._options.size === 'string' && this._options.size) {
+            classes.push('table-' + this._options.size);
+        }
+
+        if (typeof this._options.hover === 'boolean' && this._options.hover) {
+            classes.push('table-hover');
+        }
+
+        if (typeof this._options.striped === 'boolean' && this._options.striped) {
+            classes.push('table-striped');
+        }
+
+        if ( ! render.footer || ! render.pages) {
+            classes.push('empty-tfoot');
+        }
+
+
         let html = ejs.render(coreuiFormTpl['table.html'], {
-            table: this._options,
+            id: this._options.id,
+            show: this._options.show,
+            classes: classes.join(' '),
             lang: this._getLang(),
             widthSizes: widthSizes,
             heightSizes: heightSizes,

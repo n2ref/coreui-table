@@ -1,8 +1,32 @@
 
 .coreui-table {
+    > .coreui-table__container {
+        --bs-bg-opacity: 1;
+        background-color: $coreui-table-tbody-bg;
+        border: var(--bs-border-width) solid $coreui-table-border-color;
+        border-radius: $coreui-table-border-radius;
+    }
+
+    > .coreui-table__container > .coreui-table__header {
+        background-color: $coreui-table-thead-bg;
+        border-bottom: var(--bs-border-width) solid $coreui-table-border-color;
+        border-top-right-radius: $coreui-table-border-radius;
+        border-top-left-radius: $coreui-table-border-radius;
+    }
+
+    > .coreui-table__container > .coreui-table__wrapper {
+        border-radius: $coreui-table-border-radius;
+    }
+
     > .coreui-table__container > .coreui-table__wrapper > {
         table {
             min-height: 55px;
+        }
+        table > tbody {
+            border-color: $coreui-table-border-color;
+        }
+        table.empty-tfoot > tbody > tr:last-child > td {
+            border-bottom: 0;
         }
         table.table-sm > tbody > tr > td {
             padding: 0.2rem 0.25rem;
@@ -39,33 +63,33 @@
 
         table > thead > tr > td::before {
             top: 0;
-            box-shadow: 0 -1px 0 var(--bs-secondary-border-subtle), 0 0 0 var(--bs-secondary-border-subtle);
+            box-shadow: 0 -1px 0 $coreui-table-border-color, 0 0 0 $coreui-table-border-color;
         }
         table > thead > tr > td::after {
             bottom: 0;
-            box-shadow: 0 1px 0 var(--bs-secondary-border-subtle), 0 0 0 var(--bs-secondary-border-subtle);
+            box-shadow: 0 1px 0 $coreui-table-border-color, 0 0 0 $coreui-table-border-color;
         }
         table.table-bordered > thead > tr > td {
-            border: 1px solid var(--bs-secondary-border-subtle);
-            background-color: $coreui-table-bg-head;
+            border: 1px solid $coreui-table-border-color;
+            background-color: $coreui-table-thead-bg;
         }
         table > thead > tr:first-child,
         table > thead > tr:first-child > td {
             border-top: none;
-            background-color: $coreui-table-bg-head;
+            background-color: $coreui-table-thead-bg;
         }
 
 
         table > tfoot > tr > td::before {
             top: 0;
-            box-shadow: 0 0 0 var(--bs-secondary-border-subtle), 0 -1px 0 var(--bs-secondary-border-subtle);
+            box-shadow: 0 0 0 $coreui-table-border-color, 0 -1px 0 $coreui-table-border-color;
         }
         table > tfoot > tr > td::after {
             bottom: 0;
-            box-shadow: 0 0 0 var(--bs-secondary-border-subtle), 0 1px 0 var(--bs-secondary-border-subtle);
+            box-shadow: 0 0 0 $coreui-table-border-color, 0 1px 0 $coreui-table-border-color;
         }
         table.table-bordered > tfoot > tr > td {
-            border: 1px solid var(--bs-secondary-border-subtle);
+            border: 1px solid $coreui-table-border-color;
         }
         table > tfoot tr:last-child,
         table > tfoot tr:last-child > td {
@@ -90,7 +114,7 @@
             z-index: 2;
         }
         table > thead > tr > td.coreui-table__fixed_left {
-            box-shadow: 1px 0 0 var(--bs-secondary-border-subtle), 0 1px 0 var(--bs-secondary-border-subtle);
+            box-shadow: 1px 0 0 $coreui-table-border-color, 0 1px 0 $coreui-table-border-color;
         }
         table > tbody > tr > td.coreui-table__fixed_left::after {
             content: '';
@@ -99,7 +123,7 @@
             top: 0;
             height: 100%;
             width: 1px;
-            box-shadow: 1px 0 0 var(--bs-secondary-border-subtle), 0 1px 0 var(--bs-secondary-border-subtle);
+            box-shadow: 1px 0 0 $coreui-table-border-color, 0 1px 0 $coreui-table-border-color;
         }
         table > tbody > tr > td.coreui-table__fixed_right::before {
             content: '';
@@ -108,7 +132,7 @@
             top: 0;
             height: 100%;
             width: 1px;
-            box-shadow: -1px 0 0 var(--bs-secondary-border-subtle), 0 1px 0 var(--bs-secondary-border-subtle);
+            box-shadow: -1px 0 0 $coreui-table-border-color, 0 1px 0 $coreui-table-border-color;
         }
         table:not(.table-bordered) > tbody > tr > td.coreui-table__fixed_right::before {
             content: '';
@@ -117,10 +141,8 @@
             top: 0;
             height: 100%;
             width: 1px;
-            box-shadow: 1px 0 0 var(--bs-secondary-border-subtle), 0 1px 0 var(--bs-secondary-border-subtle);
+            box-shadow: 1px 0 0 $coreui-table-border-color, 0 1px 0 $coreui-table-border-color;
         }
-
-
 
         table > thead > tr > td:first-child,
         table > tbody > tr > td:first-child,
@@ -143,28 +165,33 @@
         table > tbody > tr > td > .form-switch .form-check-input {
             margin-left: 0;
         }
-        table > tfoot > tr > td .coreui-table__page_go_container input {
-            width: 55px;
-            min-height: 24px;
-            height: 24px;
-            font-size: 12px;
-        }
-        table > tfoot > tr > td .coreui-table__page_go_container button {
-            --bs-btn-font-size: .75rem;
-            line-height: 1.25;
-            padding: 0.2rem 0.25rem;
-        }
-        table > tfoot > tr > td .coreui-table__pages_container button {
-            --bs-btn-font-size: .75rem;
-            line-height: 11px;
-            padding: 0.25rem 0.25rem;
-            height: 24px;
-        }
-        table > tfoot > tr > td .coreui-table__pages_list_container > select {
-            background-size: 12px 10px;
-            line-height: 14px;
-            font-size: 12px;
-            width: 75px;
+        table > tfoot {
+            > tr > td .coreui-table__page_go_container input {
+                width: 55px;
+                min-height: 24px;
+                height: 24px;
+                font-size: 12px;
+            }
+            > tr > td .coreui-table__page_go_container button {
+                --bs-btn-font-size: .75rem;
+                line-height: 1.25;
+                padding: 0.2rem 0.25rem;
+            }
+            > tr > td .coreui-table__pages_container button {
+                --bs-btn-font-size: .75rem;
+                line-height: 11px;
+                padding: 0.25rem 0.25rem;
+                height: 24px;
+            }
+            > tr > td .coreui-table__pages_list_container > select {
+                background-size: 12px 10px;
+                line-height: 14px;
+                font-size: 12px;
+                width: 75px;
+            }
+            > tr > td {
+                background-color: $coreui-table-tfoot-bg;
+            }
         }
     }
 

@@ -24,8 +24,9 @@ var conf = {
     css: {
         fileMin: 'coreui-table.min.css',
         file: 'coreui-table.css',
+        main: 'src/css/main.scss',
         src: [
-            'src/css/main.scss',
+            'src/css/*.scss',
         ]
     },
     tpl: {
@@ -40,7 +41,7 @@ var conf = {
 
 
 gulp.task('build_css_min', function(){
-    return gulp.src(conf.css.src)
+    return gulp.src(conf.css.main)
         .pipe(sourcemaps.init())
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
         .pipe(concat(conf.css.fileMin))
@@ -49,14 +50,14 @@ gulp.task('build_css_min', function(){
 });
 
 gulp.task('build_css_min_fast', function(){
-    return gulp.src(conf.css.src)
+    return gulp.src(conf.css.main)
         .pipe(sass().on('error', sass.logError))
         .pipe(concat(conf.css.fileMin))
         .pipe(gulp.dest(conf.dist));
 });
 
 gulp.task('build_css', function(){
-    return gulp.src(conf.css.src)
+    return gulp.src(conf.css.main)
         .pipe(sass().on('error', sass.logError))
         .pipe(concat(conf.css.file))
         .pipe(gulp.dest(conf.dist));

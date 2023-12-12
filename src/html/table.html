@@ -1,5 +1,5 @@
 
-<div id="coreui-table-<%= table.id %>" class="coreui-table"<%- render.attr %>
+<div id="coreui-table-<%= id %>" class="coreui-table"<%- render.attr %>
      <% if (widthSizes) { %>style="<%= widthSizes.join(';') %>"<% } %>>
     <% if (render.controls.length > 0) { %>
         <div class="coreui-table__controls d-flex justify-content-start gap-2 flex-wrap mb-3 align-items-center">
@@ -12,27 +12,27 @@
     <% } %>
 
 
-    <div class="coreui-table__container bg-white position-relative rounded-1 border border-1">
-        <% if (table.show.total) { %>
-        <div class="ps-2 lh-lg border-bottom">
+    <div class="coreui-table__container position-relative">
+        <% if (show.total) { %>
+        <div class="coreui-table__header ps-2 lh-lg">
             <small><%= lang.total %>: <span class="coreui-table__count-total"><%= recordsTotal %></span></small>
         </div>
         <% } %>
 
         <div class="coreui-table__wrapper table-responsive overflow-x-auto" <% if (heightSizes) { %>style="<%= heightSizes.join(';') %>"<% } %>>
-            <table class="table <% if (table.size) { %>table-<%= table.size %><% } %> <% if (table.hover) { %>table-hover<% } %> <% if (table.striped) { %>table-striped<% } %> mb-0 <%= table.class %>">
+            <table class="table <%= classes %> mb-0">
                 <colgroup>
                     <% $.each(render.columnGroups, function(key, columnGroup) { %>
                     <col<% if (columnGroup.width) { %> style="width: <%= (columnGroup.width.toString() + columnGroup.unit) %>"<% } %>/>
                     <% }); %>
                 </colgroup>
-                <% if (table.show.columnHeaders) { %>
+                <% if (show.columnHeaders) { %>
                 <thead>
                     <%- render.columnsHeader %>
                     <%- render.columns %>
                 </thead>
                 <% } %>
-                <tbody class="border-secondary-subtle">
+                <tbody>
                     <%- render.records %>
                 </tbody>
                 <% if (render.footer != '' || render.pages != '') { %>

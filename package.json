@@ -1,6 +1,6 @@
 {
   "name": "coreui-table",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "CoreUI table",
   "scripts": {
     "build_all": "gulp build_tpl && gulp build_js && gulp build_js_min && gulp build_css && gulp build_css_min && npm run test_js",
