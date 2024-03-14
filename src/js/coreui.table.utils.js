@@ -1,5 +1,5 @@
 
-var coreuiTableUtils = {
+let coreuiTableUtils = {
 
 
     /**
@@ -52,6 +52,18 @@ var coreuiTableUtils = {
      */
     hashCode: function() {
         return this.crc32((new Date().getTime() + Math.random()).toString()).toString(16);
+    },
+
+
+    /**
+     * Проверка на объект
+     * @param value
+     */
+    isObject: function (value) {
+
+        return typeof value === 'object' &&
+            ! Array.isArray(value) &&
+            value !== null;
     },
 
 

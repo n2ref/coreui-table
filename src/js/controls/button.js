@@ -1,16 +1,15 @@
 
 import '../../../node_modules/ejs/ejs.min';
-import coreuiTableTpl   from '../coreui.table.templates';
-import coreuiTableUtils from '../coreui.table.utils';
-import coreuiTable      from "../coreui.table";
+import coreuiTableTpl      from '../coreui.table.templates';
+import coreuiTableUtils    from '../coreui.table.utils';
+import coreuiTable         from "../coreui.table";
+import coreuiTableElements from "../coreui.table.elements";
 
 coreuiTable.controls.button = {
 
+    _id: null,
     _table: null,
     _options: {
-        id: null,
-        type: 'button',
-        href: null,
         content: null,
         onClick: null,
         attr: null
@@ -29,10 +28,7 @@ coreuiTable.controls.button = {
 
         this._options = $.extend({}, this._options, options);
         this._table   = table;
-
-        if ( ! this._options.id) {
-            this._options.id = coreuiTableUtils.hashCode();
-        }
+        this._id      = coreuiTableUtils.hashCode();
     },
 
 
@@ -44,7 +40,9 @@ coreuiTable.controls.button = {
         let that = this;
 
         if (typeof this._options.onClick === 'function' || typeof this._options.onClick === 'string') {
-            $('#coreui-table-' + this._table._options.id + ' #coreui-table-control-' + this._options.id + ' > button')
+
+            let control = coreuiTableElements.getControl(this._table.getId(), this.getId());
+            $('button', control)
                 .click(function (event) {
                     if (typeof that._options.onClick === 'function') {
                         that._options.onClick(event, that._table);
@@ -62,8 +60,7 @@ coreuiTable.controls.button = {
      * @returns {string}
      */
     getId: function () {
-
-        return this._options.id;
+        return this._id;
     },
 
 
@@ -73,20 +70,18 @@ coreuiTable.controls.button = {
      */
     render: function() {
 
-        if (typeof this._options.attr === 'object') {
-            let attributes = [];
+        let attributes = [];
 
+        if (coreuiTableUtils.isObject(this._options.attr)) {
             $.each(this._options.attr, function (name, value) {
                 attributes.push(name + '="' + value + '"');
             });
-
-            this._render.attr = ' ' + attributes.join(' ');
         }
 
 
         return ejs.render(coreuiTableTpl['controls/button.html'], {
-            control: this._options,
-            render: this._render,
+            content: this._options.content,
+            attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });
     }
 }

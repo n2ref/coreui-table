@@ -1,4 +1,5 @@
 import coreuiTable from "../coreui.table";
+import coreuiTableElements from "../coreui.table.elements";
 
 coreuiTable.columns.switch = {
 
@@ -7,6 +8,7 @@ coreuiTable.columns.switch = {
         type: 'switch',
         label: '',
         field: '',
+        show: true,
         width: 5,
         valueY: 'Y',
         valueN: 'N',
@@ -23,16 +25,17 @@ coreuiTable.columns.switch = {
      */
     init: function (table, options) {
 
-        this._table    = table;
-        this._options  = $.extend(true, {}, this._options, options);
-        let that       = this;
-        let containers = '#coreui-table-' + table._options.id + ' > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr.coreui-table__record > td.coreui-table__switch_container';
+        let that      = this;
+        this._table   = table;
+        this._options = $.extend(true, {}, this._options, options);
 
         // Показ строк
-        this._table.on('show-records.coreui.table', function () {
+        this._table.on('show-records', function () {
+
+            let containers = coreuiTableElements.getRowsSwitches(that._table.getId());
 
             // Отмена обработки нажатия в switch колонках
-            $(containers).click(function (event) {
+            containers.click(function (event) {
                 event.stopPropagation();
             });
 
@@ -40,10 +43,10 @@ coreuiTable.columns.switch = {
             if (that._options.hasOwnProperty('onChange') &&
                 (typeof that._options.onChange === 'function' || typeof that._options.onChange === 'string')
             ) {
-                $(containers + ' .coreui-table__switch[data-field="' + that._options.field + '"]').change(function (event) {
-                    let recordKey = $(this).val();
-                    let isChecked = $(this).is(':checked');
-                    let record    = table._getRecordByKey(recordKey);
+                $('.coreui-table__switch[data-field="' + that._options.field + '"]', containers).change(function (event) {
+                    let recordIndex = $(this).val();
+                    let isChecked   = $(this).is(':checked');
+                    let record      = table.getRecordByIndex(recordIndex);
 
                     if (typeof that._options.onChange === 'function') {
                         that._options.onChange(record, isChecked, this);
@@ -67,10 +70,28 @@ coreuiTable.columns.switch = {
 
 
     /**
+     * Установка видимости колонки
+     * @param {boolean} isShow
+     */
+    setShow: function (isShow) {
+        this._options.show = !! isShow;
+    },
+
+
+    /**
+     * Видимости колонки
+     */
+    isShow: function () {
+        return !! this._options.show;
+    },
+
+
+    /**
      * Получение параметров
+     * @returns {object}
      */
     getOptions: function () {
-        return this._options;
+        return $.extend(true, {}, this._options);
     },
 
 
@@ -78,18 +99,17 @@ coreuiTable.columns.switch = {
      * Формирование контента
      * @param {string} content
      * @param {object} record
-     * @param {string} recordKey
      * @returns {string}
      */
-    render: function(content, record, recordKey) {
+    render: function(content, record) {
 
-        let checked = record.hasOwnProperty(this._options.field) && record[this._options.field] === this._options.valueY
+        let checked = record.data.hasOwnProperty(this._options.field) && record.data[this._options.field] === this._options.valueY
             ? ' checked="checked"'
             : '';
 
 
         return '<div class="form-switch">' +
-                   '<input class="coreui-table__switch form-check-input" type="checkbox" value="' + recordKey + '"' + checked +
+                   '<input class="coreui-table__switch form-check-input" type="checkbox" value="' + record.index + '"' + checked +
                          ' data-field="' + this._options.field + '" data-field="' + this._options.field + '">' +
                '</div>';
     }

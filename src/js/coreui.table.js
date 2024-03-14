@@ -1,7 +1,7 @@
 
 import coreuiFormInstance from './coreui.table.instance';
 
-var coreuiTable = {
+let coreuiTable = {
 
     columns: {},
     controls: {},
@@ -10,6 +10,9 @@ var coreuiTable = {
     lang: {},
 
     _instances: {},
+    _settings: {
+        lang: 'ru',
+    },
 
     /**
      * @param {object} options
@@ -43,6 +46,32 @@ var coreuiTable = {
         }
 
         return this._instances[id];
+    },
+
+
+    /**
+     * Установка настроек
+     * @param {object} settings
+     */
+    setSettings: function(settings) {
+
+        this._settings = $.extend(true, {}, this._settings, settings);
+    },
+
+
+    /**
+     * Получение значения настройки
+     * @param {string} name
+     */
+    getSetting: function(name) {
+
+        let value = null;
+
+        if (this._settings.hasOwnProperty(name)) {
+            value = this._settings[name];
+        }
+
+        return value;
     }
 }
 

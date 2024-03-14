@@ -1,47 +1,22 @@
 
-<div id="coreui-table-<%= id %>" class="coreui-table"<%- render.attr %>
-     <% if (widthSizes) { %>style="<%= widthSizes.join(';') %>"<% } %>>
-    <% if (render.controls.length > 0) { %>
-        <div class="coreui-table__controls d-flex justify-content-start gap-2 flex-wrap mb-3 align-items-center">
-            <% $.each(render.controls, function(key, control) { %>
-                <div id="coreui-table-control-<%= control.id %>" class="coreui-table__control">
-                    <%- control.content %>
-                </div>
-            <% }); %>
-        </div>
+<table class="table <%= classes %> mb-0">
+    <colgroup>
+        <% $.each(colGroups, function(key, columnGroup) { %>
+        <col<% if (columnGroup.width) { %> style="width: <%= (columnGroup.width.toString() + columnGroup.unit) %>"<% } %>/>
+        <% }); %>
+    </colgroup>
+    <% if (show.columnHeaders) { %>
+    <thead>
+        <%- columnGroupsHeader %>
+        <%- columns %>
+    </thead>
     <% } %>
-
-
-    <div class="coreui-table__container position-relative">
-        <% if (show.total) { %>
-        <div class="coreui-table__header ps-2 lh-lg">
-            <small><%= lang.total %>: <span class="coreui-table__count-total"><%= recordsTotal %></span></small>
-        </div>
-        <% } %>
-
-        <div class="coreui-table__wrapper table-responsive overflow-x-auto" <% if (heightSizes) { %>style="<%= heightSizes.join(';') %>"<% } %>>
-            <table class="table <%= classes %> mb-0">
-                <colgroup>
-                    <% $.each(render.columnGroups, function(key, columnGroup) { %>
-                    <col<% if (columnGroup.width) { %> style="width: <%= (columnGroup.width.toString() + columnGroup.unit) %>"<% } %>/>
-                    <% }); %>
-                </colgroup>
-                <% if (show.columnHeaders) { %>
-                <thead>
-                    <%- render.columnsHeader %>
-                    <%- render.columns %>
-                </thead>
-                <% } %>
-                <tbody>
-                    <%- render.records %>
-                </tbody>
-                <% if (render.footer != '' || render.pages != '') { %>
-                <tfoot>
-                    <%- render.footer %>
-                    <%- render.pages %>
-                </tfoot>
-                <% } %>
-            </table>
-        </div>
-    </div>
-</div>
+    <tbody>
+        <%- records %>
+    </tbody>
+    <% if (columnGroupsFooter != '') { %>
+    <tfoot>
+        <%- columnGroupsFooter %>
+    </tfoot>
+    <% } %>
+</table>

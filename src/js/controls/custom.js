@@ -4,10 +4,9 @@ import coreuiTable      from "../coreui.table";
 
 coreuiTable.controls.custom = {
 
+    _id: null,
     _table: null,
     _options: {
-        id: null,
-        type: 'custom',
         content: null
     },
 
@@ -21,10 +20,7 @@ coreuiTable.controls.custom = {
 
         this._options = $.extend({}, this._options, options);
         this._table   = table;
-
-        if ( ! this._options.id) {
-            this._options.id = coreuiTableUtils.hashCode();
-        }
+        this._id      = coreuiTableUtils.hashCode();
     },
 
 
@@ -41,8 +37,7 @@ coreuiTable.controls.custom = {
      * @returns {string}
      */
     getId: function () {
-
-        return this._options.id;
+        return this._id;
     },
 
 
@@ -51,7 +46,6 @@ coreuiTable.controls.custom = {
      * @returns {string}
      */
     render: function() {
-
         return this._options.content;
     }
 }

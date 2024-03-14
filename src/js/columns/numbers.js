@@ -25,10 +25,19 @@ coreuiTable.columns.numbers = {
 
 
     /**
+     * Видимости колонки
+     */
+    isShow: function () {
+        return true;
+    },
+
+
+    /**
      * Получение параметров
+     * @returns {object}
      */
     getOptions: function () {
-        return this._options;
+        return $.extend({}, this._options);
     },
 
 
@@ -36,10 +45,9 @@ coreuiTable.columns.numbers = {
      * Формирование контента
      * @param {string} content
      * @param {object} record
-     * @param {string} recordKey
      * @returns {string}
      */
-    render: function(content, record, recordKey) {
+    render: function(content, record) {
 
         return this._table._recordsNumber;
     }

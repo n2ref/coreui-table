@@ -1,0 +1,11 @@
+
+<div class="btn-group">
+    <% if (label) { %>
+    <span class="input-group-text"><%= label %></span>
+    <% } %>
+    <% $.each(items, function(key, item) { %>
+    <input type="radio" class="btn-check" autocomplete="off" id="<%= (field + key) %>"
+           name="<%= field %>" value="<%= item.value %>" <%= item.checked ? ' checked' : '' %>>
+    <label class="<%= item.class %>" for="<%= (field + key) %>"><%= item.text %></label>
+    <% }); %>
+</div>

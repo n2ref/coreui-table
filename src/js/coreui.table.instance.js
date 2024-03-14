@@ -1,10 +1,14 @@
 
 import '../../node_modules/ejs/ejs.min';
-import coreuiFormUtils from './coreui.table.utils';
-import coreuiFormTpl   from './coreui.table.templates';
+import coreuiTable         from './coreui.table';
+import coreuiTableTpl      from './coreui.table.templates';
+import coreuiTableUtils    from "./coreui.table.utils";
+import coreuiTableRender   from "./coreui.table.render";
+import coreuiTableElements from "./coreui.table.elements";
+import coreuiTablePrivate  from "./coreui.table.private";
 
 
-var coreuiTableInstance = {
+let coreuiTableInstance = {
 
     _options: {
         id: null,
@@ -22,35 +26,50 @@ var coreuiTableInstance = {
         naxHeight: null,
         page: 1,
         recordsPerPage: 25,
-        recordsPerPageList: [ 25, 50, 100, 1000 ], // 0 - all
-        pageParam: 'page',
-        recordsPerPageParam: 'count',
-        method: 'GET',
-        url: null,  // '/mod/index/orders/?page=[page]'
+
+        recordsRequest: {
+            method: 'GET',
+            url: null,  // '/mod/index/orders/?page=[page]'
+            params: {
+                page: 'page',
+                count: 'count',
+                start: 'start',
+                end: 'end',
+                search: 'search',
+                filter: 'filter',
+            },
+        },
+
         show: {
-            total: false,
-            columnHeaders: true,
-            pages: false,
-            pagesJump: false,
-            prePageList: false
+            columnHeaders: true
         },
         onClick: null,
         onClickUrl: null,
-        controls: [],
-        columnGroups: [],
-        columns: [],
+        header: [],
         footer: [],
+        columnGroupsHeader: [],
+        columns: [],
+        columnGroupsFooter: [],
         records: []
     },
 
+    _id: '',
     _page: 1,
+    _recordsIndex: 1,
     _recordsPerPage: 25,
     _recordsTotal: 0,
     _recordsNumber: 1,
+    _isRecordsRequest: false,
 
+    _records: [],
     _columns: [],
     _search: [],
-    _filter: [],
+    _filters: [],
+    _controls: [],
+    _controlsPositions: {
+        header: [],
+        footer: [],
+    },
     _events: {},
 
 
@@ -63,11 +82,9 @@ var coreuiTableInstance = {
 
         this._options = $.extend(true, {}, this._options, options);
         this._events  = {};
-
-
-        if ( ! this._options.id) {
-            this._options.id = coreuiFormUtils.hashCode();
-        }
+        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
+            ? this._options.id
+            : coreuiTableUtils.hashCode();
 
         if (this._options.page > 0) {
             this._page = this._options.page;
@@ -76,45 +93,76 @@ var coreuiTableInstance = {
             this._recordsPerPage = this._options.recordsPerPage;
         }
 
-        let that = this;
+        this._isRecordsRequest = (
+            this._options.hasOwnProperty('recordsRequest') &&
+            coreuiTableUtils.isObject(this._options.recordsRequest) &&
+            this._options.recordsRequest.hasOwnProperty('url') &&
+            typeof this._options.recordsRequest.url === 'string' &&
+            this._options.recordsRequest.url !== '' &&
+            this._options.recordsRequest.url !== '#'
+        );
 
+        if (this._isRecordsRequest) {
+            if ( ! this._options.recordsRequest.hasOwnProperty('method') ||
+                typeof this._options.recordsRequest.method !== 'string'
+            ) {
+                this._options.recordsRequest.method = 'GET';
+            }
+
+        } else if (Array.isArray(this._options.records)) {
+            coreuiTablePrivate._setRecords(this, this._options.records);
+        }
 
         // Инициализация колонок
         if (typeof this._options.columns === 'object' &&
             Array.isArray(this._options.columns) &&
             this._options.columns.length > 0
         ) {
-            $.each(this._options.columns, function (key, column) {
-                if (typeof column.type === 'undefined' ||
-                    ! CoreUI.table.columns.hasOwnProperty(column.type)
-                ) {
-                    column.type = 'text';
-                }
+            coreuiTablePrivate._initColumns(this, this._options.columns);
+        }
 
-                let columnInstance = $.extend(true, {}, CoreUI.table.columns[column.type]);
-                columnInstance.init(that, column);
-                that._columns.push(columnInstance);
-            });
+
+        // Инициализация поисковых полей
+        if (typeof this._options.search === 'object' &&
+            Array.isArray(this._options.search) &&
+            this._options.search.length > 0
+        ) {
+            coreuiTablePrivate._initSearch(this, this._options.search);
+        }
+
+
+        // Инициализация контролов и фильтров
+        if (this._options.hasOwnProperty('header') &&
+            Array.isArray(this._options.header) &&
+            this._options.header.length > 0
+        ) {
+            coreuiTablePrivate._initControls(this, this._options.header, 'header');
+        }
+
+        if (this._options.hasOwnProperty('footer') &&
+            Array.isArray(this._options.footer) &&
+            this._options.footer.length > 0
+        ) {
+            coreuiTablePrivate._initControls(this, this._options.footer, 'footer');
         }
     },
 
 
     /**
-     *
+     * Инициализация событий таблицы
      */
     initEvents: function () {
 
-        let that         = this;
-        let tableWrapper = '#coreui-table-' + this._options.id + ' > .coreui-table__container > .coreui-table__wrapper';
+        let that = this;
 
         // Показ строк
-        this.on('show-records.coreui.table', function () {
+        this.on('show-records', function () {
 
             // Переход по ссылке
             if (typeof that._options.onClickUrl === 'string' && that._options.onClickUrl) {
-                $(tableWrapper + ' > table > tbody > tr.coreui-table__record').click(function () {
-                    let recordKey = $(this).data('record-key');
-                    let record    = that._getRecordByKey(recordKey);
+                coreuiTableElements.getTrRecords(that.getId()).click(function () {
+                    let recordKey = $(this).data('record-index');
+                    let record    = that.getRecordByIndex(recordKey);
 
                     if ( ! record) {
                         return;
@@ -122,7 +170,7 @@ var coreuiTableInstance = {
 
                     let url = that._options.onClickUrl;
 
-                    $.each(record, function (field, value) {
+                    $.each(record.data, function (field, value) {
                         let fieldQuote = field.replace(/([^\w\d])/g, '\\$1');
                         url = url.replace(
                             new RegExp('\\[' + fieldQuote + '\\]', 'g'),
@@ -138,9 +186,9 @@ var coreuiTableInstance = {
 
             // Событие нажатия на строку
             if (typeof that._options.onClick === 'function') {
-                $(tableWrapper + ' > table > tbody > tr.coreui-table__record').click(function (event) {
-                    let recordKey = $(this).data('record-key');
-                    let record    = that._getRecordByKey(recordKey);
+                coreuiTableElements.getTrRecords(that.getId()).click(function (event) {
+                    let recordKey = $(this).data('record-index');
+                    let record    = that.getRecordByIndex(recordKey);
 
                     if ( ! record) {
                         return;
@@ -151,91 +199,37 @@ var coreuiTableInstance = {
             }
 
             // Фиксация колонок
-            let colOffset = 0;
-            $(tableWrapper + ' > table > thead > tr:last-child > td.coreui-table__fixed_left').each(function () {
-                let index  = $(this).index() + 1;
-
-                if (index !== 1) {
-                    $(tableWrapper + ' > table > thead > tr:last-child > td:nth-child(' + index + ')').css('left', colOffset + 'px');
-                    $(tableWrapper + ' > table > tbody > tr > td:nth-child(' + index + ')').css('left', colOffset + 'px');
-                }
-
-                colOffset += $(this).outerWidth();
-            });
-
-            colOffset = 0;
-            $($(tableWrapper + ' > table > thead > tr:last-child > td.coreui-table__fixed_right').get().reverse()).each(function () {
-                let index  = $(this).index() + 1;
-
-                if (index !== 1) {
-                    $(tableWrapper + ' > table > thead > tr:last-child > td:nth-child(' + index + ')').css('right', colOffset + 'px');
-                    $(tableWrapper + ' > table > tbody > tr > td:nth-child(' + index + ')').css('right', colOffset + 'px');
-                }
-
-                colOffset += $(this).outerWidth();
-            });
+            coreuiTableElements.fixedColsLeft(that.getId())
+            coreuiTableElements.fixedColsRight(that.getId())
         });
 
 
 
-        // Страницы
-        let btnPrev = $(tableWrapper + ' > table > tfoot > tr > td .coreui-table__page_prev')
-        if (btnPrev[0]) {
-            btnPrev.click(function () {
-                if (that._page > 1) {
-                    that.prevPage();
-                }
-            })
-        }
-
-        let btnNext = $(tableWrapper + ' > table > tfoot > tr > td .coreui-table__page_next')
-        if (btnNext[0]) {
-            btnNext.click(function () {
-                that.nextPage();
-            })
-        }
-
-        let inputGoPage = $(tableWrapper + ' > table > tfoot > tr > td .coreui-table__page_go_container input');
-        let btnGoPage   = $(tableWrapper + ' > table > tfoot > tr > td .coreui-table__page_go')
-        if (btnGoPage[0]) {
-            btnGoPage.click(function () {
-                that.goPage(inputGoPage.val());
-            });
-            inputGoPage.keyup(function (event) {
-                event;
-            });
-        }
-
-        let selectPerPage = $(tableWrapper + ' > table > tfoot > tr > td .coreui-table__pages_list_container select');
-        if (selectPerPage[0]) {
-            selectPerPage.change(function () {
-                that._page           = 1;
-                that._recordsPerPage = selectPerPage.val();
-                that.reload();
-            });
-        }
-
-
-
-        this._trigger('shown.coreui.table');
+        this._trigger('shown');
 
         // Вызов события показа строк
-        if (( ! this._options.url || this._options.url === '#') &&
-            typeof this._options.records === 'object' &&
-            Array.isArray(this._options.records) &&
-            this._options.records.length > 0
-        ) {
-            this._trigger('show-records.coreui.table', this, [ this ]);
+        if ( ! this._isRecordsRequest) {
+            this._trigger('show-records', this, [ this ]);
         }
     },
 
 
     /**
-     *
-     * @returns {*}
+     * Получение идентификатора таблицы
+     * @returns {string}
      */
     getId: function () {
-        return this._options.id;
+        return this._id;
+    },
+
+
+    /**
+     * Получение опций таблицы
+     * @returns {*}
+     */
+    getOptions: function () {
+
+        return $.extend(true, {}, this._options);
     },
 
 
@@ -249,18 +243,14 @@ var coreuiTableInstance = {
         let that        = this;
         let widthSizes  = [];
         let heightSizes = [];
-        let htmlRecords = '';
         let render      = {
-            controls: [],
-            columnsHeader: [],
-            columns: [],
-            columnGroups: [],
-            records: [],
-            footer: '',
-            pages: '',
+            headersOut: [],
+            headersIn: [],
+            footersIn: [],
+            footersOut: []
         };
 
-        this._recordsTotal = this._options.records.length;
+        this._recordsTotal = this._records.length;
 
 
         if (this._options.width > 0) {
@@ -296,245 +286,152 @@ var coreuiTableInstance = {
 
 
 
-        // Элементы управления
-        if (typeof this._options.controls === 'object' &&
-            Array.isArray(this._options.controls) &&
-            this._options.controls.length > 0
+        // Верхние элементы управления
+        if (Array.isArray(this._controlsPositions.header) &&
+            this._controlsPositions.header.length > 0
         ) {
-            $.each(this._options.controls, function (key, control) {
-                if (CoreUI.table.controls.hasOwnProperty(control.type)) {
+            $.each(this._controlsPositions.header, function (key, header) {
+                let controlsLeft   = [];
+                let controlsCenter = [];
+                let controlsRight  = [];
 
-                    let controlInstance = $.extend(true, {}, CoreUI.table.controls[control.type]);
-                    controlInstance.init(that, control);
+                if (Array.isArray(header.left) && header.left.length > 0) {
+                    $.each(header.left, function (key, control) {
+                        let controlRender = coreuiTableRender.renderControl(that, control);
 
-                    render.controls.push({
-                        id: controlInstance.getId(),
-                        content: controlInstance.render(),
-                    });
-
-                    that.on('shown.coreui.table', function () {
-                        controlInstance.initEvents()
-                    });
-                }
-            });
-        }
-
-
-        // Колонки
-        if (this._columns.length > 0) {
-            $.each(this._columns, function (key, column) {
-                let columnOptions = column.getOptions();
-                let attributes    = [];
-
-                if (columnOptions.fixed && typeof columnOptions.fixed === 'string') {
-                    columnOptions.attrHeader = coreuiFormUtils.mergeAttr(columnOptions.attrHeader, {
-                        class: 'coreui-table__fixed_' + columnOptions.fixed
-                    });
-
-                    columnOptions.attr = coreuiFormUtils.mergeAttr(columnOptions.attr, {
-                        class: 'coreui-table__fixed_' + columnOptions.fixed
-                    });
-                }
-
-                if (columnOptions.attrHeader && typeof columnOptions.attrHeader === 'object') {
-                    $.each(columnOptions.attrHeader, function (name, value) {
-                        attributes.push(name + '="' + value + '"');
-                    });
-                }
-
-                render.columnGroups.push({
-                    width: columnOptions.hasOwnProperty('width') ? columnOptions.width : '',
-                    unit: typeof columnOptions.width === 'number' ? 'px' : ''
-                });
-
-                render.columns.push({
-                    attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
-                    label: columnOptions.hasOwnProperty('label') ? columnOptions.label : ""
-                });
-            });
-        }
-
-
-        // Строки
-        if (this._options.url && this._options.url !== '#') {
-            this.on('shown.coreui.table', function () {
-                that.load(this._options.url);
-            });
-
-        } else {
-            if (typeof this._options.records === 'object' &&
-                Array.isArray(this._options.records) &&
-                this._options.records.length > 0
-            ) {
-                that._recordsTotal = this._options.records.length;
-
-                $.each(this._options.records, function (key, record) {
-                    render.records.push(that._renderRecord(record, key));
-                    that._recordsNumber++;
-                });
-
-                htmlRecords = ejs.render(coreuiFormTpl['table-records.html'], {
-                    records: render.records,
-                });
-
-            } else {
-                htmlRecords = ejs.render(coreuiFormTpl['table-records-empty.html'], {
-                    columnsCount: this._columns.length ? this._columns.length : 1,
-                    lang: this._getLang(),
-                });
-            }
-        }
-
-
-        // Страницы
-        if (typeof this._options.show === 'object' &&
-            (this._options.show.pages ||
-             this._options.show.pagesJump ||
-             this._options.show.prePageList)
-        ) {
-            let totalPages = this._recordsTotal > 0 && this._recordsPerPage > 0
-                ? Math.ceil(this._recordsTotal / this._recordsPerPage)
-                : 1;
-
-            if (this._options.recordsPerPageList.indexOf(this._recordsPerPage) < 0) {
-                this._options.recordsPerPageList.unshift(this._recordsPerPage);
-            }
-
-            render.pages = ejs.render(coreuiFormTpl['table-pages.html'], {
-                columnsCount: this._columns.length ? this._columns.length : 1,
-                table: this._options,
-                lang: this._getLang(),
-                currentPage: this._page,
-                pagesTotal: totalPages,
-                prevPage: this._page > 1,
-                nextPage: this._page < totalPages,
-                recordsPerPage: this._recordsPerPage,
-                recordsPerPageList: this._options.recordsPerPageList
-            })
-        }
-
-
-        if (typeof this._options.columnGroups === 'object' &&
-            Array.isArray(this._options.columnGroups) &&
-            this._options.columnGroups.length > 0
-        ) {
-            let rows = [];
-
-            $.each(this._options.columnGroups, function (key, headerRow) {
-                if (typeof headerRow === 'object' && Array.isArray(headerRow)) {
-                    let cells = [];
-
-                    $.each(headerRow, function (key, headerColumn) {
-                        if (typeof headerColumn === 'object' && ! Array.isArray(headerColumn)) {
-                            let attributes = [];
-
-                            if (headerColumn.attr && typeof headerColumn.attr === 'object') {
-                                $.each(headerColumn.attr, function (name, value) {
-                                    attributes.push(name + '="' + value + '"');
-                                });
-                            }
-
-                            cells.push({
-                                label: headerColumn.hasOwnProperty('label') ? headerColumn.label : '',
-                                attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
-                            });
+                        if (controlRender) {
+                            controlsLeft.push(controlRender);
                         }
                     });
-
-                    rows.push(
-                        ejs.render(coreuiFormTpl['table-columns.html'], {
-                            columns: cells,
-                        })
-                    );
                 }
-            });
 
-            render.columnsHeader = rows.join('');
-        }
+                if (Array.isArray(header.center) && header.center.length > 0) {
+                    $.each(header.center, function (key, control) {
+                        let controlRender = coreuiTableRender.renderControl(that, control);
 
-        if (typeof this._options.footer === 'object' &&
-            Array.isArray(this._options.footer) &&
-            this._options.footer.length > 0
-        ) {
-            let rows = [];
-
-            $.each(this._options.footer, function (key, footerRow) {
-                if (typeof footerRow === 'object' && Array.isArray(footerRow)) {
-                    let cells = [];
-
-                    $.each(footerRow, function (key, footerColumn) {
-                        if (typeof footerColumn === 'object' && ! Array.isArray(footerColumn)) {
-                            let attributes = [];
-
-                            if (footerColumn.attr && typeof footerColumn.attr === 'object') {
-                                $.each(footerColumn.attr, function (name, value) {
-                                    attributes.push(name + '="' + value + '"');
-                                });
-                            }
-
-                            cells.push({
-                                label: footerColumn.hasOwnProperty('label') ? footerColumn.label : '',
-                                attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
-                            });
+                        if (controlRender) {
+                            controlsCenter.push(controlRender);
                         }
                     });
+                }
 
-                    rows.push(
-                        ejs.render(coreuiFormTpl['table-columns-footer.html'], {
-                            columns: cells,
-                        })
-                    );
+                if (Array.isArray(header.right) && header.right.length > 0) {
+                    $.each(header.right, function (key, control) {
+                        let controlRender = coreuiTableRender.renderControl(that, control);
+
+                        if (controlRender) {
+                            controlsRight.push(controlRender);
+                        }
+                    });
+                }
+
+                if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
+                    if (header.type === 'in') {
+                        let headerControls = ejs.render(coreuiTableTpl['table-controls-header.html'], {
+                            controlsLeft: controlsLeft,
+                            controlsCenter: controlsCenter,
+                            controlsRight: controlsRight,
+                        });
+
+                        render.headersIn.push(headerControls);
+
+                    } else {
+                        let headerControls = ejs.render(coreuiTableTpl['table-controls-header-out.html'], {
+                            controlsLeft: controlsLeft,
+                            controlsCenter: controlsCenter,
+                            controlsRight: controlsRight,
+                        });
+
+                        render.headersOut.push(headerControls);
+                    }
                 }
             });
+        }
 
-            render.footer = rows.join('');
+        // Нижние элементы управления
+        if (Array.isArray(this._controlsPositions.footer) &&
+            this._controlsPositions.footer.length > 0
+        ) {
+            $.each(this._controlsPositions.footer, function (key, footer) {
+                let controlsLeft   = [];
+                let controlsCenter = [];
+                let controlsRight  = [];
+
+                if (Array.isArray(footer.left) && footer.left.length > 0) {
+                    $.each(footer.left, function (key, control) {
+                        let controlRender = coreuiTableRender.renderControl(that, control);
+
+                        if (controlRender) {
+                            controlsLeft.push(controlRender);
+                        }
+                    });
+                }
+
+                if (Array.isArray(footer.center) && footer.center.length > 0) {
+                    $.each(footer.center, function (key, control) {
+                        let controlRender = coreuiTableRender.renderControl(that, control);
+
+                        if (controlRender) {
+                            controlsCenter.push(controlRender);
+                        }
+                    });
+                }
+
+                if (Array.isArray(footer.right) && footer.right.length > 0) {
+                    $.each(footer.right, function (key, control) {
+                        let controlRender = coreuiTableRender.renderControl(that, control);
+
+                        if (controlRender) {
+                            controlsRight.push(controlRender);
+                        }
+                    });
+                }
+
+                if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
+                    if (footer.type === 'in') {
+                        let footerControls = ejs.render(coreuiTableTpl['table-controls-footer.html'], {
+                            controlsLeft: controlsLeft,
+                            controlsCenter: controlsCenter,
+                            controlsRight: controlsRight,
+                        });
+
+                        render.footersIn.push(footerControls);
+                    } else {
+                        let footerControls = ejs.render(coreuiTableTpl['table-controls-footer-out.html'], {
+                            controlsLeft: controlsLeft,
+                            controlsCenter: controlsCenter,
+                            controlsRight: controlsRight,
+                        });
+
+                        render.footersOut.push(footerControls);
+                    }
+                }
+            });
         }
 
 
-        let htmlColumns = ejs.render(coreuiFormTpl['table-columns.html'], {
-            columns: render.columns,
-        });
-
-
-        let classes = [];
-
-        if (typeof this._options.class === 'string' && this._options.class) {
-            classes.push(this._options.class);
+        // Загрузка записей
+        if (this._isRecordsRequest) {
+            this.on('shown', function () {
+                that.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+            });
         }
 
-        if (typeof this._options.size === 'string' && this._options.size) {
-            classes.push('table-' + this._options.size);
-        }
-
-        if (typeof this._options.hover === 'boolean' && this._options.hover) {
-            classes.push('table-hover');
-        }
-
-        if (typeof this._options.striped === 'boolean' && this._options.striped) {
-            classes.push('table-striped');
-        }
-
-        if ( ! render.footer || ! render.pages) {
-            classes.push('empty-tfoot');
-        }
+        let table = coreuiTableRender.renderTable(this);
 
 
-        let html = ejs.render(coreuiFormTpl['table.html'], {
-            id: this._options.id,
-            show: this._options.show,
-            classes: classes.join(' '),
-            lang: this._getLang(),
+        let html = ejs.render(coreuiTableTpl['table-wrapper.html'], {
+            id: this._id,
+            lang: this.getLang(),
             widthSizes: widthSizes,
             heightSizes: heightSizes,
             recordsTotal: this._recordsTotal,
             render: {
-                columnGroups : render.columnGroups,
-                columnsHeader : render.columnsHeader,
-                controls : render.controls,
-                columns  : htmlColumns,
-                records  : htmlRecords,
-                footer   : render.footer,
-                pages   : render.pages,
+                headersOut : render.headersOut,
+                headersIn : render.headersIn,
+                footersIn : render.footersIn,
+                footersOut : render.footersOut,
+                table : table
             },
         });
 
@@ -564,15 +461,15 @@ var coreuiTableInstance = {
 
 
     /**
-     *
+     * Блокировка таблицы
      */
     lock: function () {
 
-        let container = $('#coreui-table-' + this._options.id + ' > .coreui-table__container');
+        let container = coreuiTableElements.getContainer(this.getId());
 
         if (container[0] && ! container.find('.coreui-table-lock')[0]) {
-            let html =  ejs.render(coreuiFormTpl['table-loader.html'], {
-                lang: this._getLang()
+            let html =  ejs.render(coreuiTableTpl['table-loader.html'], {
+                lang: this.getLang()
             });
 
             container.prepend(html);
@@ -581,11 +478,11 @@ var coreuiTableInstance = {
 
 
     /**
-     *
+     * Разблокировка таблицы
      */
     unlock: function () {
 
-        $('#coreui-table-' + this._options.id + ' > .coreui-table__container > .coreui-table-lock').hide(50, function () {
+        coreuiTableElements.getLock(this.getId()).hide(50, function () {
             $(this).remove()
         });
     },
@@ -595,38 +492,60 @@ var coreuiTableInstance = {
      * Загрузка строк
      * @param {string} url
      * @param {string} method
+     * @param {object} params
      */
-    load: function (url, method) {
+    load: function (url, method, params) {
 
         this.lock();
 
         let that   = this;
-        let params = {};
+
+        params = coreuiTableUtils.isObject(params) ? params : {};
 
         if (url.match(/\[page\]/)) {
-            url = url.replace(/\[page\]/, this._page);
+            url = url.replace(/\[page\]/g, this._page);
         } else {
-            params[this._options.pageParam] = this._page;
+            let paramPage = coreuiTableUtils.isObject(this._options.recordsRequest.params) && this._options.recordsRequest.params.hasOwnProperty('page')
+                ? this._options.recordsRequest.params.page
+                : 'page';
+            params[paramPage] = this._page;
         }
 
-        if (url.match(/\[per_page\]/)) {
-            url = url.replace(/\[per_page\]/, this._recordsPerPage);
+        if (url.match(/\[count\]/)) {
+            url = url.replace(/\[count\]/g, this._recordsPerPage);
         } else {
-            params[this._options.recordsPerPageParam] = this._recordsPerPage;
+            let paramCount = coreuiTableUtils.isObject(this._options.recordsRequest.params) && this._options.recordsRequest.params.hasOwnProperty('count')
+                ? this._options.recordsRequest.params.count
+                : 'count';
+            params[paramCount] = this._recordsPerPage;
         }
 
-        if (Object.keys(params).length > 0) {
-            url += url.match(/\?/)
-                ? '&' + $.param(params)
-                : '?' + $.param(params);
+        if (url.match(/\[start\]/)) {
+            url = url.replace(/\[start\]/g, ((this._page - 1) * this._recordsPerPage) + 1);
+        } else {
+            let paramStart = coreuiTableUtils.isObject(this._options.recordsRequest.params) && this._options.recordsRequest.params.hasOwnProperty('start')
+                ? this._options.recordsRequest.params.start
+                : 'start';
+            params[paramStart] = ((this._page - 1) * this._recordsPerPage) + 1;
         }
+
+        if (url.match(/\[end\]/)) {
+            url = url.replace(/\[end\]/g, ((this._page - 1) * this._recordsPerPage) + Number(this._recordsPerPage));
+        } else {
+            let paramEnd = coreuiTableUtils.isObject(this._options.recordsRequest.params) && this._options.recordsRequest.params.hasOwnProperty('end')
+                ? this._options.recordsRequest.params.end
+                : 'end';
+            params[paramEnd] = ((this._page - 1) * this._recordsPerPage) + Number(this._recordsPerPage);
+        }
+
 
         $.ajax({
             url: url,
             method: method || 'GET',
             dataType: "json",
+            data: params,
             beforeSend: function(xhr) {
-                that._trigger('start-load-records.coreui.table', that, [ that, xhr ]);
+                that._trigger('start-load-records', that, [ that, xhr ]);
             },
             success: function (result) {
 
@@ -634,20 +553,22 @@ var coreuiTableInstance = {
                     typeof result.records === 'object' &&
                     Array.isArray(result.records)
                 ) {
-                    let total = result.hasOwnProperty('total') && coreuiFormUtils.isNumeric(result.total) ? result.total : null;
-                    that._viewRecords(result.records, total);
+                    let total = result.hasOwnProperty('total') && coreuiTableUtils.isNumeric(result.total)
+                        ? result.total
+                        : null;
+                    that.showRecords(result.records, total);
 
                 } else {
-                    that._viewRecords([]);
+                    that.showRecords([]);
                 }
             },
             error: function(xhr, textStatus, errorThrown) {
-                that._viewRecords([]);
-                that._trigger('error-load-records.coreui.table', that, [ that, xhr, textStatus, errorThrown ]);
+                that.showRecords([]);
+                that._trigger('error-load-records', that, [ that, xhr, textStatus, errorThrown ]);
             },
             complete: function(xhr, textStatus) {
                 that.unlock();
-                that._trigger('end-load-records.coreui.table', that, [ that, xhr, textStatus ]);
+                that._trigger('end-load-records', that, [ that, xhr, textStatus ]);
             },
         });
     },
@@ -658,9 +579,34 @@ var coreuiTableInstance = {
      */
     reload: function () {
 
-        if (this._options.url && this._options.url !== '#') {
-            this.load(this._options.url, this._options.method)
+        if (this._isRecordsRequest) {
+            this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
         }
+    },
+
+
+    /**
+     * Пересоздание тела таблицы
+     */
+    refresh: function () {
+
+        let table = coreuiTableRender.renderTable(this);
+
+        coreuiTableElements.getTable(this.getId()).replaceWith(table);
+
+        this._trigger('show-records', this, [ this ]);
+    },
+
+
+    /**
+     * Установка общего количества записей на странице
+     * @param recordsPerPage
+     */
+    setPageSize: function (recordsPerPage) {
+
+        this._recordsPerPage = recordsPerPage;
+
+        this._trigger('update-page-size', this);
     },
 
 
@@ -669,13 +615,9 @@ var coreuiTableInstance = {
      */
     selectAll: function () {
 
-        let tableContainer = '#coreui-table-' + this._options.id + ' > .coreui-table__container > .coreui-table__wrapper > table';
+        coreuiTableElements.selectTrAll(this.getId())
 
-        $(tableContainer + ' > thead > tr > td > .coreui-table__select-all').prop('checked', true);
-        $(tableContainer + ' > tbody > tr.coreui-table__record').addClass('table-primary');
-        $(tableContainer + ' > tbody > tr.coreui-table__record > td > .coreui-table__select').prop('checked', true);
-
-        this._trigger('select-all.coreui.table', this);
+        this._trigger('select-all', this);
     },
 
 
@@ -684,63 +626,57 @@ var coreuiTableInstance = {
      */
     unselectAll: function () {
 
-        let tableContainer = '#coreui-table-' + this._options.id + ' > .coreui-table__container > .coreui-table__wrapper > table';
+        coreuiTableElements.unselectTrAll(this.getId())
 
-        $(tableContainer + ' > thead > tr > td > .coreui-table__select-all').prop('checked', false);
-        $(tableContainer + ' > tbody > tr.coreui-table__record').removeClass('table-primary');
-        $(tableContainer + ' > tbody > tr.coreui-table__record > td.coreui-table__select_container > .coreui-table__select').prop('checked', false);
-
-        this._trigger('unselect-all.coreui.table', this);
+        this._trigger('unselect-all', this);
     },
 
 
     /**
      * Выбор записи в таблице
-     * @param {string} primaryKey
+     * @param {string} id
      */
-    selectRecord: function (primaryKey) {
+    selectRecord: function (id) {
 
-        let recordItem = this._getRecordByPrimaryKey(primaryKey);
+        let record = this.getRecordById(id);
 
-        if ( ! recordItem) {
+        if ( ! record) {
             return;
         }
 
-        let row = this._getRowByKey(recordItem.key);
+        let tr = coreuiTableElements.getTrByIndex(this.getId(), record.index);
 
-        if ( ! row) {
+        if (tr.length === 0) {
             return;
         }
 
-        $(row).addClass('table-primary');
-        $('.coreui-table__select', row).prop('checked', true);
+        coreuiTableElements.selectTr(tr)
 
-        this._trigger('select.coreui.table', this, [ recordItem.record ]);
+        this._trigger('select', this, [ record ]);
     },
 
 
     /**
      * Отмена выбора записи в таблице
-     * @param {string} primaryKey
+     * @param {string} id
      */
-    unselectRecord: function (primaryKey) {
+    unselectRecord: function (id) {
 
-        let recordItem = this._getRecordByPrimaryKey(primaryKey);
+        let record = this.getRecordById(id);
 
-        if ( ! recordItem) {
+        if ( ! record) {
             return;
         }
 
-        let row = this._getRowByKey(recordItem.key);
+        let tr = coreuiTableElements.getTrByIndex(this.getId(), record.index);
 
-        if ( ! row) {
+        if ( ! tr) {
             return;
         }
 
-        $(row).removeClass('table-primary');
-        $('.coreui-table__select', row).prop('checked', false);
+        coreuiTableElements.unselectTr(tr)
 
-        this._trigger('unselect.coreui.table', this, [ recordItem.record ]);
+        this._trigger('unselect', this, [ record.data ]);
     },
 
 
@@ -748,26 +684,23 @@ var coreuiTableInstance = {
      * Получение выбранных id
      * @return {array}
      */
-    getSelected: function () {
+    getSelectedRecordsId: function () {
 
-        let primaryKeys = [];
-        let that        = this;
-        let field       = this._options.primaryKey;
+        let records = [];
+        let that    = this;
+        let field   = this._options.primaryKey;
 
-        $('#coreui-table-' + this._options.id + ' > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr.coreui-table__record > td.coreui-table__select_container > .coreui-table__select:checked')
-            .each(function (key, element) {
-                let record = that._getRecordByKey($(element).val());
+        $.each(coreuiTableElements.getSelectedIndexes(this.getId()), function (key, index) {
+            let record = that.getRecordByIndex(index);
 
-                if ( ! record || ! record.hasOwnProperty(field)) {
-                    return;
-                }
+            if ( ! record || ! record.data.hasOwnProperty(field)) {
+                return;
+            }
 
-                primaryKeys.push(record[field]);
-            });
+            records.push(record.data[field]);
+        });
 
-
-
-        return primaryKeys;
+        return records;
     },
 
 
@@ -780,18 +713,15 @@ var coreuiTableInstance = {
         let records = [];
         let that    = this;
 
-        $('#coreui-table-' + this._options.id + ' > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr.coreui-table__record > td.coreui-table__select_container > .coreui-table__select:checked')
-            .each(function (key, element) {
-                let record = that._getRecordByKey($(element).val());
+        $.each(coreuiTableElements.getSelectedIndexes(this.getId()), function (key, index) {
+            let record = that.getRecordByIndex(index);
 
-                if ( ! record) {
-                    return;
-                }
+            if ( ! record) {
+                return;
+            }
 
-                records.push(record);
-            });
-
-
+            records.push(record);
+        });
 
         return records;
     },
@@ -799,18 +729,18 @@ var coreuiTableInstance = {
 
     /**
      * Получение записи по id
-     * @param primaryKey
+     * @param id
      * @return {object|null}
      */
-    getRecord: function (primaryKey) {
+    getRecord: function (id) {
 
-        let recordItem = this._getRecordByPrimaryKey(primaryKey);
+        let record = this.getRecordById(id);
 
-        if ( ! recordItem) {
+        if ( ! record) {
             return null;
         }
 
-        return recordItem.record;
+        return record.data;
     },
 
 
@@ -819,7 +749,13 @@ var coreuiTableInstance = {
      */
     getRecords: function () {
 
-        return this._options.records
+        let records = []
+
+        $.each(this._records, function (key, record) {
+            records.push($.extend(true, {}, record.data));
+        });
+
+        return records;
     },
 
 
@@ -865,6 +801,7 @@ var coreuiTableInstance = {
 
 
     /**
+     * Регистрация функции на событие
      * @param eventName
      * @param callback
      * @param context
@@ -883,9 +820,419 @@ var coreuiTableInstance = {
 
 
     /**
-     * @param name
-     * @param context
-     * @param params
+     * Получение переводов
+     * @return {object}
+     */
+    getLang: function () {
+
+        let result = {};
+
+        if (this._options.lang && coreuiTable.lang.hasOwnProperty(this._options.lang)) {
+            result = coreuiTable.lang[this._options.lang];
+
+        } else {
+            let lang = coreuiTable.getSetting('lang')
+
+            if (lang && coreuiTable.lang.hasOwnProperty(lang)) {
+                result = coreuiTable.lang[lang];
+
+            } else if (Object.keys(coreuiTable.lang).length > 0) {
+                result = coreuiTable.lang[Object.keys(coreuiTable.lang)[0]];
+            }
+        }
+
+        return $.extend(true, {}, result);
+    },
+
+
+    /**
+     * Установка видимых колонок, не указанные колонки будут скрыты
+     * @param {Array} columns
+     */
+    setColumnsShow: function (columns) {
+
+        if ( ! Array.isArray(columns)) {
+            return;
+        }
+
+        $.each(this._columns, function (key, column) {
+            let options = column.getOptions();
+
+            if (options.hasOwnProperty('field') && typeof options.field === 'string') {
+                column.setShow(columns.indexOf(options.field) >= 0);
+            }
+        });
+    },
+
+
+    /**
+     * Получение поисковых данных
+     * @return {*[]}
+     */
+    getSearchData: function () {
+
+        let searchData = [];
+
+        $.each(this._search, function (key, control) {
+            let options = control.getOptions();
+
+            if (options.hasOwnProperty('field') &&
+                typeof options.field === 'string' &&
+                options.field
+            ) {
+                let value = control.getValue();
+
+                if (value !== null) {
+                    searchData.push({
+                        field: options.field,
+                        value: value
+                    });
+                }
+            }
+        });
+
+        return searchData;
+    },
+
+
+    /**
+     * Получение данных из фильтров
+     * @return {*[]}
+     */
+    getFilterData: function () {
+
+        let filterData = [];
+
+        $.each(this._filters, function (key, control) {
+            let options = control.getOptions();
+
+            if (options.hasOwnProperty('field') &&
+                typeof options.field === 'string' &&
+                options.field
+            ) {
+
+                let value = control.getValue();
+
+                if (value !== null) {
+                    filterData.push({
+                        field: options.field,
+                        value: value
+                    });
+                }
+            }
+        });
+
+        return filterData;
+    },
+
+
+    /**
+     * Поиск по таблице с использованием данных из поиска и фильтров
+     */
+    searchRecords: function () {
+
+        let searchData = this.getSearchData();
+        let filterData = this.getFilterData();
+
+        if (this._isRecordsRequest) {
+            let search = coreuiTableUtils.isObject(this._options.recordsRequest.params) &&
+                         this._options.recordsRequest.params.hasOwnProperty('search') &&
+                         typeof this._options.recordsRequest.params.search === 'string'
+                ? this._options.recordsRequest.params.search
+                : 'search';
+
+            let filter = coreuiTableUtils.isObject(this._options.recordsRequest.params) &&
+                         this._options.recordsRequest.params.hasOwnProperty('filter') &&
+                         typeof this._options.recordsRequest.params.filter === 'string'
+                ? this._options.recordsRequest.params.filter
+                : 'filter';
+
+            let params = {};
+
+            if (searchData.length > 0) {
+                params[search] = searchData;
+            }
+            if (filterData.length > 0) {
+                params[filter] = filterData;
+            }
+
+            this.load(this._options.recordsRequest.url, this._options.recordsRequest.method, params);
+
+        } else {
+            $.each(this._records, function (index, record) {
+
+                let isShow = true;
+
+                if (searchData.length > 0) {
+                    isShow = coreuiTablePrivate._isFilteredRecord(searchData, record.data);
+                }
+
+                if (isShow && filterData.length > 0) {
+                    isShow = coreuiTablePrivate._isFilteredRecord(filterData, record.data);
+                }
+
+                record.show = isShow;
+            });
+
+            this.refresh();
+        }
+
+
+        this._trigger('filters_change', this, [ filterData ]);
+        this._trigger('search_change', this, [ searchData ]);
+    },
+
+
+    /**
+     * Очистка поисковых данных
+     */
+    searchClear: function () {
+
+        $.each(this._search, function (key, search) {
+            search.setValue(null);
+        });
+
+        this.searchRecords();
+    },
+
+
+    /**
+     * Очистка поисковых данных в фильтрах
+     */
+    filtersClear: function () {
+
+        $.each(this._filters, function (key, filter) {
+            filter.setValue(null);
+        });
+
+        this.searchRecords();
+    },
+
+
+    /**
+     * Получение записи по индексу
+     * @param {string|number} index
+     * @return {object|null}
+     */
+    getRecordByIndex: function (index) {
+
+        if (['string', 'number'].indexOf(typeof index) < 0 || index === '') {
+            return null;
+        }
+
+        index = Number(index);
+
+        if (index <= 0) {
+            return null;
+        }
+
+        let record = null;
+
+        $.each(this._records, function (key, recordItem) {
+            if (recordItem.index === index) {
+                record = $.extend(true, {}, recordItem);
+                return false;
+            }
+        });
+
+        return record;
+    },
+
+
+    /**
+     * Получение записи по id
+     * @param {string} id
+     * @return {object|null}
+     */
+    getRecordById: function (id) {
+
+        return this.getRecordByField(this._options.primaryKey, id);
+    },
+
+
+    /**
+     * Получение записи по полю
+     * @param {string}        field
+     * @param {string|number} value
+     * @return {object|null}
+     */
+    getRecordByField: function (field, value) {
+
+        if (['string', 'number'].indexOf(typeof field) < 0 || field === '') {
+            return null;
+        }
+
+        let record = null;
+
+        $.each(this._records, function (key, recordItem) {
+            if (recordItem.data.hasOwnProperty(field) && recordItem.data[field] === value) {
+                record = $.extend(true, {}, recordItem);
+
+                return false;
+            }
+        });
+
+        return record;
+    },
+
+
+    /**
+     * Удаление строки из таблицы по индексу
+     * @param index
+     */
+    removeRecordByIndex: function (index) {
+
+        let tr = coreuiTableElements.getTrByIndex(this, index);
+
+        if (tr.length >= 0) {
+            tr.fadeOut('fast', function () {
+                tr.remove();
+            });
+
+            if (this._records.hasOwnProperty(index)) {
+                this._records.slice(index, 1);
+            }
+        }
+    },
+
+
+    /**
+     * Добавление строки в таблицу после строки с индексом
+     * @param {object} recordData
+     * @param {number} index
+     */
+    addRecordAfterIndex: function (recordData, index) {
+
+        let tr = coreuiTableElements.getTrByIndex(this.getId(), index);
+
+        if (tr.length >= 0) {
+            let record = coreuiTablePrivate._addRecord(this, recordData, index);
+
+            if (record) {
+                tr.after(
+                    coreuiTableRender.renderRecord(this, record)
+                );
+            }
+        }
+    },
+
+
+    /**
+     * Добавление строки в таблицу перед строкой с индексом
+     * @param {object} recordData
+     * @param {number} index
+     */
+    addRecordBeforeIndex: function (recordData, index) {
+
+        let tr = coreuiTableElements.getTrByIndex(this.getId(), index);
+
+        if (tr.length >= 0) {
+            let record = coreuiTablePrivate._addRecordBefore(this, recordData, index);
+
+            if (record) {
+                tr.before(
+                    coreuiTableRender.renderRecord(this, record)
+                );
+            }
+        }
+    },
+
+
+    /**
+     * Добавление строки в начало таблицы
+     * @param {object} recordData
+     */
+    addRecordFirst: function (recordData) {
+
+        let tbody = coreuiTableElements.getTableTbody(this.getId());
+
+        if (tbody.length >= 0) {
+            let record = coreuiTablePrivate._addRecord(this, recordData, 0);
+
+            tbody.prepend(
+                coreuiTableRender.renderRecord(this, record)
+            );
+        }
+    },
+
+
+    /**
+     * Добавление строки в конец таблицы
+     * @param {object} recordData
+     */
+    addRecordLast: function (recordData) {
+
+        let tbody = coreuiTableElements.getTableTbody(this.getId());
+
+        if (tbody.length >= 0) {
+            let record = coreuiTablePrivate._addRecord(this, recordData);
+
+            tbody.append(
+                coreuiTableRender.renderRecord(this, record)
+            );
+        }
+    },
+
+
+    /**
+     * Показ указанных записей в таблице
+     * @param {Array}  records
+     * @param {number} total
+     */
+    showRecords: function (records, total) {
+
+        if ( ! Array.isArray(records)) {
+            return;
+        }
+
+        this._recordsTotal = coreuiTableUtils.isNumeric(total) ? parseInt(total) : records.length;
+
+        coreuiTablePrivate._setRecords(this, records);
+
+        if (records.length > 0) {
+            this._recordsNumber = this._page === 1
+                ? 1
+                : ((this._page - 1) * this._recordsPerPage) + 1;
+        }
+
+        let htmlRecords = coreuiTableRender.renderRecords(this, this._records);
+
+        coreuiTableElements.getTableTbody(this.getId())
+            .html(htmlRecords);
+
+        this._trigger('show-records', this, [ this ]);
+    },
+
+
+    /**
+     * Получение количества строк
+     * @return {number}
+     */
+    getRecordsCount: function () {
+
+        let count = 0;
+
+        if (this._isRecordsRequest) {
+            count = this._recordsTotal;
+
+        } else {
+
+            $.each(this._records, function (key, record) {
+                if (record.show) {
+                    count++;
+                }
+            });
+        }
+
+        return count;
+    },
+
+
+    /**
+     * Выполнения зарегистрированных функций в указанном событии
+     * @param {string}      name
+     * @param {object|null} context
+     * @param {Array}       params
      * @private
      */
     _trigger: function(name, context, params) {
@@ -893,7 +1240,7 @@ var coreuiTableInstance = {
         params = params || [];
 
         if (this._events[name] instanceof Object && this._events[name].length > 0) {
-            for (var i = 0; i < this._events[name].length; i++) {
+            for (let i = 0; i < this._events[name].length; i++) {
                 let callback = this._events[name][i].callback;
 
                 context = context || this._events[name][i].context;
@@ -905,229 +1252,6 @@ var coreuiTableInstance = {
                 }
             }
         }
-    },
-
-
-    /**
-     * Получение настроек языка
-     * @private
-     */
-    _getLang: function () {
-
-        return CoreUI.table.lang.hasOwnProperty(this._options.lang)
-            ? CoreUI.table.lang[this._options.lang]
-            : CoreUI.table.lang['ru'];
-    },
-
-
-    /**
-     * Получение записи по ключу
-     * @param recordKey
-     * @return {object|null}
-     * @private
-     */
-    _getRecordByKey: function (recordKey) {
-
-        if (typeof recordKey === 'undefined' || recordKey === '') {
-            return null;
-        }
-
-        let record = this._options.records.hasOwnProperty(recordKey)
-            ? this._options.records[recordKey]
-            : null;
-
-        if ( ! record) {
-            return null;
-        }
-
-        return record;
-    },
-
-
-    /**
-     * Получение записи по id
-     * @param {string} primaryKey
-     * @return {object|null}
-     * @private
-     */
-    _getRecordByPrimaryKey: function (primaryKey) {
-
-        if (typeof primaryKey === 'undefined' || primaryKey === '') {
-            return null;
-        }
-
-        let record    = null;
-        let recordKey = null;
-        let field     = this._options.primaryKey;
-
-        $.each(this._options.records, function (key, recordItem) {
-            if (recordItem.hasOwnProperty(field) && recordItem[field] === primaryKey) {
-                recordKey = key;
-                record    = recordItem;
-                return false;
-            }
-        });
-
-        if ( ! record) {
-            return null;
-        }
-
-        return {
-            key: recordKey,
-            record: record,
-        };
-    },
-
-
-    /**
-     * Получение элемента строки по ключу
-     * @param {int} recordKey
-     * @private
-     */
-    _getRowByKey: function (recordKey) {
-
-        return $('#coreui-table-' + this._options.id + ' > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr[data-record-key="' + recordKey + '"]');
-    },
-
-
-    /**
-     * Показ указанных записей в таблице
-     * @param records
-     * @param total
-     * @private
-     */
-    _viewRecords: function (records, total) {
-
-        this._recordsTotal = coreuiFormUtils.isNumeric(total) ? parseInt(total) : records.length;
-        let that           = this;
-        let htmlRecords    = '';
-        let totalPages     = this._recordsTotal > 0 && this._recordsPerPage > 0
-            ? Math.ceil(this._recordsTotal / this._recordsPerPage)
-            : 1;
-
-        this._options.records = records;
-
-        that._recordsNumber = this._page === 1 ? 1 : ((this._page - 1) * this._recordsPerPage) + 1;
-
-        if (records.length > 0) {
-            let renderRecorders = [];
-
-            $.each(records, function (key, record) {
-                renderRecorders.push(that._renderRecord(record, key));
-                that._recordsNumber++;
-            });
-
-            htmlRecords = ejs.render(coreuiFormTpl['table-records.html'], {
-                records: renderRecorders,
-            });
-
-        } else {
-            htmlRecords = ejs.render(coreuiFormTpl['table-records-empty.html'], {
-                columnsCount: this._columns.length > 0 ? this._columns.length : 1,
-                lang: this._getLang(),
-            });
-        }
-
-
-        let tableContainer = '#coreui-table-' + this._options.id + ' > .coreui-table__container > .coreui-table__wrapper > table';
-
-        $(tableContainer + ' > tfoot > tr > td .coreui-table__page_current').text(this._page);
-        $(tableContainer + ' > tfoot > tr > td .coreui-table__pages_total').text(totalPages);
-        $(tableContainer + ' > tfoot > tr > td .coreui-table__page_prev').attr('disabled', this._page <= 1);
-        $(tableContainer + ' > tfoot > tr > td .coreui-table__page_next').attr('disabled', this._page >= totalPages);
-
-        $(tableContainer + ' > tbody').html(htmlRecords);
-        $('#coreui-table-' + this._options.id + ' .coreui-table__count-total').text(this._recordsTotal);
-
-        this._trigger('show-records.coreui.table', this, [ this ]);
-    },
-
-
-    /**
-     * @param {object} record
-     * @param {int}    recordKey
-     * @returns {{ attr: (string), fields: (object) }}}
-     * @private
-     */
-    _renderRecord: function (record, recordKey) {
-
-        let that        = this;
-        let fields      = [];
-        let recordProps = typeof record.coreui === 'object' && ! Array.isArray(record.coreui) ? record.coreui : null;
-        let recordAttr  = {
-            class: 'coreui-table__record'
-        };
-
-        $.each(this._columns, function (key, column) {
-            fields.push(that._renderField(column, record, recordKey));
-        });
-
-        if (typeof this._options.onClickUrl === 'string' && this._options.onClickUrl) {
-            recordAttr.class += ' coreui-table_pointer';
-        }
-
-        if (recordProps) {
-            recordAttr = coreuiFormUtils.mergeAttr(recordAttr, recordProps.attr);
-        }
-
-        let recordAttrResult = [];
-
-        $.each(recordAttr, function (name, value) {
-            recordAttrResult.push(name + '="' + value + '"');
-        });
-
-        return {
-            attr: recordAttrResult.length > 0 ? (' ' + recordAttrResult.join(' ')) : '',
-            fields: fields
-        };
-    },
-
-
-    /**
-     *
-     * @param {object} column
-     * @param {object} record
-     * @param {int} recordKey
-     * @returns {{ attr: (string), content: (string) }}
-     * @private
-     */
-    _renderField: function (column, record, recordKey) {
-
-        let columnOptions = column.getOptions();
-        let columnField   = typeof columnOptions.field === 'string' ? columnOptions.field : null;
-        let content       = '';
-        let recordProps   = typeof record.coreui === 'object' && ! Array.isArray(record.coreui) ? record.coreui : null;
-        let fieldProps    = recordProps && recordProps.hasOwnProperty('fields') && recordProps.fields.hasOwnProperty(columnField)
-            ? recordProps.fields[columnField]
-            : null;
-        let fieldAttr = typeof columnOptions.attr === 'object' && ! Array.isArray(columnOptions.attr)
-            ? columnOptions.attr
-            : {};
-
-        if (fieldProps && typeof fieldProps.attr === 'object' && ! Array.isArray(fieldProps.attr)) {
-            fieldAttr = coreuiFormUtils.mergeAttr(fieldAttr, fieldProps.attr);
-        }
-
-        if (typeof columnOptions.render === 'function') {
-            content = columnOptions.render(record);
-        } else {
-            content = columnField && record.hasOwnProperty(columnField)
-                ? record[columnField]
-                : '';
-        }
-
-        content = column.render(content, record, recordKey);
-
-        let fieldAttrResult = [];
-
-        $.each(fieldAttr, function (name, value) {
-            fieldAttrResult.push(name + '="' + value + '"');
-        });
-
-        return {
-            attr:    fieldAttrResult.length > 0 ? (' ' + fieldAttrResult.join(' ')) : '',
-            content: content,
-        };
     }
 }
 

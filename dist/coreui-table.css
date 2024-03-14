@@ -28,9 +28,17 @@
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td {
   font-weight: 600;
 }
-.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td,
-.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td {
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td {
   font-size: 14px;
+}
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td,
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > .coreui-table__header,
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > .coreui-table__search .col-form-label {
+  font-size: 14px;
+}
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot > tr > td,
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > .coreui-table__footer {
+  font-size: 12px;
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead {
   position: sticky;
@@ -151,31 +159,11 @@
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td > .form-switch .form-check-input {
   margin-left: 0;
 }
-.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot > tr > td .coreui-table__page_go_container input {
-  width: 55px;
-  min-height: 24px;
-  height: 24px;
-  font-size: 12px;
-}
-.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot > tr > td .coreui-table__page_go_container button {
-  --bs-btn-font-size: .75rem;
-  line-height: 1.25;
-  padding: 0.2rem 0.25rem;
-}
-.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot > tr > td .coreui-table__pages_container button {
-  --bs-btn-font-size: .75rem;
-  line-height: 11px;
-  padding: 0.25rem 0.25rem;
-  height: 24px;
-}
-.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot > tr > td .coreui-table__pages_list_container > select {
-  background-size: 12px 10px;
-  line-height: 14px;
-  font-size: 12px;
-  width: 75px;
-}
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot > tr > td {
   background-color: #FFF;
+}
+.coreui-table .coreui-table__control .coreui-table__page_jump_container input {
+  width: 65px;
 }
 .coreui-table .coreui-table-lock {
   z-index: 2;

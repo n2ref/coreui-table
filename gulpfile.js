@@ -19,7 +19,7 @@ var conf = {
         fileMin: 'coreui-table.min.js',
         file: 'coreui-table.js',
         main: 'src/js/main.js',
-        src: 'src/js/*.js'
+        src: 'src/js/**/*.js'
     },
     css: {
         fileMin: 'coreui-table.min.css',
@@ -86,9 +86,12 @@ gulp.task('build_js_min', function() {
 gulp.task('build_js_min_fast', function() {
     return rollup({
         input: conf.js.main,
-        sourcemap: false,
+        sourcemap: true,
         format: 'umd',
         name: "CoreUI.table",
+        plugins: [
+            rollupSourcemaps(),
+        ],
         context: "window"
     })
         .pipe(source(conf.js.fileMin))

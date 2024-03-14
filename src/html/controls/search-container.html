@@ -1,0 +1,32 @@
+
+
+<div class="coreui-table__search px-3 pt-3 pb-4">
+    <div class="mb-3">
+        <% $.each(controls, function(key, control) { %>
+        <div class="mb-2 row">
+            <label class="col-12 col-md-2 col-form-label fw-medium text-start text-md-end pe-2">
+                <%= control.label %>
+                <% if (control.description) { %>
+                <div class="text-muted fw-normal">
+                    <small><%= control.description %></small>
+                </div>
+                <% } %>
+            </label>
+            <div class="col-12 col-md-10 search-control-<%= control.id %>">
+                <%- control.content %>
+                <% if (control.prefix) { %>
+                    <%= control.prefix %>
+                <% } %>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-10 offset-0 offset-md-2">
+            <button type="button" <%- btnCompleteAttr %>>
+                <%- btnCompleteContent %>
+            </button>
+        </div>
+    </div>
+</div>

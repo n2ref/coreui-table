@@ -1,11 +1,14 @@
 import coreuiTable from "../coreui.table";
+import coreuiTableElements from "../coreui.table.elements";
 
 coreuiTable.columns.select = {
 
     _table: null,
     _options: {
         type: 'select',
+        field: null,
         label: '',
+        show: true,
         width: 35,
         attr: { class: 'coreui-table__select_container text-center' },
         attrHeader: { class: 'text-center' }
@@ -27,43 +30,44 @@ coreuiTable.columns.select = {
         }
 
 
-        this._table   = table;
-        this._options = $.extend(true, {}, this._options, options);
-
+        this._table         = table;
+        this._options       = $.extend(true, {}, this._options, options);
         this._options.label = '<input class="coreui-table__select-all form-check-input" type="checkbox" value="">';
-        let tableWrapper    = '#coreui-table-' + table._options.id + ' > .coreui-table__container > .coreui-table__wrapper';
-        let containers      = tableWrapper + ' > table > tbody > tr.coreui-table__record > td.coreui-table__select_container';
-
 
         // Показ строк
-        this._table.on('show-records.coreui.table', function () {
+        this._table.on('show-records', function () {
+
+            let selects   = coreuiTableElements.getRowsSelects(table.getId());
+            let selectAll = coreuiTableElements.getRowsSelectAll(table.getId());
 
             // Отмена обработки нажатия в select колонках
-            $(containers).click(function (event) {
+            $(selects).click(function (event) {
                 event.stopPropagation();
             });
 
             // Выбор строки
-            $(containers + ' > .coreui-table__select').click(function (event) {
-                let recordKey = $(this).val();
-                let record    = table._getRecordByKey(recordKey);
-                let row       = table._getRowByKey(recordKey);
+            $(' > .coreui-table__select', selects).click(function (event) {
+                let recordIndex = $(this).val();
+                let record      = table.getRecordByIndex(recordIndex);
+                let tr          = coreuiTableElements.getTrByIndex(table.getId(), recordIndex);
 
-                if ( ! record || ! row) {
+                if ( ! record || ! tr) {
                     return;
                 }
 
                 if ($(this).is(':checked')) {
-                    $(row).addClass('table-primary');
-                    table._trigger('select.coreui.table', table, [ record ]);
+                    $(tr).addClass('table-primary');
+
+                    table._trigger('select', table, [ record ]);
                 } else {
-                    $(row).removeClass('table-primary');
-                    table._trigger('unselect.coreui.table', table, [ record ]);
+                    $(tr).removeClass('table-primary');
+
+                    table._trigger('unselect', table, [ record ]);
                 }
             });
 
             // Выбор всех строк
-            $(tableWrapper + ' > table > thead > tr > td > .coreui-table__select-all').click(function (event) {
+            selectAll.click(function (event) {
                 if ($(this).is(':checked')) {
                     table.selectAll();
                 } else {
@@ -75,10 +79,28 @@ coreuiTable.columns.select = {
 
 
     /**
+     * Установка видимости колонки
+     * @param {boolean} isShow
+     */
+    setShow: function (isShow) {
+        this._options.show = !! isShow;
+    },
+
+
+    /**
+     * Видимости колонки
+     */
+    isShow: function () {
+        return !! this._options.show;
+    },
+
+
+    /**
      * Получение параметров
+     * @returns {object}
      */
     getOptions: function () {
-        return this._options;
+        return $.extend({}, this._options);
     },
 
 
@@ -86,11 +108,10 @@ coreuiTable.columns.select = {
      * Формирование контента
      * @param {string} content
      * @param {object} record
-     * @param {string} recordKey
      * @returns {string}
      */
-    render: function(content, record, recordKey) {
+    render: function(content, record) {
 
-        return '<input class="coreui-table__select form-check-input" type="checkbox" value="' + recordKey + '">';
+        return '<input class="coreui-table__select form-check-input" type="checkbox" value="' + record.index + '">';
     }
 }

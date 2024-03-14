@@ -32,11 +32,19 @@
             padding: 0.2rem 0.25rem;
         }
         table > thead > tr > td {
-            font-weight: 600;
+            font-weight: $coreui-table-font-weight;
         }
-        table > tbody > tr > td,
-        table > thead > tr > td {
-            font-size: 14px;
+        table > tbody > tr > td {
+            font-size: $coreui-table-font-size;
+        }
+        table > thead > tr > td,
+        .coreui-table__header,
+        .coreui-table__search .col-form-label {
+            font-size: $coreui-table-font-size-header;
+        }
+        table > tfoot > tr > td,
+        .coreui-table__footer {
+            font-size: $coreui-table-font-size-footer;
         }
 
         table > thead {
@@ -166,31 +174,16 @@
             margin-left: 0;
         }
         table > tfoot {
-            > tr > td .coreui-table__page_go_container input {
-                width: 55px;
-                min-height: 24px;
-                height: 24px;
-                font-size: 12px;
-            }
-            > tr > td .coreui-table__page_go_container button {
-                --bs-btn-font-size: .75rem;
-                line-height: 1.25;
-                padding: 0.2rem 0.25rem;
-            }
-            > tr > td .coreui-table__pages_container button {
-                --bs-btn-font-size: .75rem;
-                line-height: 11px;
-                padding: 0.25rem 0.25rem;
-                height: 24px;
-            }
-            > tr > td .coreui-table__pages_list_container > select {
-                background-size: 12px 10px;
-                line-height: 14px;
-                font-size: 12px;
-                width: 75px;
-            }
             > tr > td {
                 background-color: $coreui-table-tfoot-bg;
+            }
+        }
+    }
+
+    .coreui-table__control {
+        .coreui-table__page_jump_container {
+            input {
+                width: 65px;
             }
         }
     }

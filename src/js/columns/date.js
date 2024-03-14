@@ -8,6 +8,7 @@ coreuiTable.columns.date = {
         type: 'date',
         field: null,
         label: null,
+        show: true,
         width: null,
         format: 'DD.MM.YYYY',
         attr: {},
@@ -29,10 +30,28 @@ coreuiTable.columns.date = {
 
 
     /**
+     * Установка видимости колонки
+     * @param {boolean} isShow
+     */
+    setShow: function (isShow) {
+        this._options.show = !! isShow;
+    },
+
+
+    /**
+     * Видимости колонки
+     */
+    isShow: function () {
+        return !! this._options.show;
+    },
+
+
+    /**
      * Получение параметров
+     * @returns {object}
      */
     getOptions: function () {
-        return this._options;
+        return $.extend({}, this._options);
     },
 
 
@@ -40,10 +59,9 @@ coreuiTable.columns.date = {
      * Формирование контента
      * @param {string} content
      * @param {object} record
-     * @param {string} recordKey
      * @returns {string}
      */
-    render: function(content, record, recordKey) {
+    render: function(content, record) {
 
         if (typeof content !== 'string') {
             return '';
@@ -51,14 +69,16 @@ coreuiTable.columns.date = {
 
 
         try {
-            let date = new Date(content);
+            if (content !== '') {
+                let date = new Date(content);
 
-            content = this._options.format
-                .replace(/YYYY/g, this._strPadLeft(date.getFullYear(), 4))
-                .replace(/MM/g,   this._strPadLeft(date.getMonth() + 1, 2))
-                .replace(/M/g,    date.getMonth() + 1)
-                .replace(/DD/g,   this._strPadLeft(date.getDate(), 2))
-                .replace(/D/g,    date.getDate());
+                content = this._options.format
+                    .replace(/YYYY/g, this._strPadLeft(date.getFullYear(), 4))
+                    .replace(/MM/g, this._strPadLeft(date.getMonth() + 1, 2))
+                    .replace(/M/g, date.getMonth() + 1)
+                    .replace(/DD/g, this._strPadLeft(date.getDate(), 2))
+                    .replace(/D/g, date.getDate());
+            }
 
         } catch (e) {
             content = '';

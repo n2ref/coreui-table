@@ -7,6 +7,7 @@ coreuiTable.columns.html = {
         type: 'html',
         field: null,
         label: null,
+        show: true,
         width: null,
         attr: {},
         attrHeader: {},
@@ -27,10 +28,28 @@ coreuiTable.columns.html = {
 
 
     /**
+     * Установка видимости колонки
+     * @param {boolean} isShow
+     */
+    setShow: function (isShow) {
+        this._options.show = !! isShow;
+    },
+
+
+    /**
+     * Видимости колонки
+     */
+    isShow: function () {
+        return !! this._options.show;
+    },
+
+
+    /**
      * Получение параметров
+     * @returns {object}
      */
     getOptions: function () {
-        return this._options;
+        return $.extend({}, this._options);
     },
 
 
@@ -38,10 +57,9 @@ coreuiTable.columns.html = {
      * Формирование контента
      * @param {string} content
      * @param {object} record
-     * @param {string} recordKey
      * @returns {string}
      */
-    render: function(content, record, recordKey) {
+    render: function(content, record) {
 
         if (['string', 'bigint', 'symbol', 'number'].indexOf(typeof content) < 0) {
             return '';

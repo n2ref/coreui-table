@@ -1,0 +1,25 @@
+
+<div class="coreui-table__columns px-3 pt-3 pb-4">
+    <div class="mb-3">
+        <div class="form-check coreui-table__check_all">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" <% if (showAll === true) { %>checked<% } %>>
+                <%= lang.all %>
+            </label>
+        </div>
+
+        <% $.each(columns, function(key, column) { %>
+        <div class="form-check coreui-table_check-column">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" value="<%= column.field %>"
+                       <% if (column.show === true) { %>checked<% } %>>
+                <%= column.label %>
+            </label>
+        </div>
+        <% }); %>
+    </div>
+
+    <button type="button" <%- btnCompleteAttr %>>
+        <%- btnCompleteContent %>
+    </button>
+</div>

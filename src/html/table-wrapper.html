@@ -1,0 +1,17 @@
+
+<div id="coreui-table-<%= id %>" class="coreui-table"<%- render.attr %> <% if (widthSizes) { %>style="<%= widthSizes.join(';') %>"<% } %>>
+
+    <%- render.headersOut.join('') %>
+
+    <div class="coreui-table__container position-relative">
+        <%- render.headersIn.join('') %>
+
+        <div class="coreui-table__wrapper table-responsive overflow-x-auto" <% if (heightSizes) { %>style="<%= heightSizes.join(';') %>"<% } %>>
+            <%- render.table %>
+        </div>
+
+        <%- render.footersIn.join('') %>
+    </div>
+
+    <%- render.footersOut.join('') %>
+</div>

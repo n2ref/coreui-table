@@ -6,16 +6,12 @@ import coreuiTable      from "../coreui.table";
 
 coreuiTable.controls.link = {
 
+    _id: null,
     _table: null,
     _options: {
-        id: null,
-        type: 'link',
         href: null,
         content: null,
         attr: null
-    },
-    _render: {
-        attr: ''
     },
 
 
@@ -28,10 +24,7 @@ coreuiTable.controls.link = {
 
         this._options = $.extend({}, this._options, options);
         this._table   = table;
-
-        if ( ! this._options.id) {
-            this._options.id = coreuiTableUtils.hashCode();
-        }
+        this._id      = coreuiTableUtils.hashCode();
     },
 
 
@@ -48,8 +41,7 @@ coreuiTable.controls.link = {
      * @returns {string}
      */
     getId: function () {
-
-        return this._options.id;
+        return this._id;
     },
 
 
@@ -59,19 +51,18 @@ coreuiTable.controls.link = {
      */
     render: function() {
 
-        if (typeof this._options.attr === 'object') {
-            let attributes = [];
+        let attributes = [];
 
+        if (typeof this._options.attr === 'object') {
             $.each(this._options.attr, function (name, value) {
                 attributes.push(name + '="' + value + '"');
             });
-
-            this._render.attr = ' ' + attributes.join(' ');
         }
 
         return ejs.render(coreuiTableTpl['controls/link.html'], {
-            control: this._options,
-            render: this._render,
+            href: this._options.href,
+            content: this._options.content,
+            attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });
     }
 }

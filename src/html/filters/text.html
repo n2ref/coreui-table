@@ -1,0 +1,10 @@
+
+<div class="input-group">
+    <% if (label) { %>
+    <span class="input-group-text"><%= label %></span>
+    <% } %>
+    <input type="text" <%- attr %>>
+    <button type="button" <%- btnAttr %>>
+        <%- btnContent %>
+    </button>
+</div>

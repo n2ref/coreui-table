@@ -1,0 +1,18 @@
+
+<div class="coreui-table__header ps-1 pe-1 d-flex justify-content-between border-bottom border-secondary-subtle">
+    <% if (controlsLeft.length) { %>
+    <div class="coreui-table__controls d-flex justify-content-start gap-2 flex-wrap flex-fill my-1 align-items-center">
+        <%- controlsLeft.join('') %>
+    </div>
+    <% } %>
+    <% if (controlsCenter.length) { %>
+    <div class="coreui-table__controls d-flex justify-content-center gap-2 flex-wrap flex-fill my-1 align-items-center">
+        <%- controlsCenter.join('') %>
+    </div>
+    <% } %>
+    <% if (controlsRight.length) { %>
+    <div class="coreui-table__controls d-flex justify-content-end gap-2 flex-wrap flex-fill my-1 align-items-center">
+        <%- controlsRight.join('') %>
+    </div>
+    <% } %>
+</div>

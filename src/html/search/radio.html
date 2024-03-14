@@ -1,0 +1,14 @@
+<div class="form-check">
+    <label class="form-check-label">
+        <input class="form-check-input" type="radio" name="<%= field %>" value=""<%= checkedAll ? ' checked' : '' %>>
+        <%= lang.all %>
+    </label>
+</div>
+<% $.each(options, function(key, option) { %>
+    <div class="form-check">
+        <label class="form-check-label">
+            <input class="form-check-input" type="radio" name="<%= field %>" value="<%- option.value %>" <%= option.checked ? ' checked' : '' %>>
+            <%= option.text %>
+        </label>
+    </div>
+<% }); %>
