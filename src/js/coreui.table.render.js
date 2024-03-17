@@ -31,6 +31,13 @@ let coreuiTableRender = {
 
                 let columnOptions = column.getOptions();
                 let attributes    = [];
+                let sortable      = null;
+
+                if (columnOptions.hasOwnProperty('field') && typeof columnOptions.field === 'string') {
+                    columnOptions.attrHeader = coreuiTableUtils.mergeAttr(columnOptions.attrHeader, {
+                        "data-field": columnOptions.field
+                    });
+                }
 
                 if (columnOptions.hasOwnProperty('fixed') && typeof columnOptions.fixed === 'string') {
                     columnOptions.attrHeader = coreuiTableUtils.mergeAttr(columnOptions.attrHeader, {
@@ -42,7 +49,35 @@ let coreuiTableRender = {
                     });
                 }
 
-                if (columnOptions.attrHeader && typeof columnOptions.attrHeader === 'object') {
+                if (columnOptions.type !== 'numbers') {
+                    if (columnOptions.hasOwnProperty('sortable') && columnOptions.sortable) {
+                        columnOptions.attrHeader = coreuiTableUtils.mergeAttr(columnOptions.attrHeader, {
+                            class: 'coreui-table__sortable'
+                        });
+                    }
+
+                    if (table._sort.length > 0 &&
+                        columnOptions.hasOwnProperty('field') &&
+                        typeof columnOptions.field === 'string' &&
+                        columnOptions.field
+                    ) {
+                        $.each(table._sort, function (key, sortField) {
+
+                            if (columnOptions.field === sortField.field) {
+                                if (sortField.order === 'asc') {
+                                    sortable = 'asc';
+
+                                } else if (sortField.order === 'desc') {
+                                    sortable = 'desc';
+                                }
+
+                                return false;
+                            }
+                        });
+                    }
+                }
+
+                if (columnOptions.attrHeader && coreuiTableUtils.isObject(columnOptions.attrHeader)) {
                     $.each(columnOptions.attrHeader, function (name, value) {
                         attributes.push(name + '="' + value + '"');
                     });
@@ -55,7 +90,8 @@ let coreuiTableRender = {
 
                 columns.push({
                     attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
-                    label: columnOptions.hasOwnProperty('label') ? columnOptions.label : ""
+                    label: columnOptions.hasOwnProperty('label') ? columnOptions.label : "",
+                    sortable: sortable
                 });
             });
         }

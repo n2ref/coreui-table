@@ -159,6 +159,36 @@ let coreuiTablePrivate = {
 
 
     /**
+     * Инициализация сортировки
+     * @param {Object} table
+     * @param {Array} sort
+     * @private
+     */
+    _initSort: function (table, sort) {
+
+        if (Array.isArray(sort) && sort.length > 0) {
+            $.each(sort, function (key, sortField) {
+
+                if (coreuiTableUtils.isObject(sortField) &&
+                    sortField.hasOwnProperty('field') &&
+                    sortField.hasOwnProperty('order') &&
+                    typeof sortField.field === 'string' &&
+                    typeof sortField.order === 'string' &&
+                    sortField.field &&
+                    sortField.order &&
+                    ['asc', 'desc'].indexOf(sortField.order) >= 0
+                ) {
+                    table._sort.push({
+                        field: sortField.field,
+                        order: sortField.order
+                    });
+                }
+            });
+        }
+    },
+
+
+    /**
      * Установка записей
      * @param {Object} table
      * @param {Array}  records
@@ -204,6 +234,7 @@ let coreuiTablePrivate = {
                 data: data,
                 show: true,
                 meta: meta,
+                seq: table._seq++,
             };
 
 
@@ -265,6 +296,7 @@ let coreuiTablePrivate = {
                 data: data,
                 show: true,
                 meta: meta,
+                seq: table._seq++,
             };
 
 
@@ -356,6 +388,59 @@ let coreuiTablePrivate = {
         });
 
         return isShow;
+    },
+
+
+    /**
+     * Сортировка записей по seq
+     * @param {Array} records
+     * @return {*}
+     */
+    sortRecordsBySeq: function (records) {
+
+        return records.sort(function (a, b) {
+            return a.seq - b.seq;
+        });
+    },
+
+
+    /**
+     * Сортировка записей по указанным полям
+     * @param records
+     * @param fields
+     */
+    sortRecordsByFields: function (records, fields) {
+
+        return records.sort(function(a, b) {
+
+            for (let i = 0; i < fields.length; i++) {
+                let issetAField = a.data.hasOwnProperty(fields[i].field);
+                let issetBField = b.data.hasOwnProperty(fields[i].field);
+
+                if ( ! issetAField && ! issetBField) {
+                    return 0;
+
+                } else if ( ! issetAField) {
+                    return 1;
+
+                } else if ( ! issetBField) {
+                    return -1;
+                }
+
+
+                let val = a.data[fields[i].field] < b.data[fields[i].field]
+                    ? -1
+                    : (a.data[fields[i].field] > b.data[fields[i].field] ? 1 : 0);
+
+                if (fields[i].order === "desc") {
+                    val = val * -1;
+                }
+
+                if (val !== 0) {
+                    return val;
+                }
+            }
+        })
     }
 }
 

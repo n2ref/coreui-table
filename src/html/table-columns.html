@@ -1,5 +1,12 @@
 <tr class="fw-medium bg-white">
   <% $.each(columns, function(key, column) { %>
-  <td<%- column.attr%>><%- column.label %></td>
+  <td<%- column.attr%>>
+    <%- column.label %>
+    <% if (column.sortable === 'asc') { %>
+      <i class="bi bi-sort-down-alt"></i>
+    <% } else if (column.sortable === 'desc') { %>
+      <i class="bi bi-sort-down"></i>
+    <% } %>
+  </td>
   <% }); %>
 </tr>

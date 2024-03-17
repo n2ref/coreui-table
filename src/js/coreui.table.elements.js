@@ -104,6 +104,17 @@ let coreuiTableElements = {
 
 
     /**
+     * Получение ячеек с сортировкой по таблице
+     * @param {string} tableId
+     * @return {jQuery}
+     */
+    getTableSortable: function (tableId) {
+
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td.coreui-table__sortable');
+    },
+
+
+    /**
      * Получение строк записей
      * @param {string} tableId
      * @return {jQuery}

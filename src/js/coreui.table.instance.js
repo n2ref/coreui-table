@@ -35,6 +35,7 @@ let coreuiTableInstance = {
                 count: 'count',
                 start: 'start',
                 end: 'end',
+                sort: 'sort',
                 search: 'search',
                 filter: 'filter',
             },
@@ -45,6 +46,7 @@ let coreuiTableInstance = {
         },
         onClick: null,
         onClickUrl: null,
+        sort: [],
         header: [],
         footer: [],
         columnGroupsHeader: [],
@@ -59,9 +61,11 @@ let coreuiTableInstance = {
     _recordsPerPage: 25,
     _recordsTotal: 0,
     _recordsNumber: 1,
+    _seq: 1,
     _isRecordsRequest: false,
 
     _records: [],
+    _sort: [],
     _columns: [],
     _search: [],
     _filters: [],
@@ -145,6 +149,14 @@ let coreuiTableInstance = {
         ) {
             coreuiTablePrivate._initControls(this, this._options.footer, 'footer');
         }
+
+
+        if (this._options.hasOwnProperty('sort') &&
+            Array.isArray(this._options.sort) &&
+            this._options.sort.length > 0
+        ) {
+            coreuiTablePrivate._initSort(this, this._options.sort);
+        }
     },
 
 
@@ -204,7 +216,53 @@ let coreuiTableInstance = {
         });
 
 
+        // Показ таблицы
+        this.on('show-table', function () {
 
+            let sortableColumns = coreuiTableElements.getTableSortable(that.getId());
+            if (sortableColumns[0]) {
+                sortableColumns.click(function () {
+                    let field = $(this).data('field');
+
+                    if (field) {
+                        let sorting      = [];
+                        let currentOrder = null;
+
+                        $.each(that._sort, function (key, sortField) {
+
+                            if (field === sortField.field) {
+                                currentOrder = sortField.order;
+                                return false;
+                            }
+                        });
+
+
+                        if (currentOrder === null) {
+                            sorting.push({
+                                field: field,
+                                order: 'asc',
+                            });
+
+                        } else if (currentOrder === 'asc') {
+                            sorting.push({
+                                field: field,
+                                order: 'desc',
+                            });
+                        }
+
+
+                        if (sorting.length === 0) {
+                            that.sortDefault();
+
+                        } else {
+                            that.sortFields(sorting);
+                        }
+                    }
+                });
+            }
+        });
+
+        this._trigger('show-table', this, [ this ]);
         this._trigger('shown');
 
         // Вызов события показа строк
@@ -492,15 +550,13 @@ let coreuiTableInstance = {
      * Загрузка строк
      * @param {string} url
      * @param {string} method
-     * @param {object} params
      */
-    load: function (url, method, params) {
+    load: function (url, method) {
 
         this.lock();
 
         let that   = this;
-
-        params = coreuiTableUtils.isObject(params) ? params : {};
+        let params = {};
 
         if (url.match(/\[page\]/)) {
             url = url.replace(/\[page\]/g, this._page);
@@ -536,6 +592,40 @@ let coreuiTableInstance = {
                 ? this._options.recordsRequest.params.end
                 : 'end';
             params[paramEnd] = ((this._page - 1) * this._recordsPerPage) + Number(this._recordsPerPage);
+        }
+
+
+        let searchData = this.getSearchData();
+        let filterData = this.getFilterData();
+
+        if (searchData.length > 0) {
+            let paramSearch = coreuiTableUtils.isObject(this._options.recordsRequest.params) &&
+                              this._options.recordsRequest.params.hasOwnProperty('search') &&
+                              typeof this._options.recordsRequest.params.search === 'string'
+                ? this._options.recordsRequest.params.search
+                : 'search';
+
+            params[paramSearch] = searchData;
+        }
+
+        if (filterData.length > 0) {
+            let paramFilters = coreuiTableUtils.isObject(this._options.recordsRequest.params) &&
+                              this._options.recordsRequest.params.hasOwnProperty('filter') &&
+                              typeof this._options.recordsRequest.params.filter === 'string'
+                ? this._options.recordsRequest.params.filter
+                : 'filter';
+
+            params[paramFilters] = filterData;
+        }
+
+        if (this._sort.length > 0) {
+            let paramSort = coreuiTableUtils.isObject(this._options.recordsRequest.params) &&
+                            this._options.recordsRequest.params.hasOwnProperty('sort') &&
+                            typeof this._options.recordsRequest.params.sort === 'string'
+                ? this._options.recordsRequest.params.sort
+                : 'sort';
+
+            params[paramSort] = this._sort;
         }
 
 
@@ -594,6 +684,7 @@ let coreuiTableInstance = {
 
         coreuiTableElements.getTable(this.getId()).replaceWith(table);
 
+        this._trigger('show-table', this, [ this ]);
         this._trigger('show-records', this, [ this ]);
     },
 
@@ -935,28 +1026,7 @@ let coreuiTableInstance = {
         let filterData = this.getFilterData();
 
         if (this._isRecordsRequest) {
-            let search = coreuiTableUtils.isObject(this._options.recordsRequest.params) &&
-                         this._options.recordsRequest.params.hasOwnProperty('search') &&
-                         typeof this._options.recordsRequest.params.search === 'string'
-                ? this._options.recordsRequest.params.search
-                : 'search';
-
-            let filter = coreuiTableUtils.isObject(this._options.recordsRequest.params) &&
-                         this._options.recordsRequest.params.hasOwnProperty('filter') &&
-                         typeof this._options.recordsRequest.params.filter === 'string'
-                ? this._options.recordsRequest.params.filter
-                : 'filter';
-
-            let params = {};
-
-            if (searchData.length > 0) {
-                params[search] = searchData;
-            }
-            if (filterData.length > 0) {
-                params[filter] = filterData;
-            }
-
-            this.load(this._options.recordsRequest.url, this._options.recordsRequest.method, params);
+            this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
 
         } else {
             $.each(this._records, function (index, record) {
@@ -1077,20 +1147,111 @@ let coreuiTableInstance = {
 
 
     /**
+     * Сортировка по полям
+     * @param {Array} sorting
+     */
+    sortFields: function (sorting) {
+
+        if ( ! Array.isArray(sorting)) {
+            return;
+        }
+
+        let that = this;
+
+        this._sort = [];
+
+        $.each(sorting, function (key, sort) {
+            if ( ! coreuiTableUtils.isObject(sort) ||
+                 ! sort.hasOwnProperty('field') ||
+                 ! sort.hasOwnProperty('order') ||
+                typeof sort.field !== 'string' ||
+                typeof sort.order !== 'string' ||
+                 ! sort.field ||
+                 ! sort.order
+            ) {
+                return;
+            }
+
+
+            let columnSortable = false;
+
+            $.each(that._columns, function (key, column) {
+                let options = column.getOptions();
+
+                if (options.hasOwnProperty('field') &&
+                    options.hasOwnProperty('sortable') &&
+                    typeof options.field === 'string' &&
+                    options.field === sort.field &&
+                    options.sortable
+                ) {
+                    columnSortable = true;
+                    return false;
+                }
+            });
+
+
+            if (columnSortable) {
+                that._sort.push({
+                    field: sort.field,
+                    order: sort.order,
+                });
+            }
+        });
+
+
+        if (this._sort.length >= 0) {
+            if (this._isRecordsRequest) {
+                this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+
+            } else {
+                this.records = coreuiTablePrivate.sortRecordsByFields(this._records, this._sort);
+                this.refresh();
+            }
+        }
+    },
+
+
+    /**
+     * Сортировка по умолчанию
+     */
+    sortDefault: function () {
+
+        this._sort = [];
+
+        if (this._isRecordsRequest) {
+            this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+
+        } else {
+            this.records = coreuiTablePrivate.sortRecordsBySeq(this._records);
+            this.refresh();
+        }
+    },
+
+
+    /**
      * Удаление строки из таблицы по индексу
      * @param index
      */
     removeRecordByIndex: function (index) {
 
-        let tr = coreuiTableElements.getTrByIndex(this, index);
+        let recordKey = null;
 
-        if (tr.length >= 0) {
-            tr.fadeOut('fast', function () {
-                tr.remove();
-            });
+        $.each(this._records, function (key, recordItem) {
+            if (recordItem.index === index) {
+                recordKey = key;
+                return false;
+            }
+        });
 
-            if (this._records.hasOwnProperty(index)) {
-                this._records.slice(index, 1);
+        if (recordKey) {
+            this._records.slice(recordKey, 1);
+
+            let tr = coreuiTableElements.getTrByIndex(this, index);
+
+            if (tr.length >= 0) {
+                tr.fadeOut('fast', function () {
+                    tr.remove();
+                });
             }
         }
     },

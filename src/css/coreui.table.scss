@@ -124,6 +124,10 @@
         table > thead > tr > td.coreui-table__fixed_left {
             box-shadow: 1px 0 0 $coreui-table-border-color, 0 1px 0 $coreui-table-border-color;
         }
+        table > thead > tr > td.coreui-table__sortable:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
         table > tbody > tr > td.coreui-table__fixed_left::after {
             content: '';
             position: absolute;
