@@ -39,6 +39,11 @@ let coreuiTablePrivate = {
      */
     _initSearch: function (table, searchControls) {
 
+        let options      = table.getOptions();
+        let searchValues = options.saveState && options.id
+            ? coreuiTablePrivate.getStorageField(table.getId(), 'search')
+            : null;
+
         $.each(searchControls, function (key, control) {
             if ( ! coreuiTableUtils.isObject(control)) {
                 control = {};
@@ -49,6 +54,24 @@ let coreuiTablePrivate = {
                 ! coreuiTable.search.hasOwnProperty(control.type)
             ) {
                 control.type = 'text';
+            }
+
+            if (options.saveState && options.id) {
+                control.value = null;
+
+                if (Array.isArray(searchValues) && control.hasOwnProperty('field')) {
+                    $.each(searchValues, function (key, search) {
+                        if (coreuiTableUtils.isObject(search) &&
+                            search.hasOwnProperty('field') &&
+                            search.hasOwnProperty('value') &&
+                            search.field &&
+                            search.field === control.field
+                        ) {
+                            control.value = search.value;
+                            return false;
+                        }
+                    })
+                }
             }
 
             let controlInstance = $.extend(true, {}, coreuiTable.search[control.type]);
@@ -146,6 +169,33 @@ let coreuiTablePrivate = {
                 let filterName = control.type.substring(7);
 
                 if (coreuiTable.filters.hasOwnProperty(filterName)) {
+
+                    if (control.hasOwnProperty('field')) {
+                        let options = table.getOptions();
+
+                        if (options.saveState && options.id) {
+                            let filterValues = options.saveState && options.id
+                                ? coreuiTablePrivate.getStorageField(table.getId(), 'filters')
+                                : null;
+
+                            control.value = null;
+
+                            if (Array.isArray(filterValues)) {
+                                $.each(filterValues, function (key, filter) {
+                                    if (coreuiTableUtils.isObject(filter) &&
+                                        filter.hasOwnProperty('field') &&
+                                        filter.hasOwnProperty('value') &&
+                                        filter.field &&
+                                        filter.field === control.field
+                                    ) {
+                                        control.value = filter.value;
+                                        return false;
+                                    }
+                                })
+                            }
+                        }
+                    }
+
                     instance = $.extend(true, {}, coreuiTable.filters[filterName]);
                     instance.init(table, control);
 
@@ -441,6 +491,103 @@ let coreuiTablePrivate = {
                 }
             }
         })
+    },
+
+
+    /**
+     * Получение данных из хранилища
+     * @param {string} tableId
+     * @return {object|null}
+     */
+    getStorage: function (tableId) {
+
+        let storage = localStorage.getItem('coreui_table');
+
+        try {
+            if (typeof storage === 'string' && storage) {
+                storage = JSON.parse(storage);
+
+                if (coreuiTableUtils.isObject(storage)) {
+                    return tableId && typeof tableId === 'string'
+                        ? (storage.hasOwnProperty(tableId) ? storage[tableId] : null)
+                        : storage;
+                }
+            }
+
+            return null;
+
+        } catch (e) {
+            return null;
+        }
+    },
+
+
+    /**
+     * Сохранение данных в хранилище
+     * @param {string}      tableId
+     * @param {object|null} storage
+     */
+    setStorage: function (tableId, storage) {
+
+        if (typeof tableId !== 'string' || ! tableId) {
+            return;
+        }
+
+        let storageAll = this.getStorage();
+
+        if (coreuiTableUtils.isObject(storageAll)) {
+            if (storageAll.hasOwnProperty(tableId)) {
+                if (storage) {
+                    storageAll[tableId] = storage;
+                } else {
+                    delete storageAll[tableId];
+                }
+
+            } else if (storage) {
+                storageAll[tableId] = storage;
+            }
+        }
+
+        localStorage.setItem('coreui_table', JSON.stringify(storageAll || {}));
+    },
+
+
+    /**
+     * Получение поля из хранилища
+     * @param tableId
+     * @param field
+     * @return {*|null}
+     */
+    getStorageField: function (tableId, field) {
+
+        let storage = this.getStorage(tableId) || {};
+
+        return storage.hasOwnProperty(field)
+            ? storage[field]
+            : null;
+    },
+
+
+    /**
+     * Сохранение поля в хранилище
+     * @param tableId
+     * @param field
+     * @param data
+     */
+    setStorageField: function (tableId, field, data) {
+
+        let storage = this.getStorage(tableId) || {};
+
+        if (data === null) {
+            if (storage.hasOwnProperty(field)) {
+                delete storage[field];
+            }
+
+        } else {
+            storage[field] = data;
+        }
+
+        this.setStorage(tableId, storage);
     }
 }
 

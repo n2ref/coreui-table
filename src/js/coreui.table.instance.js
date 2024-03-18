@@ -26,6 +26,7 @@ let coreuiTableInstance = {
         naxHeight: null,
         page: 1,
         recordsPerPage: 25,
+        saveState: false,
 
         recordsRequest: {
             method: 'GET',
@@ -151,11 +152,25 @@ let coreuiTableInstance = {
         }
 
 
-        if (this._options.hasOwnProperty('sort') &&
-            Array.isArray(this._options.sort) &&
-            this._options.sort.length > 0
-        ) {
-            coreuiTablePrivate._initSort(this, this._options.sort);
+        // Сортировка
+        if (this._options.saveState && this._options.id) {
+            let sort = coreuiTablePrivate.getStorageField(this.getId(), 'sort');
+
+            if (Array.isArray(sort) && sort.length > 0) {
+                coreuiTablePrivate._initSort(this, sort);
+
+                if (this._records.length > 0) {
+                    this._records = coreuiTablePrivate.sortRecordsByFields(this._records, this._sort);
+                }
+            }
+
+        } else {
+            if (this._options.hasOwnProperty('sort') &&
+                Array.isArray(this._options.sort) &&
+                this._options.sort.length > 0
+            ) {
+                coreuiTablePrivate._initSort(this, this._options.sort);
+            }
         }
     },
 
@@ -261,6 +276,23 @@ let coreuiTableInstance = {
                 });
             }
         });
+
+
+        // События смены состояния
+        if (this._options.saveState && this._options.id) {
+            this.on('sort', function () {
+                coreuiTablePrivate.setStorageField(that.getId(), 'sort', that._sort);
+            });
+
+            this.on('search_change', function () {
+                coreuiTablePrivate.setStorageField(that.getId(), 'search', that.getSearchData());
+            });
+
+            this.on('filters_change', function () {
+                coreuiTablePrivate.setStorageField(that.getId(), 'filters', that.getFilterData());
+            });
+        }
+
 
         this._trigger('show-table', this, [ this ]);
         this._trigger('shown');
@@ -893,19 +925,42 @@ let coreuiTableInstance = {
 
     /**
      * Регистрация функции на событие
-     * @param eventName
-     * @param callback
-     * @param context
-     * @param singleExec
+     * @param {Array|string} eventName
+     * @param {function}     callback
+     * @param {*}            context
+     * @param {boolean}      singleExec
      */
     on: function(eventName, callback, context, singleExec) {
-        if (typeof this._events[eventName] !== 'object') {
-            this._events[eventName] = [];
+
+        let eventNames = [];
+
+        if (Array.isArray(eventName)) {
+            $.each(eventName, function (key, name) {
+                if (typeof name === 'string' && name) {
+                    eventNames.push(name);
+                }
+            });
+
+        } else if (typeof eventName === 'string' && eventName) {
+            eventNames.push(eventName);
+
+        } else {
+            return;
         }
-        this._events[eventName].push({
-            context : context || this,
-            callback: callback,
-            singleExec: !! singleExec,
+
+        let that = this;
+
+        $.each(eventNames, function (key, name) {
+
+            if ( ! Array.isArray(that._events[name])) {
+                that._events[name] = [];
+            }
+
+            that._events[name].push({
+                context : context || that,
+                callback: callback,
+                singleExec: !! singleExec,
+            });
         });
     },
 
@@ -1100,7 +1155,11 @@ let coreuiTableInstance = {
 
         $.each(this._records, function (key, recordItem) {
             if (recordItem.index === index) {
-                record = $.extend(true, {}, recordItem);
+                record = {
+                    index: recordItem.index,
+                    data: $.extend(true, {}, recordItem.data),
+                    meta: recordItem.meta ? $.extend(true, {}, recordItem.meta) : null,
+                };
                 return false;
             }
         });
@@ -1143,6 +1202,52 @@ let coreuiTableInstance = {
         });
 
         return record;
+    },
+
+
+    /**
+     * Получение контрола по его id
+     * @param {string} id
+     * @return {object}
+     */
+    getControlById: function (id) {
+
+        let result = null;
+
+        $.each(this._controls, function (key, control) {
+            if (control.hasOwnProperty('getId') &&
+                typeof control.getId === 'function' &&
+                control.getId() === id
+            ) {
+                result = control;
+                return false;
+            }
+        });
+
+        return result;
+    },
+
+
+    /**
+     * Получение контрола поиска по его id
+     * @param {string} id
+     * @return {object}
+     */
+    getSearchControlById: function (id) {
+
+        let result = null;
+
+        $.each(this._search, function (key, search) {
+            if (search.hasOwnProperty('getId') &&
+                typeof search.getId === 'function' &&
+                search.getId() === id
+            ) {
+                result = search;
+                return false;
+            }
+        });
+
+        return result;
     },
 
 
@@ -1208,6 +1313,8 @@ let coreuiTableInstance = {
                 this.refresh();
             }
         }
+
+        this._trigger('sort', this, [ this ]);
     },
 
 
@@ -1225,6 +1332,8 @@ let coreuiTableInstance = {
             this.records = coreuiTablePrivate.sortRecordsBySeq(this._records);
             this.refresh();
         }
+
+        this._trigger('sort', this, [ this ]);
     },
 
 

@@ -308,7 +308,8 @@ let coreuiTableRender = {
 
         return {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
-            fields: fields
+            fields: fields,
+            index: record.index
         };
     },
 
