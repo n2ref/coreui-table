@@ -83,9 +83,30 @@ let coreuiTableRender = {
                     });
                 }
 
+
+                let style = [];
+
+                if (columnOptions.hasOwnProperty('width') &&
+                    ['string', 'number'].indexOf(typeof columnOptions.width) >= 0
+                ) {
+                    let unit = typeof columnOptions.width === 'number' ? 'px' : '';
+                    style.push('width:' + columnOptions.width + unit);
+                }
+                if (columnOptions.hasOwnProperty('minWidth') &&
+                    ['string', 'number'].indexOf(typeof columnOptions.minWidth) >= 0
+                ) {
+                    let unit = typeof columnOptions.minWidth === 'number' ? 'px' : '';
+                    style.push('min-width:' + columnOptions.minWidth + unit);
+                }
+                if (columnOptions.hasOwnProperty('maxWidth') &&
+                    ['string', 'number'].indexOf(typeof columnOptions.maxWidth) >= 0
+                ) {
+                    let unit = typeof columnOptions.maxWidth === 'number' ? 'px' : '';
+                    style.push('max-width:' + columnOptions.maxWidth + unit);
+                }
+
                 colGroups.push({
-                    width: columnOptions.hasOwnProperty('width') ? columnOptions.width : '',
-                    unit: typeof columnOptions.width === 'number' ? 'px' : ''
+                    style: style.length > 0 ? style.join(';') : ''
                 });
 
                 columns.push({

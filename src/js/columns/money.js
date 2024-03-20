@@ -1,11 +1,11 @@
-import coreuiTable from "../coreui.table";
+import coreuiTable      from "../coreui.table";
 import coreuiTableUtils from "../coreui.table.utils";
 
-coreuiTable.columns.html = {
+coreuiTable.columns.money = {
 
     _table: null,
     _options: {
-        type: 'html',
+        type: 'money',
         field: null,
         label: null,
         show: true,
@@ -14,8 +14,13 @@ coreuiTable.columns.html = {
         maxWidth: null,
         noWrap: null,
         noWrapToggle: null,
-        attr: {},
-        attrHeader: {},
+        currency: null,
+        attr: {
+            class: 'text-end'
+        },
+        attrHeader: {
+            class: 'text-end'
+        },
         render: null
     },
 
@@ -93,6 +98,23 @@ coreuiTable.columns.html = {
             return '';
         }
 
+
+        if (isNaN(content)) {
+            content = content.toString()
+                .replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+
+        } else {
+            content = Number(content).toFixed(2).toString();
+            content = content.replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+        }
+
+        if (this._options.currency &&
+            ['string', 'number'].indexOf(typeof this._options.currency) >= 0
+        ) {
+            content += ' <small class="text-muted">' + this._options.currency + '</small>';
+        }
+
+
         if (this._options.noWrap) {
             content = '<div>' + content + '</div>'
 
@@ -101,6 +123,6 @@ coreuiTable.columns.html = {
             }
         }
 
-        return String(content);
+        return content;
     }
 }

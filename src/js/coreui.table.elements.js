@@ -189,6 +189,17 @@ let coreuiTableElements = {
 
 
     /**
+     * Получение элементов для раскрытия ячеек
+     * @param {string} tableId
+     * @return {Array}
+     */
+    getNoWrapToggles: function (tableId) {
+
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper  > table > tbody > tr > td.coreui_table__no-wrap > i.toggle');
+    },
+
+
+    /**
      * Выделение строки в таблице
      * @param {jQuery} tr
      */

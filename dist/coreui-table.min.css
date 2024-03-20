@@ -143,6 +143,37 @@
   width: 1px;
   box-shadow: 1px 0 0 #c4c8cb, 0 1px 0 #c4c8cb;
 }
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td.coreui_table__no-wrap {
+  max-width: 0;
+  position: relative;
+}
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td.coreui_table__no-wrap > div {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td.coreui_table__no-wrap > div + i.toggle {
+  display: none;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  font-size: 10px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  text-align: center;
+  color: #ccc;
+}
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td.coreui_table__no-wrap > div + i.toggle:hover {
+  color: #444;
+}
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td.coreui_table__no-wrap:hover > div + i.toggle {
+  display: inline-block;
+}
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td.coreui_table__no-wrap.shown > div {
+  overflow: visible;
+  white-space: normal;
+}
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td:first-child,
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td:first-child,
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot > tr > td:first-child {

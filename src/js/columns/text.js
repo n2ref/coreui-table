@@ -1,4 +1,5 @@
 import coreuiTable from "../coreui.table";
+import coreuiTableUtils from "../coreui.table.utils";
 
 coreuiTable.columns.text = {
 
@@ -9,7 +10,11 @@ coreuiTable.columns.text = {
         label: null,
         show: true,
         width: null,
+        minWidth: null,
+        maxWidth: null,
         attr: null,
+        noWrap: null,
+        noWrapToggle: null,
         attrHeader: null,
         render: null
     },
@@ -24,6 +29,29 @@ coreuiTable.columns.text = {
 
         this._table   = table;
         this._options = $.extend({}, this._options, options);
+
+        let tableOptions = this._table.getOptions();
+
+        if (this._options.noWrap ||
+            (this._options.noWrap === null && tableOptions.noWrap)
+        ) {
+            if ( ! this._options.attr) {
+                this._options.attr = { class : 'coreui_table__no-wrap' };
+
+            } else {
+                this._options.attr = coreuiTableUtils.mergeAttr(this._options.attr, {
+                    class: 'coreui_table__no-wrap'
+                });
+            }
+
+            this._options.noWrap = true;
+
+            if (this._options.noWrapToggle ||
+                (this._options.noWrapToggle === null && tableOptions.noWrapToggle)
+            ) {
+                this._options.noWrapToggle = true;
+            }
+        }
     },
 
 
@@ -65,8 +93,18 @@ coreuiTable.columns.text = {
             return '';
         }
 
-        return String(content)
+        content = String(content)
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;');
+
+        if (this._options.noWrap) {
+            content = '<div>' + content + '</div>'
+
+            if (this._options.noWrapToggle) {
+                content += '<i class="bi bi-caret-down-fill toggle"></i>'
+            }
+        }
+
+        return content;
     }
 }

@@ -2,7 +2,7 @@
 <table class="table <%= classes %> mb-0">
     <colgroup>
         <% $.each(colGroups, function(key, columnGroup) { %>
-        <col<% if (columnGroup.width) { %> style="width: <%= (columnGroup.width.toString() + columnGroup.unit) %>"<% } %>/>
+        <col<% if (columnGroup.style) { %> style="<%= columnGroup.style %>"<% } %>/>
         <% }); %>
     </colgroup>
     <% if (show.columnHeaders) { %>

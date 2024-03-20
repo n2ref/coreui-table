@@ -155,6 +155,42 @@
             width: 1px;
             box-shadow: 1px 0 0 $coreui-table-border-color, 0 1px 0 $coreui-table-border-color;
         }
+        table > tbody > tr > td.coreui_table__no-wrap {
+            max-width: 0;
+            position: relative;
+
+            > div {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+
+                + i.toggle {
+                    display: none;
+                    width: 15px;
+                    height: 15px;
+                    cursor: pointer;
+                    font-size: 10px;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    text-align: center;
+                    color: #ccc;
+                }
+                + i.toggle:hover {
+                    color: #444;
+                }
+            }
+            &:hover > div + i.toggle {
+                display: inline-block;
+            }
+
+            &.shown {
+                > div {
+                    overflow: visible;
+                    white-space: normal;
+                }
+            }
+        }
 
         table > thead > tr > td:first-child,
         table > tbody > tr > td:first-child,

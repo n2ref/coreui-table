@@ -27,6 +27,8 @@ let coreuiTableInstance = {
         page: 1,
         recordsPerPage: 25,
         saveState: false,
+        noWrap: false,
+        noWrapToggle: false,
 
         recordsRequest: {
             method: 'GET',
@@ -224,6 +226,25 @@ let coreuiTableInstance = {
                     that._options.onClick(event, record);
                 });
             }
+
+            // Раскрытие строки
+            coreuiTableElements.getNoWrapToggles(that.getId()).click(function (event) {
+
+                event.cancelBubble = true;
+                event.preventDefault();
+
+                let parent = $(this).parent();
+
+                if (parent.hasClass('shown')) {
+                    $(this).removeClass('bi-caret-up-fill');
+                    $(this).addClass('bi-caret-down-fill');
+                    parent.removeClass('shown');
+                } else {
+                    $(this).removeClass('bi-caret-down-fill');
+                    $(this).addClass('bi-caret-up-fill');
+                    parent.addClass('shown');
+                }
+            });
 
             // Фиксация колонок
             coreuiTableElements.fixedColsLeft(that.getId())
