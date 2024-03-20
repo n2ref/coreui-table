@@ -48,6 +48,7 @@ import "./columns/date";
 import "./columns/datetime";
 import "./columns/html";
 import "./columns/number";
+import "./columns/money";
 import "./columns/numbers";
 import "./columns/select";
 import "./columns/switch";
