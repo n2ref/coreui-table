@@ -353,7 +353,9 @@ let coreuiTableElements = {
 
             if (index !== 1) {
                 $(tableWrapper + ' > table > thead > tr:last-child > td:nth-child(' + index + ')').css('left', colOffset + 'px');
-                $(tableWrapper + ' > table > tbody > tr > td:nth-child(' + index + ')').css('left', colOffset + 'px');
+                $(tableWrapper + ' > table > tbody > tr > td:nth-child(' + index + ')')
+                    //.addClass('coreui-table__fixed_left')
+                    .css('left', colOffset + 'px');
             }
 
             colOffset += $(this).outerWidth();
@@ -375,7 +377,9 @@ let coreuiTableElements = {
 
             if (index !== 1) {
                 $(tableWrapper + ' > table > thead > tr:last-child > td:nth-child(' + index + ')').css('right', colOffset + 'px');
-                $(tableWrapper + ' > table > tbody > tr > td:nth-child(' + index + ')').css('right', colOffset + 'px');
+                $(tableWrapper + ' > table > tbody > tr > td:nth-child(' + index + ')')
+                    //.addClass('coreui-table__fixed_left')
+                    .css('right', colOffset + 'px');
             }
 
             colOffset += $(this).outerWidth();

@@ -382,6 +382,12 @@ let coreuiTableRender = {
             fieldAttr = coreuiTableUtils.mergeAttr(fieldAttr, fieldProps.attr);
         }
 
+        if (columnOptions.hasOwnProperty('fixed') && typeof columnOptions.fixed === 'string') {
+            fieldAttr = coreuiTableUtils.mergeAttr(fieldAttr, {
+                class: 'coreui-table__fixed_' + columnOptions.fixed
+            });
+        }
+
         if (typeof columnOptions.render === 'function') {
             content = columnOptions.render({
                 data: record.data,
