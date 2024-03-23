@@ -41,7 +41,7 @@ coreuiTable.controls.total = {
         let that    = this;
         let control = coreuiTableElements.getControl(this._table.getId(), this.getId());
 
-        this._table.on('show-records', function () {
+        this._table.on('records_show', function () {
             control.html(that.render());
         });
     },

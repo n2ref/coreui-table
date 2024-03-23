@@ -1,6 +1,6 @@
-import coreuiTable from "../coreui.table";
+import coreuiTable         from "../coreui.table";
 import coreuiTableElements from "../coreui.table.elements";
-import coreuiTablePrivate from "../coreui.table.private";
+import coreuiTablePrivate  from "../coreui.table.private";
 
 coreuiTable.columns.select = {
 
@@ -36,7 +36,7 @@ coreuiTable.columns.select = {
         this._options.label = '<input class="coreui-table__select-all form-check-input" type="checkbox" value="">';
 
         // Показ строк
-        this._table.on('show-records', function () {
+        this._table.on('records_show', function () {
 
             let selects   = coreuiTableElements.getRowsSelects(table.getId());
             let selectAll = coreuiTableElements.getRowsSelectAll(table.getId());
@@ -59,11 +59,11 @@ coreuiTable.columns.select = {
                 if ($(this).is(':checked')) {
                     $(tr).addClass('table-primary');
 
-                    coreuiTablePrivate._trigger(table, 'select', table, [ record ]);
+                    coreuiTablePrivate._trigger(table, 'record_select', table, [ record ]);
                 } else {
                     $(tr).removeClass('table-primary');
 
-                    coreuiTablePrivate._trigger(table, 'unselect', table, [ record ]);
+                    coreuiTablePrivate._trigger(table, 'record_unselect', table, [ record ]);
                 }
             });
 

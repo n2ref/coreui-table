@@ -423,7 +423,7 @@ let coreuiTableRender = {
             });
 
             if (control.hasOwnProperty('initEvents') && typeof control.initEvents === 'function') {
-                table.on('shown', function () {
+                table.on('container_show', function () {
                     control.initEvents()
                 });
             }

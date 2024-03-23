@@ -47,7 +47,7 @@ coreuiTable.controls.pages = {
 
         this._initEvents();
 
-        this._table.on('show-records', function () {
+        this._table.on('records_show', function () {
             control.html(that.render());
             that._initEvents();
         });

@@ -57,7 +57,7 @@ coreuiTable.controls.page_size = {
             that._table.reload();
         });
 
-        this._table.on('update-page-size', function () {
+        this._table.on('page_size_update', function () {
             selectPageSize.val(that._table._recordsPerPage);
         });
     },

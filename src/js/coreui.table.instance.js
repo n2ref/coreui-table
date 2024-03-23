@@ -185,7 +185,7 @@ let coreuiTableInstance = {
         let that = this;
 
         // Показ строк
-        this.on('show-records', function () {
+        this.on('records_show', function () {
 
             // Переход по ссылке
             if (typeof that._options.onClickUrl === 'string' && that._options.onClickUrl) {
@@ -253,7 +253,7 @@ let coreuiTableInstance = {
 
 
         // Показ таблицы
-        this.on('show-table', function () {
+        this.on('table_show', function () {
 
             let sortableColumns = coreuiTableElements.getTableSortable(that.getId());
             if (sortableColumns[0]) {
@@ -301,7 +301,7 @@ let coreuiTableInstance = {
 
         // События смены состояния
         if (this._options.saveState && this._options.id) {
-            this.on('sort', function () {
+            this.on('records_sort', function () {
                 coreuiTablePrivate.setStorageField(that.getId(), 'sort', that._sort);
             });
 
@@ -330,12 +330,12 @@ let coreuiTableInstance = {
         }
 
 
-        coreuiTablePrivate._trigger(this, 'show-table', this, [ this ]);
-        coreuiTablePrivate._trigger(this, 'shown');
+        coreuiTablePrivate._trigger(this, 'table_show', this, [ this ]);
+        coreuiTablePrivate._trigger(this, 'container_show');
 
         // Вызов события показа строк
         if ( ! this._isRecordsRequest) {
-            coreuiTablePrivate._trigger(this, 'show-records', this, [ this ]);
+            coreuiTablePrivate._trigger(this, 'records_show', this, [ this ]);
         }
     },
 
@@ -538,7 +538,7 @@ let coreuiTableInstance = {
 
         // Загрузка записей
         if (this._isRecordsRequest) {
-            this.on('shown', function () {
+            this.on('container_show', function () {
                 that.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
             });
         }
@@ -700,7 +700,7 @@ let coreuiTableInstance = {
             dataType: "json",
             data: params,
             beforeSend: function(xhr) {
-                coreuiTablePrivate._trigger(that, 'start-load-records', that, [ that, xhr ]);
+                coreuiTablePrivate._trigger(that, 'records_load_start', that, [ that, xhr ]);
             },
             success: function (result) {
 
@@ -719,11 +719,11 @@ let coreuiTableInstance = {
             },
             error: function(xhr, textStatus, errorThrown) {
                 that.showRecords([]);
-                coreuiTablePrivate._trigger(that, 'error-load-records', that, [ that, xhr, textStatus, errorThrown ]);
+                coreuiTablePrivate._trigger(that, 'records_load_error', that, [ that, xhr, textStatus, errorThrown ]);
             },
             complete: function(xhr, textStatus) {
                 that.unlock();
-                coreuiTablePrivate._trigger(that, 'end-load-records', that, [ that, xhr, textStatus ]);
+                coreuiTablePrivate._trigger(that, 'records_load_end', that, [ that, xhr, textStatus ]);
             },
         });
     },
@@ -749,8 +749,8 @@ let coreuiTableInstance = {
 
         coreuiTableElements.getTable(this.getId()).replaceWith(table);
 
-        coreuiTablePrivate._trigger(this, 'show-table', this, [ this ]);
-        coreuiTablePrivate._trigger(this, 'show-records', this, [ this ]);
+        coreuiTablePrivate._trigger(this, 'table_show', this, [ this ]);
+        coreuiTablePrivate._trigger(this, 'records_show', this, [ this ]);
     },
 
 
@@ -762,7 +762,7 @@ let coreuiTableInstance = {
 
         this._recordsPerPage = recordsPerPage;
 
-        coreuiTablePrivate._trigger(this, 'update-page-size', this);
+        coreuiTablePrivate._trigger(this, 'page_size_update', this);
     },
 
 
@@ -773,7 +773,7 @@ let coreuiTableInstance = {
 
         coreuiTableElements.selectTrAll(this.getId())
 
-        coreuiTablePrivate._trigger(this, 'select-all', this);
+        coreuiTablePrivate._trigger(this, 'record_select_all', this);
     },
 
 
@@ -784,7 +784,7 @@ let coreuiTableInstance = {
 
         coreuiTableElements.unselectTrAll(this.getId())
 
-        coreuiTablePrivate._trigger(this, 'unselect-all', this);
+        coreuiTablePrivate._trigger(this, 'record_unselect_all', this);
     },
 
 
@@ -808,7 +808,7 @@ let coreuiTableInstance = {
 
         coreuiTableElements.selectTr(tr)
 
-        coreuiTablePrivate._trigger(this, 'select', this, [ record ]);
+        coreuiTablePrivate._trigger(this, 'record_select', this, [ record ]);
     },
 
 
@@ -832,7 +832,7 @@ let coreuiTableInstance = {
 
         coreuiTableElements.unselectTr(tr)
 
-        coreuiTablePrivate._trigger(this, 'unselect', this, [ record.data ]);
+        coreuiTablePrivate._trigger(this, 'record_unselect', this, [ record.data ]);
     },
 
 
@@ -1350,7 +1350,7 @@ let coreuiTableInstance = {
             }
         }
 
-        coreuiTablePrivate._trigger(this, 'sort', this, [ this ]);
+        coreuiTablePrivate._trigger(this, 'records_sort', this, [ this ]);
     },
 
 
@@ -1369,7 +1369,7 @@ let coreuiTableInstance = {
             this.refresh();
         }
 
-        coreuiTablePrivate._trigger(this, 'sort', this, [ this ]);
+        coreuiTablePrivate._trigger(this, 'records_sort', this, [ this ]);
     },
 
 
@@ -1511,7 +1511,7 @@ let coreuiTableInstance = {
         })
 
 
-        coreuiTablePrivate._trigger(this, 'show-records', this, [ this ]);
+        coreuiTablePrivate._trigger(this, 'records_show', this, [ this ]);
     },
 
 
@@ -1561,13 +1561,13 @@ let coreuiTableInstance = {
             }
 
             recordElement.removeClass('record-expanded');
-            coreuiTablePrivate._trigger(this, 'expand-record-hide', this, [recordIndex]);
+            coreuiTablePrivate._trigger(this, 'record_expand_hide', this, [recordIndex]);
 
         } else {
             if (recordExpanded) {
                 coreuiTableElements.showExpandRow(recordExpanded);
                 recordElement.addClass('record-expanded');
-                coreuiTablePrivate._trigger(this, 'expand-record-show', this, [recordIndex]);
+                coreuiTablePrivate._trigger(this, 'record_expand_show', this, [recordIndex]);
 
             } else {
                 if (typeof content === 'function') {

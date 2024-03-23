@@ -30,7 +30,7 @@ coreuiTable.columns.switch = {
         this._options = $.extend(true, {}, this._options, options);
 
         // Показ строк
-        this._table.on('show-records', function () {
+        this._table.on('records_show', function () {
 
             let containers = coreuiTableElements.getRowsSwitches(that._table.getId());
 

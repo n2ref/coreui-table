@@ -3,6 +3,7 @@ import '../../../node_modules/ejs/ejs.min';
 import coreuiTableTpl   from '../coreui.table.templates';
 import coreuiTableUtils from '../coreui.table.utils';
 import coreuiTable      from "../coreui.table";
+import coreuiTableElements from "../coreui.table.elements";
 
 coreuiTable.controls.link = {
 
@@ -11,6 +12,7 @@ coreuiTable.controls.link = {
     _options: {
         href: null,
         content: null,
+        onClick: null,
         attr: null
     },
 
@@ -33,6 +35,21 @@ coreuiTable.controls.link = {
      */
     initEvents: function () {
 
+        let that = this;
+
+        if (typeof this._options.onClick === 'function' || typeof this._options.onClick === 'string') {
+
+            let control = coreuiTableElements.getControl(this._table.getId(), this.getId());
+            $('a', control)
+                .click(function (event) {
+                    if (typeof that._options.onClick === 'function') {
+                        return that._options.onClick(event, that._table);
+
+                    } else if (typeof that._options.onClick === 'string') {
+                        return (new Function(that._options.onClick))();
+                    }
+                });
+        }
     },
 
 
