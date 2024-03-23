@@ -10,6 +10,8 @@ coreuiTable.controls.columns = {
     _id: null,
     _table: null,
     _options: {
+        id: null,
+        type: 'columns',
         btn: {
             content: '<i class="bi bi-layout-three-columns"></i>',
             attr: {
@@ -32,7 +34,9 @@ coreuiTable.controls.columns = {
 
         this._options = $.extend({}, this._options, options);
         this._table   = table;
-        this._id      = coreuiTableUtils.hashCode();
+        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
+            ? this._options.id
+            : coreuiTableUtils.hashCode();
 
 
         if ( ! CoreuiTableUtils.isObject(this._options.btn)) {

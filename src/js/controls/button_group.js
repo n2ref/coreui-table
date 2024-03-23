@@ -11,6 +11,8 @@ coreuiTable.controls.button_group = {
     _id: null,
     _table: null,
     _options: {
+        id: null,
+        type: 'button_group',
         content: null,
         onClick: null,
         attr: null
@@ -41,7 +43,9 @@ coreuiTable.controls.button_group = {
 
         this._options = $.extend({}, this._options, options);
         this._table   = table;
-        this._id      = coreuiTableUtils.hashCode();
+        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
+            ? this._options.id
+            : coreuiTableUtils.hashCode();
 
 
         if (Array.isArray(this._options.buttons)) {

@@ -1,0 +1,9 @@
+<div class="d-flex flex-column me-3">
+    <small class="text-body-secondary fw-medium">
+        <%= title %>
+        <% if (description) { %>
+        <i class="bi bi-info-circle coreui-table__cursor_help" title="<%= description %>"></i>
+        <% } %>
+    </small>
+    <b class="text-nowrap"><%= value %></b>
+</div>

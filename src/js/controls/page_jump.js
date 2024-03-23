@@ -9,6 +9,8 @@ coreuiTable.controls.page_jump = {
     _id: null,
     _table: null,
     _options: {
+        id: null,
+        type: 'page_jump',
         attr: {
             class: 'input-group'
         },
@@ -28,7 +30,9 @@ coreuiTable.controls.page_jump = {
 
         this._options = $.extend({}, this._options, options);
         this._table   = table;
-        this._id      = coreuiTableUtils.hashCode();
+        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
+            ? this._options.id
+            : coreuiTableUtils.hashCode();
     },
 
 

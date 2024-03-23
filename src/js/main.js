@@ -18,6 +18,7 @@ import "./controls/pages";
 import "./controls/total";
 import "./controls/search";
 import "./controls/columns";
+import "./controls/caption";
 
 import "./filters/clear";
 import "./filters/text";

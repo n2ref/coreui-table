@@ -11,6 +11,7 @@ coreuiTable.controls.dropdown = {
     _id: null,
     _table: null,
     _options: {
+        id: null,
         type: 'dropdown',
         content: null,
         items: null,
@@ -29,7 +30,9 @@ coreuiTable.controls.dropdown = {
 
         this._options = $.extend({}, this._options, options);
         this._table   = table;
-        this._id      = coreuiTableUtils.hashCode();
+        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
+            ? this._options.id
+            : coreuiTableUtils.hashCode();
 
         if (Array.isArray(this._options.items)) {
             $.each(this._options.items, function (key, item) {

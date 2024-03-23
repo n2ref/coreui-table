@@ -7,6 +7,8 @@ coreuiTable.controls.custom = {
     _id: null,
     _table: null,
     _options: {
+        id: null,
+        type: 'custom',
         content: null
     },
 
@@ -20,7 +22,9 @@ coreuiTable.controls.custom = {
 
         this._options = $.extend({}, this._options, options);
         this._table   = table;
-        this._id      = coreuiTableUtils.hashCode();
+        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
+            ? this._options.id
+            : coreuiTableUtils.hashCode();
     },
 
 

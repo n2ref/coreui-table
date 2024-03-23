@@ -5,16 +5,16 @@ import coreuiTableUtils    from '../coreui.table.utils';
 import coreuiTable         from "../coreui.table";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.controls.button = {
+coreuiTable.controls.caption = {
 
     _id: null,
     _table: null,
     _options: {
         id: null,
-        type: 'button',
-        content: null,
-        onClick: null,
-        attr: null
+        type: 'caption',
+        title: null,
+        description: null,
+        value: null,
     },
 
 
@@ -38,21 +38,6 @@ coreuiTable.controls.button = {
      */
     initEvents: function () {
 
-        let that = this;
-
-        if (typeof this._options.onClick === 'function' || typeof this._options.onClick === 'string') {
-
-            let control = coreuiTableElements.getControl(this._table.getId(), this.getId());
-            $('button', control)
-                .click(function (event) {
-                    if (typeof that._options.onClick === 'function') {
-                        that._options.onClick(event, that._table);
-
-                    } else if (typeof that._options.onClick === 'string') {
-                        (new Function(that._options.onClick))();
-                    }
-                });
-        }
     },
 
 
@@ -71,18 +56,10 @@ coreuiTable.controls.button = {
      */
     render: function() {
 
-        let attributes = [];
-
-        if (coreuiTableUtils.isObject(this._options.attr)) {
-            $.each(this._options.attr, function (name, value) {
-                attributes.push(name + '="' + value + '"');
-            });
-        }
-
-
-        return ejs.render(coreuiTableTpl['controls/button.html'], {
-            content: this._options.content,
-            attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
+        return ejs.render(coreuiTableTpl['controls/caption.html'], {
+            title: this._options.title,
+            description: this._options.description,
+            value: this._options.value,
         });
     }
 }
