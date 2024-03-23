@@ -1,0 +1,5 @@
+<tr<%- record.attr %> data-record-index="<%= record.index %>">
+    <% $.each(record.fields, function(key2, field) { %>
+        <td<%- field.attr %>></td>
+    <% }); %>
+</tr>

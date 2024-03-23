@@ -1,4 +1,4 @@
-import coreuiTable from "../coreui.table";
+import coreuiTable      from "../coreui.table";
 import coreuiTableUtils from "../coreui.table.utils";
 
 coreuiTable.columns.html = {
@@ -83,24 +83,27 @@ coreuiTable.columns.html = {
 
     /**
      * Формирование контента
-     * @param {string} content
-     * @param {object} record
+     * @param {string|HTMLElement|jQuery} content
+     * @param {object}                    record
      * @returns {string}
      */
     render: function(content, record) {
 
-        if (['string', 'bigint', 'symbol', 'number'].indexOf(typeof content) < 0) {
+        if (['string', 'bigint', 'symbol', 'number'].indexOf(typeof content) < 0 &&
+            ! (content instanceof HTMLElement) &&
+            ! (window.hasOwnProperty('jQuery') && content instanceof jQuery)
+        ) {
             return '';
         }
 
         if (this._options.noWrap) {
-            content = '<div>' + content + '</div>'
+            content = $('<div></div>').append(content);
 
             if (this._options.noWrapToggle) {
-                content += '<i class="bi bi-caret-down-fill toggle"></i>'
+                content = $(content).after('<i class="bi bi-caret-down-fill toggle"></i>')
             }
         }
 
-        return String(content);
+        return content;
     }
 }

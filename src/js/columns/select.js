@@ -1,5 +1,6 @@
 import coreuiTable from "../coreui.table";
 import coreuiTableElements from "../coreui.table.elements";
+import coreuiTablePrivate from "../coreui.table.private";
 
 coreuiTable.columns.select = {
 
@@ -58,11 +59,11 @@ coreuiTable.columns.select = {
                 if ($(this).is(':checked')) {
                     $(tr).addClass('table-primary');
 
-                    table._trigger('select', table, [ record ]);
+                    coreuiTablePrivate._trigger(table, 'select', table, [ record ]);
                 } else {
                     $(tr).removeClass('table-primary');
 
-                    table._trigger('unselect', table, [ record ]);
+                    coreuiTablePrivate._trigger(table, 'unselect', table, [ record ]);
                 }
             });
 

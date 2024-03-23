@@ -312,15 +312,30 @@ let coreuiTableInstance = {
             this.on('filters_change', function () {
                 coreuiTablePrivate.setStorageField(that.getId(), 'filters', that.getFilterData());
             });
+
+            this.on('columns_change', function () {
+                let columns = [];
+
+                $.each(that._columns, function (key, column) {
+                    let columnOptions = column.getOptions();
+
+                    columns.push({
+                        field: columnOptions.field,
+                        isShow: column.isShow(),
+                    })
+                });
+
+                coreuiTablePrivate.setStorageField(that.getId(), 'columns', columns);
+            });
         }
 
 
-        this._trigger('show-table', this, [ this ]);
-        this._trigger('shown');
+        coreuiTablePrivate._trigger(this, 'show-table', this, [ this ]);
+        coreuiTablePrivate._trigger(this, 'shown');
 
         // Вызов события показа строк
         if ( ! this._isRecordsRequest) {
-            this._trigger('show-records', this, [ this ]);
+            coreuiTablePrivate._trigger(this, 'show-records', this, [ this ]);
         }
     },
 
@@ -528,46 +543,43 @@ let coreuiTableInstance = {
             });
         }
 
-        let table = coreuiTableRender.renderTable(this);
+        let tableElement     = coreuiTableRender.renderTable(this);
+        let containerElement = $(
+            ejs.render(coreuiTableTpl['table-wrapper.html'], {
+                id: this._id,
+                lang: this.getLang(),
+                widthSizes: widthSizes,
+                heightSizes: heightSizes,
+                recordsTotal: this._recordsTotal,
+                render: {
+                    headersOut : render.headersOut,
+                    headersIn : render.headersIn,
+                    footersIn : render.footersIn,
+                    footersOut : render.footersOut
+                },
+            })
+        );
 
-
-        let html = ejs.render(coreuiTableTpl['table-wrapper.html'], {
-            id: this._id,
-            lang: this.getLang(),
-            widthSizes: widthSizes,
-            heightSizes: heightSizes,
-            recordsTotal: this._recordsTotal,
-            render: {
-                headersOut : render.headersOut,
-                headersIn : render.headersIn,
-                footersIn : render.footersIn,
-                footersOut : render.footersOut,
-                table : table
-            },
-        });
+        containerElement.find('.coreui-table__wrapper').html(tableElement);
 
         if (element === undefined) {
-            return html;
+            return containerElement;
         }
 
         // Dom element
-        let domElement = {};
+        let domElement = null;
 
         if (typeof element === 'string') {
             domElement = document.getElementById(element);
-
-            if ( ! domElement) {
-                return '';
-            }
 
         } else if (element instanceof HTMLElement) {
             domElement = element;
         }
 
-
-        domElement.innerHTML = html;
-
-        this.initEvents();
+        if (domElement) {
+            $(domElement).html(containerElement);
+            this.initEvents();
+        }
     },
 
 
@@ -688,7 +700,7 @@ let coreuiTableInstance = {
             dataType: "json",
             data: params,
             beforeSend: function(xhr) {
-                that._trigger('start-load-records', that, [ that, xhr ]);
+                coreuiTablePrivate._trigger(that, 'start-load-records', that, [ that, xhr ]);
             },
             success: function (result) {
 
@@ -707,11 +719,11 @@ let coreuiTableInstance = {
             },
             error: function(xhr, textStatus, errorThrown) {
                 that.showRecords([]);
-                that._trigger('error-load-records', that, [ that, xhr, textStatus, errorThrown ]);
+                coreuiTablePrivate._trigger(that, 'error-load-records', that, [ that, xhr, textStatus, errorThrown ]);
             },
             complete: function(xhr, textStatus) {
                 that.unlock();
-                that._trigger('end-load-records', that, [ that, xhr, textStatus ]);
+                coreuiTablePrivate._trigger(that, 'end-load-records', that, [ that, xhr, textStatus ]);
             },
         });
     },
@@ -737,8 +749,8 @@ let coreuiTableInstance = {
 
         coreuiTableElements.getTable(this.getId()).replaceWith(table);
 
-        this._trigger('show-table', this, [ this ]);
-        this._trigger('show-records', this, [ this ]);
+        coreuiTablePrivate._trigger(this, 'show-table', this, [ this ]);
+        coreuiTablePrivate._trigger(this, 'show-records', this, [ this ]);
     },
 
 
@@ -750,7 +762,7 @@ let coreuiTableInstance = {
 
         this._recordsPerPage = recordsPerPage;
 
-        this._trigger('update-page-size', this);
+        coreuiTablePrivate._trigger(this, 'update-page-size', this);
     },
 
 
@@ -761,7 +773,7 @@ let coreuiTableInstance = {
 
         coreuiTableElements.selectTrAll(this.getId())
 
-        this._trigger('select-all', this);
+        coreuiTablePrivate._trigger(this, 'select-all', this);
     },
 
 
@@ -772,7 +784,7 @@ let coreuiTableInstance = {
 
         coreuiTableElements.unselectTrAll(this.getId())
 
-        this._trigger('unselect-all', this);
+        coreuiTablePrivate._trigger(this, 'unselect-all', this);
     },
 
 
@@ -796,7 +808,7 @@ let coreuiTableInstance = {
 
         coreuiTableElements.selectTr(tr)
 
-        this._trigger('select', this, [ record ]);
+        coreuiTablePrivate._trigger(this, 'select', this, [ record ]);
     },
 
 
@@ -820,7 +832,7 @@ let coreuiTableInstance = {
 
         coreuiTableElements.unselectTr(tr)
 
-        this._trigger('unselect', this, [ record.data ]);
+        coreuiTablePrivate._trigger(this, 'unselect', this, [ record.data ]);
     },
 
 
@@ -1029,6 +1041,9 @@ let coreuiTableInstance = {
                 column.setShow(columns.indexOf(options.field) >= 0);
             }
         });
+
+
+        coreuiTablePrivate._trigger(this, 'columns_change', this);
     },
 
 
@@ -1124,8 +1139,8 @@ let coreuiTableInstance = {
         }
 
 
-        this._trigger('filters_change', this, [ filterData ]);
-        this._trigger('search_change', this, [ searchData ]);
+        coreuiTablePrivate._trigger(this, 'filters_change', this, [ filterData ]);
+        coreuiTablePrivate._trigger(this, 'search_change', this, [ searchData ]);
     },
 
 
@@ -1335,7 +1350,7 @@ let coreuiTableInstance = {
             }
         }
 
-        this._trigger('sort', this, [ this ]);
+        coreuiTablePrivate._trigger(this, 'sort', this, [ this ]);
     },
 
 
@@ -1354,7 +1369,7 @@ let coreuiTableInstance = {
             this.refresh();
         }
 
-        this._trigger('sort', this, [ this ]);
+        coreuiTablePrivate._trigger(this, 'sort', this, [ this ]);
     },
 
 
@@ -1486,12 +1501,17 @@ let coreuiTableInstance = {
                 : ((this._page - 1) * this._recordsPerPage) + 1;
         }
 
-        let htmlRecords = coreuiTableRender.renderRecords(this, this._records);
+        let recordsElements = coreuiTableRender.renderRecords(this, this._records);
+        let tableBody       = coreuiTableElements.getTableTbody(this.getId());
 
-        coreuiTableElements.getTableTbody(this.getId())
-            .html(htmlRecords);
+        tableBody.html('');
 
-        this._trigger('show-records', this, [ this ]);
+        $.each(recordsElements, function (key, recordElement) {
+            tableBody.append(recordElement);
+        })
+
+
+        coreuiTablePrivate._trigger(this, 'show-records', this, [ this ]);
     },
 
 
@@ -1520,29 +1540,106 @@ let coreuiTableInstance = {
 
 
     /**
-     * Выполнения зарегистрированных функций в указанном событии
-     * @param {string}      name
-     * @param {object|null} context
-     * @param {Array}       params
-     * @private
+     * Раскрытие / скрытие дополнительных данных строки
+     * @param {number}                                   recordIndex
+     * @param {HTMLElement|jQuery|string|Array|function} content
+     * @param {boolean}                                  isRebuild - true default
      */
-    _trigger: function(name, context, params) {
+    expandRecordContent: function (recordIndex, content, isRebuild) {
 
-        params = params || [];
+        let recordElement  = coreuiTableElements.getTrByIndex(this.getId(), recordIndex);
+        let recordExpanded = coreuiTableElements.getExpandRow(recordElement);
 
-        if (this._events[name] instanceof Object && this._events[name].length > 0) {
-            for (let i = 0; i < this._events[name].length; i++) {
-                let callback = this._events[name][i].callback;
+        if (recordElement.hasClass('record-expanded')) {
 
-                context = context || this._events[name][i].context;
+            if (recordExpanded) {
+                if (isRebuild === undefined || isRebuild) {
+                    coreuiTableElements.removeExpandRow(recordExpanded);
+                } else {
+                    coreuiTableElements.hideExpandRow(recordExpanded);
+                }
+            }
 
-                callback.apply(context, params);
+            recordElement.removeClass('record-expanded');
+            coreuiTablePrivate._trigger(this, 'expand-record-hide', this, [recordIndex]);
 
-                if (this._events[name][i].singleExec) {
-                    this._events[name].splice(i, 1);
+        } else {
+            if (recordExpanded) {
+                coreuiTableElements.showExpandRow(recordExpanded);
+                recordElement.addClass('record-expanded');
+                coreuiTablePrivate._trigger(this, 'expand-record-show', this, [recordIndex]);
+
+            } else {
+                if (typeof content === 'function') {
+                    let callbackResult = content();
+
+                    if (callbackResult instanceof Promise) {
+                        let that = this;
+
+                        callbackResult
+                            .then(function (result) {
+                                coreuiTableElements.addExpandRow(that, recordElement, result);
+
+                            }).catch(function () {
+                                coreuiTableElements.addExpandRow(that, recordElement, '');
+                            });
+
+                    } else{
+                        coreuiTableElements.addExpandRow(this, recordElement, callbackResult);
+                    }
+
+                } else {
+                    coreuiTableElements.addExpandRow(this, recordElement, content);
                 }
             }
         }
+    },
+
+
+    /**
+     * Раскрытие / скрытие дополнительных данных строки
+     * @param {number}  recordIndex
+     * @param {string}  url
+     * @param {boolean} isRebuild
+     */
+    expandRecordUrl: function (recordIndex, url, isRebuild) {
+
+        let that = this;
+
+        this.expandRecordContent(recordIndex, function () {
+
+            that.lock();
+
+            return new Promise(function (resolve, reject) {
+
+                $.ajax({
+                    method : 'get',
+                    url    : url,
+                    success: function (response, textStatus, xhr) {
+                        let result = response;
+
+                        if (typeof response === 'string') {
+                            if (String(xhr.getResponseHeader('Content-Type')).indexOf('application/json') === 0) {
+                                try {
+                                    result = JSON.parse(response);
+                                } catch (e) {
+                                    console.warn(e);
+                                }
+                            }
+                        }
+
+                        resolve(result);
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        reject(xhr, textStatus, errorThrown);
+                    },
+                    complete: function(xhr, textStatus) {
+                        that.unlock();
+                    },
+                });
+            });
+
+        }, isRebuild);
     }
 }
 

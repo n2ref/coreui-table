@@ -6,9 +6,7 @@
     <div class="coreui-table__container position-relative">
         <%- render.headersIn.join('') %>
 
-        <div class="coreui-table__wrapper table-responsive overflow-x-auto" <% if (heightSizes) { %>style="<%= heightSizes.join(';') %>"<% } %>>
-            <%- render.table %>
-        </div>
+        <div class="coreui-table__wrapper table-responsive overflow-x-auto" <% if (heightSizes) { %>style="<%= heightSizes.join(';') %>"<% } %>></div>
 
         <%- render.footersIn.join('') %>
     </div>

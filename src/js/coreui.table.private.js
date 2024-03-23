@@ -442,6 +442,34 @@ let coreuiTablePrivate = {
 
 
     /**
+     * Выполнения зарегистрированных функций в указанном событии
+     * @param {object}      table
+     * @param {string}      name
+     * @param {object|null} context
+     * @param {Array}       params
+     * @private
+     */
+    _trigger: function(table, name, context, params) {
+
+        params = params || [];
+
+        if (table._events.hasOwnProperty(name) && table._events[name].length > 0) {
+            for (let i = 0; i < table._events[name].length; i++) {
+                let callback = table._events[name][i].callback;
+
+                context = context || table._events[name][i].context;
+
+                callback.apply(context, params);
+
+                if (table._events[name][i].singleExec) {
+                    table._events[name].splice(i, 1);
+                }
+            }
+        }
+    },
+
+
+    /**
      * Сортировка записей по seq
      * @param {Array} records
      * @return {*}

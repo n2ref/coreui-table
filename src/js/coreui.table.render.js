@@ -16,7 +16,7 @@ let coreuiTableRender = {
     renderTable: function (table) {
 
         let options            = table.getOptions();
-        let htmlRecords        = '';
+        let recordsElements    = [];
         let columnGroupsHeader = '';
         let columnGroupsFooter = '';
         let colGroups          = [];
@@ -127,9 +127,9 @@ let coreuiTableRender = {
                     ? 1
                     : ((table._page - 1) * table._recordsPerPage) + 1;
 
-                htmlRecords = coreuiTableRender.renderRecords(table, table._records);
+                recordsElements = coreuiTableRender.renderRecords(table, table._records);
             } else {
-                htmlRecords = coreuiTableRender.renderRecords(table, []);
+                recordsElements = coreuiTableRender.renderRecords(table, []);
             }
         }
 
@@ -238,15 +238,25 @@ let coreuiTableRender = {
             columns: columns,
         });
 
-        return ejs.render(coreuiTableTpl['table.html'], {
-            classes: classes.join(' '),
-            show: options.show,
-            columnGroupsHeader : columnGroupsHeader,
-            colGroups : colGroups,
-            columns : htmlColumns,
-            columnGroupsFooter : columnGroupsFooter,
-            records : htmlRecords,
-        })
+        let tableElement = $(
+            ejs.render(coreuiTableTpl['table.html'], {
+                classes: classes.join(' '),
+                show: options.show,
+                columnGroupsHeader : columnGroupsHeader,
+                colGroups : colGroups,
+                columns : htmlColumns,
+                columnGroupsFooter : columnGroupsFooter,
+            })
+        );
+
+
+        let tbody = tableElement.find('tbody');
+
+        $.each(recordsElements, function (key, recordElement) {
+            tbody.append(recordElement);
+        });
+
+        return tableElement
     },
 
 
@@ -254,11 +264,10 @@ let coreuiTableRender = {
      * Сборка записей таблицы
      * @param {object} table
      * @param {Array}  records
-     * @return {*}
+     * @return {Array}
      */
     renderRecords: function (table, records) {
 
-        let result        = '';
         let renderRecords = [];
 
         if (records.length > 0) {
@@ -273,19 +282,18 @@ let coreuiTableRender = {
             });
         }
 
-        if (renderRecords.length > 0) {
-            result = ejs.render(coreuiTableTpl['table-records.html'], {
-                records: renderRecords,
-            });
-
-        } else {
-            result = ejs.render(coreuiTableTpl['table-records-empty.html'], {
-                columnsCount: table._columns.length > 0 ? table._columns.length : 1,
-                lang: table.getLang(),
-            });
+        if (renderRecords.length === 0) {
+            renderRecords = [
+                $(
+                    ejs.render(coreuiTableTpl['table-records-empty.html'], {
+                        columnsCount: table._columns.length > 0 ? table._columns.length : 1,
+                        lang: table.getLang(),
+                    })
+                )
+            ];
         }
 
-        return result;
+        return renderRecords;
     },
 
 
@@ -305,12 +313,14 @@ let coreuiTableRender = {
             class: 'coreui-table__record'
         };
 
+        record = $.extend(true, {}, record);
+
         $.each(table._columns, function (key, column) {
             if ( ! column.isShow()) {
                 return;
             }
 
-            fields.push(that.renderField(column, record));
+            fields.push(that.renderField(table, column, record));
         });
 
         if (typeof options.onClickUrl === 'string' && options.onClickUrl) {
@@ -327,26 +337,37 @@ let coreuiTableRender = {
             attributes.push(name + '="' + value + '"');
         });
 
-        return {
-            attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
-            fields: fields,
-            index: record.index
-        };
+        let recordElement = $(
+            ejs.render(coreuiTableTpl['table-record.html'], {
+                record: {
+                    attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
+                    index: record.index,
+                    fields: fields,
+                }
+            })
+        );
+
+        $.each(fields, function (key, field) {
+            recordElement.find(' > td:eq(' + key + ')').html(field.content)
+        });
+
+        return recordElement;
     },
 
 
     /**
      * Сборка ячейки таблицы
+     * @param {object} table
      * @param {object} column
      * @param {object} record
      * @returns {{ attr: (string), content: (string) }}
      * @private
      */
-    renderField: function (column, record) {
+    renderField: function (table, column, record) {
 
         let columnOptions = column.getOptions();
         let columnField   = typeof columnOptions.field === 'string' ? columnOptions.field : null;
-        let content       = '';
+        let content       = null;
         let fieldProps    = record.meta && record.meta.hasOwnProperty('fields') && record.meta.fields.hasOwnProperty(columnField)
             ? record.meta.fields[columnField]
             : null;
@@ -359,11 +380,15 @@ let coreuiTableRender = {
         }
 
         if (typeof columnOptions.render === 'function') {
-            content = columnOptions.render(record);
+            content = columnOptions.render({
+                data: record.data,
+                meta: record.meta,
+                index: record.index,
+            }, table);
         } else {
             content = columnField && record.data.hasOwnProperty(columnField)
                 ? record.data[columnField]
-                : '';
+                : null;
         }
 
         content = column.render(content, record);
@@ -405,6 +430,69 @@ let coreuiTableRender = {
 
             return controlRender;
         }
+    },
+
+
+    /**
+     * Формирование контента компонента
+     * @param {object} table
+     * @param {object} components
+     * @param {string} eventName
+     * @return {Array}
+     */
+    renderComponents: function (table, components, eventName) {
+
+        let result = [];
+
+        if (components instanceof Object) {
+            let alloyComponents  = [
+                'coreui.table',
+                'coreui.layout',
+                'coreui.panel',
+                'coreui.tabs',
+                'coreui.info',
+                'coreui.chart',
+            ];
+
+            if ( ! Array.isArray(components)) {
+                components = [ components ];
+            }
+
+            for (let i = 0; i < components.length; i++) {
+                if (typeof components[i] === 'string' ||
+                    (window.hasOwnProperty('jQuery') && components[i] instanceof jQuery)
+                ) {
+                    result.push(components[i]);
+
+                } else if (typeof components[i] === 'string') {
+                    result.push(components[i]);
+
+                } else if ( ! Array.isArray(components[i]) &&
+                    components[i].hasOwnProperty('component') &&
+                    alloyComponents.indexOf(components[i].component) >= 0
+                ) {
+                    let name = components[i].component.split('.')[1];
+
+                    if (CoreUI.hasOwnProperty(name) &&
+                        typeof CoreUI[name] === "object" &&
+                        CoreUI[name] !== null &&
+                        ! Array.isArray(CoreUI[name])
+                    ) {
+                        let instance = CoreUI[name].create(components[i]);
+                        result.push(instance.render());
+
+                        if (eventName) {
+                            table.on(eventName, instance.initEvents, instance, true);
+                        }
+                    }
+                }
+            }
+
+            result.push(components[i]);
+        }
+
+
+        return result;
     }
 }
 

@@ -1,5 +1,5 @@
 
-import coreuiFormInstance from './coreui.table.instance';
+import coreuiTableInstance from './coreui.table.instance';
 
 let coreuiTable = {
 
@@ -20,7 +20,7 @@ let coreuiTable = {
      */
     create: function (options) {
 
-        let instance = $.extend(true, {}, coreuiFormInstance);
+        let instance = $.extend(true, {}, coreuiTableInstance);
         instance._init(options instanceof Object ? options : {});
 
         let tableId = instance.getId();
