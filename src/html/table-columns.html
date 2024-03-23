@@ -2,6 +2,10 @@
   <% $.each(columns, function(key, column) { %>
   <td<%- column.attr%>>
     <%- column.label %>
+    <% if (column.description) { %>
+    <small class="bi bi-question-circle text-body-secondary coreui-table__cursor_help"
+           title="<%= column.description %>"></small>
+    <% } %>
     <% if (column.sortable === 'asc') { %>
       <i class="bi bi-sort-down-alt"></i>
     <% } else if (column.sortable === 'desc') { %>

@@ -112,6 +112,7 @@ let coreuiTableRender = {
                 columns.push({
                     attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
                     label: columnOptions.hasOwnProperty('label') ? columnOptions.label : "",
+                    description: columnOptions.hasOwnProperty('description') ? columnOptions.description : '',
                     sortable: sortable
                 });
             });
@@ -156,6 +157,7 @@ let coreuiTableRender = {
 
                             cells.push({
                                 label: headerColumn.hasOwnProperty('label') ? headerColumn.label : '',
+                                description: headerColumn.hasOwnProperty('description') ? headerColumn.description : '',
                                 attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
                             });
                         }
@@ -194,6 +196,7 @@ let coreuiTableRender = {
 
                             cells.push({
                                 label: footerColumn.hasOwnProperty('label') ? footerColumn.label : '',
+                                description: footerColumn.hasOwnProperty('description') ? footerColumn.description : '',
                                 attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
                             });
                         }
