@@ -459,20 +459,60 @@ let coreuiTableInstance = {
 
                 if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
                     if (header.type === 'in') {
-                        let headerControls = ejs.render(coreuiTableTpl['table-controls-header.html'], {
-                            controlsLeft: controlsLeft,
-                            controlsCenter: controlsCenter,
-                            controlsRight: controlsRight,
-                        });
+                        let headerControls = $(
+                            ejs.render(coreuiTableTpl['table-controls-header.html'], {
+                                controlsLeft: controlsLeft,
+                                controlsCenter: controlsCenter,
+                                controlsRight: controlsRight,
+                            })
+                        );
+
+                        if (controlsLeft.length > 0) {
+                            $.each(controlsLeft, function (key, control) {
+                                headerControls.find('.coreui-table__controls_left').append(control)
+                            });
+                        }
+
+                        if (controlsCenter.length > 0) {
+                            $.each(controlsCenter, function (key, control) {
+                                headerControls.find('.coreui-table__controls_center').append(control)
+                            });
+                        }
+
+                        if (controlsRight.length > 0) {
+                            $.each(controlsRight, function (key, control) {
+                                headerControls.find('.coreui-table__controls_right').append(control)
+                            });
+                        }
 
                         render.headersIn.push(headerControls);
 
                     } else {
-                        let headerControls = ejs.render(coreuiTableTpl['table-controls-header-out.html'], {
-                            controlsLeft: controlsLeft,
-                            controlsCenter: controlsCenter,
-                            controlsRight: controlsRight,
-                        });
+                        let headerControls = $(
+                            ejs.render(coreuiTableTpl['table-controls-header-out.html'], {
+                                controlsLeft: controlsLeft,
+                                controlsCenter: controlsCenter,
+                                controlsRight: controlsRight,
+                            })
+                        );
+
+                        if (controlsLeft.length > 0) {
+                            $.each(controlsLeft, function (key, control) {
+                                headerControls.find('.coreui-table__controls_left').append(control)
+                            });
+                        }
+
+                        if (controlsCenter.length > 0) {
+                            $.each(controlsCenter, function (key, control) {
+                                headerControls.find('.coreui-table__controls_center').append(control)
+                            });
+                        }
+
+                        if (controlsRight.length > 0) {
+                            $.each(controlsRight, function (key, control) {
+                                headerControls.find('.coreui-table__controls_right').append(control)
+                            });
+                        }
 
                         render.headersOut.push(headerControls);
                     }
@@ -521,19 +561,61 @@ let coreuiTableInstance = {
 
                 if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
                     if (footer.type === 'in') {
-                        let footerControls = ejs.render(coreuiTableTpl['table-controls-footer.html'], {
-                            controlsLeft: controlsLeft,
-                            controlsCenter: controlsCenter,
-                            controlsRight: controlsRight,
-                        });
+                        let footerControls = $(
+                            ejs.render(coreuiTableTpl['table-controls-footer.html'], {
+                                controlsLeft: controlsLeft,
+                                controlsCenter: controlsCenter,
+                                controlsRight: controlsRight,
+                            })
+                        );
+
+
+                        if (controlsLeft.length > 0) {
+                            $.each(controlsLeft, function (key, control) {
+                                footerControls.find('.coreui-table__controls_left').append(control)
+                            });
+                        }
+
+                        if (controlsCenter.length > 0) {
+                            $.each(controlsCenter, function (key, control) {
+                                footerControls.find('.coreui-table__controls_center').append(control)
+                            });
+                        }
+
+                        if (controlsRight.length > 0) {
+                            $.each(controlsRight, function (key, control) {
+                                footerControls.find('.coreui-table__controls_right').append(control)
+                            });
+                        }
 
                         render.footersIn.push(footerControls);
                     } else {
-                        let footerControls = ejs.render(coreuiTableTpl['table-controls-footer-out.html'], {
-                            controlsLeft: controlsLeft,
-                            controlsCenter: controlsCenter,
-                            controlsRight: controlsRight,
-                        });
+                        let footerControls = $(
+                            ejs.render(coreuiTableTpl['table-controls-footer-out.html'], {
+                                controlsLeft: controlsLeft,
+                                controlsCenter: controlsCenter,
+                                controlsRight: controlsRight,
+                            })
+                        );
+
+
+                        if (controlsLeft.length > 0) {
+                            $.each(controlsLeft, function (key, control) {
+                                footerControls.find('.coreui-table__controls_left').append(control)
+                            });
+                        }
+
+                        if (controlsCenter.length > 0) {
+                            $.each(controlsCenter, function (key, control) {
+                                footerControls.find('.coreui-table__controls_center').append(control)
+                            });
+                        }
+
+                        if (controlsRight.length > 0) {
+                            $.each(controlsRight, function (key, control) {
+                                footerControls.find('.coreui-table__controls_right').append(control)
+                            });
+                        }
 
                         render.footersOut.push(footerControls);
                     }
@@ -558,14 +640,22 @@ let coreuiTableInstance = {
                 heightSizes: heightSizes,
                 recordsTotal: this._recordsTotal,
                 overflow: !! this._options.overflow,
-                render: {
-                    headersOut : render.headersOut,
-                    headersIn : render.headersIn,
-                    footersIn : render.footersIn,
-                    footersOut : render.footersOut
-                },
             })
         );
+
+
+        if (render.headersOut.length > 0) {
+            containerElement.prepend(render.headersOut);
+        }
+        if (render.headersIn.length > 0) {
+            containerElement.find('.coreui-table__container').prepend(render.headersIn);
+        }
+        if (render.footersIn.length > 0) {
+            containerElement.find('.coreui-table__container').append(render.footersIn);
+        }
+        if (render.footersOut.length > 0) {
+            containerElement.append(render.footersOut);
+        }
 
         containerElement.find('.coreui-table__wrapper').html(tableElement);
 

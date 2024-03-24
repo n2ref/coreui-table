@@ -431,16 +431,18 @@ let coreuiTableRender = {
      * @param {object} table
      * @param {object} control
      * @private
+     * @returns {HTMLElement|jQuery}
      */
     renderControl: function (table, control) {
 
         if (coreuiTableUtils.isObject(control)) {
-            let controlRender = ejs.render(coreuiTableTpl['table-control.html'], {
-                control: {
-                    id: control.getId(),
-                    content: control.render(),
-                }
-            });
+            let controlElement = $(
+                ejs.render(coreuiTableTpl['table-control.html'], {
+                    id: control.getId()
+                })
+            );
+
+            controlElement.append(control.render());
 
             if (control.hasOwnProperty('initEvents') && typeof control.initEvents === 'function') {
                 table.on('container_show', function () {
@@ -448,7 +450,7 @@ let coreuiTableRender = {
                 });
             }
 
-            return controlRender;
+            return controlElement;
         }
     },
 

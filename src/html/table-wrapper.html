@@ -1,15 +1,8 @@
 
-<div id="coreui-table-<%= id %>" class="coreui-table"<%- render.attr %> <% if (widthSizes) { %>style="<%= widthSizes.join(';') %>"<% } %>>
-
-    <%- render.headersOut.join('') %>
+<div id="coreui-table-<%= id %>" class="coreui-table"<% if (widthSizes) { %> style="<%= widthSizes.join(';') %>"<% } %>>
 
     <div class="coreui-table__container position-relative">
-        <%- render.headersIn.join('') %>
-
         <div class="coreui-table__wrapper<% if (overflow) { %> overflow-x-auto<% } %>" <% if (heightSizes) { %>style="<%= heightSizes.join(';') %>"<% } %>></div>
-
-        <%- render.footersIn.join('') %>
     </div>
 
-    <%- render.footersOut.join('') %>
 </div>

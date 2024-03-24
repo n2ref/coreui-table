@@ -1,18 +1,12 @@
 
 <div class="coreui-table__footer ps-1 pe-1 d-flex justify-content-between border-top border-secondary-subtle">
     <% if (controlsLeft.length) { %>
-    <div class="coreui-table__controls d-flex justify-content-start gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center">
-        <%- controlsLeft.join('') %>
-    </div>
+    <div class="coreui-table__controls coreui-table__controls_left d-flex justify-content-start gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center"></div>
     <% } %>
     <% if (controlsCenter.length) { %>
-    <div class="coreui-table__controls d-flex justify-content-center gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center">
-        <%- controlsCenter.join('') %>
-    </div>
+    <div class="coreui-table__controls coreui-table__controls_center d-flex justify-content-center gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center"></div>
     <% } %>
     <% if (controlsRight.length) { %>
-    <div class="coreui-table__controls d-flex justify-content-end gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center">
-        <%- controlsRight.join('') %>
-    </div>
+    <div class="coreui-table__controls coreui-table__controls_right d-flex justify-content-end gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center"></div>
     <% } %>
 </div>

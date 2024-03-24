@@ -47,9 +47,15 @@ coreuiTable.controls.custom = {
 
     /**
      * Формирование контента для размещения на странице
-     * @returns {string}
+     * @returns {string|HTMLElement|jQuery}
      */
     render: function() {
-        return this._options.content;
+
+        if (typeof this._options.content === 'string') {
+            return this._options.content;
+
+        } else if (typeof this._options.content === 'function') {
+            return this._options.content();
+        }
     }
 }
