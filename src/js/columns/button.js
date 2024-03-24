@@ -83,7 +83,9 @@ coreuiTable.columns.button = {
         let attributes = [];
 
         $.each(content.attr, function (name, value) {
-            attributes.push(name + '="' + value + '"');
+            if (['string', 'number'].indexOf(typeof value) >= 0) {
+                attributes.push(name + '="' + value + '"');
+            }
         });
 
         let btn = $(

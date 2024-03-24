@@ -1,6 +1,7 @@
 import coreuiTable         from "../coreui.table";
 import coreuiTableElements from "../coreui.table.elements";
 import coreuiTablePrivate  from "../coreui.table.private";
+import coreuiTableTpl      from "../coreui.table.templates";
 
 coreuiTable.columns.select = {
 
@@ -33,7 +34,7 @@ coreuiTable.columns.select = {
 
         this._table         = table;
         this._options       = $.extend(true, {}, this._options, options);
-        this._options.label = '<input class="coreui-table__select-all form-check-input" type="checkbox" value="">';
+        this._options.label = coreuiTableTpl['columns/select_label.html'];
 
         // Показ строк
         this._table.on('records_show', function () {
@@ -44,27 +45,6 @@ coreuiTable.columns.select = {
             // Отмена обработки нажатия в select колонках
             $(selects).click(function (event) {
                 event.stopPropagation();
-            });
-
-            // Выбор строки
-            $(' > .coreui-table__select', selects).click(function (event) {
-                let recordIndex = $(this).val();
-                let record      = table.getRecordByIndex(recordIndex);
-                let tr          = coreuiTableElements.getTrByIndex(table.getId(), recordIndex);
-
-                if ( ! record || ! tr) {
-                    return;
-                }
-
-                if ($(this).is(':checked')) {
-                    $(tr).addClass('table-primary');
-
-                    coreuiTablePrivate._trigger(table, 'record_select', table, [ record ]);
-                } else {
-                    $(tr).removeClass('table-primary');
-
-                    coreuiTablePrivate._trigger(table, 'record_unselect', table, [ record ]);
-                }
             });
 
             // Выбор всех строк
@@ -113,6 +93,33 @@ coreuiTable.columns.select = {
      */
     render: function(content, record) {
 
-        return '<input class="coreui-table__select form-check-input" type="checkbox" value="' + record.index + '">';
+        let select = $(
+            ejs.render(coreuiTableTpl['columns/select.html'], {
+                index: record.index
+            })
+        );
+
+        let that = this;
+
+        // Выбор строки
+        select.click(function (event) {
+            let tr = coreuiTableElements.getTrByIndex(that._table.getId(), record.index);
+
+            if ( ! tr) {
+                return;
+            }
+
+            if ($(this).is(':checked')) {
+                $(tr).addClass('table-primary');
+
+                coreuiTablePrivate._trigger(that._table, 'record_select', that._table, [ record ]);
+            } else {
+                $(tr).removeClass('table-primary');
+
+                coreuiTablePrivate._trigger(that._table, 'record_unselect', that._table, [ record ]);
+            }
+        });
+
+        return select;
     }
 }
