@@ -24,6 +24,10 @@ let coreuiTablePrivate = {
                 column.show = true;
             }
 
+            if (column.hasOwnProperty('fixed') && typeof column.fixed === 'string') {
+                table._options.overflow = true;
+            }
+
             let columnInstance = $.extend(true, {}, coreuiTable.columns[column.type]);
             columnInstance.init(table, column);
             table._columns.push(columnInstance);

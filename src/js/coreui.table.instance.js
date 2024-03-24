@@ -24,6 +24,7 @@ let coreuiTableInstance = {
         height: null,
         minHeight: null,
         naxHeight: null,
+        overflow: false,
         page: 1,
         recordsPerPage: 25,
         saveState: false,
@@ -392,6 +393,8 @@ let coreuiTableInstance = {
         if (this._options.maxWidth > 0) {
             let unit = typeof this._options.maxWidth === 'number' ? 'px' : '';
             widthSizes.push('max-width:' + this._options.maxWidth + unit);
+
+            this._options.overflow = true;
         }
 
 
@@ -408,6 +411,8 @@ let coreuiTableInstance = {
         if (this._options.maxHeight > 0) {
             let unit = typeof this._options.maxHeight === 'number' ? 'px' : '';
             heightSizes.push('max-height:' + this._options.maxHeight + unit);
+
+            this._options.overflow = true;
         }
 
 
@@ -551,6 +556,7 @@ let coreuiTableInstance = {
                 widthSizes: widthSizes,
                 heightSizes: heightSizes,
                 recordsTotal: this._recordsTotal,
+                overflow: !! this._options.overflow,
                 render: {
                     headersOut : render.headersOut,
                     headersIn : render.headersIn,
