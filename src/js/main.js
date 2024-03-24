@@ -54,5 +54,6 @@ import "./columns/numbers";
 import "./columns/select";
 import "./columns/switch";
 import "./columns/text";
+import "./columns/button";
 
 export default coreuiTable;
