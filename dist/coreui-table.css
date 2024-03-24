@@ -213,3 +213,6 @@
 .coreui-table .coreui-table_pointer {
   cursor: pointer;
 }
+.coreui-table .coreui-table__cursor_help {
+  cursor: help;
+}

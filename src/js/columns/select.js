@@ -112,11 +112,11 @@ coreuiTable.columns.select = {
             if ($(this).is(':checked')) {
                 $(tr).addClass('table-primary');
 
-                coreuiTablePrivate._trigger(that._table, 'record_select', that._table, [ record ]);
+                coreuiTablePrivate._trigger(that._table, 'record_select', [ record ]);
             } else {
                 $(tr).removeClass('table-primary');
 
-                coreuiTablePrivate._trigger(that._table, 'record_unselect', that._table, [ record ]);
+                coreuiTablePrivate._trigger(that._table, 'record_unselect', [ record ]);
             }
         });
 

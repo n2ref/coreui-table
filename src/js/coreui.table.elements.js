@@ -188,7 +188,7 @@ let coreuiTableElements = {
 
         let recordIndex = recordElement.data('record-index');
 
-        coreuiTablePrivate._trigger(table, 'record_expand_show', this, [recordIndex]);
+        coreuiTablePrivate._trigger(table, 'record_expand_show', [recordIndex]);
     },
 
 

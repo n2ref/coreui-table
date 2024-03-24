@@ -496,9 +496,7 @@ let coreuiTableRender = {
                     let name = components[i].component.split('.')[1];
 
                     if (CoreUI.hasOwnProperty(name) &&
-                        typeof CoreUI[name] === "object" &&
-                        CoreUI[name] !== null &&
-                        ! Array.isArray(CoreUI[name])
+                        coreuiTableUtils.isObject(CoreUI[name])
                     ) {
                         let instance = CoreUI[name].create(components[i]);
                         result.push(instance.render());
@@ -509,8 +507,6 @@ let coreuiTableRender = {
                     }
                 }
             }
-
-            result.push(components[i]);
         }
 
 

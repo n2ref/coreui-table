@@ -447,26 +447,25 @@ let coreuiTablePrivate = {
 
     /**
      * Выполнения зарегистрированных функций в указанном событии
-     * @param {object}      table
-     * @param {string}      name
-     * @param {object|null} context
-     * @param {Array}       params
+     * @param {object} table
+     * @param {string} name
+     * @param {Array}  params
      * @private
      */
-    _trigger: function(table, name, context, params) {
+    _trigger: function(table, name, params) {
 
         params = params || [];
 
         if (table._events.hasOwnProperty(name) && table._events[name].length > 0) {
             for (let i = 0; i < table._events[name].length; i++) {
                 let callback = table._events[name][i].callback;
+                let context  = table._events[name][i].context ? table._events[name][i].context : table;
 
-                context = context || table._events[name][i].context;
-
-                callback.apply(context, params);
+                callback.apply(context, params)
 
                 if (table._events[name][i].singleExec) {
                     table._events[name].splice(i, 1);
+                    i--;
                 }
             }
         }
