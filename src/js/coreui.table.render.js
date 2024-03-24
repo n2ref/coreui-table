@@ -241,9 +241,20 @@ let coreuiTableRender = {
             columns: columns,
         });
 
+        let theadAttr = [];
+
+        if (options.hasOwnProperty('theadTop') &&
+            ['string', 'number'].indexOf(typeof options.theadTop) >= 0 &&
+            options.theadTop > 0
+        ) {
+            let unit = coreuiTableUtils.isNumeric(options.theadTop) ? 'px' : '';
+            theadAttr.push('style="top:' + options.theadTop + unit + '"');
+        }
+
         let tableElement = $(
             ejs.render(coreuiTableTpl['table.html'], {
                 classes: classes.join(' '),
+                theadAttr: theadAttr.length > 0 ? theadAttr.join(' ') : '',
                 show: options.show,
                 columnGroupsHeader : columnGroupsHeader,
                 colGroups : colGroups,

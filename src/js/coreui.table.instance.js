@@ -27,6 +27,7 @@ let coreuiTableInstance = {
         overflow: false,
         page: 1,
         recordsPerPage: 25,
+        theadTop: 0,
         saveState: false,
         noWrap: false,
         noWrapToggle: false,

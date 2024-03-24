@@ -6,7 +6,7 @@
         <% }); %>
     </colgroup>
     <% if (show.columnHeaders) { %>
-    <thead>
+    <thead<% if (theadAttr) { %> <%- theadAttr %>"<% } %>>
         <%- columnGroupsHeader %>
         <%- columns %>
     </thead>
