@@ -1,5 +1,6 @@
 import coreuiTable from "../coreui.table";
 import coreuiTableElements from "../coreui.table.elements";
+import coreuiTableTpl from "../coreui.table.templates";
 
 coreuiTable.columns.switch = {
 
@@ -9,6 +10,7 @@ coreuiTable.columns.switch = {
         label: '',
         field: '',
         show: true,
+        disabled: false,
         width: 5,
         valueY: 'Y',
         valueN: 'N',
@@ -25,46 +27,18 @@ coreuiTable.columns.switch = {
      */
     init: function (table, options) {
 
-        let that      = this;
         this._table   = table;
         this._options = $.extend(true, {}, this._options, options);
 
         // Показ строк
         this._table.on('records_show', function () {
 
-            let containers = coreuiTableElements.getRowsSwitches(that._table.getId());
+            let containers = coreuiTableElements.getRowsSwitches(table.getId());
 
             // Отмена обработки нажатия в switch колонках
             containers.click(function (event) {
                 event.stopPropagation();
             });
-
-            // События нажатия на переключатель
-            if (that._options.hasOwnProperty('onChange') &&
-                (typeof that._options.onChange === 'function' || typeof that._options.onChange === 'string')
-            ) {
-                $('.coreui-table__switch[data-field="' + that._options.field + '"]', containers).change(function (event) {
-                    let recordIndex = $(this).val();
-                    let isChecked   = $(this).is(':checked');
-                    let record      = table.getRecordByIndex(recordIndex);
-
-                    if (typeof that._options.onChange === 'function') {
-                        that._options.onChange(record, isChecked, this);
-
-                    } else if (typeof that._options.onChange === 'string') {
-                        let id = '';
-
-                        if (record.hasOwnProperty(table._options.primaryKey)) {
-                            id = record[table._options.primaryKey];
-                        }
-
-                        let func = new Function('record', 'checked', 'id', that._options.onChange);
-                        func(record, this, id);
-                    }
-
-                    return false;
-                });
-            }
         });
     },
 
@@ -103,14 +77,45 @@ coreuiTable.columns.switch = {
      */
     render: function(content, record) {
 
-        let checked = record.data.hasOwnProperty(this._options.field) && record.data[this._options.field] === this._options.valueY
-            ? ' checked="checked"'
-            : '';
+        let isChecked = record.data.hasOwnProperty(this._options.field) &&
+                        record.data[this._options.field] === this._options.valueY;
 
+        let formSwitch = $(
+            ejs.render(coreuiTableTpl['columns/switch.html'], {
+                index: record.index,
+                field: this._options.field,
+                disabled: this._options.disabled,
+                checked: isChecked
+            })
+        );
 
-        return '<div class="form-switch">' +
-                   '<input class="coreui-table__switch form-check-input" type="checkbox" value="' + record.index + '"' + checked +
-                         ' data-field="' + this._options.field + '" data-field="' + this._options.field + '">' +
-               '</div>';
+        // События нажатия на переключатель
+        if (this._options.hasOwnProperty('onChange') &&
+            (typeof this._options.onChange === 'function' || typeof this._options.onChange === 'string')
+        ) {
+            let that = this;
+
+            $('.coreui-table__switch', formSwitch).change(function (event) {
+                let isChecked = $(this).is(':checked');
+
+                if (typeof that._options.onChange === 'function') {
+                    that._options.onChange(record, isChecked, this);
+
+                } else if (typeof that._options.onChange === 'string') {
+                    let id = null;
+
+                    if (record.hasOwnProperty(that._table._options.primaryKey)) {
+                        id = record[that._table._options.primaryKey];
+                    }
+
+                    let func = new Function('record', 'checked', 'id', that._options.onChange);
+                    func(record, this, id);
+                }
+
+                return false;
+            });
+        }
+
+        return formSwitch;
     }
 }
