@@ -233,7 +233,7 @@ let coreuiTableRender = {
             classes.push('table-striped');
         }
 
-        if ( ! columnGroupsFooter || ! render.pages) {
+        if ( ! columnGroupsFooter) {
             classes.push('empty-tfoot');
         }
 
@@ -334,7 +334,11 @@ let coreuiTableRender = {
                 return;
             }
 
-            fields.push(that.renderField(table, column, record));
+            let field = that.renderField(table, column, record);
+
+            if (field) {
+                fields.push(field);
+            }
         });
 
         if (typeof options.onClickUrl === 'string' && options.onClickUrl) {
@@ -385,12 +389,18 @@ let coreuiTableRender = {
         let fieldProps    = record.meta && record.meta.hasOwnProperty('fields') && record.meta.fields.hasOwnProperty(columnField)
             ? record.meta.fields[columnField]
             : null;
-        let fieldAttr = coreuiTableUtils.isObject(columnOptions.attr)
+        let fieldAttr = columnOptions.hasOwnProperty('attr') && coreuiTableUtils.isObject(columnOptions.attr)
             ? columnOptions.attr
             : {};
-        
-        if (fieldProps && coreuiTableUtils.isObject(fieldProps.attr)) {
-            fieldAttr = coreuiTableUtils.mergeAttr(fieldAttr, fieldProps.attr);
+
+        if (fieldProps && coreuiTableUtils.isObject(fieldProps)) {
+            if (fieldProps && fieldProps.hasOwnProperty('show') && ! fieldProps.show) {
+                return null;
+            }
+
+            if (coreuiTableUtils.isObject(fieldProps.attr)) {
+                fieldAttr = coreuiTableUtils.mergeAttr(fieldAttr, fieldProps.attr);
+            }
         }
 
         if (columnOptions.hasOwnProperty('fixed') && typeof columnOptions.fixed === 'string') {

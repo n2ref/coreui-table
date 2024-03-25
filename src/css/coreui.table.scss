@@ -86,6 +86,10 @@
             border-top: none;
             background-color: $coreui-table-thead-bg;
         }
+        table > tbody > tr:first-child,
+        table > tbody > tr:first-child > td {
+            border-top: none;
+        }
 
 
         table > tfoot > tr > td::before {
@@ -100,7 +104,9 @@
             border: 1px solid $coreui-table-border-color;
         }
         table > tfoot tr:last-child,
-        table > tfoot tr:last-child > td {
+        table > tfoot tr:last-child > td,
+        table > tbody > tr:last-child,
+        table > tbody > tr:last-child > td  {
             border-bottom: 0;
         }
 
