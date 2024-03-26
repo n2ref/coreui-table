@@ -46,6 +46,12 @@ let coreuiTableInstance = {
             },
         },
 
+        group: {
+            field: null,
+            attr: {},
+            render: null
+        },
+
         show: {
             columnHeaders: true
         },
@@ -68,6 +74,7 @@ let coreuiTableInstance = {
     _recordsNumber: 1,
     _seq: 1,
     _isRecordsRequest: false,
+    _countColumnsShow: 0,
 
     _records: [],
     _sort: [],
@@ -119,7 +126,7 @@ let coreuiTableInstance = {
             }
 
         } else if (Array.isArray(this._options.records)) {
-            coreuiTablePrivate._setRecords(this, this._options.records);
+            coreuiTablePrivate.setRecords(this, this._options.records);
         }
 
         // Инициализация колонок
@@ -127,7 +134,7 @@ let coreuiTableInstance = {
             Array.isArray(this._options.columns) &&
             this._options.columns.length > 0
         ) {
-            coreuiTablePrivate._initColumns(this, this._options.columns);
+            coreuiTablePrivate.initColumns(this, this._options.columns);
         }
 
 
@@ -136,7 +143,7 @@ let coreuiTableInstance = {
             Array.isArray(this._options.search) &&
             this._options.search.length > 0
         ) {
-            coreuiTablePrivate._initSearch(this, this._options.search);
+            coreuiTablePrivate.initSearch(this, this._options.search);
         }
 
 
@@ -145,14 +152,14 @@ let coreuiTableInstance = {
             Array.isArray(this._options.header) &&
             this._options.header.length > 0
         ) {
-            coreuiTablePrivate._initControls(this, this._options.header, 'header');
+            coreuiTablePrivate.initControls(this, this._options.header, 'header');
         }
 
         if (this._options.hasOwnProperty('footer') &&
             Array.isArray(this._options.footer) &&
             this._options.footer.length > 0
         ) {
-            coreuiTablePrivate._initControls(this, this._options.footer, 'footer');
+            coreuiTablePrivate.initControls(this, this._options.footer, 'footer');
         }
 
 
@@ -161,7 +168,7 @@ let coreuiTableInstance = {
             let sort = coreuiTablePrivate.getStorageField(this.getId(), 'sort');
 
             if (Array.isArray(sort) && sort.length > 0) {
-                coreuiTablePrivate._initSort(this, sort);
+                coreuiTablePrivate.initSort(this, sort);
 
                 if (this._records.length > 0) {
                     this._records = coreuiTablePrivate.sortRecordsByFields(this._records, this._sort);
@@ -173,7 +180,7 @@ let coreuiTableInstance = {
                 Array.isArray(this._options.sort) &&
                 this._options.sort.length > 0
             ) {
-                coreuiTablePrivate._initSort(this, this._options.sort);
+                coreuiTablePrivate.initSort(this, this._options.sort);
             }
         }
     },
@@ -1222,11 +1229,11 @@ let coreuiTableInstance = {
                 let isShow = true;
 
                 if (searchData.length > 0) {
-                    isShow = coreuiTablePrivate._isFilteredRecord(searchData, record.data);
+                    isShow = coreuiTablePrivate.isFilteredRecord(searchData, record.data);
                 }
 
                 if (isShow && filterData.length > 0) {
-                    isShow = coreuiTablePrivate._isFilteredRecord(filterData, record.data);
+                    isShow = coreuiTablePrivate.isFilteredRecord(filterData, record.data);
                 }
 
                 record.show = isShow;
@@ -1509,7 +1516,7 @@ let coreuiTableInstance = {
         let tr = coreuiTableElements.getTrByIndex(this.getId(), index);
 
         if (tr.length >= 0) {
-            let record = coreuiTablePrivate._addRecord(this, recordData, index);
+            let record = coreuiTablePrivate.addRecord(this, recordData, index);
 
             if (record) {
                 tr.after(
@@ -1530,7 +1537,7 @@ let coreuiTableInstance = {
         let tr = coreuiTableElements.getTrByIndex(this.getId(), index);
 
         if (tr.length >= 0) {
-            let record = coreuiTablePrivate._addRecordBefore(this, recordData, index);
+            let record = coreuiTablePrivate.addRecordBefore(this, recordData, index);
 
             if (record) {
                 tr.before(
@@ -1550,7 +1557,7 @@ let coreuiTableInstance = {
         let tbody = coreuiTableElements.getTableTbody(this.getId());
 
         if (tbody.length >= 0) {
-            let record = coreuiTablePrivate._addRecord(this, recordData, 0);
+            let record = coreuiTablePrivate.addRecord(this, recordData, 0);
 
             tbody.prepend(
                 coreuiTableRender.renderRecord(this, record)
@@ -1568,7 +1575,7 @@ let coreuiTableInstance = {
         let tbody = coreuiTableElements.getTableTbody(this.getId());
 
         if (tbody.length >= 0) {
-            let record = coreuiTablePrivate._addRecord(this, recordData);
+            let record = coreuiTablePrivate.addRecord(this, recordData);
 
             tbody.append(
                 coreuiTableRender.renderRecord(this, record)
@@ -1590,7 +1597,7 @@ let coreuiTableInstance = {
 
         this._recordsTotal = coreuiTableUtils.isNumeric(total) ? parseInt(total) : records.length;
 
-        coreuiTablePrivate._setRecords(this, records);
+        coreuiTablePrivate.setRecords(this, records);
 
         if (records.length > 0) {
             this._recordsNumber = this._page === 1

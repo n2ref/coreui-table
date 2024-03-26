@@ -11,7 +11,7 @@ let coreuiTablePrivate = {
      * @param {Array} columns
      * @private
      */
-    _initColumns(table, columns) {
+    initColumns(table, columns) {
 
         $.each(columns, function (key, column) {
             if (typeof column.type === 'undefined' ||
@@ -31,6 +31,10 @@ let coreuiTablePrivate = {
             let columnInstance = $.extend(true, {}, coreuiTable.columns[column.type]);
             columnInstance.init(table, column);
             table._columns.push(columnInstance);
+
+            if (columnInstance.isShow()) {
+                table._countColumnsShow++;
+            }
         });
     },
 
@@ -41,7 +45,7 @@ let coreuiTablePrivate = {
      * @param {Array}  searchControls
      * @private
      */
-    _initSearch: function (table, searchControls) {
+    initSearch: function (table, searchControls) {
 
         let options      = table.getOptions();
         let searchValues = options.saveState && options.id
@@ -92,7 +96,7 @@ let coreuiTablePrivate = {
      * @param {string} position
      * @private
      */
-    _initControls: function (table, rows, position) {
+    initControls: function (table, rows, position) {
 
         let that = this;
 
@@ -111,7 +115,7 @@ let coreuiTablePrivate = {
 
             if (row.hasOwnProperty('left') && Array.isArray(row.left)) {
                 $.each(row.left, function (key, control) {
-                    let instance = that._initControl(table, control);
+                    let instance = that.initControl(table, control);
 
                     if (coreuiTableUtils.isObject(instance)) {
                         controlsLeft.push(instance);
@@ -121,7 +125,7 @@ let coreuiTablePrivate = {
 
             if (row.hasOwnProperty('center') && Array.isArray(row.center)) {
                 $.each(row.center, function (key, control) {
-                    let instance = that._initControl(table, control);
+                    let instance = that.initControl(table, control);
 
                     if (coreuiTableUtils.isObject(instance)) {
                         controlsCenter.push(instance);
@@ -131,7 +135,7 @@ let coreuiTablePrivate = {
 
             if (row.hasOwnProperty('right') && Array.isArray(row.right)) {
                 $.each(row.right, function (key, control) {
-                    let instance = that._initControl(table, control);
+                    let instance = that.initControl(table, control);
 
                     if (coreuiTableUtils.isObject(instance)) {
                         controlsRight.push(instance);
@@ -157,7 +161,7 @@ let coreuiTablePrivate = {
      * @param {object} control
      * @private
      */
-    _initControl: function (table, control) {
+    initControl: function (table, control) {
 
         let instance = null;
 
@@ -218,7 +222,7 @@ let coreuiTablePrivate = {
      * @param {Array} sort
      * @private
      */
-    _initSort: function (table, sort) {
+    initSort: function (table, sort) {
 
         if (Array.isArray(sort) && sort.length > 0) {
             $.each(sort, function (key, sortField) {
@@ -248,7 +252,7 @@ let coreuiTablePrivate = {
      * @param {Array}  records
      * @private
      */
-    _setRecords: function (table, records) {
+    setRecords: function (table, records) {
 
         table._recordsIndex = 1;
         table._records      = [];
@@ -257,7 +261,7 @@ let coreuiTablePrivate = {
 
         $.each(records, function (key, record) {
 
-            that._addRecord(table, record);
+            that.addRecord(table, record);
         });
     },
 
@@ -270,7 +274,7 @@ let coreuiTablePrivate = {
      * @return {object|null}
      * @private
      */
-    _addRecord: function (table, data, afterIndex) {
+    addRecord: function (table, data, afterIndex) {
 
         if (coreuiTableUtils.isObject(data)) {
             data = $.extend(true, {}, data);
@@ -332,7 +336,7 @@ let coreuiTablePrivate = {
      * @return {object|null}
      * @private
      */
-    _addRecordBefore: function (table, data, index) {
+    addRecordBefore: function (table, data, index) {
 
         if (coreuiTableUtils.isObject(data) && typeof index === 'number') {
             data = $.extend(true, {}, data);
@@ -384,7 +388,7 @@ let coreuiTablePrivate = {
      * @return {boolean}
      * @private
      */
-    _isFilteredRecord: function (filters, recordData) {
+    isFilteredRecord: function (filters, recordData) {
 
         let isShow = true;
 

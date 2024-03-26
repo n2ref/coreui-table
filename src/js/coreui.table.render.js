@@ -285,11 +285,29 @@ let coreuiTableRender = {
         let renderRecords = [];
 
         if (records.length > 0) {
-            let that = this;
+            let that    = this;
+            let options = table.getOptions();
+            let group   = options.hasOwnProperty('group') &&
+                          coreuiTableUtils.isObject(options.group) &&
+                          options.group.hasOwnProperty('field') &&
+                          typeof options.group.field === 'string' &&
+                          options.group.field
+                ? options.group
+                : null;
+            let groupValue = null;
 
             $.each(records, function (key, record) {
 
                 if (record.show) {
+                    if (group &&
+                        record.data.hasOwnProperty(group.field) &&
+                        ['string', 'number'].indexOf(typeof record.data[group.field]) >= 0 &&
+                        groupValue != record.data[group.field]
+                    ) {
+                        groupValue = record.data[group.field];
+                        renderRecords.push(that.renderGroup(table, group, record));
+                    }
+
                     renderRecords.push(that.renderRecord(table, record));
                     table._recordsNumber++;
                 }
@@ -300,7 +318,7 @@ let coreuiTableRender = {
             renderRecords = [
                 $(
                     ejs.render(coreuiTableTpl['table-records-empty.html'], {
-                        columnsCount: table._columns.length > 0 ? table._columns.length : 1,
+                        columnsCount: table._countColumnsShow,
                         lang: table.getLang(),
                     })
                 )
@@ -437,6 +455,57 @@ let coreuiTableRender = {
 
 
     /**
+     * Сборка записи-группы
+     * @param {object} table
+     * @param {object} group
+     * @param {object} record
+     * @returns {{ attr: (string), fields: (object) }}}
+     * @private
+     */
+    renderGroup: function (table, group, record) {
+
+        let attr = group.hasOwnProperty('attr') && coreuiTableUtils.isObject(group.attr)
+            ? group.attr
+            : {};
+
+        if (attr.hasOwnProperty('class') && typeof attr.class === 'string') {
+            attr.class += ' coreui-table__record-group';
+        } else {
+            attr.class = 'coreui-table__record-group';
+        }
+
+        let attributes = [];
+
+        $.each(attr, function (name, value) {
+            if (typeof value === 'string') {
+                attributes.push(name + '="' + value + '"');
+            }
+        });
+
+        let recordElement = $(
+            ejs.render(coreuiTableTpl['table-record-group.html'], {
+                attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
+                colspan: table._countColumnsShow,
+            })
+        );
+
+        let content = record.data[group.field];
+
+        if (group.hasOwnProperty('render') && typeof group.render === 'function') {
+            let renderContent = group.render(record);
+
+            if (renderContent) {
+                content = renderContent;
+            }
+        }
+
+        recordElement.find(' > td').html(content);
+
+        return recordElement;
+    },
+
+
+    /**
      * Сборка элемента управления
      * @param {object} table
      * @param {object} control
@@ -477,7 +546,7 @@ let coreuiTableRender = {
         let result = [];
 
         if (components instanceof Object) {
-            let alloyComponents  = [
+            let alloyComponents = [
                 'coreui.table',
                 'coreui.layout',
                 'coreui.panel',
