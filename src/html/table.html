@@ -5,7 +5,7 @@
         <col<% if (columnGroup.style) { %> style="<%= columnGroup.style %>"<% } %>/>
         <% }); %>
     </colgroup>
-    <% if (show.columnHeaders) { %>
+    <% if (columnHeaders) { %>
     <thead<% if (theadAttr) { %> <%- theadAttr %>"<% } %>>
         <%- columnGroupsHeader %>
         <%- columns %>

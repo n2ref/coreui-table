@@ -31,6 +31,7 @@ let coreuiTableInstance = {
         saveState: false,
         noWrap: false,
         noWrapToggle: false,
+        columnHeaders: true,
 
         recordsRequest: {
             method: 'GET',
@@ -52,9 +53,6 @@ let coreuiTableInstance = {
             render: null
         },
 
-        show: {
-            columnHeaders: true
-        },
         onClick: null,
         onClickUrl: null,
         sort: [],

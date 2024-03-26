@@ -255,7 +255,7 @@ let coreuiTableRender = {
             ejs.render(coreuiTableTpl['table.html'], {
                 classes: classes.join(' '),
                 theadAttr: theadAttr.length > 0 ? theadAttr.join(' ') : '',
-                show: options.show,
+                columnHeaders: options.columnHeaders,
                 columnGroupsHeader : columnGroupsHeader,
                 colGroups : colGroups,
                 columns : htmlColumns,
