@@ -506,6 +506,42 @@ let coreuiTableRender = {
 
 
     /**
+     * Сборка раскрывающейся строки
+     * @param {object}       table
+     * @param {Array|string} content
+     */
+    renderExpand: function (table, content) {
+
+        if (typeof content === 'object') {
+            content = coreuiTableRender.renderComponents(content);
+        }
+
+
+        let expandRecord = $(
+            ejs.render(coreuiTableTpl['table-record-expand.html'], {
+                colspan: table._countColumnsShow,
+            })
+        );
+
+        if (['string', 'number'].indexOf(typeof content) >= 0) {
+            expandRecord.find('td').html(content)
+
+        } else if (Array.isArray(content)) {
+            $.each(content, function (key, item) {
+                if (['string', 'number'].indexOf(typeof item) >= 0 ||
+                    item instanceof HTMLElement ||
+                    (window.hasOwnProperty('jQuery') && item instanceof jQuery)
+                ) {
+                    expandRecord.find('td').append(item)
+                }
+            });
+        }
+
+        return expandRecord;
+    },
+
+
+    /**
      * Сборка элемента управления
      * @param {object} table
      * @param {object} control

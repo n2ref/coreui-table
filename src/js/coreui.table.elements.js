@@ -1,5 +1,7 @@
 import coreuiTableRender from "./coreui.table.render";
 import coreuiTablePrivate from "./coreui.table.private";
+import coreuiTableTemplates from "./coreui.table.templates";
+import coreuiTableTpl from "./coreui.table.templates";
 
 
 let coreuiTableElements = {
@@ -161,26 +163,7 @@ let coreuiTableElements = {
      */
     addExpandRow: function (table, recordElement, content) {
 
-        if (typeof content === 'object') {
-            content = coreuiTableRender.renderComponents(content);
-        }
-
-        let expandRecord = $('<tr class="coreui-table__record-expanded" style="display: none"><td colspan="1000"></td></tr>');
-
-        if (['string', 'number'].indexOf(typeof content) >= 0) {
-            expandRecord.find('td').html(content)
-
-        } else if (Array.isArray(content)) {
-            $.each(content, function (key, item) {
-                if (['string', 'number'].indexOf(typeof item) >= 0 ||
-                    item instanceof HTMLElement ||
-                    (window.hasOwnProperty('jQuery') && item instanceof jQuery)
-                ) {
-                    expandRecord.find('td').append(item)
-                }
-            });
-        }
-
+        let expandRecord = coreuiTableRender.renderExpand(table, content);
 
         recordElement.after(expandRecord);
         recordElement.next().show('fast');
