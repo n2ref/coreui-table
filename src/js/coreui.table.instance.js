@@ -59,6 +59,10 @@ let coreuiTableInstance = {
         header: [],
         footer: [],
         columnGroupsHeader: [],
+        search: {
+            labelWidth: 200,
+            controls: [],
+        },
         columns: [],
         columnGroupsFooter: [],
         records: []
@@ -137,11 +141,12 @@ let coreuiTableInstance = {
 
 
         // Инициализация поисковых полей
-        if (typeof this._options.search === 'object' &&
-            Array.isArray(this._options.search) &&
-            this._options.search.length > 0
+        if (coreuiTableUtils.isObject(this._options.search) &&
+            typeof this._options.search.controls === 'object' &&
+            Array.isArray(this._options.search.controls) &&
+            this._options.search.controls.length > 0
         ) {
-            coreuiTablePrivate.initSearch(this, this._options.search);
+            coreuiTablePrivate.initSearch(this, this._options.search.controls);
         }
 
 

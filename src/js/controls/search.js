@@ -82,7 +82,12 @@ coreuiTable.controls.search = {
         let buttonClear  = $('button.btn-clear', control);
 
         buttonToggle.click(function () {
-            let container = coreuiTableElements.getSearchContainer(that._table.getId());
+            let container        = coreuiTableElements.getSearchContainer(that._table.getId());
+            let columnsContainer = coreuiTableElements.getColumnsContainer(that._table.getId());
+
+            if (columnsContainer[0]) {
+                columnsContainer.hide();
+            }
 
             if (container[0]) {
                 container.fadeToggle('fast');
@@ -93,6 +98,10 @@ coreuiTable.controls.search = {
                 let btnCompleteAttr    = [];
                 let btnCompleteContent = '';
                 let wrapper            = coreuiTableElements.getWrapper(that._table.getId());
+                let tableOptions       = that._table.getOptions();
+                let labelWidth         = tableOptions.search.hasOwnProperty('labelWidth') && tableOptions.search.labelWidth
+                    ? tableOptions.search.labelWidth
+                    : 160;
 
                 $.each(that._table._search, function (key, control) {
                     let options = control.getOptions();
@@ -149,8 +158,8 @@ coreuiTable.controls.search = {
                     btnCompleteContent = that._options.btnComplete.content;
                 }
 
-
                 let content = ejs.render(coreuiTableTpl['controls/search-container.html'], {
+                    labelWidth: labelWidth + (typeof labelWidth === 'number' ? 'px' : ''),
                     controls: controls,
                     btnCompleteAttr:    btnCompleteAttr.length > 0 ? (' ' + btnCompleteAttr.join(' ')) : '',
                     btnCompleteContent: btnCompleteContent,
