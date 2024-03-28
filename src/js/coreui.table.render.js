@@ -221,18 +221,6 @@ let coreuiTableRender = {
             classes.push(options.class);
         }
 
-        if (typeof options.size === 'string' && options.size) {
-            classes.push('table-' + options.size);
-        }
-
-        if (typeof options.hover === 'boolean' && options.hover) {
-            classes.push('table-hover');
-        }
-
-        if (typeof options.striped === 'boolean' && options.striped) {
-            classes.push('table-striped');
-        }
-
         if ( ! columnGroupsFooter) {
             classes.push('empty-tfoot');
         }
