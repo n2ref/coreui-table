@@ -94,18 +94,24 @@
 
         table > tfoot > tr > td::before {
             top: 0;
-            box-shadow: 0 0 0 $coreui-table-border-color, 0 -1px 0 $coreui-table-border-color;
+            box-shadow: 0 -1px 0 $coreui-table-border-color;
         }
         table > tfoot > tr > td::after {
-            bottom: 0;
-            box-shadow: 0 0 0 $coreui-table-border-color, 0 1px 0 $coreui-table-border-color;
+            top: 0;
+            right: 0;
+            width: 1px;
+            height: 100%;
+            box-shadow: -1px 0px 0 0px #c4c8cb;
+            z-index: 1;
         }
         table.table-bordered > tfoot > tr > td {
             border: 1px solid $coreui-table-border-color;
+            border-bottom: 0;
         }
         table > tfoot tr:last-child,
         table > tfoot tr:last-child > td,
         table > tbody > tr:last-child,
+        table > tbody > tr:last-child > td,
         table > tbody > tr:last-child > td  {
             border-bottom: 0;
         }
