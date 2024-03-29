@@ -135,28 +135,28 @@ let coreuiTableRender = {
         }
 
 
-        if (typeof options.columnGroupsHeader === 'object' &&
+        if (options.hasOwnProperty('columnGroupsHeader') &&
             Array.isArray(options.columnGroupsHeader) &&
             options.columnGroupsHeader.length > 0
         ) {
             let rows = [];
 
             $.each(options.columnGroupsHeader, function (key, headerRow) {
-                if (typeof headerRow === 'object' && Array.isArray(headerRow)) {
+                if (Array.isArray(headerRow)) {
                     let cells = [];
 
                     $.each(headerRow, function (key, headerColumn) {
-                        if (typeof headerColumn === 'object' && ! Array.isArray(headerColumn)) {
+                        if (coreuiTableUtils.isObject(headerColumn)) {
                             let attributes = [];
 
-                            if (headerColumn.attr && typeof headerColumn.attr === 'object') {
+                            if (headerColumn.hasOwnProperty('attr') && coreuiTableUtils.isObject(headerColumn.attr)) {
                                 $.each(headerColumn.attr, function (name, value) {
                                     attributes.push(name + '="' + value + '"');
                                 });
                             }
 
                             cells.push({
-                                label: headerColumn.hasOwnProperty('label') ? headerColumn.label : '',
+                                content: headerColumn.hasOwnProperty('content') ? headerColumn.content : '',
                                 description: headerColumn.hasOwnProperty('description') ? headerColumn.description : '',
                                 attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
                             });
@@ -164,7 +164,7 @@ let coreuiTableRender = {
                     });
 
                     rows.push(
-                        ejs.render(coreuiTableTpl['table-columns.html'], {
+                        ejs.render(coreuiTableTpl['table-columns-header.html'], {
                             columns: cells,
                         })
                     );
@@ -174,28 +174,28 @@ let coreuiTableRender = {
             columnGroupsHeader = rows.join('');
         }
 
-        if (typeof options.columnGroupsFooter === 'object' &&
+        if (options.hasOwnProperty('columnGroupsFooter') &&
             Array.isArray(options.columnGroupsFooter) &&
             options.columnGroupsFooter.length > 0
         ) {
             let rows = [];
 
             $.each(options.columnGroupsFooter, function (key, footerRow) {
-                if (typeof footerRow === 'object' && Array.isArray(footerRow)) {
+                if (Array.isArray(footerRow)) {
                     let cells = [];
 
                     $.each(footerRow, function (key, footerColumn) {
-                        if (typeof footerColumn === 'object' && ! Array.isArray(footerColumn)) {
+                        if (coreuiTableUtils.isObject(footerColumn)) {
                             let attributes = [];
 
-                            if (footerColumn.attr && typeof footerColumn.attr === 'object') {
+                            if (footerColumn.hasOwnProperty('attr') && coreuiTableUtils.isObject(footerColumn.attr)) {
                                 $.each(footerColumn.attr, function (name, value) {
                                     attributes.push(name + '="' + value + '"');
                                 });
                             }
 
                             cells.push({
-                                label: footerColumn.hasOwnProperty('label') ? footerColumn.label : '',
+                                content: footerColumn.hasOwnProperty('content') ? footerColumn.content : '',
                                 description: footerColumn.hasOwnProperty('description') ? footerColumn.description : '',
                                 attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
                             });
@@ -584,7 +584,7 @@ let coreuiTableRender = {
             }
 
             for (let i = 0; i < components.length; i++) {
-                if (typeof components[i] === 'string' ||
+                if (typeof components[i] === 'object' ||
                     (window.hasOwnProperty('jQuery') && components[i] instanceof jQuery)
                 ) {
                     result.push(components[i]);
