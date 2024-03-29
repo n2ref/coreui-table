@@ -29,6 +29,10 @@ var conf = {
             'src/css/*.scss',
         ]
     },
+    css_bootstrap: {
+        fileMin: 'coreui-table.bootstrap.min.css',
+        main: 'src/css/coreui.table.bootstrap.scss',
+    },
     tpl: {
         file: 'coreui.table.templates.js',
         dist: './src/js',
@@ -125,6 +129,16 @@ gulp.task('build_tpl', function() {
             }
         }))
         .pipe(gulp.dest(conf.tpl.dist));
+});
+
+
+gulp.task('build_bootstrap', function() {
+    return gulp.src(conf.css_bootstrap.main)
+        .pipe(sourcemaps.init())
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(concat(conf.css_bootstrap.fileMin))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(conf.dist));
 });
 
 
