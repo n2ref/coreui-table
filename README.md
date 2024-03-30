@@ -1,6 +1,6 @@
 # CoreUI table
 
-**[DEMO](https://shabuninil.github.io/coreui-table)**
+**[DEMO](https://n2ref.github.io/coreui-table)**
 
 
 ### Install with NPM
@@ -9,7 +9,7 @@
 
 ### Example usage
 
-![Preview](https://raw.githubusercontent.com/shabuninil/coreui-table/master/preview.png)
+![Preview](https://raw.githubusercontent.com/n2ref/coreui-table/master/preview.png)
 
 ```html
 <div id="table-all"></div>
