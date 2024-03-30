@@ -584,12 +584,7 @@ let coreuiTableRender = {
             }
 
             for (let i = 0; i < components.length; i++) {
-                if (typeof components[i] === 'object' ||
-                    (window.hasOwnProperty('jQuery') && components[i] instanceof jQuery)
-                ) {
-                    result.push(components[i]);
-
-                } else if (typeof components[i] === 'string') {
+                if (typeof components[i] === 'string') {
                     result.push(components[i]);
 
                 } else if ( ! Array.isArray(components[i]) &&
