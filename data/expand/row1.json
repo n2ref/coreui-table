@@ -1,0 +1,14 @@
+{
+  "component": "coreui.table",
+  "columns": [
+    { "field": "fname", "label": "First Name", "width": "15%" },
+    { "field": "lname", "label": "Last Name",  "width": "15%" },
+    { "field": "email", "label": "Email" },
+    { "field": "sdate", "label": "Start Date", "width": 120, "type": "date" }
+  ],
+  "records": [
+    { "id": "1", "fname": "Jane",   "lname": "Doe",     "email": "jdoe@gmail.com",  "sdate": "2023-09-03" },
+    { "id": "2", "fname": "Stuart", "lname": "Motzart", "email": "frank@gmail.com", "sdate": "2023-04-03" },
+    { "id": "3", "fname": "Jin",    "lname": "Franson", "email": "peter@gmail.com", "sdate": "2023-02-03" }
+  ]
+}

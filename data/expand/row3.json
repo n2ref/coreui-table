@@ -1,0 +1,77 @@
+{
+  "component": "coreui.chart",
+  "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+  "datasets": [
+    {
+      "type": "line",
+      "name": "Dubai",
+      "data": [20.2, 21.6, 24.4, 27.9, 31.8, 34.6, 35.8, 35.8, 33.7, 30.7, 26.2, 22.5],
+      "style": {
+        "color": "#98c18a",
+        "width": 1,
+        "dash": 0,
+        "markerSize": 3,
+        "fill": 60,
+        "theme": "smooth",
+        "gradient": true,
+        "labels": false
+      }
+    },
+    {
+      "type": "line",
+      "name": "London",
+      "data": [5.1, 5.5, 6.6, 8.7, 11.5, 14.4, 16.6, 16, 13.7, 11.2, 8.2, 6.2],
+      "style": {
+        "width": 0,
+        "labels": true,
+        "labelColor": "#ffb56a",
+        "theme": "straight"
+      }
+    },
+    {
+      "type": "line",
+      "name": "Murmansk",
+      "data": [-11.2, -8, -4.2, 0.3, 5.6, 10.1, 14.7, 12.2, 7.6, 1.6, -2.9, -7.2],
+      "style": {
+        "width": 3,
+        "dash": 5,
+        "markerSize": 3,
+        "fill": 0,
+        "theme": "stepline"
+      }
+    }
+  ],
+
+  "options": {
+    "width": "100%",
+    "height": 400,
+
+    "title": {
+      "text": "Temperature",
+      "align": "left",
+      "fontSize"  : "14px",
+      "fontWeight": "bold",
+      "fontFamily": "'Segoe UI',Roboto,'Helvetica Neue'",
+      "color"     : "#333",
+
+      "description": {
+        "text": "2010 year",
+        "align": "left",
+        "fontSize":  "12px",
+        "fontWeight":  "normal",
+        "color":  "#666"
+      }
+    },
+
+    "style": {
+      "width": 1,
+      "dash": 0,
+      "stacked": false,
+      "markerSize": 1,
+      "markerType": "circle",
+      "fill": 40,
+      "gradient": false,
+      "theme": "straight"
+    }
+  }
+}

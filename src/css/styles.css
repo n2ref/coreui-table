@@ -161,6 +161,18 @@ pre {
     --bs-btn-padding-x: 0.5rem;
 }
 
+@media (max-width: 768px) {
+    .content-example {
+        padding: 70px 10px 30px 10px;
+    }
+    #table-events .coreui-table__wrapper,
+    #table-column-types-basic .coreui-table__wrapper,
+    #table-column-types-advanced .coreui-table__wrapper,
+    #table-search .coreui-table__wrapper,
+    #table-filters .coreui-table__wrapper {
+        overflow-x: auto !important;
+    }
+}
 @media (min-width: 768px) {
     header .nav-item {
         margin: -8px 0;

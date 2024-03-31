@@ -10,7 +10,9 @@
     <script src="dist/page.min.js"></script>
 
     <link href="dist/coreui-table.min.css" rel="stylesheet"/>
+    <link href="dist/coreui-chart.min.css" rel="stylesheet"/>
     <script src="dist/coreui-table.min.js"></script>
+    <script src="dist/coreui-chart.min.js"></script>
 
     <script src="src/js/examples.js"></script>
 </head>
@@ -42,7 +44,7 @@
                                     </ul>
 
                                     <ul class="nav navbar-nav navbar-right">
-                                        <li class="nav-item"><a class="nav-link" href="https://github.com/shabuninil/coreui-table">GitHub</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="https://github.com/n2ref/coreui-table">GitHub</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -58,20 +60,33 @@
                                 <a href="#examples">Examples</a>
                                 <ul class="nav">
                                     <li><a href="#example-simple">Simple table</a></li>
-                                    <li><a href="#example-empty">Empty</a></li>
-                                    <li><a href="#example-ajax">Ajax</a></li>
-                                    <li><a href="#example-many-records">Many records</a></li>
+                                    <li><a href="#example-empty">Empty table</a></li>
+                                    <li><a href="#example-controls-basic">Controls basic</a></li>
+                                    <li><a href="#example-controls-buttons">Controls buttons</a></li>
+                                    <li><a href="#example-controls-advanced">Controls advanced</a></li>
+                                    <li><a href="#example-ajax-records">Ajax records</a></li>
+                                    <li><a href="#example-nowrap">No wrap</a></li>
                                     <li><a href="#example-pages">Pages</a></li>
-                                    <li><a href="#example-column-types">Column types</a></li>
-                                    <li><a href="#example-controls">Controls</a></li>
+                                    <li><a href="#example-expand-rows">Expand rows</a></li>
                                     <li><a href="#example-events">Events</a></li>
-                                    <li><a href="#example-fixed-columns">Fixed columns</a></li>
-                                    <li><a href="#example-all">All options</a></li>
+                                    <li><a href="#example-column-types-basic">Column types basic</a></li>
+                                    <li><a href="#example-column-types-advanced">Column types advanced</a></li>
+                                    <li><a href="#example-column-manage">Column Manage</a></li>
+                                    <li><a href="#example-columns-fixed">Columns fixed</a></li>
+                                    <li><a href="#example-headers">Headers</a></li>
+                                    <li><a href="#example-footers">Footers</a></li>
+                                    <li><a href="#example-columns-row-span">Col-Row span</a></li>
+                                    <li><a href="#example-group">Group</a></li>
+                                    <li><a href="#example-sizing-decoration">Sizing and decoration</a></li>
+                                    <li><a href="#example-sorting">Sorting</a></li>
+                                    <li><a href="#example-search">Search</a></li>
+                                    <li><a href="#example-filters">Filters</a></li>
                                 </ul>
                             </li>
                             <li><a href="#options">Options</a></li>
                             <li><a href="#methods">Methods</a></li>
                             <li><a href="#events">Events</a></li>
+                            <li><a href="#sass-variables">Sass variables</a></li>
                         </ul>
                     </div>
                 </div>
@@ -81,7 +96,7 @@
                         <p>
                             You can download a minimized version of the library or get the full source code at github.com.
                         </p>
-                        <a class="btn btn-secondary" href="https://github.com/shabuninil/coreui-table/archive/master.zip">Download source</a>
+                        <a class="btn btn-secondary" href="https://github.com/n2ref/coreui-table/archive/master.zip">Download source</a>
                     </div>
 
 
@@ -110,32 +125,27 @@
     &lt;div id="table-simple2"&gt;&lt;/div&gt;
 
     &lt;script&gt;
-        let columns = [
-            { field: 'fname', label: 'First Name', width: '15%' },
-            { field: 'lname', label: 'Last Name',  width: '15%' },
-            { field: 'email', label: 'Email' },
-            { field: 'sdate', label: 'Start Date', width: 120, type: 'date' }
-        ];
-        let records = [
-            { id: "1", fname: 'Jane',   lname: 'Doe',     email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
-            { id: "2", fname: 'Stuart', lname: 'Motzart', email: 'frank@gmail.com', sdate: '2023-04-03' },
-            { id: "3", fname: 'Jin',    lname: 'Franson', email: 'peter@gmail.com', sdate: '2023-02-03' }
-        ];
+        // Table 1
+        let tableSimple = {
+            columns: [
+                { field: 'fname', label: 'First Name', width: '15%' },
+                { field: 'lname', label: 'Last Name',  width: '15%' },
+                { field: 'email', label: 'Email' },
+                { field: 'sdate', label: 'Start Date', width: 120, type: 'date' }
+            ],
+            records: [
+                { id: "1", fname: 'Jane',   lname: 'Doe',     email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
+                { id: "2", fname: 'Stuart', lname: 'Motzart', email: 'frank@gmail.com', sdate: '2023-04-03' },
+                { id: "3", fname: 'Jin',    lname: 'Franson', email: 'peter@gmail.com', sdate: '2023-02-03' }
+            ]
+        };
 
+        CoreUI.table.create(tableSimple).render('table-simple1');
 
-        CoreUI.table.create({
-            columns: columns,
-            records: records
-        }).render('table-simple1');
+        // Table 2
+        tableSimple.columnHeaders = false;
 
-
-        CoreUI.table.create({
-            show: {
-                columnHeaders: false
-            },
-            columns: columns,
-            records: records
-        }).render('table-simple2');
+        CoreUI.table.create(tableSimple).render('table-simple2');
     &lt;/script&gt;
                                 </code></pre>
                             </div>
@@ -143,7 +153,7 @@
                         <br><br>
 
 
-                        <h3 id="example-empty">Empty</h3>
+                        <h3 id="example-empty">Empty table</h3>
                         <div>
                             <div class="content-example">
                                 <div id="table-empty"></div>
@@ -169,48 +179,48 @@
                         <br><br>
 
 
-                        <h3 id="example-ajax">Ajax</h3>
+                        <h3 id="example-controls-basic">Controls basic</h3>
                         <div>
                             <div class="content-example">
-                                <div id="table-ajax"></div>
+                                <div id="table-controls-basic"></div>
                             </div>
                             <div class="content-markup">
                                 <pre><code class="html">
-    &lt;div id="table-ajax"&gt;&lt;/div&gt;
+    &lt;div id="table-controls-basic"&gt;&lt;/div&gt;
 
     &lt;script&gt;
         CoreUI.table.create({
-            url: 'data/records.json',
-            method: 'GET',
-            maxHeight: 400,
-            show: {
-                columnHeaders: true,
-                total: true
-            },
-            controls: [
-                { type: "button", content: "Reload", attr: { class: 'btn btn-sm btn-secondary' },
-                    onClick: function (event, table) {
-                        table.reload();
-                    }
-                },
-                { type: "button", content: "Lock", attr: { class: 'btn btn-sm btn-secondary' },
-                    onClick: function (event, table) {
-                        table.lock();
-                    }
-                },
-                { type: "button", content: "Unlock", attr: { class: 'btn btn-sm btn-secondary' },
-                    onClick: function (event, table) {
-                        table.unlock();
-                    }
+            primaryKey: 'id',
+            header: [
+                {
+                    type: 'out',
+                    left: [
+                        { type: "button", content: "Select row 2", attr: { class: 'btn btn-secondary' },
+                            onClick: function (event, table) {
+                                table.selectRecord('2');
+                            }
+                        },
+                        { type: "button", content: "Unselect row 2", attr: { class: 'btn btn-secondary' },
+                            onClick: function (event, table) {
+                                table.unselectRecord('2');
+                            }
+                        }
+                    ]
                 }
             ],
             columns: [
-                { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
-                { field: 'fname', label: 'First Name', width: '25%' },
-                { field: 'lname', label: 'Last Name', width: '25%' },
-                { field: 'sdate', label: 'Start Date' }
+                { type: 'numbers', width: 10, attr: { class: "border-end text-end" } },
+                { type: 'select' },
+                { field: 'name',  label: 'Name' },
+                { field: 'email', label: 'Email',      width: 150 },
+                { field: 'sdate', label: 'Start Date', width: 150, type: 'date', format: 'DD.MM.YYYY' }
+            ],
+            records: [
+                { id: "1", name: 'Jane Doe',       email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
+                { id: "2", name: 'Stuart Motzart', email: 'frank@gmail.com', sdate: '2023-04-03' },
+                { id: "3", name: 'Jin Franson',    email: 'peter@gmail.com', sdate: '2023-02-03' }
             ]
-        }).render('table-ajax');
+        }).render('table-controls-basic');
     &lt;/script&gt;
                                 </code></pre>
                             </div>
@@ -218,37 +228,285 @@
                         <br><br>
 
 
-                        <h3 id="example-many-records">Many records</h3>
+                        <h3 id="example-controls-buttons">Controls buttons</h3>
                         <div>
                             <div class="content-example">
-                                <div id="table-many-records"></div>
+                                <div id="table-controls-buttons"></div>
                             </div>
                             <div class="content-markup">
                                 <pre><code class="html">
-    &lt;div id="table-many-records"&gt;&lt;/div&gt;
+    &lt;div id="table-controls-buttons"&gt;&lt;/div&gt;
 
     &lt;script&gt;
         CoreUI.table.create({
-            url: 'data/many-records.json',
-            method: 'GET',
-            maxHeight: 500,
-            show: {
-                columnHeaders: true,
-                total: true
-            },
+            primaryKey: 'id',
+            header: [
+                // Header row 1
+                {
+                    type: 'out',
+                    left: [
+                        { type: "link",   content: "Link",         attr: { class: 'btn btn-success' },   onClick: function () { return false }, href: "/link-url" },
+                        { type: "button", content: "Select all",   attr: { class: 'btn btn-secondary' }, onClick: function (event, table) { table.selectAll(); } },
+                        { type: "button", content: "Unselect all", attr: { class: 'btn btn-secondary' }, onClick: function (event, table) { table.unselectAll(); } }
+                    ],
+                    right: [
+                        { type: "button", content: "Show id", attr: { class: 'btn btn-secondary' },
+                            onClick: function (event, table) {
+                                let recordsId = table.getSelectedRecordsId();
+
+                                if (recordsId.length > 0) {
+                                    alert('Selected records: ' + recordsId.join(', '))
+                                } else {
+                                    alert('No selected records');
+                                }
+                            }
+                        },
+                        { type: "button", content: "Show records", attr: { class: 'btn btn-secondary' },
+                            onClick: function (event, table) {
+                                let records = table.getSelectedRecords();
+
+                                if (records.length > 0) {
+                                    alert('Selected records: ' + JSON.stringify(records))
+                                } else {
+                                    alert('No selected records');
+                                }
+                            }
+                        }
+                    ]
+                },
+                // Header row 2
+                {
+                    type: 'in',
+                    left: [
+                        { type: "button", content: "Add record", attr: { class: 'btn btn-secondary' },
+                            onClick: function (event, table) {
+                                table.addRecordLast({
+                                    id:    Math.floor(Math.random() * (10 - 100) + 100),
+                                    name:  'New name',
+                                    email: 'example@gmail.com',
+                                    sdate: '2023-02-03'
+                                });
+                            }
+                        },
+                        { type: "button", content: "Remove record", attr: { class: 'btn btn-secondary' },
+                            onClick: function (event, table) {
+                                let records = table.getRecords();
+                                if (records.length > 0) {
+                                    table.removeRecordByIndex(records[records.length - 1].index);
+                                }
+                            }
+                        }
+                    ],
+                    right: [
+                        { type: "dropdown", content: "Dropdown", attr: { class: 'btn btn-primary' }, position: 'end',
+                            items: [
+                                { type: 'link',   content: 'Link', link: "#" },
+                                { type: 'button', content: 'Button 1', onClick: function (event, table) { console.log(1) } },
+                                { type: 'divider' },
+                                { type: 'button', content: 'Button 2', onClick: function (event, table) { console.log(2) } },
+                            ]
+                        },
+                        { type: "button_group", attr: { class: 'btn-group' },
+                            buttons: [
+                                { type: "link",     content: "Link",     attr: { class: 'btn btn-outline-secondary' }, link: "#" },
+                                { type: "button",   content: "Button",   attr: { class: 'btn btn-outline-secondary' }, onClick: function (event, table) { console.log(1) } },
+                                { type: "dropdown", content: "Dropdown", attr: { class: 'btn btn-outline-primary' },  position: 'end',
+                                    items: [
+                                        { type: 'link',   content: 'Link', link: "#" },
+                                        { type: 'button', content: 'Button 1', onClick: function (event, table) { console.log(2) } },
+                                        { type: 'divider' },
+                                        { type: 'button', content: 'Button 2', onClick: function (event, table) { console.log(3) } },
+                                    ]
+                                },
+                            ]
+                        },
+                    ]
+                }
+            ],
             columns: [
-                { field: 'id',         label: 'ID',            width: 35 },
-                { field: 'name',       label: 'Name',          attr: { class: 'text-nowrap' } },
-                { field: 'age',        label: 'Age',           width: 40 },
-                { field: 'gender',     label: 'Gender',        width: 50 },
-                { field: 'color',      label: 'Color',         width: 60 },
-                { field: 'email',      label: 'Email',         width: 180, attr: { class: 'text-nowrap' } },
-                { field: 'phone',      label: 'Phone',         width: 200, attr: { class: 'text-nowrap' } },
-                { field: 'address',    label: 'Address',       attrHeader: { style : 'min-width: 250px'} },
-                { field: 'about',      label: 'About',         attrHeader: { style : 'min-width: 750px'} },
-                { field: 'registered', label: 'Register Date', type: 'datetime', format: 'DD.MM.YYYY hh:mm:ss', attr: { class: 'text-nowrap' } }
+                { type: 'numbers', width: 10, attr: { class: "border-end text-end" } },
+                { type: 'select' },
+                { field: 'name',  label: 'Name' },
+                { field: 'email', label: 'Email',      width: 150 },
+                { field: 'sdate', label: 'Start Date', width: 150, type: 'date', format: 'DD.MM.YYYY' }
+            ],
+            records: [
+                { id: "1", name: 'Jane Doe',       email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
+                { id: "2", name: 'Stuart Motzart', email: 'frank@gmail.com', sdate: '2023-04-03' },
+                { id: "3", name: 'Jin Franson',    email: 'peter@gmail.com', sdate: '2023-02-03' }
             ]
-        }).render('table-many-records');
+        }).render('table-controls-buttons');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-controls-advanced">Controls advanced</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-controls-advanced"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-controls-advanced"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            header: [
+                // Header row 1
+                {
+                    type: 'out',
+                    left: [
+                        { type: 'caption', title: 'Total orders',         value: '1237' },
+                        { type: 'caption', title: 'Money received',       value: '92 324 $', description: 'Description text' },
+                        { type: 'caption', title: 'Advertising expenses', value: '8.34 %' }
+                    ]
+                },
+                // Header row 2
+                {
+                    type: 'in',
+                    left: [
+                        { type: "custom", content: '&lt;small class="text-body-secondary"&gt;My custom text&lt;/small&gt;'},
+                    ],
+                    right: [
+                        { type: "custom",
+                            content:
+                                '&lt;div class="form-check pt-1"&gt;' +
+                                    '&lt;input class="form-check-input" type="checkbox" id="gridCheck"&gt;' +
+                                    '&lt;label class="form-check-label" for="gridCheck"&gt;Custom contol&lt;/label&gt;' +
+                                '&lt;/div&gt;'
+                        },
+                        { type: "custom",
+                            content: function () {
+                                let btn = $('&lt;button type="button" class="btn btn-sm btn-secondary"&gt;Custom button&lt;/button&gt;');
+
+                                btn.click(function () {
+                                    console.log('custom button');
+                                });
+
+                                return btn;
+                            }
+                        }
+                    ]
+                }
+            ],
+            columns: [
+                { type: 'numbers', width: 10, attr: { class: "border-end text-end" } },
+                { type: 'select' },
+                { field: 'name',  label: 'Name' },
+                { field: 'email', label: 'Email',      width: 150 },
+                { field: 'sdate', label: 'Start Date', width: 150, type: 'date', format: 'DD.MM.YYYY' }
+            ],
+            records: [
+                { id: "1", name: 'Jane Doe',       email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
+                { id: "2", name: 'Stuart Motzart', email: 'frank@gmail.com', sdate: '2023-04-03' },
+                { id: "3", name: 'Jin Franson',    email: 'peter@gmail.com', sdate: '2023-02-03' }
+            ]
+        }).render('table-controls-advanced');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-ajax-records">Ajax records</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-ajax-records"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-ajax-records"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            recordsRequest: {
+                url: 'data/records.json?page=[page]&count=[count]',
+                method: 'GET',
+                params: {
+                    page: 'page',
+                    count: 'count',
+                    start: 'start',
+                    end: 'end',
+                    sort: 'sort',
+                    search: 'search',
+                    filter: 'filter',
+                },
+            },
+
+            maxHeight: 500,
+            header: [
+                {
+                    type: 'out',
+                    left: [
+                        {
+                            type: "button", content: "Reload", attr: {class: 'btn btn-sm btn-secondary'},
+                            onClick: function (event, table) {
+                                table.reload();
+                            }
+                        },
+                        {
+                            type: "button", content: "Lock", attr: {class: 'btn btn-sm btn-secondary'},
+                            onClick: function (event, table) {
+                                table.lock();
+                            }
+                        },
+                        {
+                            type: "button", content: "Unlock", attr: {class: 'btn btn-sm btn-secondary'},
+                            onClick: function (event, table) {
+                                table.unlock();
+                            }
+                        }
+                    ],
+                },
+                {
+                    type: 'in',
+                    left: [
+                        { type: 'total' }
+                    ]
+                },
+            ],
+            columns: [
+                { field: 'fname', label: 'First Name', },
+                { field: 'lname', label: 'Last Name',  },
+                { field: 'sdate', label: 'Start Date', width: 120 }
+            ]
+        }).render('table-ajax-records');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-nowrap">No wrap</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-nowrap"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-nowrap"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            recordsRequest: {
+                url: 'data/many-records.json'
+            },
+
+            noWrap: false,
+            noWrapToggle: true,
+            maxHeight: 500,
+            columns: [
+                { field: 'id',      label: 'ID',      width: 35 },
+                { field: 'name',    label: 'Name',    minWidth: 140 },
+                { field: 'about',   label: 'About',   minWidth: 400, noWrap: true  },
+                { field: 'address', label: 'Address', minWidth: 250, noWrap: true, noWrapToggle: false },
+            ]
+        }).render('table-nowrap');
     &lt;/script&gt;
                                 </code></pre>
                             </div>
@@ -267,39 +525,53 @@
 
     &lt;script&gt;
         CoreUI.table.create({
-            url: 'data/page[page].json',
-            method: 'GET',
+            recordsRequest: {
+                url: 'data/pages/[page].json',
+                method: 'GET',
+            },
+
             page: 1,
             recordsPerPage: 15,
-            recordsPerPageList: [ 25, 50, 100, 1000, 0 ], // 0 - all
-            pageParam: 'page',
-            recordsPerPageParam: 'count',
             maxHeight: 400,
-            show: {
-                total: true,
-                columnHeaders: true,
-                pages: true,
-                pagesJump: true,
-                prePageList: true
-            },
-            controls: [
-                { type: "button", content: "Prev page", attr: { class: 'btn btn-sm btn-secondary' },
-                    onClick: function (event, table) {
-                        table.prevPage();
-                    }
-                },
-                { type: "button", content: "Next page", attr: { class: 'btn btn-sm btn-secondary' },
-                    onClick: function (event, table) {
-                        table.nextPage();
-                    }
-                }
-            ],
+
             columns: [
                 { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
                 { field: 'fname',  label: 'First Name', width: '25%' },
                 { field: 'lname',  label: 'Last Name', width: '25%' },
                 { field: 'sdate',  label: 'Start Date' }
-            ]
+            ],
+            header: [
+                {
+                    type: 'in',
+                    left: [
+                        { type: 'total' }
+                    ]
+                },
+            ],
+            footer: [
+                {
+                    type: 'in',
+                    left: [
+                        { type: 'pages', count: 3, attr: { class: 'pagination-sm' } },
+                    ],
+                    right: [
+                        { type: 'page_jump', attr: { class: 'input-group-sm' } },
+                        { type: 'page_size', list: [ 25, 50, 100, 1000, 0 ], attr: { class: 'form-select-sm' } } // 0 - all
+                    ]
+                },
+                {
+                    type: 'out',
+                    left: [
+                        { type: 'pages', show: { prev: false, next: false }, count: 5, attr: { class: 'pagination-sm' } }
+                    ],
+                },
+                {
+                    type: 'out',
+                    left: [
+                        { type: 'pages', count: 0, attr: { class: 'pagination-sm' } }
+                    ],
+                }
+            ],
         }).render('table-pages');
     &lt;/script&gt;
                                 </code></pre>
@@ -308,117 +580,60 @@
                         <br><br>
 
 
-                        <h3 id="example-column-types">Column types</h3>
+                        <h3 id="example-expand-rows">Expand rows</h3>
                         <div>
                             <div class="content-example">
-                                <div id="table-column-types"></div>
+                                <div id="table-expand-rows"></div>
                             </div>
                             <div class="content-markup">
                                 <pre><code class="html">
-    &lt;div id="table-column-types"&gt;&lt;/div&gt;
+    &lt;div id="table-expand-rows"&gt;&lt;/div&gt;
 
     &lt;script&gt;
         CoreUI.table.create({
+            id: 'expand',
             columns: [
-                { type: 'numbers',  width: 25, attr: { class: "border-end text-end" } },
-                { type: 'select' },
-                { type: 'text',     field: 'text',         label: 'Text' },
-                { type: 'number',   field: 'number',       label: 'Number',   width: 100 },
-                { type: 'html',     field: 'html',         label: 'Html',     width: 100 },
-                { type: 'date',     field: 'date',         label: 'Date',     format: 'DD.MM.YYYY',          width: 100  },
-                { type: 'datetime', field: 'datetime',     label: 'Datetime', format: 'DD.MM.YYYY hh:mm:ss', width: 140 },
-                { type: 'switch',   field: 'is_active_sw', label: 'Switch',   valueY: 'Y', valueN: 'N',      width: 50 },
+                { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
+                { field: 'btn_static', label: 'static content', type: 'html', width: 110,
+                    render: function (record, table) {
+                        let btn = $(`&lt;button class="btn btn-sm btn-outline-secondary"&gt;
+                                         &lt;i class="bi bi-chevron-down"&gt;&lt;/i&gt;
+                                     &lt;/button&gt;`);
+
+                        btn.click(function () {
+                            table.expandRecordContent(
+                                record.index,
+                                `Record custom content: &lt;b&gt;${record.data.fname} ${record.data.lname}&lt;/b&gt;`,
+                                true
+                            );
+                        });
+
+                        return btn;
+                    }
+                },
+                { field: 'btn_ajax', label: 'ajax content', type: 'html', width: 110,
+                    render: function (record, table) {
+                        let btn = $(`&lt;button class="btn btn-sm btn-outline-secondary"&gt;
+                                         &lt;i class="bi bi-chevron-down"&gt;&lt;/i&gt;
+                                     &lt;/button&gt;`);
+
+                        btn.click(function () {
+                            CoreUI.table.get('expand').expandRecordUrl(record.index, 'data/page1.json');
+                        });
+
+                        return btn;
+                    }
+                },
+                { field: 'fname',  label: 'First Name'},
+                { field: 'lname',  label: 'Last Name'},
+                { field: 'sdate',  label: 'Start Date', type: 'date' }
             ],
             records: [
-                { text: 'Jane Doe',       number: 1000,    html: '&lt;span style="color: #f00"&gt;Text&lt;/span&gt; &lt;b&gt;bold&lt;/b&gt;',                date: '2023-04-03', datetime: '2023-12-03 12:04:10', is_active_sw: "N" },
-                { text: 'Stuart Motzart', number: 32,      html: '&lt;button class="btn btn-xs btn-outline-secondary"&gt;button&lt;/button&gt;', date: '2023-04-03', datetime: '2023-11-03 13:10:30', is_active_sw: "N" },
-                { text: 'Jin Franson',    number: 1122335, html: '&lt;a href="#"&gt;Link&lt;/a&gt;',                                             date: '2023-04-03', datetime: '2023-04-03 23:57:00', is_active_sw: "Y" },
-                { text: 'Susan Ottie',    number: -2343,   html: '&lt;i class="bi bi-star"&gt;&lt;/i&gt; icon',                                  date: '2023-09-03', datetime: '2023-10-03 05:15:37', is_active_sw: "Y" },
+                { id: "1", fname: 'Jane',   lname: 'Doe',     email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
+                { id: "2", fname: 'Stuart', lname: 'Motzart', email: 'frank@gmail.com', sdate: '2023-04-03' },
+                { id: "3", fname: 'Jin',    lname: 'Franson', email: 'peter@gmail.com', sdate: '2023-02-03' }
             ]
-        }).render('table-column-types');
-    &lt;/script&gt;
-                                </code></pre>
-                            </div>
-                        </div>
-                        <br><br>
-
-
-                        <h3 id="example-controls">Controls</h3>
-                        <div>
-                            <div class="content-example">
-                                <div id="table-controls"></div>
-                            </div>
-                            <div class="content-markup">
-                                <pre><code class="html">
-    &lt;div id="table-controls"&gt;&lt;/div&gt;
-
-    &lt;script&gt;
-        CoreUI.table.create({
-            primaryKey: 'id',
-            controls: [
-                { type: "link",   content: "Link add", href: "#", attr: { class: 'btn btn-sm btn-success' } },
-                { type: "button", content: "Button delete",       attr: { class: 'btn btn-sm btn-warning' },
-                    onClick: function (event, table) {
-                        let recordsId = table.getSelected();
-
-                        if (recordsId.length > 0) {
-                            alert('Selected records: ' + recordsId.join(', '))
-                        } else {
-                            alert('No selected records');
-                        }
-                    }
-                },
-                { type: "button", content: "Selected records", attr: { class: 'btn btn-sm btn-secondary' },
-                    onClick: function (event, table) {
-                        let records = table.getSelectedRecords();
-
-                        if (records.length > 0) {
-                            alert('Selected records: ' + JSON.stringify(records))
-                        } else {
-                            alert('No selected records');
-                        }
-                    }
-                },
-                { type: "button", content: "Select row 2", attr: { class: 'btn btn-sm btn-secondary' },
-                    onClick: function (event, table) {
-                        table.selectRecord('2');
-                    }
-                },
-                { type: "button", content: "Unselect row 2", attr: { class: 'btn btn-sm btn-secondary' },
-                    onClick: function (event, table) {
-                        table.unselectRecord('2');
-                    }
-                },
-                { type: "button", content: "Select all", attr: { class: 'btn btn-sm btn-secondary' },
-                    onClick: function (event, table) {
-                        table.selectAll();
-                    }
-                },
-                { type: "button", content: "Unselect all", attr: { class: 'btn btn-sm btn-secondary' },
-                    onClick: function (event, table) {
-                        table.unselectAll();
-                    }
-                },
-                { type: "custom", content:
-                    '&lt;div class="form-check"&gt;' +
-                        '&lt;input class="form-check-input" type="checkbox" id="gridCheck"&gt;' +
-                        '&lt;label class="form-check-label" for="gridCheck"&gt;Custom contol&lt;/label&gt;' +
-                    '&lt;/div&gt;'
-                }
-            ],
-            columns: [
-                { type: 'numbers', width: 10, attr: { class: "border-end text-end" } },
-                { type: 'select' },
-                { field: 'name',  label: 'Name' },
-                { field: 'email', label: 'Email',      width: 150 },
-                { field: 'sdate', label: 'Start Date', width: 150, type: 'date', format: 'DD.MM.YYYY' }
-            ],
-            records: [
-                { id: "1", name: 'Jane Doe',       email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
-                { id: "2", name: 'Stuart Motzart', email: 'frank@gmail.com', sdate: '2023-04-03' },
-                { id: "3", name: 'Jin Franson',    email: 'peter@gmail.com', sdate: '2023-02-03' }
-            ]
-        }).render('table-controls');
+        }).render('table-expand-rows');
     &lt;/script&gt;
                                 </code></pre>
                             </div>
@@ -444,7 +659,7 @@
                 { field: 'name',   label: 'Name' },
                 { field: 'email',  label: 'Email',        width: 150 },
                 { type: 'date',    field: 'sdate',        label: 'Start Date', width: 100,  format: 'DD.MM.YYYY' },
-                { type:  'switch', field: 'is_active_sw', label: 'On', valueY: 'Y', valueN: 'N',
+                { type:  'switch', field: 'is_active_sw', label: 'On', valueY: 'Y', valueN: 'N', disabled: false,
                     onChange: function (record, value) {
                         alert("Switch record to " + value + ": " + JSON.stringify(record));
                     }
@@ -462,23 +677,23 @@
 
         tableEvents.render('table-events')
 
-        tableEvents.on('select.coreui.table', function (record) {
+        tableEvents.on('record_select', function (record) {
             alert('Select record: ' + JSON.stringify(record));
         });
-        tableEvents.on('unselect.coreui.table', function (record) {
+        tableEvents.on('record_unselect', function (record) {
             alert('Unselect record: ' + JSON.stringify(record));
         });
-        tableEvents.on('select-all.coreui.table', function () {
+        tableEvents.on('record_select_all', function () {
             alert('Select all records');
         });
-        tableEvents.on('unselect-all.coreui.table', function () {
+        tableEvents.on('record_unselect_all', function () {
             alert('Unselect all records');
         });
-        tableEvents.on('shown.coreui.table', function () {
-            console.log('shown')
+        tableEvents.on('container_show', function () {
+            console.log('show_container')
         });
-        tableEvents.on('show-records.coreui.table', function () {
-            console.log('show-records')
+        tableEvents.on('records_show', function () {
+            console.log('records_show')
         });
     &lt;/script&gt;
                                 </code></pre>
@@ -487,27 +702,284 @@
                         <br><br>
 
 
-                        <h3 id="example-fixed-columns">Fixed columns</h3>
+                        <h3 id="example-column-types-basic">Column types basic</h3>
                         <div>
                             <div class="content-example">
-                                <div id="table-fixed-columns"></div>
+                                <div id="table-column-types-basic"></div>
                             </div>
                             <div class="content-markup">
                                 <pre><code class="html">
-    &lt;div id="table-fixed-columns"&gt;&lt;/div&gt;
+    &lt;div id="table-column-types-basic"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            columns: [
+                { type: 'numbers',  width: 25, attr: { class: "border-end text-end" } },
+                { type: 'select' },
+                { type: 'text',     field: 'text',     label: 'Text',     description: "Description text" },
+                { type: 'number',   field: 'number',   label: 'Number',   width: 100 },
+                { type: 'money',    field: 'money',    label: 'Money',    width: 120, currency: 'USD'},
+                { type: 'html',     field: 'html',     label: 'Html',     width: 100 },
+                { type: 'date',     field: 'date',     label: 'Date',     format: 'DD.MM.YYYY',          width: 100  },
+                { type: 'datetime', field: 'datetime', label: 'Datetime', format: 'DD.MM.YYYY hh:mm:ss', width: 140 }
+            ],
+            records: [
+                { text: 'Jane Doe',       number: 32,      money: 0.15,     html: '&lt;span style="color: #f00"&gt;Text&lt;/span&gt; &lt;b&gt;bold&lt;/b&gt;',                date: '2023-04-03', datetime: '2023-12-03 12:04:10'},
+                { text: 'Stuart Motzart', number: 100,     money: 10,       html: '&lt;button class="btn btn-xs btn-outline-secondary"&gt;button&lt;/button&gt;', date: '2023-04-03', datetime: '2023-11-03 13:10:30'},
+                { text: 'Jin Franson',    number: 1122335, money: 12500.00, html: '&lt;a href="#"&gt;Link&lt;/a&gt;',                                             date: '2023-04-03', datetime: '2023-04-03 23:57:00'},
+                { text: 'Susan Ottie',    number: -2343,   money: -1234.40, html: '&lt;i class="bi bi-star"&gt;&lt;/i&gt; icon',                                  date: '2023-09-03', datetime: '2023-10-03 05:15:37'},
+            ]
+        }).render('table-column-types-basic');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-column-types-advanced">Column types advanced</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-column-types-advanced"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-column-types-advanced"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            id: 'types_advanced',
+            columns: [
+                { type: 'select' },
+                { type: 'switch',    field: 'is_active_sw', label: 'Switch', valueY: 'Y', valueN: 'N', width: 80 },
+                { type: 'badge',     field: 'badge',        label: 'Badge'},
+                { type: 'component', field: 'component',    label: 'Components coreui', width: 200 },
+                { type: 'link',      field: 'link',         label: 'Link',              width: 200 },
+                { type: 'button',    field: 'button',       label: 'Button',            width: 100 },
+                { type: 'menu',      field: 'menu',         label: 'Menu',              width: 100 },
+            ],
+            records: [
+                {
+                    is_active_sw: "N",
+                    badge: { type: 'secondary', text: 'Secondary' },
+                    component: {
+                        component: 'coreui.chart',
+                        datasets: [
+                            { type: "bar", name: "dataset", style: { fill: 100 }, data: [12, 14, 2, 47, 42, 15, 47, 75, 65, 19, 14] }
+                        ],
+                        options: {
+                            width: 100,
+                            height: 30,
+                            enabled: { legend: false, labels: false, minimize: true },
+                            axis: { xaxis: { show: false }, yaxis: { show: false }, grid: { show: false } }
+                        }
+                    },
+                    button: {
+                        content: "Button",
+                        attr: { class: 'btn btn-sm btn-outline-secondary' },
+                        onClick: function (record, table) { console.log(record) }
+                    },
+                    link: {
+                        content: "Link content",
+                        url: "#/link-url",
+                        attr: {}
+                    },
+                    menu: {
+                        content: '&lt;i class="bi bi-three-dots-vertical"&gt;&lt;/i&gt;',
+                        attr: { class: 'btn btn-sm btn-outline-secondary rounded-1' },
+                        position: 'end',
+                        items: [
+                            { type: 'header', content: 'Header text' },
+                            { type: 'link',   content: 'Link', link: "#" },
+                            {
+                                type: 'button',
+                                content: 'Button',
+                                onClick: function (record, table, event) { console.log('button') }
+                            },
+                            { type: 'divider' },
+                            {
+                                type: 'button',
+                                content: '&lt;i class="bi bi-trash"&gt;&lt;/i&gt; Delete',
+                                attr: { class: 'text-danger' },
+                                onClick: function (record, table, event) { console.log('delete record ' + record.index) }
+                            },
+                        ]
+                    }
+                },
+                {
+                    is_active_sw: "N",
+                    badge: { type: 'primary', text: 'Primary' },
+                    component: {
+                        component: 'coreui.chart',
+                        datasets: [
+                            { type: "line", name: "dataset", style: { fill: 0 }, data: [25, 66, 41, 89, 63, 25, 44, 12, 36, 9, 54] }
+                        ],
+                        options: {
+                            width: 100,
+                            height: 30,
+                            enabled: { legend: false, labels: false, minimize: true },
+                            axis: { xaxis: { show: false }, yaxis: { show: false }, grid: { show: false } }
+                        }
+                    },
+                    button: {
+                        content: "Button",
+                        attr: { class: 'btn btn-sm btn-outline-secondary' },
+                        onClick: function (record, table) { console.log(record) }
+                    },
+                    link: "#/link-url",
+                    menu: {
+                        attr: { class: 'btn btn-sm rounded-1' },
+                        items: [
+                            { type: 'link', content: 'Link 1', link: "#" },
+                            { type: 'link', content: 'Link 2', link: "#" },
+                            { type: 'link', content: 'Link 3', link: "#" },
+                        ]
+                    }
+                },
+                {
+                    is_active_sw: "Y",
+                    badge: { type: 'success', text: 'Success' },
+                    component: {
+                        component: 'coreui.chart',
+                        labels: ['d1', 'd2', 'd3', 'd4'],
+                        datasets: [
+                            { type: "pie", name: "Pie", data: [43, 32, 12, 9] }
+                        ],
+                        options: {
+                            type: "pie",
+                            width: 100,
+                            height: 30,
+                            enabled: { legend: false, labels: false, minimize: true },
+                            axis: { xaxis: { show: false }, yaxis: { show: false }, grid: { show: false } }
+                        }
+                    },
+                    button: {
+                        content: "Button",
+                        attr: { class: 'btn btn-sm btn-outline-secondary' },
+                        onClick: "console.log(record)"
+                    },
+                    link: {
+                        content: "Link",
+                        url: "#/link-url",
+                        attr: { class: 'btn btn-sm btn-outline-secondary' }
+                    },
+                    menu: {
+                        attr: { class: 'btn btn-sm rounded-1' },
+                        position: 'start',
+                        items: [
+                            { type: 'link', content: 'Link 1', link: "#" },
+                            { type: 'link', content: 'Link 2', link: "#" },
+                            { type: 'link', content: 'Link 3', link: "#" },
+                        ]
+                    }
+                },
+                {
+                    is_active_sw: "Y",
+                    badge: { type: 'warning', text: 'Warning' },
+                    component: {
+                        component: 'coreui.chart',
+                        labels: ['d1', 'd2', 'd3', 'd4'],
+                        datasets: [
+                            { type: "donut", name: "Data", data: [43, 32, 12, 9] }
+                        ],
+                        options: {
+                            type: "pie",
+                            width: 100,
+                            height: 30,
+                            enabled: { legend: false, labels: false, minimize: true },
+                            axis: { xaxis: { show: false }, yaxis: { show: false }, grid: { show: false } }
+                        }
+                    },
+                    button: {
+                        content: "Button",
+                        attr: { class: 'btn btn-sm btn-outline-secondary' },
+                        onClick: "console.log(record)"
+                    },
+                    link: {
+                        content: "&lt;i class=\"bi bi-arrow-right\"&gt;&lt;/i&gt;",
+                        url: "#/link-url",
+                        attr: { class: 'btn btn-sm btn-outline-secondary' }
+                    },
+                    menu: {
+                        content: 'Dropdown',
+                        attr: { class: 'btn btn-sm btn-secondary dropdown-toggle' },
+                        position: 'end',
+                        items: [
+                            { type: 'link', content: 'Link 1', link: "#" },
+                            { type: 'link', content: 'Link 2', link: "#" },
+                            { type: 'link', content: 'Link 3', link: "#" },
+                        ]
+                    }
+                },
+            ]
+        }).render('table-column-types-advanced');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-column-manage">Column Manage</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-column-manage"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-column-manage"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            header: [
+                {
+                    type: 'in',
+                    left: [
+                        {
+                            type: 'columns',
+                            btn: {
+                                content: "&lt;i class=\"bi bi-layout-three-columns\"&gt;&lt;/i&gt; Columns",
+                                attr: { class: 'btn btn-sm btn-secondary' }
+                            },
+                            btnComplete: {
+                                content: "Complete",
+                                attr: { class: 'btn btn-sm btn-primary' },
+                            }
+                        }
+                    ]
+                },
+            ],
+            columns: [
+                { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
+                { field: 'fname',  label: 'First Name'},
+                { field: 'lname',  label: 'Last Name', show: false},
+                { field: 'sdate',  label: 'Start Date', type: 'date' }
+            ],
+            records: [
+                { id: "1", fname: 'Jane',   lname: 'Doe',     email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
+                { id: "2", fname: 'Stuart', lname: 'Motzart', email: 'frank@gmail.com', sdate: '2023-04-03' },
+                { id: "3", fname: 'Jin',    lname: 'Franson', email: 'peter@gmail.com', sdate: '2023-02-03' }
+            ]
+        }).render('table-column-manage');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-columns-fixed">Columns fixed</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-columns-fixed"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-columns-fixed"&gt;&lt;/div&gt;
 
     &lt;script&gt;
         CoreUI.table.create({
             height: 550,
-            columnGroups: [
-                [
-                    { label: 'Header 1', attr: { colspan: 17 } },
-                ],
-                [
-                    { label: '', attr: { colspan: 2 } },
-                    { label: 'Header 2', attr: { colspan: 15 } }
-                ]
-            ],
             columns: [
                 { type: 'numbers', attr: { class: 'text-end' }, fixed: 'left' },
                 { type: 'select',  fixed: 'left' },
@@ -527,13 +999,28 @@
                 { type: 'text',    field: 'cell14', label: 'Column 14', attr: { style: 'min-width: 150px' } },
                 { type: 'text',    field: 'cell15', label: 'Column 15', attr: { style: 'min-width: 150px' }, fixed: 'right' },
             ],
-            footer: [
-                [
-                    { label: 'Footer', attr: { colspan: 17 } },
-                ]
-            ],
-            records: [ ... ]
-        }).render('table-fixed-columns');
+            records: [
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' },
+                { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' }
+            ]
+        }).render('table-columns-fixed');
     &lt;/script&gt;
                                 </code></pre>
                             </div>
@@ -541,89 +1028,44 @@
                         <br><br>
 
 
-                        <h3 id="example-all">All options</h3>
+                        <h3 id="example-headers">Headers</h3>
                         <div>
                             <div class="content-example">
-                                <div id="table-all"></div>
+                                <div id="table-headers"></div>
                             </div>
                             <div class="content-markup">
                                 <pre><code class="html">
-    &lt;div id="table-all"&gt;&lt;/div&gt;
+    &lt;div id="table-headers"&gt;&lt;/div&gt;
 
     &lt;script&gt;
-        let tableAll = CoreUI.table.create({
-            id: "table-id",
+        CoreUI.table.create({
             class: 'table-bordered',
-            lang: "ru",
-            size: 'sm',
-            striped: true,
-            hover: true,
-            width: '100%',
-            minWidth: '100%',
-            maxWidth: '100%',
-            height: 550,
-            minHeight: 550,
-            maxHeight: 550,
-            show: {
-                columnHeaders: true,
-                total: true
-            },
-            fixedBody: false,
-            nowrap: true,
-            controls: [
-                { type: "link",   content: "Добавить", href: "#",                attr: { class: 'btn btn-sm btn-success' } },
-                { type: "button", content: "Удалить", onClick: function (e) { }, attr: { class: 'btn btn-sm btn-warning' } },
-                { type: "custom", content:
-                        '&lt;div class="form-check"&gt;' +
-                            '&lt;input class="form-check-input" type="checkbox" id="gridCheck"&gt;' +
-                            '&lt;label class="form-check-label" for="gridCheck"&gt;Check me&lt;/label&gt;' +
-                        '&lt;/div&gt;'
-                }
-            ],
-            columnGroups: [
+            maxHeight: 400,
+            columnGroupsHeader: [
                 [
-                    { label: '', attr: { rowspan: 2, colspan: 2 }  },
-                    { label: 'General Information', attr: { colspan: 7 } },
+                    { content: '', attr: { rowspan: 2, colspan: 2 }  },
+                    { content: 'General Information', attr: { colspan: 7 } },
                 ],
                 [
-                    { label: 'Full name', attr: { colspan: 3 } },
-                    { label: 'Important Dates', attr: { colspan: 4, class: "text-center" } }
+                    { content: 'Full name', attr: { colspan: 3 } },
+                    { content: 'Important Dates', attr: { colspan: 3, class: "text-center" } }
                 ]
             ],
             columns: [
-                { type: 'numbers', fixed: 'left' },
-                { type: 'select',  fixed: 'left' },
+                { type: 'numbers'},
+                { type: 'select'},
                 { type: 'text',    field: 'fname', label: 'First Name', width: '15%'},
                 { type: 'text',    field: 'lname', label: 'Last Name',  width: '15%'},
                 { type: 'text',    field: 'email', label: 'Email' },
                 { type: 'date',    field: 'sdate', label: 'Start Date', width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
                 { type: 'date',    field: 'edate', label: 'End Date',   width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
-                { type: 'number',  field: 'diff',  label: 'Diff Date',  width: 90,  attr: { class: 'text-end' }, attrHeader: { class: 'text-end' },
-                    render: function (record) {
-                        const date1 = new Date(record.sdate);
-                        const date2 = new Date(record.edate);
-                        const diffTime = Math.abs(date2 - date1);
-                        return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    }
-                },
-                { type: 'switch', field: 'is_active_sw', label: 'On', valueY: 'Y', valueN: 'N', fixed: 'right',
+                { type: 'switch', field: 'is_active_sw', label: 'On', valueY: 'Y', valueN: 'N',
                     onChange: function (record, value) {
                         console.log(record);
                         console.log(value);
                     }
                 },
             ],
-            footer: [
-                [
-                    { label: 'Total', attr: { colspan: 7, class: 'text-end' } },
-                    { label: '123', attr: { class: 'text-end' } },
-                    { label: '' },
-                ]
-            ],
-            onClick: function (record, event) {
-                console.log(record)
-            },
-            onClickUrl: "#/path/to/object/[id]",
             records: [
                 { id: 1,  fname: 'Jane',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-12-03', is_active_sw: "N" },
                 { id: 2,  fname: 'Stuart',  lname: 'Motzart',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-11-03', is_active_sw: "N" },
@@ -643,21 +1085,494 @@
                 { id: 16, fname: 'Doer',    lname: 'Welldo',      email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-07', is_active_sw: "N" },
                 { id: 17, fname: 'Shashi',  lname: 'Bahh',        email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
                 { id: 18, fname: 'Av',      lname: 'Rachmaninov', email: 'joe@gmail.com',      sdate: '2023-09-03', edate: '2023-12-06', is_active_sw: "N" },
-                { id: 19, fname: 'John',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-09-03', edate: '2023-12-06', is_active_sw: "N" ,
-                    coreui: {
-                        attr: { class: 'table-row' },
+            ]
+        }).render('table-headers');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-footers">Footers</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-footers"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-footers"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            class: 'table-bordered',
+            maxHeight: 400,
+            columnGroupsFooter: [
+                [
+                    { content: '',     attr: { rowspan: 2, colspan: 2 } },
+                    { content: 'Name', attr: { colspan: 2 } },
+                    { content: '',     attr: { colspan: 4 } },
+                ],
+                [
+                    { content: 'Total', attr: { colspan: 4, class: 'text-end' } },
+                    { content: '123',   attr: { class: 'text-end', onclick: 'console.log(123)' } },
+                    { content: '' },
+                ]
+            ],
+            columns: [
+                { type: 'numbers'},
+                { type: 'select'},
+                { type: 'text',    field: 'fname', label: 'First Name', width: '15%'},
+                { type: 'text',    field: 'lname', label: 'Last Name',  width: '15%'},
+                { type: 'text',    field: 'email', label: 'Email' },
+                { type: 'date',    field: 'sdate', label: 'Start Date', width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
+                { type: 'date',    field: 'edate', label: 'End Date',   width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
+                { type: 'switch', field: 'is_active_sw', label: 'On', valueY: 'Y', valueN: 'N',
+                    onChange: function (record, value) {
+                        console.log(record);
+                        console.log(value);
+                    }
+                },
+            ],
+            records: [
+                { id: 1,  fname: 'Jane',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-12-03', is_active_sw: "N" },
+                { id: 2,  fname: 'Stuart',  lname: 'Motzart',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-11-03', is_active_sw: "N" },
+                { id: 3,  fname: 'Jin',     lname: 'Franson',     email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "Y" },
+                { id: 4,  fname: 'Susan',   lname: 'Ottie',       email: 'frank@gmail.com',    sdate: '2023-09-03', edate: '2023-10-03', is_active_sw: "Y" },
+                { id: 5,  fname: 'Kelly',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-06-24', is_active_sw: "Y" },
+                { id: 6,  fname: 'Francis', lname: 'Gatos',       email: 'jdoe@gmail.com',     sdate: '2023-02-03', edate: '2023-06-03', is_active_sw: "N" },
+                { id: 7,  fname: 'Mark',    lname: 'Welldo',      email: 'susan@gmail.com',    sdate: '2023-04-03', edate: '2023-06-23', is_active_sw: "N" },
+                { id: 8,  fname: 'Thomas',  lname: 'Bahh',        email: 'david@gmail.com',    sdate: '2023-04-03', edate: '2023-09-16', is_active_sw: "N" },
+                { id: 9,  fname: 'Sergei',  lname: 'Rachmaninov', email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
+                { id: 10, fname: 'Jill',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
+                { id: 11, fname: 'Frank',   lname: 'Motzart',     email: 'peterson@gmail.com', sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
+                { id: 12, fname: 'Peter',   lname: 'Franson',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-03', is_active_sw: "N" },
+                { id: 13, fname: 'Andrew',  lname: 'Ottie',       email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-06-19', is_active_sw: "N" },
+                { id: 14, fname: 'Manny',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-05', is_active_sw: "N" },
+                { id: 15, fname: 'Ben',     lname: 'Gatos',       email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-09-03', is_active_sw: "N" },
+                { id: 16, fname: 'Doer',    lname: 'Welldo',      email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-07', is_active_sw: "N" },
+                { id: 17, fname: 'Shashi',  lname: 'Bahh',        email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
+                { id: 18, fname: 'Av',      lname: 'Rachmaninov', email: 'joe@gmail.com',      sdate: '2023-09-03', edate: '2023-12-06', is_active_sw: "N" },
+            ]
+        }).render('table-footers');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-columns-row-span">Col-Row span</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-columns-row-span"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-columns-row-span"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            class: 'table-bordered',
+            columnHeaders: false,
+            columns: [
+                { type: 'text',   field: 'group',  label: 'Group', width: 300 },
+                { type: 'text',   field: 'count',  label: 'Count' },
+                { type: 'money',  field: 'money',  label: 'Money',  width: 200, currency: 'USD'},
+                { type: 'date',   field: 'date',   label: 'Date',   width: 200, format: 'DD.MM.YYYY' },
+            ],
+            records: [
+                {
+                    group: 'Group 1',
+                    count: 'Jane Doe',
+                    _meta: {
                         fields: {
-                            fname: {
-                                attr: { style: 'font-weight: bold', class: 'cell' },
-                            }
+                            group: { attr: { rowspan: 2 } },
+                            count: { attr: { colspan: 3 } },
+                            money: { show: false },
+                            date:  { show: false },
+                        },
+                    }
+                },
+                {
+                    count: 32,
+                    money: 0.15,
+                    date: '2023-04-03',
+                    _meta: {
+                        fields: {
+                            group: { show: false }
+                        },
+                    }
+                },
+                {
+                    group: 'Group 2',
+                    count: 'Jin Franson',
+                    _meta: {
+                        fields: {
+                            group: { attr: { rowspan: 2 } },
+                            count: { attr: { colspan: 3 } },
+                            money: { show: false },
+                            date:  { show: false },
+                        },
+                    }
+                },
+                {
+                    count: 32,
+                    money: 0.15,
+                    date: '2023-04-03',
+                    _meta: {
+                        fields: {
+                            group: { show: false }
                         },
                     }
                 }
             ]
-        });
+        }).render('table-columns-row-span');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
 
-        $('#table-all').html(tableAll.render());
-        tableAll.initEvents();
+
+                        <h3 id="example-group">Group</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-group"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-group"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            group: {
+                field: 'fname',
+                attr: { class: 'table-secondary' },
+                render: function (record) {
+                    return 'Group: ' + record.data.fname + ' ' + record.data.lname
+                },
+            },
+            columns: [
+                { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
+                { field: 'fname',  label: 'First Name'},
+                { field: 'lname',  label: 'Last Name'},
+                { field: 'sdate',  label: 'Start Date', type: 'date' }
+            ],
+            records: [
+                { id: "1", fname: 'Jane',   lname: 'Doe',     email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
+                { id: "2", fname: 'Jane',   lname: 'Doe',     email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
+                { id: "3", fname: 'Stuart', lname: 'Motzart', email: 'frank@gmail.com', sdate: '2023-04-03' },
+                { id: "4", fname: 'Jin',    lname: 'Franson', email: 'peter@gmail.com', sdate: '2023-02-03' },
+                { id: "5", fname: 'Jin',    lname: 'Franson', email: 'peter@gmail.com', sdate: '2023-02-03' },
+                { id: "6", fname: 'Jin',    lname: 'Franson', email: 'peter@gmail.com', sdate: '2023-02-03' }
+            ]
+        }).render('table-group');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-sizing-decoration">Sizing and decoration</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-sizing-decoration"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-sizing-decoration"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            class: 'table-bordered table-sm table-hover table-striped',
+            width: '100%',
+            minWidth: '100%',
+            maxWidth: '100%',
+            height: 540,
+            minHeight: 540,
+            maxHeight: 540,
+            columns: [
+                { type: 'numbers'},
+                { type: 'select'},
+                { type: 'text',    field: 'fname', label: 'First Name', width: '15%'},
+                { type: 'text',    field: 'lname', label: 'Last Name',  width: '15%'},
+                { type: 'text',    field: 'email', label: 'Email' },
+                { type: 'date',    field: 'sdate', label: 'Start Date', width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
+                { type: 'date',    field: 'edate', label: 'End Date',   width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
+                { type: 'switch', field: 'is_active_sw', label: 'On', valueY: 'Y', valueN: 'N' },
+            ],
+            records: [
+                { id: 1,  fname: 'Jane',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-12-03', is_active_sw: "N" },
+                { id: 2,  fname: 'Stuart',  lname: 'Motzart',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-11-03', is_active_sw: "N" },
+                { id: 3,  fname: 'Jin',     lname: 'Franson',     email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "Y" },
+                { id: 4,  fname: 'Susan',   lname: 'Ottie',       email: 'frank@gmail.com',    sdate: '2023-09-03', edate: '2023-10-03', is_active_sw: "Y" },
+                { id: 5,  fname: 'Kelly',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-06-24', is_active_sw: "Y" },
+                { id: 6,  fname: 'Francis', lname: 'Gatos',       email: 'jdoe@gmail.com',     sdate: '2023-02-03', edate: '2023-06-03', is_active_sw: "N" },
+                { id: 7,  fname: 'Mark',    lname: 'Welldo',      email: 'susan@gmail.com',    sdate: '2023-04-03', edate: '2023-06-23', is_active_sw: "N" },
+                { id: 8,  fname: 'Thomas',  lname: 'Bahh',        email: 'david@gmail.com',    sdate: '2023-04-03', edate: '2023-09-16', is_active_sw: "N" },
+                { id: 9,  fname: 'Sergei',  lname: 'Rachmaninov', email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
+                { id: 10, fname: 'Jill',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
+                { id: 11, fname: 'Frank',   lname: 'Motzart',     email: 'peterson@gmail.com', sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
+                { id: 12, fname: 'Peter',   lname: 'Franson',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-03', is_active_sw: "N" },
+                { id: 13, fname: 'Andrew',  lname: 'Ottie',       email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-06-19', is_active_sw: "N" },
+                { id: 14, fname: 'Manny',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-05', is_active_sw: "N" },
+                { id: 15, fname: 'Ben',     lname: 'Gatos',       email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-09-03', is_active_sw: "N" },
+                { id: 16, fname: 'Doer',    lname: 'Welldo',      email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-07', is_active_sw: "N" },
+                { id: 17, fname: 'Shashi',  lname: 'Bahh',        email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
+                { id: 18, fname: 'Av',      lname: 'Rachmaninov', email: 'joe@gmail.com',      sdate: '2023-09-03', edate: '2023-12-06', is_active_sw: "N" },
+                { id: 19, fname: 'John',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-09-03', edate: '2023-12-06', is_active_sw: "N" }
+            ]
+        }).render('table-sizing-decoration');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-sorting">Sorting</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-sorting"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-sorting"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            saveState: true,
+            sort: [ { field: 'fname', order: 'asc' } ],
+            maxHeight: 400,
+            columns: [
+                { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
+                { field: 'fname',  label: 'First Name', sortable: true, width: '25%' },
+                { field: 'lname',  label: 'Last Name', sortable: true, width: '25%' },
+                { field: 'sdate',  label: 'Start Date', sortable: true }
+            ],
+            records: [
+                { id: 1,  fname: "Joseph",            lname: "Haydn",     sdate: "1732-1809" },
+                { id: 2,  fname: "Ludwig Van",        lname: "Beethoven", sdate: "1770-1827" },
+                { id: 3,  fname: "Wolfgang1 Amadeus", lname: "Mozart",    sdate: "1756-1791" },
+                { id: 4,  fname: "Johann Sebastian",  lname: "Bach",      sdate: "1685-1750" },
+                { id: 5,  fname: "Richard",           lname: "Wagner",    sdate: "1685-1750" },
+                { id: 6,  fname: "Joseph",            lname: "Haydn",     sdate: "1732-1809" },
+                { id: 7,  fname: "Ludwig Van",        lname: "Beethoven", sdate: "1770-1827", _meta: { "attr": { "style": "background-color: #C2F5B4" }}},
+                { id: 8,  fname: "Wolfgang2 Amadeus", lname: "Mozart",    sdate: "1756-1791" },
+                { id: 9,  fname: "Johann Sebastian",  lname: "Bach",      sdate: "1685-1750" },
+                { id: 10, fname: "Richard",           lname: "Wagner",    sdate: "1685-1750", _meta: { "attr": { "style": "color: red" }}},
+                { id: 11, fname: "Joseph",            lname: "Haydn",     sdate: "1732-1809", _meta: { "attr": { "style": "background-color: #FBFEC0" }}},
+                { id: 12, fname: "Ludwig Van",        lname: "Beethoven", sdate: "1770-1827" },
+                { id: 13, fname: "Wolfgang3 Amadeus", lname: "Mozart",    sdate: "1756-1791" },
+                { id: 14, fname: "Johann Sebastian",  lname: "Bach",      sdate: "1685-1750" },
+                { id: 15, fname: "Richard",           lname: "Wagner",    sdate: "1685-1750", _meta: { "attr": { "style": "color: blue" }}}
+            ]
+        }).render('table-sorting')
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-search">Search</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-search"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-search"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            header: [
+                {
+                    type: 'in',
+                    left: [
+                        {
+                            type: "search",
+                            btn: {
+                                content: "&lt;i class=\"bi bi-search\"&gt;&lt;/i&gt; Search",
+                                attr: { class: 'btn btn-sm btn-secondary' }
+                            },
+                            btnClear: {
+                                content: "&lt;i class=\"bi bi-x\"&gt;&lt;/i&gt;",
+                                attr: { class: 'btn btn-sm btn-outline-secondary' }
+                            },
+                            btnComplete: {
+                                content: "Search",
+                                attr: { class: 'btn btn-sm btn-primary' }
+                            },
+                        },
+                    ]
+                }
+            ],
+            footer: [
+                {
+                    type: 'out',
+                    left: [ { type: 'total' } ]
+                }
+            ],
+            search: {
+                labelWidth: 200,
+                controls: [
+                    { type: 'text',           field: 'fname',  label: 'text',           width: 200, attr: { placeholder: 'text' },
+                        description: "Description text", prefix: "Prefix content"
+                    },
+                    { type: 'number',         field: 'number', label: 'number',         width: 200, attr: { placeholder: 'number' } },
+                    { type: 'date',           field: 'sdate',  label: 'date',           width: 200, attr: {} },
+                    { type: 'date_month',     field: 'sdate',  label: 'date_month',     width: 200, attr: {} },
+                    { type: 'datetime',       field: 'sdate',  label: 'datetime',       width: 200, attr: {} },
+                    { type: 'date_range',     field: 'sdate',  label: 'date_range',     width: 200, attr: {} },
+                    { type: 'datetime_range', field: 'sdate',  label: 'datetime_range', width: 200, attr: {} },
+                    { type: 'radio',          field: 'active', label: 'radio',
+                        options: [
+                            { value: 'Y', text: 'Active' },
+                            { value: 'N', text: 'Inactive' },
+                        ]
+                    },
+                    { type: 'checkbox', field: 'select', label: 'checkbox',
+                        options: [
+                            { value: '1', text: 'Element 1' },
+                            { value: '2', text: 'Element 2' },
+                            { value: '3', text: 'Element 3' },
+                        ]
+                    },
+                    { type: 'switch', field: 'active', label: 'switch', valueY: 'Y' },
+                    { type: 'select', field: 'select', label: 'select', width: 200,
+                        options: {
+                            '1': 'Adams John',
+                            '2': 'Johnson Peter',
+                            '3': 'Lewis Frank',
+                            '4': 'Cruz Steve',
+                            '5': 'Donnun Nick',
+                        }
+                    },
+                    { type: 'select', field: 'select', label: 'multiselect', width: 200, attr: {multiple: "multiple"},
+                        options: [
+                            { value: 'val',  text: 'Item text' },
+                            { type: "group", label: 'Group 1',
+                                options : [
+                                    { value: 1, text: 'Adams John' },
+                                    { value: 2, text: 'Johnson Peter' },
+                                ]
+                            },
+                            { type: "group", label: 'Group 2', attr: { class: "group-class"  },
+                                options : [
+                                    { value: 3, text: 'Lewis Frank' },
+                                    { value: 4, text: 'Cruz Steve' },
+                                    { value: 5, text: 'Donnun Nick' }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            columns: [
+                { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
+                { field: 'fname',  label: 'First Name', width: '25%' },
+                { field: 'lname',  label: 'Last Name',  width: '25%' },
+                { field: 'select', label: 'Select' },
+                { field: 'number', label: 'Number',     type: 'number', width: 50 },
+                { field: 'active', label: 'Active',     type: 'switch', width: 50 },
+                { field: 'sdate',  label: 'Start Date', type: 'date' }
+            ],
+            records: [
+                { id: "1", fname: 'Jane',   lname: 'Doe',     number: 1, select: '1', active: 'Y', email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
+                { id: "2", fname: 'Stuart', lname: 'Motzart', number: 2, select: '2', active: 'N', email: 'frank@gmail.com', sdate: '2023-04-03' },
+                { id: "3", fname: 'Jin',    lname: 'Franson', number: 3, select: '3', active: 'Y', email: 'peter@gmail.com', sdate: '2023-02-03' }
+            ]
+        }).render('table-search');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+                        <br><br>
+
+
+                        <h3 id="example-filters">Filters</h3>
+                        <div>
+                            <div class="content-example">
+                                <div id="table-filters"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-filters"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            header: [
+                {
+                    type: 'out',
+                    left: [
+                        { type: 'filter:text',           field: 'fname',  label: 'text', width: 150,
+                            attr: { class: "form-control" },
+                            btn: { attr: { class: "btn btn-sm btn-outline-secondary border-secondary-subtle" } }
+                        },
+                        { type: 'filter:number',         field: 'number', label: '', width: 90,
+                            attr: { class: "form-control" },
+                            btn: { attr: { class: "btn btn-sm btn-outline-secondary border-secondary-subtle" } }
+                        },
+                        { type: 'filter:date',           field: 'sdate',  label: '', width: 140, attr: {} },
+                        { type: 'filter:datetime',       field: 'sdate',  label: '', width: 180, attr: {} },
+                        { type: 'filter:date_month',     field: 'sdate',  label: '', width: 200, attr: {} },
+                        { type: 'filter:date_range',     field: 'sdate',  label: '', width: 140, attr: {} },
+                        { type: 'filter:datetime_range', field: 'sdate',  label: '', width: 180, attr: {} },
+                    ],
+                },
+                {
+                    type: 'in',
+                    left: [
+                        { type: 'filter:radio', field: 'number', label: '',
+                            options: [
+                                { value: '1', text: 'Radio 1', class: 'btn btn-outline-secondary' },
+                                { value: '2', text: 'Radio 2', class: 'btn btn-outline-secondary' },
+                                { value: '3', text: 'Radio 3', class: 'btn btn-outline-warning' },
+                            ] },
+                        { type: 'filter:checkbox', field: 'number', label: '',
+                            options: [
+                                { value: '1', text: 'Check 1', class: 'btn btn-outline-secondary' },
+                                { value: '2', text: 'Check 2', class: 'btn btn-outline-secondary' },
+                                { value: '3', text: 'Check 3', class: 'btn btn-outline-primary' },
+                            ] },
+                        { type: 'filter:select', field: 'select', label: '', width: 200, attr: {},
+                            options: {
+                                '1': 'Adams John',
+                                '2': 'Johnson Peter',
+                                '3': 'Lewis Frank',
+                                '4': 'Cruz Steve',
+                                '5': 'Donnun Nick',
+                            }
+                        },
+                        { type: 'filter:switch', field: 'active', label: 'Active', valueY: 'Y'},
+                        { type: 'filter:clear',  content: '&lt;i class="bi bi-backspace"&gt;&lt;/i&gt; Clear', attr: { class: "btn btn-secondary" } },
+                    ]
+                }
+            ],
+            footer: [
+                {
+                    type: 'out',
+                    left: [ { type: 'total' } ]
+                }
+            ],
+            columns: [
+                { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
+                { field: 'fname',  label: 'First Name', width: '25%' },
+                { field: 'lname',  label: 'Last Name', width: '25%' },
+                { field: 'select',  label: 'Select' },
+                { field: 'number', label: 'Number', type: 'number', width: 50 },
+                { field: 'active', label: 'Active', type: 'switch', width: 50 },
+                { field: 'sdate',  label: 'Start Date', type: 'date' }
+            ],
+            records: [
+                { id: "1", fname: 'Jane',   lname: 'Doe',     number: 1, select: '1', active: 'Y', email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
+                { id: "2", fname: 'Stuart', lname: 'Motzart', number: 2, select: '2', active: 'N', email: 'frank@gmail.com', sdate: '2023-04-03' },
+                { id: "3", fname: 'Jin',    lname: 'Franson', number: 3, select: '3', active: 'Y', email: 'peter@gmail.com', sdate: '2023-02-03' }
+            ]
+        }).render('table-filters');
     &lt;/script&gt;
                                 </code></pre>
                             </div>
@@ -686,6 +1601,10 @@
                             <tr>
                                 <th>class</th> <td>string</td> <td></td>
                                 <td>Значение для атрибута сlass для таблицы</td>
+                            </tr>
+                            <tr>
+                                <th>columns</th> <td>array</td> <td> </td>
+                                <td>Массив с настройками колонок таблицы</td>
                             </tr>
                             <tr>
                                 <th>primaryKey</th> <td>string</td> <td><code>id</code></td>
@@ -720,6 +1639,26 @@
                                 <td>Максимальная высота таблицы</td>
                             </tr>
                             <tr>
+                                <th>overflow</th> <td>boolean</td> <td><code>false</code></td>
+                                <td>Активирует ограничение на выход таблицы за границы контейнера. Включается автоматически при указании ограничения высоты или ширины</td>
+                            </tr>
+                            <tr>
+                                <th>theadTop</th> <td>numeric</td> <td><code>0</code></td>
+                                <td>Если overflow не активен, то, по умолчанию, при прокрутке, заголовок таблицы прижимается к верху страницы. Этот параметр указывает высоту на которой заголовок будет оставаться</td>
+                            </tr>
+                            <tr>
+                                <th>noWrap</th> <td>boolean</td> <td><code>false</code></td>
+                                <td>На все текстовые колонки таблицы будет применено ограничение текста в рамках одной строки. Для ограничения колонки по ширине в них требуется указывать maxWidth</td>
+                            </tr>
+                            <tr>
+                                <th>noWrapToggle</th> <td>boolean</td> <td><code>false</code></td>
+                                <td>Если активен, то на все текстовые колонки таблицы с ограничением по строкам (noWrap), будут добавлена кнопка разворачивания и сворачивания содержимого</td>
+                            </tr>
+                            <tr>
+                                <th>columnHeaders</th> <td>boolean</td> <td><code>true</code></td>
+                                <td>Указывает, показывать ли заголовки колонок</td>
+                            </tr>
+                            <tr>
                                 <th>onClick</th> <td>function</td> <td></td>
                                 <td>Событие выполняемое при клике на строку</td>
                             </tr>
@@ -736,57 +1675,78 @@
                                 <td>Количество строк на странице</td>
                             </tr>
                             <tr>
-                                <th>recordsPerPageList</th> <td>array</td> <td><code>[25, 50, 100, 1000]</code></td>
-                                <td>Варианты для изменения количество строк на странице</td>
-                            </tr>
-                            <tr>
-                                <th>pageParam</th> <td>string</td> <td><code>page</code></td>
-                                <td>Имя параметра указывающего страницу для подстановки при переходе по страницам</td>
-                            </tr>
-                            <tr>
-                                <th>recordsPerPageParam</th> <td>string</td> <td><code>count</code></td>
-                                <td>Имя параметра указывающего количества срок на странице для подстановки при переходе по страницам</td>
-                            </tr>
-                            <tr>
-                                <th>method</th> <td>string</td> <td><code>GET</code></td>
-                                <td>Http метод выполняемый для загрузки строк</td>
-                            </tr>
-                            <tr>
-                                <th>url</th> <td>string</td> <td></td>
-                                <td>Адрес для загрузки строк</td>
-                            </tr>
-                            <tr>
-                                <th>show</th> <td>object</td>
-                                <td>
+                                <th>recordsRequest</th> <td>object</td> <td><code>
                                     {
-                                        total: false,
-                                        columnHeaders: true,
-                                        pages: false,
-                                        pagesJump: false,
-                                        prePageList: false
+                                        method: 'GET',
+                                        url: '',
+                                        params: {
+                                            page: 'page',
+                                            count: 'count',
+                                            start: 'start',
+                                            end: 'end',
+                                            sort: 'sort',
+                                            search: 'search',
+                                            filter: 'filter'
+                                        }
                                     }
+                                </code></td>
+                                <td>
+                                    Параметр указывает, что данные должны быть загружены по адресу.
+                                    <b>url</b> - адрес для загрузки данных.
+                                    <b>method</b> - http метод выполняемый для загрузки данных.
+                                    <b>params</b> - имена параметров отвечающих за запрашиваемые данные.
                                 </td>
-                                <td>Параметры настраивающие отображаемые элементы таблицы</td>
                             </tr>
                             <tr>
-                                <th>controls</th> <td>array</td> <td> </td>
-                                <td>Массив настроек для отображения колонок таблицы и их свойств</td>
+                                <th>saveState</th> <td>boolean</td> <td><code>false</code></td>
+                                <td>Указывает сохранять ли измененные состояния таблицы. Если активно, то при формировании таблицы сохраненные состояния будут в приоритете. Сохраняются например сортировка, поиск, фильтрация</td>
                             </tr>
                             <tr>
-                                <th>columnGroups</th> <td>array</td> <td> </td>
-                                <td>Массив настроек для отображения групп колонок таблицы и их свойств</td>
-                            </tr>
-                            <tr>
-                                <th>controls</th> <td>array</td> <td> </td>
-                                <td>Массив настроек для отображения элементов управления таблицей</td>
+                                <th>header</th> <td>array</td> <td> </td>
+                                <td>Массив настроек для отображения контролов в верхней части таблицы</td>
                             </tr>
                             <tr>
                                 <th>footer</th> <td>array</td> <td> </td>
-                                <td>Массив настроек для отображения нижней части таблицы</td>
+                                <td>Массив настроек для отображения контролов в нижней части таблицы</td>
+                            </tr>
+                            <tr>
+                                <th>columnGroupsHeader</th> <td>array</td> <td> </td>
+                                <td>Массив настроек для отображения дополнительных заголовков над колонками таблицы</td>
+                            </tr>
+                            <tr>
+                                <th>columnGroupsFooter</th> <td>array</td> <td> </td>
+                                <td>Массив настроек для отображения дополнительных заголовков под колонками таблицы</td>
+                            </tr>
+                            <tr>
+                                <th>group</th> <td>object</td> <td><code>
+                                    {
+                                    field: null,
+                                    attr: {},
+                                    render: null
+                                    }
+                                </code></td>
+                                <td>Группировка строк по указанному полю</td>
                             </tr>
                             <tr>
                                 <th>records</th> <td>array</td> <td> </td>
                                 <td>Массив строк отображаемых в таблице</td>
+                            </tr>
+                            <tr>
+                                <th>sort</th> <td>array</td> <td> </td>
+                                <td>Массив с описанием какие колонки отсортированы и как именно. Пример: <code>{ field: 'fname', order: 'asc' }</code></td>
+                            </tr>
+                            <tr>
+                                <th>search</th> <td>object</td> <td><code>
+                                    {
+                                        labelWidth: 200,
+                                        controls: []
+                                    }
+                                </code></td>
+                                <td>
+                                    Указывает, какие поисковые контролы необходимо добавить в раскрывающийся поиск.
+                                    <b>labelWidth</b> - ширина первой колонки с поисковыми названиями.
+                                    <b>controls</b> - список поисковых контролов.
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -838,140 +1798,184 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.getId()
-                                </td>
-                                <td>
-                                    Получение id таблицы
-                                </td>
+                                <td>table.getId()</td>
+                                <td>Получение id таблицы</td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.lock()
-                                </td>
-                                <td>
-                                    Блокирует работу с таблицей и показывает сообщение о загрузке
-                                </td>
+                                <td>table.getOptions()</td>
+                                <td>Получение заданных ранее опций таблицы</td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.unlock()
-                                </td>
-                                <td>
-                                    Разблокирует работу с таблицей
-                                </td>
+                                <td>table.lock()</td>
+                                <td>Блокирует работу с таблицей и показывает сообщение о загрузке</td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.reload()
-                                </td>
-                                <td>
-                                    Перезагрузка строк в таблице, при условии, что ранее был указан адрес для загрузки
-                                </td>
+                                <td>table.unlock()</td>
+                                <td>Разблокирует работу с таблицей</td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.load( url, method )
-                                </td>
-                                <td>
-                                    Загрузка строк в таблице по указанному адресу и методу
-                                </td>
+                                <td>table.reload()</td>
+                                <td>Перезагрузка строк в таблице, при условии, что ранее был указан адрес для загрузки</td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.prevPage()
-                                </td>
-                                <td>
-                                    Загрузка строк в таблице из предыдущей страницы
-                                </td>
+                                <td>table.load( url, method ) </td>
+                                <td>Загрузка строк в таблице по указанному адресу и методу </td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.nextPage()
-                                </td>
-                                <td>
-                                    Загрузка строк в таблице из следующей страницы
-                                </td>
+                                <td>table.reload()</td>
+                                <td>Перезагрузка записей в таблице</td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.goPage( page )
-                                </td>
-                                <td>
-                                    Загрузка строк в таблицу из указанной страницы
-                                </td>
+                                <td>table.refresh()</td>
+                                <td>Пересоздание тела таблицы</td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.getRecord( primaryKey )
-                                </td>
-                                <td>
-                                    Получение объекта строки из таблицы по указанному primaryKey
-                                </td>
+                                <td>table.setPageSize()</td>
+                                <td>Установка общего количества записей на странице</td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.getRecords()
-                                </td>
-                                <td>
-                                    Получение массива всех строк из таблицы
-                                </td>
+                                <td>table.prevPage()</td>
+                                <td>Загрузка строк в таблице из предыдущей страницы</td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.getSelected()
-                                </td>
-                                <td>
-                                    Получение всех выбранных строк из таблицы в виде массива primaryKey
-                                </td>
+                                <td>table.nextPage()</td>
+                                <td>Загрузка строк в таблице из следующей страницы</td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.getSelectedRecords()
-                                </td>
-                                <td>
-                                    Получение всех выбранных строк из таблицы в виде массива объектов строк
-                                </td>
+                                <td>table.goPage( page )</td>
+                                <td>Загрузка строк в таблицу из указанной страницы</td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.selectRecord( primaryKey )
-                                </td>
-                                <td>
-                                    Выделение указанной строки находящийся в таблице
-                                </td>
+                                <td>table.getRecords()</td>
+                                <td>Получение массива всех строк из таблицы</td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.unselectRecord( primaryKey )
-                                </td>
-                                <td>
-                                    Снятие выделения указанной строки находящийся в таблице
-                                </td>
+                                <td>table.getRecordById( primaryKey )</td>
+                                <td>Получение объекта строки из таблицы по указанному primaryKey</td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.selectAll()
-                                </td>
-                                <td>
-                                    Выделение всех строк в таблице
-                                </td>
+                                <td>table.getRecordByIndex()</td>
+                                <td>Получение записи по индексу</td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.unselectAll()
-                                </td>
-                                <td>
-                                    Снятие выделения всех строк в таблице
-                                </td>
+                                <td>table.getRecordByField( field, value )</td>
+                                <td>Получение записи по полю</td>
                             </tr>
                             <tr>
-                                <td>
-                                    table.on( name, function )
-                                </td>
-                                <td>
-                                    Регистрация функции вызываемой при наступлении указанного события
-                                </td>
+                                <td>table.getSelected()</td>
+                                <td>Получение всех выбранных строк из таблицы в виде массива primaryKey</td>
+                            </tr>
+                            <tr>
+                                <td>table.getSelectedRecords()</td>
+                                <td>Получение всех выбранных строк из таблицы в виде массива объектов строк</td>
+                            </tr>
+                            <tr>
+                                <td>table.getSelectedRecordsId()</td>
+                                <td>Получение выбранных id</td>
+                            </tr>
+                            <tr>
+                                <td>table.selectRecord( primaryKey )</td>
+                                <td>Выделение указанной строки находящийся в таблице</td>
+                            </tr>
+                            <tr>
+                                <td>table.unselectRecord( primaryKey )</td>
+                                <td>Снятие выделения указанной строки находящийся в таблице</td>
+                            </tr>
+                            <tr>
+                                <td>table.selectAll()</td>
+                                <td>Выделение всех строк в таблице</td>
+                            </tr>
+                            <tr>
+                                <td>table.unselectAll()</td>
+                                <td>Снятие выделения всех строк в таблице</td>
+                            </tr>
+                            <tr>
+                                <td>table.on( name, function, context, singleExec )</td>
+                                <td>Регистрация функции вызываемой при наступлении указанного события</td>
+                            </tr>
+                            <tr>
+                                <td>table.getLang()</td>
+                                <td>Получение переводов текущего языка</td>
+                            </tr>
+                            <tr>
+                                <td>table.setColumnsShow( columns )</td>
+                                <td>Установка видимых колонок, не указанные колонки будут скрыты</td>
+                            </tr>
+                            <tr>
+                                <td>table.getSearchData()</td>
+                                <td>Получение поисковых данных</td>
+                            </tr>
+                            <tr>
+                                <td>table.getFilterData()</td>
+                                <td>Получение данных из фильтров</td>
+                            </tr>
+                            <tr>
+                                <td>table.searchRecords()</td>
+                                <td>Поиск по таблице с использованием данных из поиска и фильтров</td>
+                            </tr>
+                            <tr>
+                                <td>table.searchRecords()</td>
+                                <td>Поиск по таблице с использованием данных из поиска и фильтров</td>
+                            </tr>
+                            <tr>
+                                <td>table.searchClear()</td>
+                                <td>Очистка поисковых данных</td>
+                            </tr>
+                            <tr>
+                                <td>table.filtersClear()</td>
+                                <td>Очистка поисковых данных в фильтрах</td>
+                            </tr>
+                            <tr>
+                                <td>table.getControlById()</td>
+                                <td>Получение контрола по его id</td>
+                            </tr>
+                            <tr>
+                                <td>table.getSearchControlById()</td>
+                                <td>Получение контрола поиска по его id</td>
+                            </tr>
+                            <tr>
+                                <td>table.sortFields( sorting )</td>
+                                <td>Сортировка по полям</td>
+                            </tr>
+                            <tr>
+                                <td>table.sortDefault()</td>
+                                <td>Сортировка по умолчанию</td>
+                            </tr>
+                            <tr>
+                                <td>table.removeRecordByIndex( index )</td>
+                                <td>Удаление строки из таблицы по индексу</td>
+                            </tr>
+                            <tr>
+                                <td>table.addRecordAfterIndex( recordData, index )</td>
+                                <td>Добавление строки в таблицу после строки с индексом</td>
+                            </tr>
+                            <tr>
+                                <td>table.addRecordBeforeIndex( recordData, index )</td>
+                                <td>Добавление строки в таблицу перед строкой с индексом</td>
+                            </tr>
+                            <tr>
+                                <td>table.addRecordFirst( recordData )</td>
+                                <td>Добавление строки в начало таблицы</td>
+                            </tr>
+                            <tr>
+                                <td>table.addRecordLast( recordData )</td>
+                                <td>Добавление строки в конец таблицы</td>
+                            </tr>
+                            <tr>
+                                <td>table.setRecords( records, total )</td>
+                                <td>Показ указанных записей в таблице</td>
+                            </tr>
+                            <tr>
+                                <td>table.getRecordsCount()</td>
+                                <td>Получение количества строк</td>
+                            </tr>
+                            <tr>
+                                <td>table.expandRecordContent( recordIndex, content, isRebuild )</td>
+                                <td>Раскрытие / скрытие дополнительных данных строки</td>
+                            </tr>
+                            <tr>
+                                <td>table.expandRecordUrl( recordIndex, url, isRebuild )</td>
+                                <td>Раскрытие / скрытие дополнительных данных строки</td>
                             </tr>
                             </tbody>
                         </table>
@@ -981,7 +1985,7 @@
 
 
                     <h2 id="events" class="section-margin">Events</h2>
-                    <div>
+                    <div class="table-responsive">
                         <table class="table table-bordered table-striped bs-events-table">
                             <thead>
                             <tr>
@@ -991,68 +1995,159 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td class="text-nowrap">shown.coreui.table</td>
+                                <td class="text-nowrap">container_show</td>
                                 <td>
-                                    Показ таблицы на странице. Происходит один раз при отображении
+                                    Показ контейнера таблицы на странице. Происходит один раз при отображении
                                 </td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">show-records.coreui.table</td>
+                                <td class="text-nowrap">table_show</td>
+                                <td>
+                                    Показ таблицы на странице.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">records_show</td>
                                 <td>
                                     Показ строк в таблице.
                                     Происходит каждый раз при загрузке строк в таблицу.<br>
-                                    В качестве параметров передаются <code>table.on('show-records.coreui.table', function (table)</code>
+                                    В качестве параметров передаются <code>table.on('records_show', function (table)</code>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">start-load-records.coreui.table</td>
+                                <td class="text-nowrap">records_load_start</td>
                                 <td>
                                     Выполняется каждый раз перед началом запроса для загрузки строк в таблицу.<br>
-                                    В качестве параметров передаются <code>table.on('start-load-records.coreui.table', function (table, xhr)</code>
+                                    В качестве параметров передаются <code>table.on('records_load_start', function (table, xhr)</code>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">end-load-records.coreui.table</td>
+                                <td class="text-nowrap">records_load_end</td>
                                 <td>
                                     Выполняется каждый раз после запроса для загрузки строк в таблицу.<br>
-                                    В качестве параметров передаются <code>table.on('end-load-records.coreui.table', function (table, xhr, textStatus)</code>
+                                    В качестве параметров передаются <code>table.on('records_load_end', function (table, xhr, textStatus)</code>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">error-load-records.coreui.table</td>
+                                <td class="text-nowrap">records_load_error</td>
                                 <td>
                                     Выполняется каждый раз после не успешного запроса для загрузки строк в таблицу.<br>
-                                    В качестве параметров передаются <code>table.on('error-load-records.coreui.table', function (table, xhr, textStatus)</code>
+                                    В качестве параметров передаются <code>table.on('records_load_error', function (table, xhr, textStatus)</code>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">select-all.coreui.table</td>
+                                <td class="text-nowrap">record_select_all</td>
                                 <td>
                                     Происходит при выборе всех строк в таблице.
                                 </td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">unselect-all.coreui.table</td>
+                                <td class="text-nowrap">record_unselect_all</td>
                                 <td>
                                     Происходит при снятии выбора всех строк в таблице.
                                 </td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">select.coreui.table</td>
+                                <td class="text-nowrap">record_select</td>
                                 <td>
                                     Происходит при выборе одной строки в таблице.<br>
-                                    В качестве параметров передаются <code>table.on('select.coreui.table', function (record)</code>
+                                    В качестве параметров передаются <code>table.on('record_select', function (record)</code>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="text-nowrap">unselect.coreui.table</td>
+                                <td class="text-nowrap">record_unselect</td>
                                 <td>
                                     Происходит при выборе одной строки в таблице.<br>
-                                    В качестве параметров передаются <code>table.on('unselect.coreui.table', function (record)</code>
+                                    В качестве параметров передаются <code>table.on('record_unselect', function (record)</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">record_expand_show</td>
+                                <td>
+                                    Происходит при разворачивании какого-либо содержимого под строкой в таблице.<br>
+                                    В качестве параметров передаются <code>table.on('record_expand_show', function (record)</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">record_expand_hide</td>
+                                <td>
+                                    Происходит при сворачивании какого-либо содержимого под строкой в таблице.<br>
+                                    В качестве параметров передаются <code>table.on('record_expand_hide', function (record)</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">page_size_update</td>
+                                <td>
+                                    Происходит при изменении отображаемого количества строк в таблице.</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">columns_change</td>
+                                <td>
+                                    Происходит при изменении показываемых колонок в таблице.</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">search_change</td>
+                                <td>
+                                    Происходит при изменении поисковых параметров в таблице.<br>
+                                    В качестве параметров передаются <code>table.on('search_change', function (searchData)</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">filters_change</td>
+                                <td>
+                                    Происходит при изменении поисковых фильтров в таблице.
+                                    В качестве параметров передаются <code>table.on('filters_change', function (filterData)</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">records_sort</td>
+                                <td>
+                                    Происходит при сортировке в таблице.
+                                    В качестве параметров передаются <code>table.on('records_sort', function (table)</code>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <br>
+                    <br>
+
+
+                    <h2 id="sass-variables" class="section-margin">Sass variables</h2>
+                    <div>
+                        <div class="content-markup">
+                            <pre><code>
+    $coreui-table-thead-bg: #FFF;
+    $coreui-table-tbody-bg: #FFF;
+    $coreui-table-tfoot-bg: #FFF;
+
+    $coreui-table-thead-color: #212529;
+    $coreui-table-tbody-color: #212529;
+    $coreui-table-tfoot-color: #212529;
+
+    $coreui-table-border-color: #c4c8cb;
+    $coreui-table-border-radius: 0.25rem;
+
+
+    $coreui-table-font-weight: 600;
+
+    $coreui-table-font-size: 14px;
+    $coreui-table-font-size-header: $coreui-table-font-size;
+    $coreui-table-font-size-footer: 12px;
+
+
+    $coreui-table-control-padding-x: 5px;
+    $coreui-table-control-padding-y: 2px;
+
+    $coreui-table-control-padding-header-x: $coreui-table-control-padding-x;
+    $coreui-table-control-padding-header-y: $coreui-table-control-padding-y;
+
+    $coreui-table-control-padding-footer-x: $coreui-table-control-padding-x;
+    $coreui-table-control-padding-footer-y: $coreui-table-control-padding-y;
+                            </code></pre>
+                        </div>
                     </div>
                     <br>
                     <br>
