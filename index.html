@@ -1419,7 +1419,7 @@
             search: {
                 labelWidth: 200,
                 controls: [
-                    { type: 'text',           field: 'fname',  label: 'text',           width: 200, attr: { placeholder: 'text' },
+                    { type: 'text',           field: 'name',  label: 'text',           width: 200, attr: { placeholder: 'text' },
                         description: "Description text", prefix: "Prefix content"
                     },
                     { type: 'number',         field: 'number', label: 'number',         width: 200, attr: { placeholder: 'number' } },
@@ -1434,37 +1434,37 @@
                             { value: 'N', text: 'Inactive' },
                         ]
                     },
-                    { type: 'checkbox', field: 'select', label: 'checkbox',
+                    { type: 'checkbox', field: 'id', label: 'checkbox',
                         options: [
-                            { value: '1', text: 'Element 1' },
-                            { value: '2', text: 'Element 2' },
-                            { value: '3', text: 'Element 3' },
+                            { value: '1', text: 'Dionne Mccray' },
+                            { value: '2', text: 'Bridgett Melendez' },
+                            { value: '3', text: 'Finley Meyer' },
                         ]
                     },
                     { type: 'switch', field: 'active', label: 'switch', valueY: 'Y' },
-                    { type: 'select', field: 'select', label: 'select', width: 200,
+                    { type: 'select', field: 'id', label: 'select', width: 200,
                         options: {
-                            '1': 'Adams John',
-                            '2': 'Johnson Peter',
-                            '3': 'Lewis Frank',
-                            '4': 'Cruz Steve',
-                            '5': 'Donnun Nick',
+                            '1': 'Dionne Mccray',
+                            '2': 'Bridgett Melendez',
+                            '3': 'Finley Meyer',
+                            '4': 'Sheila Briggs',
+                            '5': 'Vasquez Shepard',
                         }
                     },
-                    { type: 'select', field: 'select', label: 'multiselect', width: 200, attr: {multiple: "multiple"},
+                    { type: 'select', field: 'id', label: 'multiselect', width: 200, attr: {multiple: "multiple"},
                         options: [
-                            { value: 'val',  text: 'Item text' },
+                            { value: '0',  text: 'Armstrong Cole' },
                             { type: "group", label: 'Group 1',
                                 options : [
-                                    { value: 1, text: 'Adams John' },
-                                    { value: 2, text: 'Johnson Peter' },
+                                    { value: 1, text: 'Dionne Mccray' },
+                                    { value: 2, text: 'Bridgett Melendez' },
                                 ]
                             },
                             { type: "group", label: 'Group 2', attr: { class: "group-class"  },
                                 options : [
-                                    { value: 3, text: 'Lewis Frank' },
-                                    { value: 4, text: 'Cruz Steve' },
-                                    { value: 5, text: 'Donnun Nick' }
+                                    { value: 3, text: 'Finley Meyer' },
+                                    { value: 4, text: 'Sheila Briggs' },
+                                    { value: 5, text: 'Vasquez Shepard' }
                                 ]
                             }
                         ]
@@ -1473,17 +1473,27 @@
             },
             columns: [
                 { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
-                { field: 'fname',  label: 'First Name', width: '25%' },
-                { field: 'lname',  label: 'Last Name',  width: '25%' },
-                { field: 'select', label: 'Select' },
-                { field: 'number', label: 'Number',     type: 'number', width: 50 },
-                { field: 'active', label: 'Active',     type: 'switch', width: 50 },
-                { field: 'sdate',  label: 'Start Date', type: 'date' }
+                { field: 'name',   label: 'Name' },
+                { field: 'number', label: 'Number',     type: 'number', width: 80 },
+                { field: 'active', label: 'Active',     type: 'switch', width: 80 },
+                { field: 'sdate',  label: 'Start Date', type: 'date', width: 140 }
             ],
             records: [
-                { id: "1", fname: 'Jane',   lname: 'Doe',     number: 1, select: '1', active: 'Y', email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
-                { id: "2", fname: 'Stuart', lname: 'Motzart', number: 2, select: '2', active: 'N', email: 'frank@gmail.com', sdate: '2023-04-03' },
-                { id: "3", fname: 'Jin',    lname: 'Franson', number: 3, select: '3', active: 'Y', email: 'peter@gmail.com', sdate: '2023-02-03' }
+                { "id": 0,  "name": "Armstrong Cole",    "number": 28, "active": "N", "sdate": "2018-09-18" },
+                { "id": 1,  "name": "Dionne Mccray",     "number": 38, "active": "N", "sdate": "2015-03-06" },
+                { "id": 2,  "name": "Bridgett Melendez", "number": 33, "active": "N", "sdate": "2020-02-13" },
+                { "id": 3,  "name": "Finley Meyer",      "number": 35, "active": "Y", "sdate": "2014-11-17" },
+                { "id": 4,  "name": "Sheila Briggs",     "number": 38, "active": "N", "sdate": "2023-07-04" },
+                { "id": 5,  "name": "Vasquez Shepard",   "number": 23, "active": "Y", "sdate": "2015-10-30" },
+                { "id": 6,  "name": "Meredith Garrison", "number": 27, "active": "N", "sdate": "2021-04-07" },
+                { "id": 7,  "name": "Isabella Poole",    "number": 39, "active": "Y", "sdate": "2023-02-24" },
+                { "id": 8,  "name": "Roach Fischer",     "number": 30, "active": "N", "sdate": "2021-03-12" },
+                { "id": 9,  "name": "Melva Macdonald",   "number": 38, "active": "Y", "sdate": "2015-05-18" },
+                { "id": 10, "name": "Goodwin Foster",    "number": 21, "active": "N", "sdate": "2018-11-18" },
+                { "id": 11, "name": "Jacqueline Gibson", "number": 30, "active": "N", "sdate": "2017-09-30" },
+                { "id": 12, "name": "Amalia Shannon",    "number": 23, "active": "Y", "sdate": "2023-05-24" },
+                { "id": 13, "name": "Dena Floyd",        "number": 37, "active": "N", "sdate": "2024-01-15" },
+                { "id": 14, "name": "Merrill Russo",     "number": 22, "active": "Y", "sdate": "2023-04-09" }
             ]
         }).render('table-search');
     &lt;/script&gt;
@@ -1508,7 +1518,7 @@
                 {
                     type: 'out',
                     left: [
-                        { type: 'filter:text',           field: 'fname',  label: 'text', width: 150,
+                        { type: 'filter:text',           field: 'name',  label: 'text', width: 150,
                             attr: { class: "form-control" },
                             btn: { attr: { class: "btn btn-sm btn-outline-secondary border-secondary-subtle" } }
                         },
@@ -1526,25 +1536,25 @@
                 {
                     type: 'in',
                     left: [
-                        { type: 'filter:radio', field: 'number', label: '',
+                        { type: 'filter:radio', field: 'id', label: '',
                             options: [
                                 { value: '1', text: 'Radio 1', class: 'btn btn-outline-secondary' },
                                 { value: '2', text: 'Radio 2', class: 'btn btn-outline-secondary' },
                                 { value: '3', text: 'Radio 3', class: 'btn btn-outline-warning' },
                             ] },
-                        { type: 'filter:checkbox', field: 'number', label: '',
+                        { type: 'filter:checkbox', field: 'id', label: '',
                             options: [
                                 { value: '1', text: 'Check 1', class: 'btn btn-outline-secondary' },
                                 { value: '2', text: 'Check 2', class: 'btn btn-outline-secondary' },
                                 { value: '3', text: 'Check 3', class: 'btn btn-outline-primary' },
                             ] },
-                        { type: 'filter:select', field: 'select', label: '', width: 200, attr: {},
+                        { type: 'filter:select', field: 'id', label: '', width: 200, attr: {},
                             options: {
-                                '1': 'Adams John',
-                                '2': 'Johnson Peter',
-                                '3': 'Lewis Frank',
-                                '4': 'Cruz Steve',
-                                '5': 'Donnun Nick',
+                                '1': "Dionne Mccray",
+                                '2': "Bridgett Melendez",
+                                '3': "Finley Meyer",
+                                '4': "Sheila Briggs",
+                                '5': "Vasquez Shepard",
                             }
                         },
                         { type: 'filter:switch', field: 'active', label: 'Active', valueY: 'Y'},
@@ -1560,17 +1570,27 @@
             ],
             columns: [
                 { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
-                { field: 'fname',  label: 'First Name', width: '25%' },
-                { field: 'lname',  label: 'Last Name', width: '25%' },
-                { field: 'select',  label: 'Select' },
-                { field: 'number', label: 'Number', type: 'number', width: 50 },
-                { field: 'active', label: 'Active', type: 'switch', width: 50 },
-                { field: 'sdate',  label: 'Start Date', type: 'date' }
+                { field: 'name',   label: 'Name' },
+                { field: 'number', label: 'Number',     type: 'number', width: 80 },
+                { field: 'active', label: 'Active',     type: 'switch', width: 80 },
+                { field: 'sdate',  label: 'Start Date', type: 'date', width: 140 }
             ],
             records: [
-                { id: "1", fname: 'Jane',   lname: 'Doe',     number: 1, select: '1', active: 'Y', email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
-                { id: "2", fname: 'Stuart', lname: 'Motzart', number: 2, select: '2', active: 'N', email: 'frank@gmail.com', sdate: '2023-04-03' },
-                { id: "3", fname: 'Jin',    lname: 'Franson', number: 3, select: '3', active: 'Y', email: 'peter@gmail.com', sdate: '2023-02-03' }
+                { "id": 0,  "name": "Armstrong Cole",    "number": 28, "active": "N", "sdate": "2018-09-18" },
+                { "id": 1,  "name": "Dionne Mccray",     "number": 38, "active": "N", "sdate": "2015-03-06" },
+                { "id": 2,  "name": "Bridgett Melendez", "number": 33, "active": "N", "sdate": "2020-02-13" },
+                { "id": 3,  "name": "Finley Meyer",      "number": 35, "active": "Y", "sdate": "2014-11-17" },
+                { "id": 4,  "name": "Sheila Briggs",     "number": 38, "active": "N", "sdate": "2023-07-04" },
+                { "id": 5,  "name": "Vasquez Shepard",   "number": 23, "active": "Y", "sdate": "2015-10-30" },
+                { "id": 6,  "name": "Meredith Garrison", "number": 27, "active": "N", "sdate": "2021-04-07" },
+                { "id": 7,  "name": "Isabella Poole",    "number": 39, "active": "Y", "sdate": "2023-02-24" },
+                { "id": 8,  "name": "Roach Fischer",     "number": 30, "active": "N", "sdate": "2021-03-12" },
+                { "id": 9,  "name": "Melva Macdonald",   "number": 38, "active": "Y", "sdate": "2015-05-18" },
+                { "id": 10, "name": "Goodwin Foster",    "number": 21, "active": "N", "sdate": "2018-11-18" },
+                { "id": 11, "name": "Jacqueline Gibson", "number": 30, "active": "N", "sdate": "2017-09-30" },
+                { "id": 12, "name": "Amalia Shannon",    "number": 23, "active": "Y", "sdate": "2023-05-24" },
+                { "id": 13, "name": "Dena Floyd",        "number": 37, "active": "N", "sdate": "2024-01-15" },
+                { "id": 14, "name": "Merrill Russo",     "number": 22, "active": "Y", "sdate": "2023-04-09" }
             ]
         }).render('table-filters');
     &lt;/script&gt;
