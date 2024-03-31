@@ -111,6 +111,14 @@ coreuiTable.filters.radio = {
 
 
     /**
+     * Получение типа поискового алгоритма
+     */
+    getAlgorithm: function () {
+        return 'strict';
+    },
+
+
+    /**
      * Инициализация событий
      */
     initEvents: function () {

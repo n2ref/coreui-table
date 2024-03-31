@@ -815,14 +815,14 @@ let coreuiTableInstance = {
                     let total = result.hasOwnProperty('total') && coreuiTableUtils.isNumeric(result.total)
                         ? result.total
                         : null;
-                    that.showRecords(result.records, total);
+                    that.setRecords(result.records, total);
 
                 } else {
-                    that.showRecords([]);
+                    that.setRecords([]);
                 }
             },
             error: function(xhr, textStatus, errorThrown) {
-                that.showRecords([]);
+                that.setRecords([]);
                 coreuiTablePrivate._trigger(that, 'records_load_error', [ that, xhr, textStatus, errorThrown ]);
             },
             complete: function(xhr, textStatus) {
@@ -1103,7 +1103,7 @@ let coreuiTableInstance = {
 
 
     /**
-     * Получение переводов
+     * Получение переводов текущего языка
      * @return {object}
      */
     getLang: function () {
@@ -1171,7 +1171,8 @@ let coreuiTableInstance = {
                 if (value !== null) {
                     searchData.push({
                         field: options.field,
-                        value: value
+                        value: value,
+                        alg: control.hasOwnProperty('getAlgorithm') && typeof control.getAlgorithm === 'function' ? control.getAlgorithm() : null
                     });
                 }
             }
@@ -1202,7 +1203,8 @@ let coreuiTableInstance = {
                 if (value !== null) {
                     filterData.push({
                         field: options.field,
-                        value: value
+                        value: value,
+                        alg: control.hasOwnProperty('getAlgorithm') && typeof control.getAlgorithm === 'function' ? control.getAlgorithm() : null
                     });
                 }
             }
@@ -1595,7 +1597,7 @@ let coreuiTableInstance = {
      * @param {Array}  records
      * @param {number} total
      */
-    showRecords: function (records, total) {
+    setRecords: function (records, total) {
 
         if ( ! Array.isArray(records)) {
             return;

@@ -501,7 +501,7 @@ let coreuiTableRender = {
     renderExpand: function (table, content) {
 
         if (typeof content === 'object') {
-            content = coreuiTableRender.renderComponents(content);
+            content = coreuiTableRender.renderComponents(table, content, 'record_expand_show');
         }
 
 

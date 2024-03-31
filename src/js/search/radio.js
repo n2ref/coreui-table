@@ -109,6 +109,13 @@ coreuiTable.search.radio = {
     },
 
 
+    /**
+     * Получение типа поискового алгоритма
+     */
+    getAlgorithm: function () {
+        return 'strict';
+    },
+
 
     /**
      * Инициализация событий

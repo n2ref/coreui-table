@@ -163,7 +163,7 @@ let coreuiTableElements = {
      */
     addExpandRow: function (table, recordElement, content) {
 
-        let expandRecord = coreuiTableRender.renderExpand(table, content);
+        let expandRecord = coreuiTableRender.renderExpand(table, content, 'record_expand_show');
 
         recordElement.after(expandRecord);
         recordElement.next().show('fast');

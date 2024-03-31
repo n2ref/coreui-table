@@ -399,8 +399,15 @@ let coreuiTablePrivate = {
             ) {
 
                 if (['string', 'number'].indexOf(typeof filter.value) >= 0) {
-                    if (recordData[filter.field].toString().toLowerCase()
-                        .indexOf(filter.value.toString().toLowerCase()) < 0
+
+                    if (filter.hasOwnProperty('alg') && filter.alg === 'strict') {
+                        if (recordData[filter.field].toString().toLowerCase() != filter.value.toString().toLowerCase()) {
+                            isShow = false;
+                            return false;
+                        }
+
+                    } else if (recordData[filter.field].toString().toLowerCase()
+                               .indexOf(filter.value.toString().toLowerCase()) < 0
                     ) {
                         isShow = false;
                         return false;
