@@ -75,7 +75,12 @@ coreuiTable.controls.columns = {
         let button  = $('button', control);
 
         button.click(function () {
-            let container = coreuiTableElements.getColumnsContainer(that._table.getId());
+            let container       = coreuiTableElements.getColumnsContainer(that._table.getId());
+            let containerSearch = coreuiTableElements.getSearchContainer(that._table.getId());
+
+            if (containerSearch[0]) {
+                containerSearch.hide();
+            }
 
             if (container[0]) {
                 container.fadeToggle('fast');

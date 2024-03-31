@@ -176,6 +176,7 @@ coreuiTable.controls.dropdown = {
 
         return ejs.render(coreuiTableTpl['controls/dropdown.html'], {
             content: options.content,
+            position: options.hasOwnProperty('position') && typeof options.position === 'string' ? options.position : 'end',
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             items: items,
         });

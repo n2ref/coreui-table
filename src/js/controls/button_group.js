@@ -308,6 +308,7 @@ coreuiTable.controls.button_group = {
                             buttons.push({
                                 type: 'dropdown',
                                 content: button.content,
+                                position: button.hasOwnProperty('position') && typeof button.position === 'string' ? button.position : 'end',
                                 attr: attributes,
                                 items: items
                             });
