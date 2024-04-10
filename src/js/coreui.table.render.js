@@ -232,8 +232,7 @@ let coreuiTableRender = {
         let theadAttr = [];
 
         if (options.hasOwnProperty('theadTop') &&
-            ['string', 'number'].indexOf(typeof options.theadTop) >= 0 &&
-            options.theadTop > 0
+            ['string', 'number'].indexOf(typeof options.theadTop) >= 0
         ) {
             let unit = coreuiTableUtils.isNumeric(options.theadTop) ? 'px' : '';
             theadAttr.push('style="top:' + options.theadTop + unit + '"');
