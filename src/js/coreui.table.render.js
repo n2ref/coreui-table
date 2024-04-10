@@ -570,15 +570,6 @@ let coreuiTableRender = {
         let result = [];
 
         if (components instanceof Object) {
-            let alloyComponents = [
-                'coreui.table',
-                'coreui.layout',
-                'coreui.panel',
-                'coreui.tabs',
-                'coreui.info',
-                'coreui.chart',
-            ];
-
             if ( ! Array.isArray(components)) {
                 components = [ components ];
             }
@@ -589,7 +580,7 @@ let coreuiTableRender = {
 
                 } else if ( ! Array.isArray(components[i]) &&
                     components[i].hasOwnProperty('component') &&
-                    alloyComponents.indexOf(components[i].component) >= 0
+                    components[i].component.substring(0, 6) === 'coreui'
                 ) {
                     let name = components[i].component.split('.')[1];
 
