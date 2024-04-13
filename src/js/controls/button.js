@@ -14,7 +14,9 @@ coreuiTable.controls.button = {
         type: 'button',
         content: null,
         onClick: null,
-        attr: null
+        attr: {
+            class: 'btn btn-secondary'
+        }
     },
 
 
