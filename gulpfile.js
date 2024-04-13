@@ -10,6 +10,7 @@ const rollupBabel      = require('rollup-plugin-babel');
 const source           = require('vinyl-source-stream');
 const buffer           = require("vinyl-buffer");
 const wrapFile         = require('gulp-wrap-file');
+const sort             = require('gulp-sort');
 
 
 
@@ -120,6 +121,7 @@ gulp.task('build_js', function() {
 
 gulp.task('build_tpl', function() {
     return gulp.src(conf.tpl.src)
+        .pipe(sort())
         .pipe(htmlToJs({global: 'tpl', concat: conf.tpl.file}))
         .pipe(wrapFile({
             wrapper: function(content, file) {

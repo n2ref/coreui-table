@@ -102,10 +102,11 @@ coreuiTable.controls.button_group = {
                             $('button#btn-' + button.id, control)
                                 .click(function (event) {
                                     if (typeof button.onClick === 'function') {
-                                        button.onClick(event, that._table);
+                                        button.onClick(event, that._table, that);
 
                                     } else if (typeof button.onClick === 'string') {
-                                        (new Function(button.onClick))();
+                                        let func = new Function('event', 'table', 'control', button.onClick);
+                                        func(event, that._table, that);
                                     }
                                 });
                         }
@@ -123,10 +124,11 @@ coreuiTable.controls.button_group = {
                                     $('button#btn-dropdown-' + item.id, control)
                                         .click(function (event) {
                                             if (typeof item.onClick === 'function') {
-                                                item.onClick(event, that._table);
+                                                item.onClick(event, that._table, that);
 
                                             } else if (typeof item.onClick === 'string') {
-                                                (new Function(item.onClick))();
+                                                let func = new Function('event', 'table', 'control', item.onClick);
+                                                func(event, that._table, that);
                                             }
                                         });
                                 }

@@ -78,10 +78,11 @@ coreuiTable.controls.dropdown = {
                             $('button#btn-dropdown-' + item.id, control)
                                 .click(function (event) {
                                     if (typeof item.onClick === 'function') {
-                                        item.onClick(event, that._table);
+                                        item.onClick(event, that._table, that);
 
                                     } else if (typeof item.onClick === 'string') {
-                                        (new Function(item.onClick))();
+                                        let func = new Function('event', 'table', 'control', item.onClick);
+                                        func(event, that._table, that);
                                     }
                                 });
                         }

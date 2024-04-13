@@ -50,7 +50,8 @@ coreuiTable.controls.link = {
                         return that._options.onClick(event, that._table);
 
                     } else if (typeof that._options.onClick === 'string') {
-                        return (new Function(that._options.onClick))();
+                        let func = new Function('event', 'table', 'control', that._options.onClick);
+                        func(event, that._table, that);
                     }
                 });
         }

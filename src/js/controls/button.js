@@ -46,10 +46,11 @@ coreuiTable.controls.button = {
             $('button', control)
                 .click(function (event) {
                     if (typeof that._options.onClick === 'function') {
-                        that._options.onClick(event, that._table);
+                        that._options.onClick(event, that._table, that);
 
                     } else if (typeof that._options.onClick === 'string') {
-                        (new Function(that._options.onClick))();
+                        let func = new Function('event', 'table', 'control', that._options.onClick);
+                        func(event, that._table, that);
                     }
                 });
         }

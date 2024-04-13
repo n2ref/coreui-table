@@ -1,6 +1,6 @@
 {
   "name": "coreui-table",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "CoreUI table",
   "scripts": {
     "build_all": "gulp build_tpl && gulp build_js && gulp build_js_min && gulp build_css && gulp build_css_min && npm run test_js",
@@ -25,6 +25,7 @@
     "gulp-uglify": "3.0.*",
     "gulp-babel": "8.0.0",
     "gulp-sass": "5.1.0",
+    "gulp-sort": "2.0.0",
     "gulp-wrap-file": "0.1.2",
     "gulp-html-to-js": "0.0.7",
     "rollup-stream": "1.24.1",
@@ -50,7 +51,7 @@
     "bootstrap"
   ],
   "author": "n2ref",
-  "license": "ISC",
+  "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/n2ref/coreui-table/issues"
   },
