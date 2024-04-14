@@ -591,7 +591,7 @@ let coreuiTablePrivate = {
                 }
 
                 let columnElement = thead.find('[data-field="' + options.field + '"]');
-                columnElement.find('.coreui-table__sort').remove();
+                columnElement.find('.coreui-table__column-sort').remove();
 
                 if (sortColumn !== null) {
                     if (sortColumn.order === 'asc') {
