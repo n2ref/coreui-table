@@ -80,6 +80,10 @@
         table.table-bordered > thead > tr > td {
             border: 1px solid $coreui-table-border-color;
             background-color: $coreui-table-thead-bg;
+
+            .coreui-table__column-description {
+                cursor: help;
+            }
         }
         table > thead > tr:first-child,
         table > thead > tr:first-child > td {

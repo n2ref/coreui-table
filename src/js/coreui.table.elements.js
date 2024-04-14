@@ -108,6 +108,17 @@ let coreuiTableElements = {
 
 
     /**
+     * Получение заголовков таблицы
+     * @param {string} tableId
+     * @return {jQuery}
+     */
+    getTableThead: function (tableId) {
+
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > table > thead');
+    },
+
+
+    /**
      * Получение ячеек с сортировкой по таблице
      * @param {string} tableId
      * @return {jQuery}

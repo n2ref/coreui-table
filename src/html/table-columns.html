@@ -1,15 +1,15 @@
 <tr class="fw-medium bg-white">
   <% $.each(columns, function(key, column) { %>
   <td<%- column.attr%>>
-    <%- column.label %>
+    <span class="coreui-table__column-label"><%- column.label %></span>
     <% if (column.description) { %>
-    <small class="bi bi-question-circle text-body-secondary coreui-table__cursor_help"
+    <small class="coreui-table__column-description bi bi-question-circle text-body-secondary"
            title="<%= column.description %>"></small>
     <% } %>
     <% if (column.sortable === 'asc') { %>
-      <i class="bi bi-sort-down-alt"></i>
+      <i class="coreui-table__column-sort bi bi-sort-down-alt"></i>
     <% } else if (column.sortable === 'desc') { %>
-      <i class="bi bi-sort-down"></i>
+      <i class="coreui-table__column-sort bi bi-sort-down"></i>
     <% } %>
   </td>
   <% }); %>

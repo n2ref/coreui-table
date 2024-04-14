@@ -1,6 +1,5 @@
 
 import '../../node_modules/ejs/ejs.min';
-import coreuiTable         from './coreui.table';
 import coreuiTableTpl      from './coreui.table.templates';
 import coreuiTableUtils    from "./coreui.table.utils";
 import coreuiTableRender   from "./coreui.table.render";
@@ -14,7 +13,8 @@ let coreuiTableInstance = {
         id: null,
         class: '',
         primaryKey: 'id',
-        lang: 'ru',
+        lang: 'en',
+        langList: {},
         width: null,
         minWidth: null,
         maxWidth: null,
@@ -1020,6 +1020,22 @@ let coreuiTableInstance = {
 
 
     /**
+     * Получение данных из существующих записей
+     * @return {Array}
+     */
+    getData: function () {
+
+        let data = []
+
+        $.each(this._records, function (key, record) {
+            data.push($.extend(true, {}, record.data));
+        });
+
+        return data;
+    },
+
+
+    /**
      * Переход к предыдущей странице
      */
     prevPage: function () {
@@ -1108,23 +1124,7 @@ let coreuiTableInstance = {
      */
     getLang: function () {
 
-        let result = {};
-
-        if (this._options.lang && coreuiTable.lang.hasOwnProperty(this._options.lang)) {
-            result = coreuiTable.lang[this._options.lang];
-
-        } else {
-            let lang = coreuiTable.getSetting('lang')
-
-            if (lang && coreuiTable.lang.hasOwnProperty(lang)) {
-                result = coreuiTable.lang[lang];
-
-            } else if (Object.keys(coreuiTable.lang).length > 0) {
-                result = coreuiTable.lang[Object.keys(coreuiTable.lang)[0]];
-            }
-        }
-
-        return $.extend(true, {}, result);
+        return $.extend(true, {}, this._options.langList);
     },
 
 
@@ -1449,6 +1449,7 @@ let coreuiTableInstance = {
         if (this._sort.length >= 0) {
             if (this._isRecordsRequest) {
                 this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+                coreuiTablePrivate.setColumnsSort(this, this._sort);
 
             } else {
                 this.records = coreuiTablePrivate.sortRecordsByFields(this._records, this._sort);
@@ -1469,6 +1470,7 @@ let coreuiTableInstance = {
 
         if (this._isRecordsRequest) {
             this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+            coreuiTablePrivate.setColumnsSort(this);
 
         } else {
             this.records = coreuiTablePrivate.sortRecordsBySeq(this._records);

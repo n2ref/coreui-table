@@ -72,6 +72,9 @@
   border: 1px solid #c4c8cb;
   background-color: #FFF;
 }
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table.table-bordered > thead > tr > td .coreui-table__column-description {
+  cursor: help;
+}
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:first-child,
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:first-child > td {
   border-top: none;

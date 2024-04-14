@@ -1,7 +1,7 @@
 
 import coreuiTable from "../coreui.table";
 
-coreuiTable.lang.ru = {
+coreuiTable.lang.en = {
     "emptyRecords": "No records",
     "loading": "Loading...",
     "total": "Total",

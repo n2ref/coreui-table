@@ -1,6 +1,7 @@
 
 import coreuiTable      from "./coreui.table";
 import coreuiTableUtils from "./coreui.table.utils";
+import coreuiTableElements from "./coreui.table.elements";
 
 
 let coreuiTablePrivate = {
@@ -519,10 +520,26 @@ let coreuiTablePrivate = {
                     return -1;
                 }
 
+                let aVal = a.data[fields[i].field];
+                let bVal = b.data[fields[i].field];
 
-                let val = a.data[fields[i].field] < b.data[fields[i].field]
+                if (aVal === null || aVal === undefined || typeof aVal === "function") {
+                    aVal = '';
+
+                } else if (typeof aVal === 'object') {
+                    aVal = JSON.stringify(aVal);
+                }
+
+                if (bVal === null || bVal === undefined || typeof bVal === "function") {
+                    bVal = '';
+
+                } else if (typeof bVal === 'object') {
+                    bVal = JSON.stringify(bVal);
+                }
+
+                let val = aVal < bVal
                     ? -1
-                    : (a.data[fields[i].field] > b.data[fields[i].field] ? 1 : 0);
+                    : (aVal > bVal ? 1 : 0);
 
                 if (fields[i].order === "desc") {
                     val = val * -1;
@@ -533,6 +550,58 @@ let coreuiTablePrivate = {
                 }
             }
         })
+    },
+
+
+    /**
+     * Установка сортировки для указанных колонок
+     * @param {object} table
+     * @param {Array}  sort
+     */
+    setColumnsSort: function (table, sort) {
+
+        let thead = coreuiTableElements.getTableThead(table.getId());
+
+        $.each(table._columns, function (key, column) {
+            let options = column.getOptions();
+
+            if (options.hasOwnProperty('field') &&
+                options.hasOwnProperty('sortable') &&
+                typeof options.field === 'string' &&
+                options.sortable
+            ) {
+
+                let sortColumn = null;
+
+                if (Array.isArray(sort)) {
+                    $.each(sort, function (key, sortItem) {
+                        if (coreuiTableUtils.isObject(sortItem) &&
+                            sortItem.hasOwnProperty('field') &&
+                            sortItem.hasOwnProperty('order') &&
+                            typeof sortItem.field === 'string' &&
+                            typeof sortItem.order === 'string' &&
+                            options.field === sortItem.field
+                        ) {
+                            sortColumn = {
+                                field: sortItem.field,
+                                order: sortItem.order
+                            };
+                        }
+                    });
+                }
+
+                let columnElement = thead.find('[data-field="' + options.field + '"]');
+                columnElement.find('.coreui-table__sort').remove();
+
+                if (sortColumn !== null) {
+                    if (sortColumn.order === 'asc') {
+                        columnElement.append('<i class="coreui-table__column-sort bi bi-sort-down-alt"></i>');
+                    } else {
+                        columnElement.append('<i class="coreui-table__column-sort bi bi-sort-down"></i>');
+                    }
+                }
+            }
+        });
     },
 
 

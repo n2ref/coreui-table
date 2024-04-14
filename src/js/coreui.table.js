@@ -1,5 +1,6 @@
 
 import coreuiTableInstance from './coreui.table.instance';
+import coreuiTableUtils from "./coreui.table.utils";
 
 let coreuiTable = {
 
@@ -11,7 +12,7 @@ let coreuiTable = {
 
     _instances: {},
     _settings: {
-        lang: 'ru',
+        lang: 'en',
     },
 
     /**
@@ -21,6 +22,16 @@ let coreuiTable = {
     create: function (options) {
 
         let instance = $.extend(true, {}, coreuiTableInstance);
+
+        if ( ! options.hasOwnProperty('lang') || typeof options.lang !== 'string') {
+            options.lang = this.getSetting('lang');
+        }
+
+        let langList     = this.lang.hasOwnProperty(options.lang) ? this.lang[options.lang] : {};
+        options.langList = options.hasOwnProperty('langList') && coreuiTableUtils.isObject(options.langList)
+            ? $.extend(true, {}, langList, options.langList)
+            : langList;
+
         instance._init(options instanceof Object ? options : {});
 
         let tableId = instance.getId();
