@@ -268,7 +268,7 @@ let coreuiTableElements = {
      */
     getRowsSelectAll: function (tableId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper  > table > thead > tr > td > .coreui-table__select-all');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper  > table > thead > tr > td .coreui-table__select-all');
     },
 
 
