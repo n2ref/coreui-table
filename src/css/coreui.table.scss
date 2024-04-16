@@ -61,7 +61,7 @@
         table > thead > tr > td::after,
         table > tfoot > tr > td::before,
         table > tfoot > tr > td::after {
-            content: '';
+            content: "";
             position: absolute;
             left: 0;
             width: 100%;
@@ -145,7 +145,7 @@
             cursor: pointer;
         }
         table > tbody > tr > td.coreui-table__fixed_left::after {
-            content: '';
+            content: "";
             position: absolute;
             right: 0;
             top: 0;
@@ -154,7 +154,7 @@
             box-shadow: 1px 0 0 $coreui-table-border-color, 0 1px 0 $coreui-table-border-color;
         }
         table > tbody > tr > td.coreui-table__fixed_right::before {
-            content: '';
+            content: "";
             position: absolute;
             left: 0;
             top: 0;
@@ -163,7 +163,7 @@
             box-shadow: -1px 0 0 $coreui-table-border-color, 0 1px 0 $coreui-table-border-color;
         }
         table:not(.table-bordered) > tbody > tr > td.coreui-table__fixed_right::before {
-            content: '';
+            content: "";
             position: absolute;
             left: 0;
             top: 0;
@@ -233,6 +233,17 @@
             > tr > td {
                 background-color: $coreui-table-tfoot-bg;
             }
+        }
+    }
+
+
+    &.coreui-table__no_border {
+        .coreui-table__container {
+            border: none;
+        }
+
+        > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td::before {
+            box-shadow: none;
         }
     }
 

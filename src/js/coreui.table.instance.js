@@ -26,6 +26,7 @@ let coreuiTableInstance = {
         recordsPerPage: 25,
         theadTop: 0,
         saveState: false,
+        noBorder: false,
         noWrap: false,
         noWrapToggle: false,
         columnHeaders: true,
@@ -378,6 +379,7 @@ let coreuiTableInstance = {
         let that        = this;
         let widthSizes  = [];
         let heightSizes = [];
+        let options     = this.getOptions();
         let render      = {
             headersOut: [],
             headersIn: [],
@@ -388,39 +390,39 @@ let coreuiTableInstance = {
         this._recordsTotal = this._records.length;
 
 
-        if (this._options.width > 0) {
-            let unit = typeof this._options.width === 'number' ? 'px' : '';
-            widthSizes.push('width:' + this._options.width + unit);
+        if (options.width > 0) {
+            let unit = typeof options.width === 'number' ? 'px' : '';
+            widthSizes.push('width:' + options.width + unit);
         }
 
-        if (this._options.minWidth > 0) {
-            let unit = typeof this._options.minWidth === 'number' ? 'px' : '';
-            widthSizes.push('min-width:' + this._options.minWidth + unit);
+        if (options.minWidth > 0) {
+            let unit = typeof options.minWidth === 'number' ? 'px' : '';
+            widthSizes.push('min-width:' + options.minWidth + unit);
         }
 
-        if (this._options.maxWidth > 0) {
-            let unit = typeof this._options.maxWidth === 'number' ? 'px' : '';
-            widthSizes.push('max-width:' + this._options.maxWidth + unit);
+        if (options.maxWidth > 0) {
+            let unit = typeof options.maxWidth === 'number' ? 'px' : '';
+            widthSizes.push('max-width:' + options.maxWidth + unit);
 
-            this._options.overflow = true;
+            options.overflow = true;
         }
 
 
-        if (this._options.height > 0) {
-            let unit = typeof this._options.height === 'number' ? 'px' : '';
-            heightSizes.push('height:' + this._options.height + unit);
+        if (options.height > 0) {
+            let unit = typeof options.height === 'number' ? 'px' : '';
+            heightSizes.push('height:' + options.height + unit);
         }
 
-        if (this._options.minHeight > 0) {
-            let unit = typeof this._options.minHeight === 'number' ? 'px' : '';
-            heightSizes.push('min-height:' + this._options.minHeight + unit);
+        if (options.minHeight > 0) {
+            let unit = typeof options.minHeight === 'number' ? 'px' : '';
+            heightSizes.push('min-height:' + options.minHeight + unit);
         }
 
-        if (this._options.maxHeight > 0) {
-            let unit = typeof this._options.maxHeight === 'number' ? 'px' : '';
-            heightSizes.push('max-height:' + this._options.maxHeight + unit);
+        if (options.maxHeight > 0) {
+            let unit = typeof options.maxHeight === 'number' ? 'px' : '';
+            heightSizes.push('max-height:' + options.maxHeight + unit);
 
-            this._options.overflow = true;
+            options.overflow = true;
         }
 
 
@@ -634,19 +636,31 @@ let coreuiTableInstance = {
         // Загрузка записей
         if (this._isRecordsRequest) {
             this.on('container_show', function () {
-                that.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+                that.load(options.recordsRequest.url, options.recordsRequest.method);
             });
         }
+
+
+        let classes = [];
+
+        if (options.hasOwnProperty('noBorder') &&
+            typeof options.noBorder === 'boolean' &&
+            options.noBorder
+        ) {
+            classes.push('coreui-table__no_border');
+        }
+
 
         let tableElement     = coreuiTableRender.renderTable(this);
         let containerElement = $(
             ejs.render(coreuiTableTpl['table-wrapper.html'], {
                 id: this._id,
                 lang: this.getLang(),
+                classes: classes.length > 0 ? ' ' + classes.join(' ') : '',
                 widthSizes: widthSizes,
                 heightSizes: heightSizes,
                 recordsTotal: this._recordsTotal,
-                overflow: !! this._options.overflow,
+                overflow: !! options.overflow,
             })
         );
 

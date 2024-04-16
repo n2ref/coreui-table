@@ -212,6 +212,12 @@
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot > tr > td {
   background-color: #FFF;
 }
+.coreui-table.coreui-table__no_border .coreui-table__container {
+  border: none;
+}
+.coreui-table.coreui-table__no_border > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td::before {
+  box-shadow: none;
+}
 .coreui-table .coreui-table__control .coreui-table__page_jump_container input {
   width: 65px;
 }
