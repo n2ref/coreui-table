@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     CoreUI.table.create(tableSimple).render('table-simple1');
 
     // Table 2
-    tableSimple.columnHeaders = false;
+    tableSimple.showHeaders = false;
 
     CoreUI.table.create(tableSimple).render('table-simple2');
 
@@ -722,7 +722,7 @@ document.addEventListener('DOMContentLoaded', function () {
     CoreUI.table.create({
         class: 'table-bordered',
         maxHeight: 400,
-        columnGroupsHeader: [
+        columnsHeader: [
             [
                 { content: '', attr: { rowspan: 2, colspan: 2 }  },
                 { content: 'General Information', attr: { colspan: 7 } },
@@ -774,7 +774,7 @@ document.addEventListener('DOMContentLoaded', function () {
     CoreUI.table.create({
         class: 'table-bordered',
         maxHeight: 400,
-        columnGroupsFooter: [
+        columnsFooter: [
             [
                 { content: '',     attr: { rowspan: 2, colspan: 2 } },
                 { content: 'Name', attr: { colspan: 2 } },
@@ -827,7 +827,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Col-Row Span
     CoreUI.table.create({
         class: 'table-bordered',
-        columnHeaders: false,
+        showHeaders: false,
         columns: [
             { type: 'text',   field: 'group',  label: 'Group', width: 300 },
             { type: 'text',   field: 'count',  label: 'Count' },

@@ -144,7 +144,7 @@
         CoreUI.table.create(tableSimple).render('table-simple1');
 
         // Table 2
-        tableSimple.columnHeaders = false;
+        tableSimple.showHeaders = false;
 
         CoreUI.table.create(tableSimple).render('table-simple2');
     &lt;/script&gt;
@@ -1042,7 +1042,7 @@
         CoreUI.table.create({
             class: 'table-bordered',
             maxHeight: 400,
-            columnGroupsHeader: [
+            columnsHeader: [
                 [
                     { content: '', attr: { rowspan: 2, colspan: 2 }  },
                     { content: 'General Information', attr: { colspan: 7 } },
@@ -1108,7 +1108,7 @@
         CoreUI.table.create({
             class: 'table-bordered',
             maxHeight: 400,
-            columnGroupsFooter: [
+            columnsFooter: [
                 [
                     { content: '',     attr: { rowspan: 2, colspan: 2 } },
                     { content: 'Name', attr: { colspan: 2 } },
@@ -1175,7 +1175,7 @@
     &lt;script&gt;
         CoreUI.table.create({
             class: 'table-bordered',
-            columnHeaders: false,
+            showHeaders: false,
             columns: [
                 { type: 'text',   field: 'group',  label: 'Group', width: 300 },
                 { type: 'text',   field: 'count',  label: 'Count' },
@@ -1680,7 +1680,7 @@
                                 <td>Если активен, то на все текстовые колонки таблицы с ограничением по строкам (noWrap), будут добавлена кнопка разворачивания и сворачивания содержимого</td>
                             </tr>
                             <tr>
-                                <th>columnHeaders</th> <td>boolean</td> <td><code>true</code></td>
+                                <th>showHeaders</th> <td>boolean</td> <td><code>true</code></td>
                                 <td>Указывает, показывать ли заголовки колонок</td>
                             </tr>
                             <tr>
@@ -1735,11 +1735,11 @@
                                 <td>Массив настроек для отображения контролов в нижней части таблицы</td>
                             </tr>
                             <tr>
-                                <th>columnGroupsHeader</th> <td>array</td> <td> </td>
+                                <th>columnsHeader</th> <td>array</td> <td> </td>
                                 <td>Массив настроек для отображения дополнительных заголовков над колонками таблицы</td>
                             </tr>
                             <tr>
-                                <th>columnGroupsFooter</th> <td>array</td> <td> </td>
+                                <th>columnsFooter</th> <td>array</td> <td> </td>
                                 <td>Массив настроек для отображения дополнительных заголовков под колонками таблицы</td>
                             </tr>
                             <tr>
