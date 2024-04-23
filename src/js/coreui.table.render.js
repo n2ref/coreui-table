@@ -15,12 +15,12 @@ let coreuiTableRender = {
      */
     renderTable: function (table) {
 
-        let options            = table.getOptions();
-        let recordsElements    = [];
-        let columnGroupsHeader = '';
-        let columnGroupsFooter = '';
-        let colGroups          = [];
-        let columns            = [];
+        let options         = table.getOptions();
+        let recordsElements = [];
+        let columnsHeader   = '';
+        let columnsFooter   = '';
+        let colGroups       = [];
+        let columns         = [];
 
         // Колонки
         if (table._columns.length > 0) {
@@ -135,13 +135,13 @@ let coreuiTableRender = {
         }
 
 
-        if (options.hasOwnProperty('columnGroupsHeader') &&
-            Array.isArray(options.columnGroupsHeader) &&
-            options.columnGroupsHeader.length > 0
+        if (options.hasOwnProperty('columnsHeader') &&
+            Array.isArray(options.columnsHeader) &&
+            options.columnsHeader.length > 0
         ) {
             let rows = [];
 
-            $.each(options.columnGroupsHeader, function (key, headerRow) {
+            $.each(options.columnsHeader, function (key, headerRow) {
                 if (Array.isArray(headerRow)) {
                     let cells = [];
 
@@ -171,16 +171,16 @@ let coreuiTableRender = {
                 }
             });
 
-            columnGroupsHeader = rows.join('');
+            columnsHeader = rows.join('');
         }
 
-        if (options.hasOwnProperty('columnGroupsFooter') &&
-            Array.isArray(options.columnGroupsFooter) &&
-            options.columnGroupsFooter.length > 0
+        if (options.hasOwnProperty('columnsFooter') &&
+            Array.isArray(options.columnsFooter) &&
+            options.columnsFooter.length > 0
         ) {
             let rows = [];
 
-            $.each(options.columnGroupsFooter, function (key, footerRow) {
+            $.each(options.columnsFooter, function (key, footerRow) {
                 if (Array.isArray(footerRow)) {
                     let cells = [];
 
@@ -210,7 +210,7 @@ let coreuiTableRender = {
                 }
             });
 
-            columnGroupsFooter = rows.join('');
+            columnsFooter = rows.join('');
         }
 
 
@@ -221,7 +221,7 @@ let coreuiTableRender = {
             classes.push(options.class);
         }
 
-        if ( ! columnGroupsFooter) {
+        if ( ! columnsFooter) {
             classes.push('empty-tfoot');
         }
 
@@ -242,11 +242,11 @@ let coreuiTableRender = {
             ejs.render(coreuiTableTpl['table.html'], {
                 classes: classes.join(' '),
                 theadAttr: theadAttr.length > 0 ? theadAttr.join(' ') : '',
-                columnHeaders: options.columnHeaders,
-                columnGroupsHeader : columnGroupsHeader,
+                showHeaders: options.showHeaders,
+                columnsHeader : columnsHeader,
                 colGroups : colGroups,
                 columns : htmlColumns,
-                columnGroupsFooter : columnGroupsFooter,
+                columnsFooter : columnsFooter,
             })
         );
 

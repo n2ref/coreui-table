@@ -29,7 +29,7 @@ let coreuiTableInstance = {
         noBorder: false,
         noWrap: false,
         noWrapToggle: false,
-        columnHeaders: true,
+        showHeaders: true,
 
         recordsRequest: {
             method: 'GET',
@@ -56,13 +56,13 @@ let coreuiTableInstance = {
         sort: [],
         header: [],
         footer: [],
-        columnGroupsHeader: [],
+        columnsHeader: [],
         search: {
             labelWidth: 200,
             controls: [],
         },
         columns: [],
-        columnGroupsFooter: [],
+        columnsFooter: [],
         records: []
     },
 

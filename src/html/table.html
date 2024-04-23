@@ -5,16 +5,16 @@
         <col<% if (columnGroup.style) { %> style="<%= columnGroup.style %>"<% } %>/>
         <% }); %>
     </colgroup>
-    <% if (columnHeaders) { %>
+    <% if (showHeaders) { %>
     <thead<% if (theadAttr) { %> <%- theadAttr %>"<% } %>>
-        <%- columnGroupsHeader %>
+        <%- columnsHeader %>
         <%- columns %>
     </thead>
     <% } %>
     <tbody></tbody>
-    <% if (columnGroupsFooter != '') { %>
+    <% if (columnsFooter != '') { %>
     <tfoot>
-        <%- columnGroupsFooter %>
+        <%- columnsFooter %>
     </tfoot>
     <% } %>
 </table>

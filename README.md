@@ -26,7 +26,7 @@
         minHeight: 550,
         maxHeight: 550,
         show: {
-            columnHeaders: true,
+            showHeaders: true,
             total: true
         },
         controls: [
