@@ -1,17 +1,16 @@
 
-import coreuiTable      from "../coreui.table";
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTableUtils from "../coreui.table.utils";
-import CoreuiTableUtils from "../coreui.table.utils";
+import coreuiTable         from "../coreui.table";
+import coreuiTableTpl      from "../coreui.table.templates";
+import coreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.filters.clear = {
+coreuiTable.controls.filter_clear = {
 
     _id: null,
     _table: null,
     _options: {
         id: null,
-        type: 'clear',
+        type: 'filter_clear',
         content: null,
         attr: {
             class: 'btn btn-secondary'
@@ -56,25 +55,6 @@ coreuiTable.filters.clear = {
      */
     getId: function () {
         return this._id;
-    },
-
-
-    /**
-     * Установка значения
-     * @param {string} value
-     */
-    setValue: function (value) {
-
-    },
-
-
-    /**
-     * Получение значения
-     * @returns {null}
-     */
-    getValue: function () {
-
-        return null;
     },
 
 
@@ -134,7 +114,7 @@ coreuiTable.filters.clear = {
             attr.push(name + '="' + value + '"');
         });
 
-        return ejs.render(coreuiTableTpl['filters/clear.html'], {
+        return ejs.render(coreuiTableTpl['controls/filter_clear.html'], {
             attr: attr.length > 0 ? (' ' + attr.join(' ')) : '',
             content: options.content ? options.content : '',
         });

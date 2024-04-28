@@ -19,8 +19,8 @@ import "./controls/total";
 import "./controls/search";
 import "./controls/columns";
 import "./controls/caption";
+import "./controls/filter_clear";
 
-import "./filters/clear";
 import "./filters/text";
 import "./filters/number";
 import "./filters/date";
