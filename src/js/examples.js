@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 left: [
                     { type: "button", content: "Select all",   attr: { class: 'btn btn-secondary' }, onClick: function (event, table) { table.selectAll(); } },
                     { type: "button", content: "Unselect all", attr: { class: 'btn btn-secondary' }, onClick: function (event, table) { table.unselectAll(); } },
-                    { type: "link",   content: "Link",         attr: { class: 'btn btn-success' },   onClick: function () { return false }, href: "/link-url" }
+                    { type: "link",   content: "Link",         attr: { class: 'btn btn-success' },   onClick: function () { return false }, url: "/link-url" }
                 ],
                 right: [
                     { type: "button", content: "Show id", attr: { class: 'btn btn-secondary' },
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 right: [
                     { type: "dropdown", content: "Dropdown", attr: { class: 'btn btn-primary' }, position: 'end',
                         items: [
-                            { type: 'link',   content: 'Link', link: "#" },
+                            { type: 'link',   content: 'Link', url: "#" },
                             { type: 'button', content: 'Button 1', onClick: function (event, table) { console.log(1) } },
                             { type: 'divider' },
                             { type: 'button', content: 'Button 2', onClick: function (event, table) { console.log(2) } },
@@ -142,11 +142,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     { type: "button_group", attr: { class: 'btn-group' },
                         buttons: [
-                            { type: "link",     content: "Link",     attr: { class: 'btn btn-outline-secondary' }, link: "#" },
+                            { type: "link",     content: "Link",     attr: { class: 'btn btn-outline-secondary' }, url: "#" },
                             { type: "button",   content: "Button",   attr: { class: 'btn btn-outline-secondary' }, onClick: function (event, table) { console.log(1) } },
                             { type: "dropdown", content: "Dropdown", attr: { class: 'btn btn-outline-primary' }, position: 'end',
                                 items: [
-                                    { type: 'link',   content: 'Link', link: "#" },
+                                    { type: 'link',   content: 'Link', url: "#" },
                                     { type: 'button', content: 'Button 1', onClick: function (event, table) { console.log(2) } },
                                     { type: 'divider' },
                                     { type: 'button', content: 'Button 2', onClick: function (event, table) { console.log(3) } },
@@ -513,7 +513,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     position: 'end',
                     items: [
                         { type: 'header', content: 'Header text' },
-                        { type: 'link',   content: 'Link', link: "#" },
+                        { type: 'link',   content: 'Link', url: "#" },
                         {
                             type: 'button',
                             content: 'Button',
@@ -553,9 +553,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 menu: {
                     attr: { class: 'btn btn-sm rounded-1' },
                     items: [
-                        { type: 'link', content: 'Link 1', link: "#" },
-                        { type: 'link', content: 'Link 2', link: "#" },
-                        { type: 'link', content: 'Link 3', link: "#" },
+                        { type: 'link', content: 'Link 1', url: "#" },
+                        { type: 'link', content: 'Link 2', url: "#" },
+                        { type: 'link', content: 'Link 3', url: "#" },
                     ]
                 }
             },
@@ -590,9 +590,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     attr: { class: 'btn btn-sm rounded-1' },
                     position: 'start',
                     items: [
-                        { type: 'link', content: 'Link 1', link: "#" },
-                        { type: 'link', content: 'Link 2', link: "#" },
-                        { type: 'link', content: 'Link 3', link: "#" },
+                        { type: 'link', content: 'Link 1', url: "#" },
+                        { type: 'link', content: 'Link 2', url: "#" },
+                        { type: 'link', content: 'Link 3', url: "#" },
                     ]
                 }
             },
@@ -628,9 +628,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     attr: { class: 'btn btn-sm btn-secondary dropdown-toggle' },
                     position: 'end',
                     items: [
-                        { type: 'link', content: 'Link 1', link: "#" },
-                        { type: 'link', content: 'Link 2', link: "#" },
-                        { type: 'link', content: 'Link 3', link: "#" },
+                        { type: 'link', content: 'Link 1', url: "#" },
+                        { type: 'link', content: 'Link 2', url: "#" },
+                        { type: 'link', content: 'Link 3', url: "#" },
                     ]
                 }
             },
@@ -1141,7 +1141,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     },
                     { type: 'filter:switch', field: 'active', label: 'Active', valueY: 'Y'},
-                    { type: 'filter:clear',  content: '<i class="bi bi-backspace"></i> Clear', attr: { class: "btn btn-secondary" } },
+                    { type: 'filter_clear',  content: '<i class="bi bi-backspace"></i> Clear', attr: { class: "btn btn-secondary" } },
                 ]
             }
         ],
