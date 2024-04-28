@@ -10,6 +10,7 @@ coreuiTable.controls.total = {
     _id: null,
     _table: null,
     _options: {
+        type: 'total',
         attr: {
             class: 'px-1'
         }

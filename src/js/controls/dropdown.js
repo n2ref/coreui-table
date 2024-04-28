@@ -120,12 +120,12 @@ coreuiTable.controls.dropdown = {
                     if (item.type === 'link') {
                         if (item.hasOwnProperty('link') &&
                             item.hasOwnProperty('content') &&
-                            typeof item.link === 'string' &&
+                            typeof item.url === 'string' &&
                             typeof item.content === 'string'
                         ) {
                             items.push({
                                 type: 'link',
-                                link: item.link,
+                                url: item.url,
                                 content: item.content,
                             });
                         }

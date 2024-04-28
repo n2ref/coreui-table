@@ -22,8 +22,8 @@ coreuiTable.columns.text = {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {object} table
+     * @param {object} options
      */
     init: function (table, options) {
 

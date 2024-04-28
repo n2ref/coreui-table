@@ -40,8 +40,7 @@ let coreuiTableInstance = {
                 start: 'start',
                 end: 'end',
                 sort: 'sort',
-                search: 'search',
-                filter: 'filter',
+                search: 'search'
             },
         },
 
@@ -781,6 +780,12 @@ let coreuiTableInstance = {
         let searchData = this.getSearchData();
         let filterData = this.getFilterData();
 
+        if (filterData.length > 0) {
+            $.each(filterData, function (key, filter) {
+                searchData.push(filter);
+            });
+        }
+
         if (searchData.length > 0) {
             let paramSearch = coreuiTableUtils.isObject(this._options.recordsRequest.params) &&
                               this._options.recordsRequest.params.hasOwnProperty('search') &&
@@ -789,16 +794,6 @@ let coreuiTableInstance = {
                 : 'search';
 
             params[paramSearch] = searchData;
-        }
-
-        if (filterData.length > 0) {
-            let paramFilters = coreuiTableUtils.isObject(this._options.recordsRequest.params) &&
-                              this._options.recordsRequest.params.hasOwnProperty('filter') &&
-                              typeof this._options.recordsRequest.params.filter === 'string'
-                ? this._options.recordsRequest.params.filter
-                : 'filter';
-
-            params[paramFilters] = filterData;
         }
 
         if (this._sort.length > 0) {

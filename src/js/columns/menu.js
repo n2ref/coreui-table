@@ -2,7 +2,6 @@ import coreuiTable      from "../coreui.table";
 import coreuiTableUtils from "../coreui.table.utils";
 import coreuiTableTpl   from "../coreui.table.templates";
 import CoreuiTableUtils from "../coreui.table.utils";
-import coreuiTableElements from "../coreui.table.elements";
 
 coreuiTable.columns.menu = {
 

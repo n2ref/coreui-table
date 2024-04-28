@@ -13,7 +13,6 @@ coreuiTable.columns.switch = {
         disabled: false,
         width: 5,
         valueY: 'Y',
-        valueN: 'N',
         attr: { class: 'coreui-table__switch_container' },
         attrHeader: { },
         onChange: null

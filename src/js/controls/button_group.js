@@ -13,9 +13,7 @@ coreuiTable.controls.button_group = {
     _options: {
         id: null,
         type: 'button_group',
-        content: null,
-        onClick: null,
-        attr: null
+        buttons: null
     },
     _link: {
         attr: {
@@ -191,7 +189,7 @@ coreuiTable.controls.button_group = {
 
                             buttons.push({
                                 type: 'link',
-                                link: button.link,
+                                url: button.url,
                                 content: button.content,
                                 attr: attributes
                             });
@@ -227,7 +225,6 @@ coreuiTable.controls.button_group = {
 
                             buttons.push({
                                 type: 'button',
-                                link: button.link,
                                 id: button.id,
                                 content: button.content,
                                 attr: attributes
@@ -247,12 +244,12 @@ coreuiTable.controls.button_group = {
                                     if (item.type === 'link') {
                                         if (item.hasOwnProperty('link') &&
                                             item.hasOwnProperty('content') &&
-                                            typeof item.link === 'string' &&
+                                            typeof item.url === 'string' &&
                                             typeof item.content === 'string'
                                         ) {
                                             items.push({
                                                 type: 'link',
-                                                link: item.link,
+                                                url: item.url,
                                                 content: item.content,
                                             });
                                         }

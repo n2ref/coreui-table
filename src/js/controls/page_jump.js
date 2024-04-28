@@ -83,10 +83,7 @@ coreuiTable.controls.page_jump = {
         }
 
         return ejs.render(coreuiTableTpl['controls/page-jump.html'], {
-            recordsPerPageList: this._options.list,
-            recordsPerPage: this._table._recordsPerPage,
-            attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
-            lang: this._table.getLang(),
+            attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : ''
         });
     }
 }

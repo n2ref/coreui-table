@@ -12,7 +12,7 @@ coreuiTable.controls.link = {
     _options: {
         id: null,
         type: 'link',
-        href: null,
+        url: null,
         content: null,
         onClick: null,
         attr: null
@@ -82,7 +82,7 @@ coreuiTable.controls.link = {
         }
 
         return ejs.render(coreuiTableTpl['controls/link.html'], {
-            href: this._options.href,
+            url: this._options.url,
             content: this._options.content,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });
