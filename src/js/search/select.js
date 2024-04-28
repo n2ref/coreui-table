@@ -113,15 +113,16 @@ coreuiTable.search.select = {
 
     /**
      * Получение значения
-     * @returns {Array|null}
+     * @returns {Array|string|null}
      */
     getValue: function () {
 
         let control = coreuiTableElements.getSearchControl(this._table.getId(), this._id);
 
         if (control[0]) {
-            let options = $('select option:selected', control);
-            let items   = [];
+            let isMultiple = !! $('select', control).attr('multiple');
+            let options    = $('select option:selected', control);
+            let items      = [];
 
             $.each(options, function (key, option) {
                 let value = $(option).attr('value');
@@ -133,7 +134,9 @@ coreuiTable.search.select = {
                 }
             });
 
-            return items.length > 0 ? items : null;
+            return items.length > 0
+                ? (isMultiple ? items : items[0])
+                : null;
 
         } else {
             return this._value;

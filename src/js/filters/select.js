@@ -17,6 +17,7 @@ coreuiTable.filters.select = {
         field: null,
         label: null,
         width: null,
+        value: null,
         attr: {
             class: 'form-select d-inline-block'
         },
@@ -26,8 +27,8 @@ coreuiTable.filters.select = {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {object} table
+     * @param {object} options
      */
     init: function (table, options) {
 
@@ -36,6 +37,10 @@ coreuiTable.filters.select = {
         this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
             ? this._options.id
             : coreuiTableUtils.hashCode();
+
+        if (this._options.value !== null) {
+            this.setValue(this._options.value);
+        }
     },
 
 
@@ -108,15 +113,16 @@ coreuiTable.filters.select = {
 
     /**
      * Получение значения
-     * @returns {Array|null}
+     * @returns {Array|string|null}
      */
     getValue: function () {
 
         let control = coreuiTableElements.getControl(this._table.getId(), this._id);
 
         if (control[0]) {
-            let options = $('select option:checked', control);
-            let items   = [];
+            let isMultiple = !! $('select', control).attr('multiple');
+            let options    = $('select option:checked', control);
+            let items      = [];
 
             $.each(options, function (key, option) {
                 let value = $(option).attr('value');
@@ -128,7 +134,9 @@ coreuiTable.filters.select = {
                 }
             });
 
-            return items.length > 0 ? items : null;
+            return items.length > 0
+                ? (isMultiple ? items : items[0])
+                : null;
 
         } else {
             return null;
