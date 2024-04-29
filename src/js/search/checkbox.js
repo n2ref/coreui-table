@@ -22,8 +22,8 @@ coreuiTable.search.checkbox = {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {object} table
+     * @param {object} options
      */
     init: function (table, options) {
 
@@ -157,23 +157,35 @@ coreuiTable.search.checkbox = {
         let options = [];
 
         $.each(this._options.options, function (key, option) {
-            if ( ! coreuiTableUtils.isObject(option) ||
-                ! option.hasOwnProperty('value') ||
-                ['string', 'numeric'].indexOf(typeof option.value) === -1
-            ) {
-                return;
+
+            if (['string', 'numeric'].indexOf(typeof option) >= 0) {
+                let checked = Array.isArray(that._value) ? that._value.indexOf(key) >= 0 : false;
+
+                options.push({
+                    text:    option,
+                    value:   key,
+                    checked: checked,
+                });
+
+            } else {
+                if ( ! coreuiTableUtils.isObject(option) ||
+                    ! option.hasOwnProperty('value') ||
+                    ['string', 'numeric'].indexOf(typeof option.value) === -1
+                ) {
+                    return;
+                }
+
+                let checked = Array.isArray(that._value) ? that._value.indexOf(option.value) >= 0 : false;
+                let text    = option.hasOwnProperty('text')
+                    ? option.text
+                    : option.value;
+
+                options.push({
+                    text:    text,
+                    value:   option.value,
+                    checked: checked,
+                });
             }
-
-            let checked = Array.isArray(that._value) ? that._value.indexOf(option.value) >= 0 : false;
-            let text    = option.hasOwnProperty('text')
-                ? option.text
-                : option.value;
-
-            options.push({
-                text:    text,
-                value:   option.value,
-                checked: checked,
-            });
         });
 
         return ejs.render(coreuiTableTpl['search/checkbox.html'], {

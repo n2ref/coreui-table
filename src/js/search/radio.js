@@ -139,27 +139,43 @@ coreuiTable.search.radio = {
         let options    = [];
 
         $.each(this._options.options, function (key, option) {
-            if ( ! coreuiTableUtils.isObject(option) ||
-                 ! option.hasOwnProperty('value') ||
-                ['string', 'numeric'].indexOf(typeof option.value) === -1
-            ) {
-                return;
+
+            if (['string', 'numeric'].indexOf(typeof option) >= 0) {
+                let checked = key == that._value;
+
+                if (checked) {
+                    checkedAll = false;
+                }
+
+                options.push({
+                    text:    option,
+                    value:   key,
+                    checked: checked,
+                });
+
+            } else {
+                if ( ! coreuiTableUtils.isObject(option) ||
+                    ! option.hasOwnProperty('value') ||
+                    ['string', 'numeric'].indexOf(typeof option.value) === -1
+                ) {
+                    return;
+                }
+
+                let checked = option.value == that._value;
+                let text    = option.hasOwnProperty('text')
+                    ? option.text
+                    : option.value;
+
+                if (checked) {
+                    checkedAll = false;
+                }
+
+                options.push({
+                    text:    text,
+                    value:   option.value,
+                    checked: checked,
+                });
             }
-
-            let checked = option.value == that._value;
-            let text    = option.hasOwnProperty('text')
-                ? option.text
-                : option.value;
-
-            if (checked) {
-                checkedAll = false;
-            }
-
-            options.push({
-                text:    text,
-                value:   option.value,
-                checked: checked,
-            });
         });
 
         return ejs.render(coreuiTableTpl['search/radio.html'], {
