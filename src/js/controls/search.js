@@ -44,7 +44,7 @@ coreuiTable.controls.search = {
         if ( ! this._options.btn.hasOwnProperty('content') ||
             typeof this._options.btn.content !== 'string'
         ) {
-            this._options.btn.content = table.getLang().search
+            this._options.btn.content = '<i class="bi bi-search"></i> ' + table.getLang().search
         }
 
 
