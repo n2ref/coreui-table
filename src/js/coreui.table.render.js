@@ -109,10 +109,28 @@ let coreuiTableRender = {
                     style: style.length > 0 ? style.join(';') : ''
                 });
 
+
+
+                let label       = '';
+                let description = '';
+
+                if (columnOptions.hasOwnProperty('label') &&
+                    typeof columnOptions.label === 'string' &&
+                    ( ! columnOptions.hasOwnProperty('showLabel') || columnOptions.showLabel)
+                ) {
+                    label = columnOptions.label;
+                }
+
+                if (columnOptions.hasOwnProperty('description') &&
+                    typeof columnOptions.label === 'string'
+                ) {
+                    description = columnOptions.description;
+                }
+
                 columns.push({
                     attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
-                    label: columnOptions.hasOwnProperty('label') ? columnOptions.label : "",
-                    description: columnOptions.hasOwnProperty('description') ? columnOptions.description : '',
+                    label: label,
+                    description: description,
                     sortable: sortable
                 });
             });
@@ -120,18 +138,15 @@ let coreuiTableRender = {
 
 
         // Строки
-        if ( ! table._isRecordsRequest) {
+        if (table._records.length > 0) {
+            table._recordsTotal  = table.getRecordsCount();
+            table._recordsNumber = table._page === 1
+                ? 1
+                : ((table._page - 1) * table._recordsPerPage) + 1;
 
-            if (table._records.length > 0) {
-                table._recordsTotal  = table.getRecordsCount();
-                table._recordsNumber = table._page === 1
-                    ? 1
-                    : ((table._page - 1) * table._recordsPerPage) + 1;
-
-                recordsElements = coreuiTableRender.renderRecords(table, table._records);
-            } else {
-                recordsElements = coreuiTableRender.renderRecords(table, []);
-            }
+            recordsElements = coreuiTableRender.renderRecords(table, table._records);
+        } else {
+            recordsElements = coreuiTableRender.renderRecords(table, []);
         }
 
 

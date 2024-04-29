@@ -9,6 +9,7 @@ coreuiTable.columns.text = {
         field: null,
         label: null,
         show: true,
+        showLabel: true,
         width: null,
         minWidth: null,
         maxWidth: null,
