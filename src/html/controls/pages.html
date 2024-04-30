@@ -3,7 +3,7 @@
     <ul <%- attr %>>
         <% if (showPrev) { %>
             <li class="page-item coreui-table__page_prev <% if ( ! isActivePrev) { %> disabled<% } %>">
-                <button type="button" class="page-link text-secondary">
+                <button type="button" class="page-link">
                     <i class="bi bi-chevron-left"></i>
                 </button>
             </li>
@@ -11,7 +11,7 @@
 
         <% if (showPageFirst) { %>
             <li class="page-item">
-                <button type="button" class="page-link text-secondary coreui-table__page">
+                <button type="button" class="page-link coreui-table__page">
                     1
                 </button>
             </li>
@@ -19,19 +19,19 @@
 
         <% if (showDividerStart) { %>
             <li class="page-item disabled">
-                <span class="page-link text-secondary px-1">...</span>
+                <span class="page-link px-1">...</span>
             </li>
         <% } %>
 
 
         <% $.each(pages, function(key, page) { %>
             <% if (page == currentPage) { %>
-                <li class="page-item">
+                <li class="page-item active">
                     <span class="page-link"><%= page %></span>
                 </li>
             <% } else { %>
                 <li class="page-item">
-                    <button type="button" class="page-link text-secondary coreui-table__page">
+                    <button type="button" class="page-link coreui-table__page">
                         <%= page %>
                     </button>
                 </li>
@@ -41,13 +41,13 @@
 
         <% if (showDividerEnd) { %>
             <li class="page-item disabled">
-                <span class="page-link text-secondary px-1">...</span>
+                <span class="page-link px-1">...</span>
             </li>
         <% } %>
 
         <% if (showPageLast) { %>
             <li class="page-item">
-                <button type="button" class="page-link text-secondary coreui-table__page">
+                <button type="button" class="page-link coreui-table__page">
                     <%= pagesTotal %>
                 </button>
             </li>
@@ -55,7 +55,7 @@
 
         <% if (showNext) { %>
             <li class="page-item coreui-table__page_next<% if ( ! isActiveNext) { %> disabled<% } %>">
-                <button type="button" class="page-link text-secondary">
+                <button type="button" class="page-link">
                     <i class="bi bi-chevron-right"></i>
                 </button>
             </li>
