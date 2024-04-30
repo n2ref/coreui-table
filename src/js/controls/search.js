@@ -16,7 +16,7 @@ coreuiTable.controls.search = {
         },
         btnClear: {
             content: "<i class=\"bi bi-x\"></i>",
-            attr: { class: 'btn btn-outline-secondary' }
+            attr: { class: 'btn btn-secondary' }
         },
         btnComplete: {
             attr: { class: 'btn btn-primary' },
