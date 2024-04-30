@@ -35,7 +35,7 @@ coreuiTable.controls.filter_clear = {
         if ( ! this._options.hasOwnProperty('content') ||
             typeof this._options.content !== 'string'
         ) {
-            this._options.content = table.getLang().clear
+            this._options.content = '<i class="bi bi-x"></i> ' + table.getLang().clear
         }
     },
 
