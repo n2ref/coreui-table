@@ -1,10 +1,12 @@
 
 .coreui-table {
     > .coreui-table__container {
-        --bs-bg-opacity: 1;
         background-color: $coreui-table-tbody-bg;
         border: var(--bs-border-width) solid $coreui-table-border-color;
         border-radius: $coreui-table-border-radius;
+    }
+    > .coreui-table__container.fixed-columns {
+        --bs-bg-opacity: 1;
     }
 
     > .coreui-table__container > .coreui-table__header {
@@ -16,6 +18,14 @@
 
     > .coreui-table__container > .coreui-table__wrapper {
         border-radius: $coreui-table-border-radius;
+    }
+
+    > .coreui-table__container > .coreui-table__wrapper.table-scroll-shadow {
+        box-shadow: inset -15px 0px 15px -15px rgba(0,0,0,.3), inset 16px 0 15px -15px rgba(0,0,0,.3);
+
+        > table {
+            box-shadow: inset -15px 0 15px 0 #fff, inset 15px 0 15px 0 #fff;
+        }
     }
 
     > .coreui-table__container > .coreui-table__wrapper > {

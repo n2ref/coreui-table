@@ -339,8 +339,9 @@ let coreuiTableElements = {
      */
     fixedColsLeft: function (tableId) {
 
-        let tableWrapper = '#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper';
-        let colOffset    = 0;
+        let tableContainer = '#coreui-table-' + tableId + ' > .coreui-table__container';
+        let tableWrapper   = tableContainer + ' > .coreui-table__wrapper';
+        let colOffset      = 0;
 
         $(tableWrapper + ' > table > thead > tr:last-child > td.coreui-table__fixed_left').each(function () {
             let index = $(this).index() + 1;
@@ -354,6 +355,10 @@ let coreuiTableElements = {
 
             colOffset += $(this).outerWidth();
         });
+
+        if (colOffset > 0) {
+            $(tableContainer).addClass('fixed-columns');
+        }
     },
 
 
@@ -363,8 +368,9 @@ let coreuiTableElements = {
      */
     fixedColsRight: function (tableId) {
 
-        let tableWrapper = '#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper';
-        let colOffset    = 0;
+        let tableContainer = '#coreui-table-' + tableId + ' > .coreui-table__container';
+        let tableWrapper   = tableContainer + ' > .coreui-table__wrapper';
+        let colOffset      = 0;
 
         $($(tableWrapper + ' > table > thead > tr:last-child > td.coreui-table__fixed_right').get().reverse()).each(function () {
             let index  = $(this).index() + 1;
@@ -378,6 +384,10 @@ let coreuiTableElements = {
 
             colOffset += $(this).outerWidth();
         });
+
+        if (colOffset > 0) {
+            $(tableContainer).addClass('fixed-columns');
+        }
     }
 }
 
