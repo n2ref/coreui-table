@@ -30,6 +30,7 @@ let coreuiTableInstance = {
         noWrap: false,
         noWrapToggle: false,
         showHeaders: true,
+        showScrollShadow: false,
 
         recordsRequest: {
             method: 'GET',
@@ -648,6 +649,14 @@ let coreuiTableInstance = {
             options.noBorder
         ) {
             classes.push('coreui-table__no_border');
+        }
+
+
+        if (options.hasOwnProperty('showScrollShadow') &&
+            typeof options.showScrollShadow === 'boolean' &&
+            options.showScrollShadow
+        ) {
+            classes.push('table-scroll-shadow');
         }
 
 

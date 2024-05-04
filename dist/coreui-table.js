@@ -2458,6 +2458,7 @@
       noWrap: false,
       noWrapToggle: false,
       showHeaders: true,
+      showScrollShadow: false,
       recordsRequest: {
         method: 'GET',
         url: null,
@@ -2922,6 +2923,9 @@
       var classes = [];
       if (options.hasOwnProperty('noBorder') && typeof options.noBorder === 'boolean' && options.noBorder) {
         classes.push('coreui-table__no_border');
+      }
+      if (options.hasOwnProperty('showScrollShadow') && typeof options.showScrollShadow === 'boolean' && options.showScrollShadow) {
+        classes.push('table-scroll-shadow');
       }
       var tableElement = coreuiTableRender.renderTable(this);
       var containerElement = $(ejs.render(tpl['table-wrapper.html'], {
