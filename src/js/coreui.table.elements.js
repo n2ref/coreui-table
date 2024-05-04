@@ -1,7 +1,5 @@
-import coreuiTableRender from "./coreui.table.render";
-import coreuiTablePrivate from "./coreui.table.private";
-import coreuiTableTemplates from "./coreui.table.templates";
-import coreuiTableTpl from "./coreui.table.templates";
+
+import coreuiTableRender  from "./coreui.table.render";
 
 
 let coreuiTableElements = {
@@ -179,10 +177,6 @@ let coreuiTableElements = {
         recordElement.after(expandRecord);
         recordElement.next().show('fast');
         recordElement.addClass('record-expanded');
-
-        let recordIndex = recordElement.data('record-index');
-
-        coreuiTablePrivate._trigger(table, 'record_expand_show', [recordIndex]);
     },
 
 

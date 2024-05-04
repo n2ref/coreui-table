@@ -1,8 +1,8 @@
 
-import '../../../node_modules/ejs/ejs.min';
-import coreuiTable      from "../coreui.table";
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTableUtils from "../coreui.table.utils";
+import 'ejs/ejs.min';
+import coreuiTable         from "../coreui.table";
+import coreuiTableTpl      from "../coreui.table.templates";
+import coreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
 
 coreuiTable.filters.date_month = {

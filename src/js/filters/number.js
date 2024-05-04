@@ -1,5 +1,5 @@
 
-import '../../../node_modules/ejs/ejs.min';
+import 'ejs/ejs.min';
 import coreuiTable      from "../coreui.table";
 import coreuiTableTpl   from "../coreui.table.templates";
 import coreuiTableUtils from "../coreui.table.utils";

@@ -1,5 +1,5 @@
 
-import '../../node_modules/ejs/ejs.min';
+import 'ejs/ejs.min';
 import coreuiTableTpl      from './coreui.table.templates';
 import coreuiTableUtils    from "./coreui.table.utils";
 import coreuiTableRender   from "./coreui.table.render";
@@ -90,10 +90,11 @@ let coreuiTableInstance = {
 
     /**
      * Инициализация
+     * @param {object} tableWrapper
      * @param {object} options
      * @private
      */
-    _init: function (options) {
+    _init: function (tableWrapper, options) {
 
         this._options = $.extend(true, {}, this._options, options);
         this._events  = {};
@@ -133,7 +134,7 @@ let coreuiTableInstance = {
             Array.isArray(this._options.columns) &&
             this._options.columns.length > 0
         ) {
-            coreuiTablePrivate.initColumns(this, this._options.columns);
+            coreuiTablePrivate.initColumns(tableWrapper, this, this._options.columns);
         }
 
 
@@ -143,7 +144,7 @@ let coreuiTableInstance = {
             Array.isArray(this._options.search.controls) &&
             this._options.search.controls.length > 0
         ) {
-            coreuiTablePrivate.initSearch(this, this._options.search.controls);
+            coreuiTablePrivate.initSearch(tableWrapper, this, this._options.search.controls);
         }
 
 
@@ -152,14 +153,14 @@ let coreuiTableInstance = {
             Array.isArray(this._options.header) &&
             this._options.header.length > 0
         ) {
-            coreuiTablePrivate.initControls(this, this._options.header, 'header');
+            coreuiTablePrivate.initControls(tableWrapper, this, this._options.header, 'header');
         }
 
         if (this._options.hasOwnProperty('footer') &&
             Array.isArray(this._options.footer) &&
             this._options.footer.length > 0
         ) {
-            coreuiTablePrivate.initControls(this, this._options.footer, 'footer');
+            coreuiTablePrivate.initControls(tableWrapper, this, this._options.footer, 'footer');
         }
 
 
@@ -1693,6 +1694,8 @@ let coreuiTableInstance = {
                 coreuiTablePrivate._trigger(this, 'record_expand_show', [recordIndex]);
 
             } else {
+                let recordIndex = recordElement.data('record-index');
+
                 if (typeof content === 'function') {
                     let callbackResult = content();
 
@@ -1702,17 +1705,21 @@ let coreuiTableInstance = {
                         callbackResult
                             .then(function (result) {
                                 coreuiTableElements.addExpandRow(that, recordElement, result);
+                                coreuiTablePrivate._trigger(this, 'record_expand_show', [recordIndex]);
 
                             }).catch(function () {
                                 coreuiTableElements.addExpandRow(that, recordElement, '');
+                                coreuiTablePrivate._trigger(this, 'record_expand_show', [recordIndex]);
                             });
 
                     } else{
                         coreuiTableElements.addExpandRow(this, recordElement, callbackResult);
+                        coreuiTablePrivate._trigger(this, 'record_expand_show', [recordIndex]);
                     }
 
                 } else {
                     coreuiTableElements.addExpandRow(this, recordElement, content);
+                    coreuiTablePrivate._trigger(this, 'record_expand_show', [recordIndex]);
                 }
             }
         }

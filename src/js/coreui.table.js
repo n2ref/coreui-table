@@ -1,6 +1,6 @@
 
 import coreuiTableInstance from './coreui.table.instance';
-import coreuiTableUtils from "./coreui.table.utils";
+import coreuiTableUtils    from "./coreui.table.utils";
 
 let coreuiTable = {
 
@@ -17,7 +17,7 @@ let coreuiTable = {
 
     /**
      * @param {object} options
-     * @returns {CoreUI.table.instance}
+     * @returns {object}
      */
     create: function (options) {
 
@@ -32,7 +32,7 @@ let coreuiTable = {
             ? $.extend(true, {}, langList, options.langList)
             : langList;
 
-        instance._init(options instanceof Object ? options : {});
+        instance._init(this, options instanceof Object ? options : {});
 
         let tableId = instance.getId();
         this._instances[tableId] = instance;
@@ -43,7 +43,7 @@ let coreuiTable = {
 
     /**
      * @param {string} id
-     * @returns {CoreUI.table.instance|null}
+     * @returns {object|null}
      */
     get: function (id) {
 

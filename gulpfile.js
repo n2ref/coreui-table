@@ -4,9 +4,10 @@ const sourcemaps       = require('gulp-sourcemaps');
 const uglify           = require('gulp-uglify');
 const htmlToJs         = require('gulp-html-to-js');
 const sass             = require('gulp-sass')(require('sass'));
-const rollup           = require('rollup-stream');
+const rollup           = require('@rollup/stream');
 const rollupSourcemaps = require('rollup-plugin-sourcemaps');
-const rollupBabel      = require('rollup-plugin-babel');
+const rollupBabel      = require('@rollup/plugin-babel');
+const nodeResolve      = require('@rollup/plugin-node-resolve');
 const source           = require('vinyl-source-stream');
 const buffer           = require("vinyl-buffer");
 const wrapFile         = require('gulp-wrap-file');
@@ -68,17 +69,43 @@ gulp.task('build_css', function(){
         .pipe(gulp.dest(conf.dist));
 });
 
+
+
+gulp.task('build_js_min_fast', function() {
+    return rollup({
+        input: conf.js.main,
+        output: {
+            sourcemap: false,
+            format: 'umd',
+            name: "CoreUI.table"
+        },
+        context: "window",
+        plugins: [
+            nodeResolve(),
+            rollupSourcemaps(),
+            rollupBabel({babelHelpers: 'bundled'}),
+        ]
+    })
+        .pipe(source(conf.js.fileMin))
+        .pipe(buffer())
+        .pipe(gulp.dest(conf.dist));
+});
+
+
 gulp.task('build_js_min', function() {
     return rollup({
         input: conf.js.main,
-        sourcemap: false,
-        format: 'umd',
-        name: "CoreUI.table",
-        plugins: [
-            rollupSourcemaps(),
-            rollupBabel()
-        ],
+        output: {
+            sourcemap: false,
+            format: 'umd',
+            name: "CoreUI.table"
+        },
         context: "window",
+        plugins: [
+            nodeResolve(),
+            rollupSourcemaps(),
+            rollupBabel({babelHelpers: 'bundled'}),
+        ]
     })
         .pipe(source(conf.js.fileMin))
         .pipe(buffer())
@@ -88,30 +115,19 @@ gulp.task('build_js_min', function() {
         .pipe(gulp.dest(conf.dist));
 });
 
-gulp.task('build_js_min_fast', function() {
-    return rollup({
-        input: conf.js.main,
-        sourcemap: true,
-        format: 'umd',
-        name: "CoreUI.table",
-        plugins: [
-            rollupSourcemaps(),
-        ],
-        context: "window"
-    })
-        .pipe(source(conf.js.fileMin))
-        .pipe(buffer())
-        .pipe(gulp.dest(conf.dist));
-});
-
 gulp.task('build_js', function() {
     return rollup({
         input: conf.js.main,
-        sourcemap: true,
-        format: 'umd',
-        name: "CoreUI.table",
-        plugins: [rollupBabel()],
-        context: "window"
+        output: {
+            sourcemap: false,
+            format: 'umd',
+            name: "CoreUI.table"
+        },
+        context: "window",
+        plugins: [
+            nodeResolve(),
+            rollupBabel({babelHelpers: 'bundled'}),
+        ]
     })
         .pipe(source(conf.js.file))
         .pipe(buffer())

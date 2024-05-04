@@ -1,6 +1,5 @@
 
-import coreuiTable      from "./coreui.table";
-import coreuiTableUtils from "./coreui.table.utils";
+import coreuiTableUtils    from "./coreui.table.utils";
 import coreuiTableElements from "./coreui.table.elements";
 
 
@@ -8,15 +7,16 @@ let coreuiTablePrivate = {
 
     /**
      * Инициализация колонок
-     * @param {Object} table
+     * @param {object} tableWrapper
+     * @param {object} table
      * @param {Array} columns
      * @private
      */
-    initColumns(table, columns) {
+    initColumns(tableWrapper, table, columns) {
 
         $.each(columns, function (key, column) {
             if (typeof column.type === 'undefined' ||
-                ! coreuiTable.columns.hasOwnProperty(column.type)
+                ! tableWrapper.columns.hasOwnProperty(column.type)
             ) {
                 column.type = 'text';
             }
@@ -29,7 +29,7 @@ let coreuiTablePrivate = {
                 table._options.overflow = true;
             }
 
-            let columnInstance = $.extend(true, {}, coreuiTable.columns[column.type]);
+            let columnInstance = $.extend(true, {}, tableWrapper.columns[column.type]);
             columnInstance.init(table, column);
             table._columns.push(columnInstance);
 
@@ -42,11 +42,12 @@ let coreuiTablePrivate = {
 
     /**
      * Инициализация поисковых полей
+     * @param {object} tableWrapper
      * @param {Object} table
      * @param {Array}  searchControls
      * @private
      */
-    initSearch: function (table, searchControls) {
+    initSearch: function (tableWrapper, table, searchControls) {
 
         let options      = table.getOptions();
         let searchValues = options.saveState && options.id
@@ -60,7 +61,7 @@ let coreuiTablePrivate = {
 
             if ( ! control.hasOwnProperty('type') ||
                 typeof control.type !== 'string' ||
-                ! coreuiTable.search.hasOwnProperty(control.type)
+                ! tableWrapper.search.hasOwnProperty(control.type)
             ) {
                 control.type = 'text';
             }
@@ -83,7 +84,7 @@ let coreuiTablePrivate = {
                 }
             }
 
-            let controlInstance = $.extend(true, {}, coreuiTable.search[control.type]);
+            let controlInstance = $.extend(true, {}, tableWrapper.search[control.type]);
             controlInstance.init(table, control);
             table._search.push(controlInstance);
         });
@@ -92,12 +93,13 @@ let coreuiTablePrivate = {
 
     /**
      * Инициализация контролов и фильтров
+     * @param {Object} tableWrapper
      * @param {Object} table
      * @param {Array}  rows
      * @param {string} position
      * @private
      */
-    initControls: function (table, rows, position) {
+    initControls: function (tableWrapper, table, rows, position) {
 
         let that = this;
 
@@ -116,7 +118,7 @@ let coreuiTablePrivate = {
 
             if (row.hasOwnProperty('left') && Array.isArray(row.left)) {
                 $.each(row.left, function (key, control) {
-                    let instance = that.initControl(table, control);
+                    let instance = that.initControl(tableWrapper, table, control);
 
                     if (coreuiTableUtils.isObject(instance)) {
                         controlsLeft.push(instance);
@@ -126,7 +128,7 @@ let coreuiTablePrivate = {
 
             if (row.hasOwnProperty('center') && Array.isArray(row.center)) {
                 $.each(row.center, function (key, control) {
-                    let instance = that.initControl(table, control);
+                    let instance = that.initControl(tableWrapper, table, control);
 
                     if (coreuiTableUtils.isObject(instance)) {
                         controlsCenter.push(instance);
@@ -136,7 +138,7 @@ let coreuiTablePrivate = {
 
             if (row.hasOwnProperty('right') && Array.isArray(row.right)) {
                 $.each(row.right, function (key, control) {
-                    let instance = that.initControl(table, control);
+                    let instance = that.initControl(tableWrapper, table, control);
 
                     if (coreuiTableUtils.isObject(instance)) {
                         controlsRight.push(instance);
@@ -158,18 +160,19 @@ let coreuiTablePrivate = {
 
     /**
      * Инициализация контрола или фильтра
+     * @param {object} tableWrapper
      * @param {Object} table
      * @param {object} control
      * @private
      */
-    initControl: function (table, control) {
+    initControl: function (tableWrapper, table, control) {
 
         let instance = null;
 
         if (coreuiTableUtils.isObject(control) && typeof control.type === 'string') {
 
-            if (coreuiTable.controls.hasOwnProperty(control.type)) {
-                instance = $.extend(true, {}, coreuiTable.controls[control.type]);
+            if (tableWrapper.controls.hasOwnProperty(control.type)) {
+                instance = $.extend(true, {}, tableWrapper.controls[control.type]);
                 instance.init(table, control);
 
                 table._controls.push(instance);
@@ -177,7 +180,7 @@ let coreuiTablePrivate = {
             } else if (control.type.indexOf('filter:') === 0) {
                 let filterName = control.type.substring(7);
 
-                if (coreuiTable.filters.hasOwnProperty(filterName)) {
+                if (tableWrapper.filters.hasOwnProperty(filterName)) {
 
                     if (control.hasOwnProperty('field')) {
                         let options = table.getOptions();
@@ -205,7 +208,7 @@ let coreuiTablePrivate = {
                         }
                     }
 
-                    instance = $.extend(true, {}, coreuiTable.filters[filterName]);
+                    instance = $.extend(true, {}, tableWrapper.filters[filterName]);
                     instance.init(table, control);
 
                     table._filters.push(instance);

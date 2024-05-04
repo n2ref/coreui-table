@@ -1,8 +1,5 @@
 
 import coreuiTable from "./coreui.table";
-import './coreui.table.instance';
-import './coreui.table.templates';
-import './coreui.table.utils';
 
 import "./lang/ru";
 import "./lang/en";
