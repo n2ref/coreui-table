@@ -642,7 +642,8 @@ let coreuiTableInstance = {
         }
 
 
-        let classes = [];
+        let classes        = [];
+        let classesWrapper = [];
 
         if (options.hasOwnProperty('noBorder') &&
             typeof options.noBorder === 'boolean' &&
@@ -656,7 +657,14 @@ let coreuiTableInstance = {
             typeof options.showScrollShadow === 'boolean' &&
             options.showScrollShadow
         ) {
-            classes.push('table-scroll-shadow');
+            classesWrapper.push('table-scroll-shadow');
+        }
+
+        if (options.hasOwnProperty('overflow') &&
+            typeof options.overflow === 'boolean' &&
+            options.overflow
+        ) {
+            classesWrapper.push('overflow-x-auto');
         }
 
 
@@ -666,6 +674,7 @@ let coreuiTableInstance = {
                 id: this._id,
                 lang: this.getLang(),
                 classes: classes.length > 0 ? ' ' + classes.join(' ') : '',
+                classesWrapper: classesWrapper.length > 0 ? ' ' + classesWrapper.join(' ') : '',
                 widthSizes: widthSizes,
                 heightSizes: heightSizes,
                 recordsTotal: this._recordsTotal,

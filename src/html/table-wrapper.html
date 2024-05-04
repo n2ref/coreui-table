@@ -2,7 +2,7 @@
 <div id="coreui-table-<%= id %>" class="coreui-table<%= classes %>"<% if (widthSizes) { %> style="<%= widthSizes.join(';') %>"<% } %>>
 
     <div class="coreui-table__container position-relative">
-        <div class="coreui-table__wrapper<% if (overflow) { %> overflow-x-auto<% } %>" <% if (heightSizes) { %>style="<%= heightSizes.join(';') %>"<% } %>></div>
+        <div class="coreui-table__wrapper<%= classesWrapper %>" <% if (heightSizes) { %>style="<%= heightSizes.join(';') %>"<% } %>></div>
     </div>
 
 </div>

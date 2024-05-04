@@ -1168,7 +1168,7 @@
   tpl['table-record-group.html'] = '<tr<%- attr %>> <td colspan="<%= colspan %>"></td> </tr>';
   tpl['table-record.html'] = '<tr<%- record.attr %> data-record-index="<%= record.index %>"> <% $.each(record.fields, function(key2, field) { %> <td<%- field.attr %>></td> <% }); %> </tr>';
   tpl['table-records-empty.html'] = '<tr> <td class="text-center" colspan="<%= columnsCount %>"><%= lang.emptyRecords %></td> </tr>';
-  tpl['table-wrapper.html'] = ' <div id="coreui-table-<%= id %>" class="coreui-table<%= classes %>"<% if (widthSizes) { %> style="<%= widthSizes.join(\';\') %>"<% } %>> <div class="coreui-table__container position-relative"> <div class="coreui-table__wrapper<% if (overflow) { %> overflow-x-auto<% } %>" <% if (heightSizes) { %>style="<%= heightSizes.join(\';\') %>"<% } %>></div> </div> </div>';
+  tpl['table-wrapper.html'] = ' <div id="coreui-table-<%= id %>" class="coreui-table<%= classes %>"<% if (widthSizes) { %> style="<%= widthSizes.join(\';\') %>"<% } %>> <div class="coreui-table__container position-relative"> <div class="coreui-table__wrapper<%= classesWrapper %>" <% if (heightSizes) { %>style="<%= heightSizes.join(\';\') %>"<% } %>></div> </div> </div>';
   tpl['table.html'] = ' <table class="table <%= classes %> mb-0"> <colgroup> <% $.each(colGroups, function(key, columnGroup) { %> <col<% if (columnGroup.style) { %> style="<%= columnGroup.style %>"<% } %>/> <% }); %> </colgroup> <% if (showHeaders) { %> <thead<% if (theadAttr) { %> <%- theadAttr %>"<% } %>> <%- columnsHeader %> <%- columns %> </thead> <% } %> <tbody></tbody> <% if (columnsFooter != \'\') { %> <tfoot> <%- columnsFooter %> </tfoot> <% } %> </table>';
 
   var coreuiTableUtils = {
@@ -2921,17 +2921,22 @@
         });
       }
       var classes = [];
+      var classesWrapper = [];
       if (options.hasOwnProperty('noBorder') && typeof options.noBorder === 'boolean' && options.noBorder) {
         classes.push('coreui-table__no_border');
       }
       if (options.hasOwnProperty('showScrollShadow') && typeof options.showScrollShadow === 'boolean' && options.showScrollShadow) {
-        classes.push('table-scroll-shadow');
+        classesWrapper.push('table-scroll-shadow');
+      }
+      if (options.hasOwnProperty('overflow') && typeof options.overflow === 'boolean' && options.overflow) {
+        classesWrapper.push('overflow-x-auto');
       }
       var tableElement = coreuiTableRender.renderTable(this);
       var containerElement = $(ejs.render(tpl['table-wrapper.html'], {
         id: this._id,
         lang: this.getLang(),
         classes: classes.length > 0 ? ' ' + classes.join(' ') : '',
+        classesWrapper: classesWrapper.length > 0 ? ' ' + classesWrapper.join(' ') : '',
         widthSizes: widthSizes,
         heightSizes: heightSizes,
         recordsTotal: this._recordsTotal,
