@@ -79,9 +79,9 @@ coreuiTable.columns.menu = {
                 if (CoreuiTableUtils.isObject(item) && typeof item.type === 'string') {
 
                     if (item.type === 'link') {
-                        if (item.hasOwnProperty('link') &&
+                        if (item.hasOwnProperty('url') &&
                             item.hasOwnProperty('content') &&
-                            typeof item.link === 'string' &&
+                            typeof item.url === 'string' &&
                             typeof item.content === 'string'
                         ) {
                             let linkAttr = {};
@@ -113,7 +113,7 @@ coreuiTable.columns.menu = {
 
                             items.push({
                                 type: 'link',
-                                link: item.link,
+                                url: item.url,
                                 content: item.content,
                                 attr: linkAttributes,
                             });
