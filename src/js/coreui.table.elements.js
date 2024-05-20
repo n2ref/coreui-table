@@ -44,7 +44,7 @@ let coreuiTableElements = {
      */
     getSearchContainer: function (tableId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__search');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__search');
     },
 
 
@@ -55,7 +55,7 @@ let coreuiTableElements = {
      */
     getColumnsContainer: function (tableId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__columns');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__columns');
     },
 
 
@@ -67,7 +67,7 @@ let coreuiTableElements = {
      */
     getSearchControl: function (tableId, controlId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__search .search-control-' + controlId);
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__search .search-control-' + controlId);
     },
 
 

@@ -7,6 +7,7 @@ coreuiTable.lang.ru = {
     "total": "Всего",
     "all": "Все",
     "complete": "Применить",
-    "search": "Искать",
+    "search": "Поиск",
+    "searchAction": "Искать",
     "clear": "Очистить",
 }

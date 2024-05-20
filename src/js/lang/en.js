@@ -8,5 +8,6 @@ coreuiTable.lang.en = {
     "all": "All",
     "complete": "Complete",
     "search": "Search",
+    "searchAction": "Search",
     "clear": "Clear",
 }

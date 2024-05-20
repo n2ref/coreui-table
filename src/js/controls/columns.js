@@ -153,11 +153,11 @@ coreuiTable.controls.columns = {
                     btnCompleteContent: btnCompleteContent,
                     lang:               that._table.getLang(),
                 });
-                wrapper.prepend(content);
+                wrapper.before(content);
 
 
 
-                container = $('> .coreui-table__columns', wrapper);
+                container = wrapper.parent().find('> .coreui-table__columns');
 
                 $('.coreui-table__check_all input', container).change(function () {
                     $('.coreui-table_check-column input', container).prop('checked', $(this).is(":checked"));

@@ -27,7 +27,7 @@ coreuiTable.controls.search = {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
+     * @param {object} table
      * @param {object} options
      */
     init: function (table, options) {
@@ -66,7 +66,7 @@ coreuiTable.controls.search = {
         if ( ! this._options.btnComplete.hasOwnProperty('content') ||
             typeof this._options.btnComplete.content !== 'string'
         ) {
-            this._options.btnComplete.content = table.getLang().search
+            this._options.btnComplete.content = table.getLang().searchAction
         }
     },
 
@@ -113,7 +113,7 @@ coreuiTable.controls.search = {
                         controls.push({
                             label:       options.hasOwnProperty('label') && typeof options.label === 'string' ? options.label : '',
                             description: options.hasOwnProperty('description') && typeof options.description === 'string' ? options.description : '',
-                            prefix:      options.hasOwnProperty('prefix') && typeof options.prefix === 'string' ? options.prefix : '',
+                            suffix:      options.hasOwnProperty('suffix') && typeof options.suffix === 'string' ? options.suffix : '',
                             id:          control.getId(),
                             content:     control.render(),
                         });
@@ -164,7 +164,7 @@ coreuiTable.controls.search = {
                     btnCompleteAttr:    btnCompleteAttr.length > 0 ? (' ' + btnCompleteAttr.join(' ')) : '',
                     btnCompleteContent: btnCompleteContent,
                 });
-                wrapper.prepend(content);
+                wrapper.before(content);
 
 
                 if (controlsEvents.length > 0) {
@@ -174,7 +174,7 @@ coreuiTable.controls.search = {
                 }
 
 
-                container = $('> .coreui-table__search', wrapper);
+                container = wrapper.parent().find('> .coreui-table__search');
 
                 $('.btn-complete', container).click(function () {
                     that._table.searchRecords();
