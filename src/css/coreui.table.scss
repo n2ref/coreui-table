@@ -52,6 +52,10 @@
         .coreui-table__search .col-form-label {
             font-size: $coreui-table-font-size-header;
         }
+        .coreui-table__search,
+        .coreui-table__columns {
+            border-bottom: 1px solid $coreui-table-border-color;
+        }
         table > tfoot > tr > td,
         .coreui-table__footer {
             font-size: $coreui-table-font-size-footer;

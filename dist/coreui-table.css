@@ -44,6 +44,10 @@
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > .coreui-table__search .col-form-label {
   font-size: 14px;
 }
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > .coreui-table__search,
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > .coreui-table__columns {
+  border-bottom: 1px solid #c4c8cb;
+}
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot > tr > td,
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > .coreui-table__footer {
   font-size: 12px;
