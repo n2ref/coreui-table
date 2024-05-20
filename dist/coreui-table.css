@@ -21,6 +21,13 @@
 .coreui-table > .coreui-table__container > .coreui-table__wrapper.table-scroll-shadow > table {
   box-shadow: inset -15px 0 15px 0 #fff, inset 15px 0 15px 0 #fff;
 }
+.coreui-table > .coreui-table__container .coreui-table__search .col-form-label {
+  font-size: 14px;
+}
+.coreui-table > .coreui-table__container .coreui-table__search,
+.coreui-table > .coreui-table__container .coreui-table__columns {
+  border-bottom: 1px solid #c4c8cb;
+}
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table {
   min-height: 55px;
 }
@@ -40,13 +47,8 @@
   font-size: 14px;
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td,
-.coreui-table > .coreui-table__container > .coreui-table__wrapper > .coreui-table__header,
-.coreui-table > .coreui-table__container > .coreui-table__wrapper > .coreui-table__search .col-form-label {
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > .coreui-table__header {
   font-size: 14px;
-}
-.coreui-table > .coreui-table__container > .coreui-table__wrapper > .coreui-table__search,
-.coreui-table > .coreui-table__container > .coreui-table__wrapper > .coreui-table__columns {
-  border-bottom: 1px solid #c4c8cb;
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot > tr > td,
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > .coreui-table__footer {
