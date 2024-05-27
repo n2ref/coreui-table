@@ -9024,8 +9024,8 @@
             that._options.onChange(record, isChecked, this);
           } else if (typeof that._options.onChange === 'string') {
             var id = null;
-            if (record.hasOwnProperty(that._table._options.primaryKey)) {
-              id = record[that._table._options.primaryKey];
+            if (record.data.hasOwnProperty(that._table._options.primaryKey)) {
+              id = record.data[that._table._options.primaryKey];
             }
             var func = new Function('record', 'checked', 'id', that._options.onChange);
             func(record, this, id);

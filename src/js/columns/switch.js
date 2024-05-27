@@ -103,8 +103,8 @@ coreuiTable.columns.switch = {
                 } else if (typeof that._options.onChange === 'string') {
                     let id = null;
 
-                    if (record.hasOwnProperty(that._table._options.primaryKey)) {
-                        id = record[that._table._options.primaryKey];
+                    if (record.data.hasOwnProperty(that._table._options.primaryKey)) {
+                        id = record.data[that._table._options.primaryKey];
                     }
 
                     let func = new Function('record', 'checked', 'id', that._options.onChange);
