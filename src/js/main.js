@@ -17,6 +17,7 @@ import "./controls/search";
 import "./controls/columns";
 import "./controls/caption";
 import "./controls/filter_clear";
+import "./controls/divider";
 
 import "./filters/text";
 import "./filters/number";

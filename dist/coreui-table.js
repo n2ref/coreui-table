@@ -1123,6 +1123,7 @@
   tpl['controls/caption.html'] = '<div class="d-flex flex-column me-3"> <small class="text-body-secondary fw-medium"> <%= title %> <% if (description) { %> <i class="bi bi-question-circle coreui-table__cursor_help" title="<%= description %>"></i> <% } %> </small> <b class="text-nowrap"><%= value %></b> </div>';
   tpl['controls/columns-container.html'] = ' <div class="coreui-table__columns px-3 pt-3 pb-4"> <div class="mb-3"> <div class="form-check coreui-table__check_all"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" <% if (showAll === true) { %>checked<% } %>> <%= lang.all %> </label> </div> <% $.each(columns, function(key, column) { %> <div class="form-check coreui-table_check-column"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="<%= column.field %>" <% if (column.show === true) { %>checked<% } %>> <%= column.label %> </label> </div> <% }); %> </div> <button type="button" <%- btnCompleteAttr %>> <%- btnCompleteContent %> </button> </div>';
   tpl['controls/columns.html'] = '<button type="button"<%- btnAttr %>><%-btnContent%></button>';
+  tpl['controls/divider.html'] = '<div <%- attr %>></div>';
   tpl['controls/dropdown.html'] = ' <div class="btn-group" role="group"> <button type="button" data-bs-toggle="dropdown"<%- attr %>> <%- content %> </button> <ul class="dropdown-menu dropdown-menu-<%= position %>"> <% $.each(items, function(key, item) { %> <% if (item.type === \'link\') { %> <li><a class="dropdown-item" href="<%= item.url %>"><%= item.content %></a></li> <% } else if (item.type === \'button\') { %> <li> <button type="button" class="dropdown-item" id="btn-dropdown-<%= item.id %>"> <%= item.content %> </button> </li> <% } else if (item.type === \'divider\') { %> <li><hr class="dropdown-divider"></li> <% } %> <% }) %> </ul> </div>';
   tpl['controls/filter_clear.html'] = ' <button type="button" <%- attr %>><%- content %></button>';
   tpl['controls/link.html'] = '<a href="<%- url %>"<%- attr %>><%- content %></a>';
@@ -4668,14 +4669,14 @@
     _options: {
       btn: {
         attr: {
-          "class": 'btn btn-secondary'
+          "class": 'btn btn-outline-secondary'
         },
         content: null
       },
       btnClear: {
-        content: "<i class=\"bi bi-x\"></i>",
+        content: "<i class=\"bi bi-x text-danger\"></i>",
         attr: {
-          "class": 'btn btn-secondary'
+          "class": 'btn btn-outline-secondary'
         }
       },
       btnComplete: {
@@ -5176,6 +5177,58 @@
       return ejs.render(tpl['controls/filter_clear.html'], {
         attr: attr.length > 0 ? ' ' + attr.join(' ') : '',
         content: options.content ? options.content : ''
+      });
+    }
+  };
+
+  coreuiTable.controls.divider = {
+    _id: null,
+    _table: null,
+    _options: {
+      type: 'divider',
+      width: 40,
+      attr: {
+        "class": 'd-inline-block',
+        style: 'height:16px'
+      }
+    },
+    /**
+     * Инициализация
+     * @param {object} table
+     * @param {object} options
+     */
+    init: function init(table, options) {
+      this._options = $.extend({}, this._options, options);
+      this._table = table;
+      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : coreuiTableUtils.hashCode();
+    },
+    /**
+     * Инициализация событий связанных с элементом управления
+     */
+    initEvents: function initEvents() {},
+    /**
+     * Получение ID элемента управления
+     * @returns {string}
+     */
+    getId: function getId() {
+      return this._id;
+    },
+    /**
+     * Формирование контента для размещения на странице
+     * @returns {string}
+     */
+    render: function render() {
+      var attributes = [];
+      if (coreuiTableUtils.isObject(this._options.attr)) {
+        this._options.attr = coreuiTableUtils.mergeAttr(this._options.attr, {
+          style: 'width:' + this._options.width + 'px'
+        });
+        $.each(this._options.attr, function (name, value) {
+          attributes.push(name + '="' + value + '"');
+        });
+      }
+      return ejs.render(tpl['controls/divider.html'], {
+        attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
       });
     }
   };
