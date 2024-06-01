@@ -11,12 +11,12 @@ coreuiTable.controls.search = {
     _table: null,
     _options: {
         btn: {
-            attr: { class: 'btn btn-secondary' },
+            attr: { class: 'btn btn-outline-secondary' },
             content: null,
         },
         btnClear: {
-            content: "<i class=\"bi bi-x\"></i>",
-            attr: { class: 'btn btn-secondary' }
+            content: "<i class=\"bi bi-x text-danger\"></i>",
+            attr: { class: 'btn btn-outline-secondary' }
         },
         btnComplete: {
             attr: { class: 'btn btn-primary' },
