@@ -1113,8 +1113,10 @@
   var tpl = Object.create(null);
   tpl['columns/badge.html'] = '<span class="badge text-bg-<%= type %>"><%= text %></span>';
   tpl['columns/button.html'] = '<button type="button"<%- attr %>><%- content %></button>';
+  tpl['columns/image.html'] = '<img <%- attr %>/>';
   tpl['columns/link.html'] = '<a <%- attr %>><%- content %></a>';
   tpl['columns/menu.html'] = ' <div class="btn-group" role="group"> <button type="button" data-bs-toggle="dropdown" <%- attr %>> <%- content %> </button> <ul class="dropdown-menu dropdown-menu-<%= position %>"> <% $.each(items, function(key, item) { %> <% if (item.type === \'link\') { %> <li><a href="<%= item.url %>"<%- item.attr %>><%= item.content %></a></li> <% } else if (item.type === \'button\') { %> <li> <button type="button" id="btn-dropdown-<%= item.id %>"<%- item.attr %>> <%- item.content %> </button> </li> <% } else if (item.type === \'divider\') { %> <li><hr class="dropdown-divider"></li> <% } else if (item.type === \'header\') { %> <li><h6 class="dropdown-header"><%= item.content %></h6></li> <% } %> <% }) %> </ul> </div>';
+  tpl['columns/progress.html'] = '<% if (description !== null) { %> <small class="text-body-secondary"><%= description %></small> <% } %> <div <%- attr %>> <div class="progress-bar bg-<%= color %>" style="width:<%= percent %>%;"><%= percentText %></div> </div>';
   tpl['columns/select_label.html'] = '<input class="coreui-table__select-all form-check-input" type="checkbox" value="">';
   tpl['columns/select.html'] = '<input class="coreui-table__select form-check-input" type="checkbox" value="<%= index %>">';
   tpl['columns/switch.html'] = '<div class="form-switch"> <input class="form-check-input coreui-table__switch" type="checkbox" data-field="<%= field %>" value="record.index"<% if (checked) { %> checked<% } %><% if (disabled) { %> disabled<% } %>> </div>';
@@ -4616,8 +4618,8 @@
     },
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {object} table
+     * @param {object} options
      */
     init: function init(table, options) {
       if (options.hasOwnProperty('attr') && coreuiTableUtils.isObject(options.attr)) {
@@ -5189,7 +5191,7 @@
       width: 40,
       attr: {
         "class": 'd-inline-block',
-        style: 'height:16px'
+        style: 'height:20px'
       }
     },
     /**
@@ -5219,14 +5221,12 @@
      */
     render: function render() {
       var attributes = [];
-      if (coreuiTableUtils.isObject(this._options.attr)) {
-        this._options.attr = coreuiTableUtils.mergeAttr(this._options.attr, {
-          style: 'width:' + this._options.width + 'px'
-        });
-        $.each(this._options.attr, function (name, value) {
-          attributes.push(name + '="' + value + '"');
-        });
-      }
+      this._options.attr = coreuiTableUtils.mergeAttr(this._options.attr, {
+        style: 'width:' + this._options.width + 'px'
+      });
+      $.each(this._options.attr, function (name, value) {
+        attributes.push(name + '="' + value + '"');
+      });
       return ejs.render(tpl['controls/divider.html'], {
         attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
       });
@@ -9553,12 +9553,12 @@
     },
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {object} table
+     * @param {object} options
      */
     init: function init(table, options) {
       this._table = table;
-      this._options = $.extend({}, this._options, options);
+      this._options = $.extend(true, {}, this._options, options);
     },
     /**
      * Установка видимости колонки
@@ -9578,7 +9578,7 @@
      * @returns {object}
      */
     getOptions: function getOptions() {
-      return $.extend({}, this._options);
+      return $.extend(true, {}, this._options);
     },
     /**
      * Формирование контента
@@ -9587,13 +9587,16 @@
      * @returns {string}
      */
     render: function render(content, record) {
-      if (!coreuiTableUtils.isObject(content) || !content.hasOwnProperty('type') || !content.hasOwnProperty('text') || typeof content.type !== 'string' || typeof content.text !== 'string' || !content.type || !content.text) {
+      if (!coreuiTableUtils.isObject(content) || !content.hasOwnProperty('type') || !content.hasOwnProperty('text') || typeof content.type !== 'string' || typeof content.text !== 'string' || !content.text) {
         return '';
       }
-      return $(ejs.render(tpl['columns/badge.html'], {
+      if (content.type === '' || content.type === 'none') {
+        return content.text;
+      }
+      return ejs.render(tpl['columns/badge.html'], {
         type: content.type,
         text: content.text
-      }));
+      });
     }
   };
 
@@ -9648,6 +9651,235 @@
         return '';
       }
       return coreuiTableRender.renderComponents(this._table, content, 'records_show');
+    }
+  };
+
+  coreuiTable.columns.progress = {
+    _table: null,
+    _options: {
+      type: 'progress',
+      field: null,
+      label: null,
+      show: true,
+      width: null,
+      minWidth: null,
+      maxWidth: null,
+      attr: {},
+      showPercent: null,
+      barColor: 'primary',
+      barWidth: null,
+      barHeight: null
+    },
+    /**
+     * Инициализация
+     * @param {object} table
+     * @param {object} options
+     */
+    init: function init(table, options) {
+      this._table = table;
+      this._options = $.extend(true, {}, this._options, options);
+    },
+    /**
+     * Установка видимости колонки
+     * @param {boolean} isShow
+     */
+    setShow: function setShow(isShow) {
+      this._options.show = !!isShow;
+    },
+    /**
+     * Видимости колонки
+     */
+    isShow: function isShow() {
+      return !!this._options.show;
+    },
+    /**
+     * Получение параметров
+     * @returns {object}
+     */
+    getOptions: function getOptions() {
+      return $.extend(true, {}, this._options);
+    },
+    /**
+     * Формирование контента
+     * @param {object|string|number} content
+     * @param {object}              record
+     * @returns {string}
+     */
+    render: function render(content, record) {
+      if (!coreuiTableUtils.isNumeric(content) && (!coreuiTableUtils.isObject(content) || !content.hasOwnProperty('percent') || !coreuiTableUtils.isNumeric(content.percent))) {
+        return '';
+      }
+      var description = null;
+      var percent = 0;
+      var percentText = '';
+      var color = typeof this._options.barColor === 'string' ? this._options.barColor : 'primary';
+      var attr = this._options.attr;
+      attr = coreuiTableUtils.mergeAttr(attr, {
+        "class": 'progress'
+      });
+      if (this._options.barWidth) {
+        var barWidth = coreuiTableUtils.isNumeric(this._options.barWidth) ? this._options.barWidth + 'px' : this._options.barWidth;
+        attr = coreuiTableUtils.mergeAttr(attr, {
+          style: 'width:' + barWidth
+        });
+      }
+      if (this._options.barHeight) {
+        var barHeight = coreuiTableUtils.isNumeric(this._options.barHeight) ? this._options.barHeight + 'px' : this._options.barHeight;
+        attr = coreuiTableUtils.mergeAttr(attr, {
+          style: 'height:' + barHeight
+        });
+      }
+      if (coreuiTableUtils.isNumeric(content)) {
+        if (content < 0) {
+          percent = 0;
+        } else if (content > 100) {
+          percent = 100;
+        } else {
+          percent = content;
+        }
+        attr = coreuiTableUtils.mergeAttr(attr, {
+          "class": 'mt-1'
+        });
+      } else {
+        if (content.percent < 0) {
+          percent = 0;
+        } else if (content.percent > 100) {
+          percent = 100;
+        } else {
+          percent = content.percent;
+        }
+        if (content.hasOwnProperty('color') && typeof content.color === 'string') {
+          color = content.color;
+        }
+        if (content.hasOwnProperty('description') && typeof content.description === 'string' && content.description !== '') {
+          description = content.description;
+        } else {
+          attr = coreuiTableUtils.mergeAttr(attr, {
+            "class": 'mt-1'
+          });
+        }
+      }
+      if (this._options.showPercent) {
+        percentText = percent + '%';
+      }
+      var attributes = [];
+      $.each(attr, function (name, value) {
+        if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
+          attributes.push(name + '="' + value + '"');
+        }
+      });
+      return ejs.render(tpl['columns/progress.html'], {
+        description: description,
+        percent: percent,
+        percentText: percentText,
+        color: color,
+        attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
+      });
+    }
+  };
+
+  coreuiTable.columns.image = {
+    _table: null,
+    _options: {
+      type: 'image',
+      field: null,
+      label: null,
+      show: true,
+      width: null,
+      minWidth: null,
+      maxWidth: null,
+      attr: {},
+      imgWidth: null,
+      imgHeight: null,
+      imgBorder: null,
+      imgStyle: null
+    },
+    /**
+     * Инициализация
+     * @param {object} table
+     * @param {object} options
+     */
+    init: function init(table, options) {
+      this._table = table;
+      this._options = $.extend(true, {}, this._options, options);
+    },
+    /**
+     * Установка видимости колонки
+     * @param {boolean} isShow
+     */
+    setShow: function setShow(isShow) {
+      this._options.show = !!isShow;
+    },
+    /**
+     * Видимости колонки
+     */
+    isShow: function isShow() {
+      return !!this._options.show;
+    },
+    /**
+     * Получение параметров
+     * @returns {object}
+     */
+    getOptions: function getOptions() {
+      return $.extend(true, {}, this._options);
+    },
+    /**
+     * Формирование контента
+     * @param {string} content
+     * @param {object} record
+     * @returns {string}
+     */
+    render: function render(content, record) {
+      if (typeof content !== 'string' || content === '') {
+        return '';
+      }
+      var attr = this._options.attr;
+      attr.src = content;
+      if (this._options.imgWidth) {
+        var imgWidth = coreuiTableUtils.isNumeric(this._options.imgWidth) ? this._options.imgWidth + 'px' : this._options.imgWidth;
+        attr = coreuiTableUtils.mergeAttr(attr, {
+          style: 'width:' + imgWidth
+        });
+      }
+      if (this._options.imgHeight) {
+        var imgHeight = coreuiTableUtils.isNumeric(this._options.imgHeight) ? this._options.imgHeight + 'px' : this._options.imgHeight;
+        attr = coreuiTableUtils.mergeAttr(attr, {
+          style: 'height:' + imgHeight
+        });
+      }
+      if (this._options.imgBorder) {
+        attr = coreuiTableUtils.mergeAttr(attr, {
+          "class": 'border border-secondary-subtle'
+        });
+      }
+      if (this._options.imgStyle && typeof this._options.imgStyle === 'string') {
+        switch (this._options.imgStyle) {
+          case 'circle':
+            attr = coreuiTableUtils.mergeAttr(attr, {
+              "class": 'rounded-circle'
+            });
+            break;
+          case 'thumb':
+            attr = coreuiTableUtils.mergeAttr(attr, {
+              "class": 'img-thumbnail'
+            });
+            break;
+          case 'rounded':
+            attr = coreuiTableUtils.mergeAttr(attr, {
+              "class": 'rounded'
+            });
+            break;
+        }
+      }
+      var attributes = [];
+      $.each(attr, function (name, value) {
+        if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
+          attributes.push(name + '="' + value + '"');
+        }
+      });
+      return ejs.render(tpl['columns/image.html'], {
+        attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
+      });
     }
   };
 

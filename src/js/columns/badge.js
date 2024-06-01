@@ -18,13 +18,13 @@ coreuiTable.columns.badge = {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {object} table
+     * @param {object} options
      */
     init: function (table, options) {
 
         this._table   = table;
-        this._options = $.extend({}, this._options, options);
+        this._options = $.extend(true, {}, this._options, options);
     },
 
 
@@ -50,7 +50,7 @@ coreuiTable.columns.badge = {
      * @returns {object}
      */
     getOptions: function () {
-        return $.extend({}, this._options);
+        return $.extend(true, {}, this._options);
     },
 
 
@@ -67,17 +67,18 @@ coreuiTable.columns.badge = {
              ! content.hasOwnProperty('text') ||
              typeof content.type !== 'string' ||
              typeof content.text !== 'string' ||
-             ! content.type ||
              ! content.text
         ) {
             return '';
         }
 
-        return $(
-            ejs.render(coreuiTableTpl['columns/badge.html'], {
-                type: content.type,
-                text: content.text
-            })
-        );
+        if (content.type === '' || content.type === 'none') {
+            return content.text;
+        }
+
+        return ejs.render(coreuiTableTpl['columns/badge.html'], {
+            type: content.type,
+            text: content.text
+        });
     }
 }

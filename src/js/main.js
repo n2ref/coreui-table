@@ -57,5 +57,7 @@ import "./columns/link";
 import "./columns/menu";
 import "./columns/badge";
 import "./columns/component";
+import "./columns/progress";
+import "./columns/image";
 
 export default coreuiTable;
