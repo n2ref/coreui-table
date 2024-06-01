@@ -452,7 +452,6 @@ document.addEventListener('DOMContentLoaded', function () {
     CoreUI.table.create({
         columns: [
             { type: 'numbers',  width: 25, attr: { class: "border-end text-end" } },
-            { type: 'select' },
             { type: 'text',     field: 'text',     label: 'Text',     description: "Description text" },
             { type: 'number',   field: 'number',   label: 'Number',   width: 100 },
             { type: 'money',    field: 'money',    label: 'Money',    width: 120, currency: 'USD'},
@@ -469,22 +468,87 @@ document.addEventListener('DOMContentLoaded', function () {
     }).render('table-column-types-basic');
 
 
-    // Column types advanced
+    // Column types standard
     CoreUI.table.create({
-        id: 'types_advanced',
+        id: 'types_standard',
         columns: [
             { type: 'select' },
-            { type: 'switch',    field: 'is_active_sw', label: 'Switch', valueY: 'Y', valueN: 'N', width: 80 },
-            { type: 'badge',     field: 'badge',        label: 'Badge'},
-            { type: 'component', field: 'component',    label: 'Components coreui', width: 200 },
-            { type: 'link',      field: 'link',         label: 'Link',              width: 200 },
-            { type: 'button',    field: 'button',       label: 'Button',            width: 100 },
-            { type: 'menu',      field: 'menu',         label: 'Menu',              width: 100 },
+            { type: 'switch',  field: 'is_active_sw', label: 'Switch', valueY: 'Y', valueN: 'N', width: 80 },
+            { type: 'image',   field: 'image',        label: 'Image',             width: 100, imgStyle: 'circle', imgWidth: 30, imgHeight: 30, imgBorder: true },
+            { type: 'badge',   field: 'badge',        label: 'Badge'},
+            { type: 'link',    field: 'link',         label: 'Link',              width: 200 },
+            { type: 'button',  field: 'button',       label: 'Button',            width: 100 },
         ],
         records: [
             {
                 is_active_sw: "N",
+                image: 'data/img/thumb1.png',
+                button: {
+                    content: "Button",
+                    attr: { class: 'btn btn-sm btn-outline-secondary' },
+                    onClick: function (record, table) { console.log(record) }
+                },
                 badge: { type: 'secondary', text: 'Secondary' },
+                link: {
+                    content: "Link content",
+                    url: "#/link-url",
+                    attr: {}
+                }
+            },
+            {
+                is_active_sw: "N",
+                image: 'data/img/thumb2.png',
+                button: {
+                    content: "Button",
+                    attr: { class: 'btn btn-sm btn-outline-secondary' },
+                    onClick: function (record, table) { console.log(record) }
+                },
+                badge: { type: 'primary',   text: 'Primary' },
+                link: "#/link-url"
+            },
+            {
+                is_active_sw: "Y",
+                image: 'data/img/thumb3.png',
+                button: {
+                    content: "Button",
+                    attr: { class: 'btn btn-sm btn-outline-secondary' },
+                    onClick: "console.log(record)"
+                },
+                badge: { type: 'success',   text: 'Success' },
+                link: {
+                    content: "Link",
+                    url: "#/link-url",
+                    attr: { class: 'btn btn-sm btn-outline-secondary' }
+                },
+            },
+            {
+                is_active_sw: "Y",
+                image: 'data/img/thumb4.png',
+                button: {
+                    content: "Button",
+                    attr: { class: 'btn btn-sm btn-outline-secondary' },
+                    onClick: "console.log(record)"
+                },
+                badge: { type: 'warning',   text: 'Warning' },
+                link: {
+                    content: "<i class=\"bi bi-arrow-right\"></i>",
+                    url: "#/link-url",
+                    attr: { class: 'btn btn-sm btn-outline-secondary' }
+                }
+            },
+        ]
+    }).render('table-column-types-standard');
+
+    // Column types advanced
+    CoreUI.table.create({
+        id: 'types_advanced',
+        columns: [
+            { type: 'component', field: 'component',    label: 'Components coreui' },
+            { type: 'progress',  field: 'progress',     label: 'Progress',          width: 250, barWidth: 150, showPercent: true },
+            { type: 'menu',      field: 'menu',         label: 'Menu',              width: 100 },
+        ],
+        records: [
+            {
                 component: {
                     component: 'coreui.chart',
                     datasets: [
@@ -497,16 +561,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         axis: { xaxis: { show: false }, yaxis: { show: false }, grid: { show: false } }
                     }
                 },
-                button: {
-                    content: "Button",
-                    attr: { class: 'btn btn-sm btn-outline-secondary' },
-                    onClick: function (record, table) { console.log(record) }
-                },
-                link: {
-                    content: "Link content",
-                    url: "#/link-url",
-                    attr: {}
-                },
+                progress: 25,
                 menu: {
                     content: '<i class="bi bi-three-dots-vertical"></i>',
                     attr: { class: 'btn btn-sm btn-outline-secondary rounded-1' },
@@ -530,8 +585,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             },
             {
-                is_active_sw: "N",
-                badge: { type: 'primary', text: 'Primary' },
                 component: {
                     component: 'coreui.chart',
                     datasets: [
@@ -544,12 +597,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         axis: { xaxis: { show: false }, yaxis: { show: false }, grid: { show: false } }
                     }
                 },
-                button: {
-                    content: "Button",
-                    attr: { class: 'btn btn-sm btn-outline-secondary' },
-                    onClick: function (record, table) { console.log(record) }
-                },
-                link: "#/link-url",
+                progress: { percent: 50, color: 'info' },
                 menu: {
                     attr: { class: 'btn btn-sm rounded-1' },
                     items: [
@@ -560,8 +608,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             },
             {
-                is_active_sw: "Y",
-                badge: { type: 'success', text: 'Success' },
                 component: {
                     component: 'coreui.chart',
                     labels: ['d1', 'd2', 'd3', 'd4'],
@@ -576,16 +622,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         axis: { xaxis: { show: false }, yaxis: { show: false }, grid: { show: false } }
                     }
                 },
-                button: {
-                    content: "Button",
-                    attr: { class: 'btn btn-sm btn-outline-secondary' },
-                    onClick: "console.log(record)"
-                },
-                link: {
-                    content: "Link",
-                    url: "#/link-url",
-                    attr: { class: 'btn btn-sm btn-outline-secondary' }
-                },
+                progress: { percent: 75, color: 'warning', description: '750Mb of 1Gb' },
                 menu: {
                     attr: { class: 'btn btn-sm rounded-1' },
                     position: 'start',
@@ -597,32 +634,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             },
             {
-                is_active_sw: "Y",
-                badge: { type: 'warning', text: 'Warning' },
                 component: {
-                    component: 'coreui.chart',
-                    labels: ['d1', 'd2', 'd3', 'd4'],
-                    datasets: [
-                        { type: "donut", name: "Data", data: [43, 32, 12, 9] }
+                    component: 'coreui.table',
+                    columns: [
+                        {field: 'fname', label: 'First Name', width: 100},
+                        {field: 'lname', label: 'Last Name'},
+                        {field: 'sdate', label: 'Start Date', width: 120, type: 'date'}
                     ],
-                    options: {
-                        type: "pie",
-                        width: 100,
-                        height: 30,
-                        enabled: { legend: false, labels: false, minimize: true },
-                        axis: { xaxis: { show: false }, yaxis: { show: false }, grid: { show: false } }
-                    }
+                    records: [
+                        {id: "1", fname: 'Jane',   lname: 'Doe',     sdate: '2023-09-03'},
+                        {id: "2", fname: 'Stuart', lname: 'Motzart', sdate: '2023-04-03'},
+                        {id: "3", fname: 'Jin',    lname: 'Franson', sdate: '2023-02-03'}
+                    ]
                 },
-                button: {
-                    content: "Button",
-                    attr: { class: 'btn btn-sm btn-outline-secondary' },
-                    onClick: "console.log(record)"
-                },
-                link: {
-                    content: "<i class=\"bi bi-arrow-right\"></i>",
-                    url: "#/link-url",
-                    attr: { class: 'btn btn-sm btn-outline-secondary' }
-                },
+                progress: { percent: 100, color: 'success', description: 'Description text' },
                 menu: {
                     content: 'Dropdown',
                     attr: { class: 'btn btn-sm btn-secondary dropdown-toggle' },

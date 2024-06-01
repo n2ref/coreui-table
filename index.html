@@ -25,7 +25,7 @@
                     <header>
                         <nav class="navbar navbar-expand-lg navbar-default">
                             <div class="container-fluid">
-                                <a class="navbar-brand" href="#">CoreUI</a>
+                                <a class="navbar-brand" href="https://n2ref.github.io/coreui">CoreUI</a>
                                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                     <span class="navbar-toggler-icon"></span>
                                 </button>
@@ -71,6 +71,7 @@
                                     <li><a href="#example-expand-rows">Expand rows</a></li>
                                     <li><a href="#example-events">Events</a></li>
                                     <li><a href="#example-column-types-basic">Column types basic</a></li>
+                                    <li><a href="#example-column-types-standard">Column types standard</a></li>
                                     <li><a href="#example-column-types-advanced">Column types advanced</a></li>
                                     <li><a href="#example-column-manage">Column Manage</a></li>
                                     <li><a href="#example-columns-fixed">Columns fixed</a></li>
@@ -112,10 +113,11 @@
                         <a href="https://jquery.com" target="_blank">jquery</a>
                     </p>
 
-                    <h2 id="examples" class="section-margin">Examples</h2>
-                    <div>
-                        <h3 id="example-simple">Simple table</h3>
-                        <div>
+                    <div id="examples">
+                        <h2 class="section-margin">Examples</h2>
+
+                        <div id="example-simple" class="mb-5">
+                            <h3>Simple table</h3>
                             <div class="content-example">
                                 <div id="table-simple1"></div><br>
                                 <div id="table-simple2"></div>
@@ -151,11 +153,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-empty">Empty table</h3>
-                        <div>
+                        <div id="example-empty" class="mb-5">
+                            <h3>Empty table</h3>
                             <div class="content-example">
                                 <div id="table-empty"></div>
                             </div>
@@ -177,11 +178,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-controls-basic">Controls basic</h3>
-                        <div>
+                        <div id="example-controls-basic" class="mb-5">
+                            <h3>Controls basic</h3>
                             <div class="content-example">
                                 <div id="table-controls-basic"></div>
                             </div>
@@ -226,11 +226,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-controls-buttons">Controls buttons</h3>
-                        <div>
+                        <div id="example-controls-buttons" class="mb-5">
+                            <h3>Controls buttons</h3>
                             <div class="content-example">
                                 <div id="table-controls-buttons"></div>
                             </div>
@@ -341,11 +340,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-controls-advanced">Controls advanced</h3>
-                        <div>
+                        <div id="example-controls-advanced" class="mb-5">
+                            <h3>Controls advanced</h3>
                             <div class="content-example">
                                 <div id="table-controls-advanced"></div>
                             </div>
@@ -410,11 +408,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-ajax-records">Ajax records</h3>
-                        <div>
+                        <div id="example-ajax-records" class="mb-5">
+                            <h3>Ajax records</h3>
                             <div class="content-example">
                                 <div id="table-ajax-records"></div>
                             </div>
@@ -480,11 +477,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-nowrap">No wrap</h3>
-                        <div>
+                        <div id="example-nowrap" class="mb-5">
+                            <h3>No wrap</h3>
                             <div class="content-example">
                                 <div id="table-nowrap"></div>
                             </div>
@@ -512,11 +508,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-pages">Pages</h3>
-                        <div>
+                        <div id="example-pages" class="mb-5">
+                            <h3>Pages</h3>
                             <div class="content-example">
                                 <div id="table-pages"></div>
                             </div>
@@ -578,11 +573,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-expand-rows">Expand rows</h3>
-                        <div>
+                        <div id="example-expand-rows" class="mb-5">
+                            <h3>Expand rows</h3>
                             <div class="content-example">
                                 <div id="table-expand-rows"></div>
                             </div>
@@ -639,11 +633,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-events">Events</h3>
-                        <div>
+                        <div id="example-events" class="mb-5">
+                            <h3>Events</h3>
                             <div class="content-example">
                                 <div id="table-events"></div>
                             </div>
@@ -700,11 +693,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-column-types-basic">Column types basic</h3>
-                        <div>
+                        <div id="example-column-types-basic" class="mb-5">
+                            <h3>Column types basic</h3>
                             <div class="content-example">
                                 <div id="table-column-types-basic"></div>
                             </div>
@@ -716,7 +708,6 @@
         CoreUI.table.create({
             columns: [
                 { type: 'numbers',  width: 25, attr: { class: "border-end text-end" } },
-                { type: 'select' },
                 { type: 'text',     field: 'text',     label: 'Text',     description: "Description text" },
                 { type: 'number',   field: 'number',   label: 'Number',   width: 100 },
                 { type: 'money',    field: 'money',    label: 'Money',    width: 120, currency: 'USD'},
@@ -735,11 +726,96 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-column-types-advanced">Column types advanced</h3>
-                        <div>
+                        <div id="example-column-types-standard" class="mb-5">
+                            <h3>Column types standard</h3>
+
+                            <div class="content-example">
+                                <div id="table-column-types-standard"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-column-types-standard"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            id: 'types_standard',
+            columns: [
+                { type: 'select' },
+                { type: 'switch',  field: 'is_active_sw', label: 'Switch', valueY: 'Y', valueN: 'N', width: 80 },
+                { type: 'image',   field: 'image',        label: 'Image',             width: 100, imgStyle: 'circle', imgWidth: 30, imgHeight: 30, imgBorder: true },
+                { type: 'badge',   field: 'badge',        label: 'Badge'},
+                { type: 'link',    field: 'link',         label: 'Link',              width: 200 },
+                { type: 'button',  field: 'button',       label: 'Button',            width: 100 },
+            ],
+            records: [
+                {
+                    is_active_sw: "N",
+                    image: 'data/img/thumb1.png',
+                    button: {
+                        content: "Button",
+                        attr: { class: 'btn btn-sm btn-outline-secondary' },
+                        onClick: function (record, table) { console.log(record) }
+                    },
+                    badge: { type: 'secondary', text: 'Secondary' },
+                    link: {
+                        content: "Link content",
+                        url: "#/link-url",
+                        attr: {}
+                    }
+                },
+                {
+                    is_active_sw: "N",
+                    image: 'data/img/thumb2.png',
+                    button: {
+                        content: "Button",
+                        attr: { class: 'btn btn-sm btn-outline-secondary' },
+                        onClick: function (record, table) { console.log(record) }
+                    },
+                    badge: { type: 'primary',   text: 'Primary' },
+                    link: "#/link-url"
+                },
+                {
+                    is_active_sw: "Y",
+                    image: 'data/img/thumb3.png',
+                    button: {
+                        content: "Button",
+                        attr: { class: 'btn btn-sm btn-outline-secondary' },
+                        onClick: "console.log(record)"
+                    },
+                    badge: { type: 'success',   text: 'Success' },
+                    link: {
+                        content: "Link",
+                        url: "#/link-url",
+                        attr: { class: 'btn btn-sm btn-outline-secondary' }
+                    },
+                },
+                {
+                    is_active_sw: "Y",
+                    image: 'data/img/thumb4.png',
+                    button: {
+                        content: "Button",
+                        attr: { class: 'btn btn-sm btn-outline-secondary' },
+                        onClick: "console.log(record)"
+                    },
+                    badge: { type: 'warning',   text: 'Warning' },
+                    link: {
+                        content: "&gt;i class=\"bi bi-arrow-right\"&lt;&gt;/i&lt;",
+                        url: "#/link-url",
+                        attr: { class: 'btn btn-sm btn-outline-secondary' }
+                    }
+                },
+            ]
+        }).render('table-column-types-standard');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+
+
+                        <div id="example-column-types-advanced" class="mb-5">
+                            <h3>Column types advanced</h3>
                             <div class="content-example">
                                 <div id="table-column-types-advanced"></div>
                             </div>
@@ -751,18 +827,12 @@
         CoreUI.table.create({
             id: 'types_advanced',
             columns: [
-                { type: 'select' },
-                { type: 'switch',    field: 'is_active_sw', label: 'Switch', valueY: 'Y', valueN: 'N', width: 80 },
-                { type: 'badge',     field: 'badge',        label: 'Badge'},
-                { type: 'component', field: 'component',    label: 'Components coreui', width: 200 },
-                { type: 'link',      field: 'link',         label: 'Link',              width: 200 },
-                { type: 'button',    field: 'button',       label: 'Button',            width: 100 },
+                { type: 'component', field: 'component',    label: 'Components coreui' },
+                { type: 'progress',  field: 'progress',     label: 'Progress',          width: 250, barWidth: 150, showPercent: true },
                 { type: 'menu',      field: 'menu',         label: 'Menu',              width: 100 },
             ],
             records: [
                 {
-                    is_active_sw: "N",
-                    badge: { type: 'secondary', text: 'Secondary' },
                     component: {
                         component: 'coreui.chart',
                         datasets: [
@@ -775,18 +845,9 @@
                             axis: { xaxis: { show: false }, yaxis: { show: false }, grid: { show: false } }
                         }
                     },
-                    button: {
-                        content: "Button",
-                        attr: { class: 'btn btn-sm btn-outline-secondary' },
-                        onClick: function (record, table) { console.log(record) }
-                    },
-                    link: {
-                        content: "Link content",
-                        url: "#/link-url",
-                        attr: {}
-                    },
+                    progress: 25,
                     menu: {
-                        content: '&lt;i class="bi bi-three-dots-vertical"&gt;&lt;/i&gt;',
+                        content: '&gt;i class="bi bi-three-dots-vertical"&lt;&gt;/i&lt;',
                         attr: { class: 'btn btn-sm btn-outline-secondary rounded-1' },
                         position: 'end',
                         items: [
@@ -800,7 +861,7 @@
                             { type: 'divider' },
                             {
                                 type: 'button',
-                                content: '&lt;i class="bi bi-trash"&gt;&lt;/i&gt; Delete',
+                                content: '&gt;i class="bi bi-trash"&lt;&gt;/i&lt; Delete',
                                 attr: { class: 'text-danger' },
                                 onClick: function (record, table, event) { console.log('delete record ' + record.index) }
                             },
@@ -808,8 +869,6 @@
                     }
                 },
                 {
-                    is_active_sw: "N",
-                    badge: { type: 'primary', text: 'Primary' },
                     component: {
                         component: 'coreui.chart',
                         datasets: [
@@ -822,12 +881,7 @@
                             axis: { xaxis: { show: false }, yaxis: { show: false }, grid: { show: false } }
                         }
                     },
-                    button: {
-                        content: "Button",
-                        attr: { class: 'btn btn-sm btn-outline-secondary' },
-                        onClick: function (record, table) { console.log(record) }
-                    },
-                    link: "#/link-url",
+                    progress: { percent: 50, color: 'info' },
                     menu: {
                         attr: { class: 'btn btn-sm rounded-1' },
                         items: [
@@ -838,8 +892,6 @@
                     }
                 },
                 {
-                    is_active_sw: "Y",
-                    badge: { type: 'success', text: 'Success' },
                     component: {
                         component: 'coreui.chart',
                         labels: ['d1', 'd2', 'd3', 'd4'],
@@ -854,16 +906,7 @@
                             axis: { xaxis: { show: false }, yaxis: { show: false }, grid: { show: false } }
                         }
                     },
-                    button: {
-                        content: "Button",
-                        attr: { class: 'btn btn-sm btn-outline-secondary' },
-                        onClick: "console.log(record)"
-                    },
-                    link: {
-                        content: "Link",
-                        url: "#/link-url",
-                        attr: { class: 'btn btn-sm btn-outline-secondary' }
-                    },
+                    progress: { percent: 75, color: 'warning', description: '750Mb of 1Gb' },
                     menu: {
                         attr: { class: 'btn btn-sm rounded-1' },
                         position: 'start',
@@ -875,32 +918,20 @@
                     }
                 },
                 {
-                    is_active_sw: "Y",
-                    badge: { type: 'warning', text: 'Warning' },
                     component: {
-                        component: 'coreui.chart',
-                        labels: ['d1', 'd2', 'd3', 'd4'],
-                        datasets: [
-                            { type: "donut", name: "Data", data: [43, 32, 12, 9] }
+                        component: 'coreui.table',
+                        columns: [
+                            {field: 'fname', label: 'First Name', width: 100},
+                            {field: 'lname', label: 'Last Name'},
+                            {field: 'sdate', label: 'Start Date', width: 120, type: 'date'}
                         ],
-                        options: {
-                            type: "pie",
-                            width: 100,
-                            height: 30,
-                            enabled: { legend: false, labels: false, minimize: true },
-                            axis: { xaxis: { show: false }, yaxis: { show: false }, grid: { show: false } }
-                        }
+                        records: [
+                            {id: "1", fname: 'Jane',   lname: 'Doe',     sdate: '2023-09-03'},
+                            {id: "2", fname: 'Stuart', lname: 'Motzart', sdate: '2023-04-03'},
+                            {id: "3", fname: 'Jin',    lname: 'Franson', sdate: '2023-02-03'}
+                        ]
                     },
-                    button: {
-                        content: "Button",
-                        attr: { class: 'btn btn-sm btn-outline-secondary' },
-                        onClick: "console.log(record)"
-                    },
-                    link: {
-                        content: "&lt;i class=\"bi bi-arrow-right\"&gt;&lt;/i&gt;",
-                        url: "#/link-url",
-                        attr: { class: 'btn btn-sm btn-outline-secondary' }
-                    },
+                    progress: { percent: 100, color: 'success', description: 'Description text' },
                     menu: {
                         content: 'Dropdown',
                         attr: { class: 'btn btn-sm btn-secondary dropdown-toggle' },
@@ -918,11 +949,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-column-manage">Column Manage</h3>
-                        <div>
+                        <div id="example-column-manage" class="mb-5">
+                            <h3>Column Manage</h3>
                             <div class="content-example">
                                 <div id="table-column-manage"></div>
                             </div>
@@ -966,11 +996,11 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-columns-fixed">Columns fixed</h3>
-                        <div>
+                        <div id="example-columns-fixed" class="mb-5">
+                            <h3>Columns fixed</h3>
+
                             <div class="content-example">
                                 <div id="table-columns-fixed"></div>
                             </div>
@@ -1026,11 +1056,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-headers">Headers</h3>
-                        <div>
+                        <div id="example-headers" class="mb-5">
+                            <h3>Headers</h3>
                             <div class="content-example">
                                 <div id="table-headers"></div>
                             </div>
@@ -1092,11 +1121,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-footers">Footers</h3>
-                        <div>
+                        <div id="example-footers" class="mb-5">
+                            <h3>Footers</h3>
                             <div class="content-example">
                                 <div id="table-footers"></div>
                             </div>
@@ -1160,11 +1188,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-columns-row-span">Col-Row span</h3>
-                        <div>
+                        <div id="example-columns-row-span" class="mb-5">
+                            <h3>Col-Row span</h3>
                             <div class="content-example">
                                 <div id="table-columns-row-span"></div>
                             </div>
@@ -1233,11 +1260,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-group">Group</h3>
-                        <div>
+                        <div id="example-group" class="mb-5">
+                            <h3>Group</h3>
                             <div class="content-example">
                                 <div id="table-group"></div>
                             </div>
@@ -1273,11 +1299,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-sizing-decoration">Sizing and decoration</h3>
-                        <div>
+                        <div id="example-sizing-decoration" class="mb-5">
+                            <h3>Sizing and decoration</h3>
                             <div class="content-example">
                                 <div id="table-sizing-decoration"></div>
                             </div>
@@ -1330,11 +1355,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-sorting">Sorting</h3>
-                        <div>
+                        <div id="example-sorting" class="mb-5">
+                            <h3>Sorting</h3>
                             <div class="content-example">
                                 <div id="table-sorting"></div>
                             </div>
@@ -1375,11 +1399,11 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-search">Search</h3>
-                        <div>
+                        <div id="example-search" class="mb-5">
+                            <h3>Search</h3>
+
                             <div class="content-example">
                                 <div id="table-search"></div>
                             </div>
@@ -1501,11 +1525,10 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
 
 
-                        <h3 id="example-filters">Filters</h3>
-                        <div>
+                        <div id="example-filters" class="mb-5">
+                            <h3>Filters</h3>
                             <div class="content-example">
                                 <div id="table-filters"></div>
                             </div>
@@ -1598,554 +1621,554 @@
                                 </code></pre>
                             </div>
                         </div>
-                        <br><br>
-
                     </div>
 
 
-                    <h2 id="options" class="section-margin">Options</h2>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped js-options-table">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>type</th>
-                                <th>default</th>
-                                <th>description</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <th>id</th> <td>string</td> <td><code>crc32b</code></td>
-                                <td>Идентификатор таблицы. Этот id будет указан вместо уникального значения</td>
-                            </tr>
-                            <tr>
-                                <th>class</th> <td>string</td> <td></td>
-                                <td>Значение для атрибута сlass для таблицы</td>
-                            </tr>
-                            <tr>
-                                <th>columns</th> <td>array</td> <td> </td>
-                                <td>Массив с настройками колонок таблицы</td>
-                            </tr>
-                            <tr>
-                                <th>primaryKey</th> <td>string</td> <td><code>id</code></td>
-                                <td>Имя поля которое является первичным ключом в строках</td>
-                            </tr>
-                            <tr>
-                                <th>lang</th> <td>string</td> <td><code>ru</code></td>
-                                <td>Двухбуквенное обозначение языка</td>
-                            </tr>
-                            <tr>
-                                <th>width</th> <td>string|numeric</td> <td></td>
-                                <td>Ширина таблицы</td>
-                            </tr>
-                            <tr>
-                                <th>minWidth</th> <td>string|numeric</td> <td></td>
-                                <td>Минимальная ширина таблицы</td>
-                            </tr>
-                            <tr>
-                                <th>maxWidth</th> <td>string|numeric</td> <td></td>
-                                <td>Максимальная ширина таблицы</td>
-                            </tr>
-                            <tr>
-                                <th>height</th> <td>string|numeric</td> <td></td>
-                                <td>Высота таблицы таблицы</td>
-                            </tr>
-                            <tr>
-                                <th>minHeight</th> <td>string|numeric</td> <td></td>
-                                <td>Минимальная высота таблицы</td>
-                            </tr>
-                            <tr>
-                                <th>maxHeight</th> <td>string|numeric</td> <td></td>
-                                <td>Максимальная высота таблицы</td>
-                            </tr>
-                            <tr>
-                                <th>overflow</th> <td>boolean</td> <td><code>false</code></td>
-                                <td>Активирует ограничение на выход таблицы за границы контейнера. Включается автоматически при указании ограничения высоты или ширины</td>
-                            </tr>
-                            <tr>
-                                <th>theadTop</th> <td>numeric</td> <td><code>0</code></td>
-                                <td>Если overflow не активен, то, по умолчанию, при прокрутке, заголовок таблицы прижимается к верху страницы. Этот параметр указывает высоту на которой заголовок будет оставаться</td>
-                            </tr>
-                            <tr>
-                                <th>noBorder</th> <td>boolean</td> <td><code>false</code></td>
-                                <td>Убирает внешние границы с таблицы. Может быть полезно для визуального встраивания внутрь другого контента</td>
-                            </tr>
-                            <tr>
-                                <th>noWrap</th> <td>boolean</td> <td><code>false</code></td>
-                                <td>На все текстовые колонки таблицы будет применено ограничение текста в рамках одной строки. Для ограничения колонки по ширине в них требуется указывать maxWidth</td>
-                            </tr>
-                            <tr>
-                                <th>noWrapToggle</th> <td>boolean</td> <td><code>false</code></td>
-                                <td>Если активен, то на все текстовые колонки таблицы с ограничением по строкам (noWrap), будут добавлена кнопка разворачивания и сворачивания содержимого</td>
-                            </tr>
-                            <tr>
-                                <th>showHeaders</th> <td>boolean</td> <td><code>true</code></td>
-                                <td>Указывает, показывать ли заголовки колонок</td>
-                            </tr>
-                            <tr>
-                                <th>showScrollShadow</th> <td>boolean</td> <td><code>false</code></td>
-                                <td>Указывает отображать ли тень при прокрутке</td>
-                            </tr>
-                            <tr>
-                                <th>onClick</th> <td>function</td> <td></td>
-                                <td>Событие выполняемое при клике на строку</td>
-                            </tr>
-                            <tr>
-                                <th>onClickUrl</th> <td>string</td> <td></td>
-                                <td>Адрес открываемый при клике на строку</td>
-                            </tr>
-                            <tr>
-                                <th>page</th> <td>int</td> <td><code>1</code></td>
-                                <td>Текущая страница</td>
-                            </tr>
-                            <tr>
-                                <th>recordsPerPage</th> <td>int</td> <td><code>25</code></td>
-                                <td>Количество строк на странице</td>
-                            </tr>
-                            <tr>
-                                <th>recordsRequest</th> <td>object</td> <td><code>
-                                    {
-                                        method: 'GET',
-                                        url: '',
-                                        params: {
-                                            page: 'page',
-                                            count: 'count',
-                                            start: 'start',
-                                            end: 'end',
-                                            sort: 'sort',
-                                            search: 'search',
-                                            filter: 'filter'
+                    <div id="options" class="mb-5">
+                        <h2 class="section-margin">Options</h2>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped js-options-table">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>type</th>
+                                    <th>default</th>
+                                    <th>description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th>id</th> <td>string</td> <td><code>crc32b</code></td>
+                                    <td>Идентификатор таблицы. Этот id будет указан вместо уникального значения</td>
+                                </tr>
+                                <tr>
+                                    <th>class</th> <td>string</td> <td></td>
+                                    <td>Значение для атрибута сlass для таблицы</td>
+                                </tr>
+                                <tr>
+                                    <th>columns</th> <td>array</td> <td> </td>
+                                    <td>Массив с настройками колонок таблицы</td>
+                                </tr>
+                                <tr>
+                                    <th>primaryKey</th> <td>string</td> <td><code>id</code></td>
+                                    <td>Имя поля которое является первичным ключом в строках</td>
+                                </tr>
+                                <tr>
+                                    <th>lang</th> <td>string</td> <td><code>ru</code></td>
+                                    <td>Двухбуквенное обозначение языка</td>
+                                </tr>
+                                <tr>
+                                    <th>width</th> <td>string|numeric</td> <td></td>
+                                    <td>Ширина таблицы</td>
+                                </tr>
+                                <tr>
+                                    <th>minWidth</th> <td>string|numeric</td> <td></td>
+                                    <td>Минимальная ширина таблицы</td>
+                                </tr>
+                                <tr>
+                                    <th>maxWidth</th> <td>string|numeric</td> <td></td>
+                                    <td>Максимальная ширина таблицы</td>
+                                </tr>
+                                <tr>
+                                    <th>height</th> <td>string|numeric</td> <td></td>
+                                    <td>Высота таблицы таблицы</td>
+                                </tr>
+                                <tr>
+                                    <th>minHeight</th> <td>string|numeric</td> <td></td>
+                                    <td>Минимальная высота таблицы</td>
+                                </tr>
+                                <tr>
+                                    <th>maxHeight</th> <td>string|numeric</td> <td></td>
+                                    <td>Максимальная высота таблицы</td>
+                                </tr>
+                                <tr>
+                                    <th>overflow</th> <td>boolean</td> <td><code>false</code></td>
+                                    <td>Активирует ограничение на выход таблицы за границы контейнера. Включается автоматически при указании ограничения высоты или ширины</td>
+                                </tr>
+                                <tr>
+                                    <th>theadTop</th> <td>numeric</td> <td><code>0</code></td>
+                                    <td>Если overflow не активен, то, по умолчанию, при прокрутке, заголовок таблицы прижимается к верху страницы. Этот параметр указывает высоту на которой заголовок будет оставаться</td>
+                                </tr>
+                                <tr>
+                                    <th>noBorder</th> <td>boolean</td> <td><code>false</code></td>
+                                    <td>Убирает внешние границы с таблицы. Может быть полезно для визуального встраивания внутрь другого контента</td>
+                                </tr>
+                                <tr>
+                                    <th>noWrap</th> <td>boolean</td> <td><code>false</code></td>
+                                    <td>На все текстовые колонки таблицы будет применено ограничение текста в рамках одной строки. Для ограничения колонки по ширине в них требуется указывать maxWidth</td>
+                                </tr>
+                                <tr>
+                                    <th>noWrapToggle</th> <td>boolean</td> <td><code>false</code></td>
+                                    <td>Если активен, то на все текстовые колонки таблицы с ограничением по строкам (noWrap), будут добавлена кнопка разворачивания и сворачивания содержимого</td>
+                                </tr>
+                                <tr>
+                                    <th>showHeaders</th> <td>boolean</td> <td><code>true</code></td>
+                                    <td>Указывает, показывать ли заголовки колонок</td>
+                                </tr>
+                                <tr>
+                                    <th>showScrollShadow</th> <td>boolean</td> <td><code>false</code></td>
+                                    <td>Указывает отображать ли тень при прокрутке</td>
+                                </tr>
+                                <tr>
+                                    <th>onClick</th> <td>function</td> <td></td>
+                                    <td>Событие выполняемое при клике на строку</td>
+                                </tr>
+                                <tr>
+                                    <th>onClickUrl</th> <td>string</td> <td></td>
+                                    <td>Адрес открываемый при клике на строку</td>
+                                </tr>
+                                <tr>
+                                    <th>page</th> <td>int</td> <td><code>1</code></td>
+                                    <td>Текущая страница</td>
+                                </tr>
+                                <tr>
+                                    <th>recordsPerPage</th> <td>int</td> <td><code>25</code></td>
+                                    <td>Количество строк на странице</td>
+                                </tr>
+                                <tr>
+                                    <th>recordsRequest</th> <td>object</td> <td><code>
+                                        {
+                                            method: 'GET',
+                                            url: '',
+                                            params: {
+                                                page: 'page',
+                                                count: 'count',
+                                                start: 'start',
+                                                end: 'end',
+                                                sort: 'sort',
+                                                search: 'search',
+                                                filter: 'filter'
+                                            }
                                         }
-                                    }
-                                </code></td>
-                                <td>
-                                    Параметр указывает, что данные должны быть загружены по адресу.
-                                    <b>url</b> - адрес для загрузки данных.
-                                    <b>method</b> - http метод выполняемый для загрузки данных.
-                                    <b>params</b> - имена параметров отвечающих за запрашиваемые данные.
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>saveState</th> <td>boolean</td> <td><code>false</code></td>
-                                <td>Указывает сохранять ли измененные состояния таблицы. Если активно, то при формировании таблицы сохраненные состояния будут в приоритете. Сохраняются например сортировка, поиск, фильтрация</td>
-                            </tr>
-                            <tr>
-                                <th>header</th> <td>array</td> <td> </td>
-                                <td>Массив настроек для отображения контролов в верхней части таблицы</td>
-                            </tr>
-                            <tr>
-                                <th>footer</th> <td>array</td> <td> </td>
-                                <td>Массив настроек для отображения контролов в нижней части таблицы</td>
-                            </tr>
-                            <tr>
-                                <th>columnsHeader</th> <td>array</td> <td> </td>
-                                <td>Массив настроек для отображения дополнительных заголовков над колонками таблицы</td>
-                            </tr>
-                            <tr>
-                                <th>columnsFooter</th> <td>array</td> <td> </td>
-                                <td>Массив настроек для отображения дополнительных заголовков под колонками таблицы</td>
-                            </tr>
-                            <tr>
-                                <th>group</th> <td>object</td> <td><code>
-                                    {
-                                    field: null,
-                                    attr: {},
-                                    render: null
-                                    }
-                                </code></td>
-                                <td>Группировка строк по указанному полю</td>
-                            </tr>
-                            <tr>
-                                <th>records</th> <td>array</td> <td> </td>
-                                <td>Массив строк отображаемых в таблице</td>
-                            </tr>
-                            <tr>
-                                <th>sort</th> <td>array</td> <td> </td>
-                                <td>Массив с описанием какие колонки отсортированы и как именно. Пример: <code>{ field: 'fname', order: 'asc' }</code></td>
-                            </tr>
-                            <tr>
-                                <th>search</th> <td>object</td> <td><code>
-                                    {
-                                        labelWidth: 200,
-                                        controls: []
-                                    }
-                                </code></td>
-                                <td>
-                                    Указывает, какие поисковые контролы необходимо добавить в раскрывающийся поиск.
-                                    <b>labelWidth</b> - ширина первой колонки с поисковыми названиями.
-                                    <b>controls</b> - список поисковых контролов.
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                    </code></td>
+                                    <td>
+                                        Параметр указывает, что данные должны быть загружены по адресу.
+                                        <b>url</b> - адрес для загрузки данных.
+                                        <b>method</b> - http метод выполняемый для загрузки данных.
+                                        <b>params</b> - имена параметров отвечающих за запрашиваемые данные.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>saveState</th> <td>boolean</td> <td><code>false</code></td>
+                                    <td>Указывает сохранять ли измененные состояния таблицы. Если активно, то при формировании таблицы сохраненные состояния будут в приоритете. Сохраняются например сортировка, поиск, фильтрация</td>
+                                </tr>
+                                <tr>
+                                    <th>header</th> <td>array</td> <td> </td>
+                                    <td>Массив настроек для отображения контролов в верхней части таблицы</td>
+                                </tr>
+                                <tr>
+                                    <th>footer</th> <td>array</td> <td> </td>
+                                    <td>Массив настроек для отображения контролов в нижней части таблицы</td>
+                                </tr>
+                                <tr>
+                                    <th>columnsHeader</th> <td>array</td> <td> </td>
+                                    <td>Массив настроек для отображения дополнительных заголовков над колонками таблицы</td>
+                                </tr>
+                                <tr>
+                                    <th>columnsFooter</th> <td>array</td> <td> </td>
+                                    <td>Массив настроек для отображения дополнительных заголовков под колонками таблицы</td>
+                                </tr>
+                                <tr>
+                                    <th>group</th> <td>object</td> <td><code>
+                                        {
+                                        field: null,
+                                        attr: {},
+                                        render: null
+                                        }
+                                    </code></td>
+                                    <td>Группировка строк по указанному полю</td>
+                                </tr>
+                                <tr>
+                                    <th>records</th> <td>array</td> <td> </td>
+                                    <td>Массив строк отображаемых в таблице</td>
+                                </tr>
+                                <tr>
+                                    <th>sort</th> <td>array</td> <td> </td>
+                                    <td>Массив с описанием какие колонки отсортированы и как именно. Пример: <code>{ field: 'fname', order: 'asc' }</code></td>
+                                </tr>
+                                <tr>
+                                    <th>search</th> <td>object</td> <td><code>
+                                        {
+                                            labelWidth: 200,
+                                            controls: []
+                                        }
+                                    </code></td>
+                                    <td>
+                                        Указывает, какие поисковые контролы необходимо добавить в раскрывающийся поиск.
+                                        <b>labelWidth</b> - ширина первой колонки с поисковыми названиями.
+                                        <b>controls</b> - список поисковых контролов.
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
 
-                    <h2 id="methods" class="section-margin">Methods</h2>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped js-options-table">
-                            <thead>
-                            <tr>
-                                <th style="width: 40%">Method</th>
-                                <th>Description</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    let table = CoreUI.table.create( options )
-                                </td>
-                                <td>
-                                    Метод для создания экземпляра таблицы
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    let table = CoreUI.table.get( tableId )
-                                </td>
-                                <td>
-                                    Получение ранее созданного экземпляра таблицы
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    table.render( elementId )
-                                </td>
-                                <td>
-                                    Формирование html таблицы и размещение его если указан dom элемент.
-                                    Если элемент не указан, то метод возвращает сформированный html
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    table.initEvents()
-                                </td>
-                                <td>
-                                    Инициализирует события необходимые для корректной работы таблицы.
-                                    Требует обязательного вызова, если при рендере таблицы не был указан элемент для вставки
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>table.getId()</td>
-                                <td>Получение id таблицы</td>
-                            </tr>
-                            <tr>
-                                <td>table.getOptions()</td>
-                                <td>Получение заданных ранее опций таблицы</td>
-                            </tr>
-                            <tr>
-                                <td>table.lock()</td>
-                                <td>Блокирует работу с таблицей и показывает сообщение о загрузке</td>
-                            </tr>
-                            <tr>
-                                <td>table.unlock()</td>
-                                <td>Разблокирует работу с таблицей</td>
-                            </tr>
-                            <tr>
-                                <td>table.reload()</td>
-                                <td>Перезагрузка строк в таблице, при условии, что ранее был указан адрес для загрузки</td>
-                            </tr>
-                            <tr>
-                                <td>table.load( url, method ) </td>
-                                <td>Загрузка строк в таблице по указанному адресу и методу </td>
-                            </tr>
-                            <tr>
-                                <td>table.reload()</td>
-                                <td>Перезагрузка записей в таблице</td>
-                            </tr>
-                            <tr>
-                                <td>table.refresh()</td>
-                                <td>Пересоздание тела таблицы</td>
-                            </tr>
-                            <tr>
-                                <td>table.setPageSize()</td>
-                                <td>Установка общего количества записей на странице</td>
-                            </tr>
-                            <tr>
-                                <td>table.prevPage()</td>
-                                <td>Загрузка строк в таблице из предыдущей страницы</td>
-                            </tr>
-                            <tr>
-                                <td>table.nextPage()</td>
-                                <td>Загрузка строк в таблице из следующей страницы</td>
-                            </tr>
-                            <tr>
-                                <td>table.goPage( page )</td>
-                                <td>Загрузка строк в таблицу из указанной страницы</td>
-                            </tr>
-                            <tr>
-                                <td>table.getRecords()</td>
-                                <td>Получение массива всех строк из таблицы</td>
-                            </tr>
-                            <tr>
-                                <td>table.getRecordById( primaryKey )</td>
-                                <td>Получение объекта строки из таблицы по указанному primaryKey</td>
-                            </tr>
-                            <tr>
-                                <td>table.getRecordByIndex()</td>
-                                <td>Получение записи по индексу</td>
-                            </tr>
-                            <tr>
-                                <td>table.getRecordByField( field, value )</td>
-                                <td>Получение записи по полю</td>
-                            </tr>
-                            <tr>
-                                <td>table.getSelected()</td>
-                                <td>Получение всех выбранных строк из таблицы в виде массива primaryKey</td>
-                            </tr>
-                            <tr>
-                                <td>table.getSelectedRecords()</td>
-                                <td>Получение всех выбранных строк из таблицы в виде массива объектов строк</td>
-                            </tr>
-                            <tr>
-                                <td>table.getSelectedRecordsId()</td>
-                                <td>Получение выбранных id</td>
-                            </tr>
-                            <tr>
-                                <td>table.selectRecord( primaryKey )</td>
-                                <td>Выделение указанной строки находящийся в таблице</td>
-                            </tr>
-                            <tr>
-                                <td>table.unselectRecord( primaryKey )</td>
-                                <td>Снятие выделения указанной строки находящийся в таблице</td>
-                            </tr>
-                            <tr>
-                                <td>table.selectAll()</td>
-                                <td>Выделение всех строк в таблице</td>
-                            </tr>
-                            <tr>
-                                <td>table.unselectAll()</td>
-                                <td>Снятие выделения всех строк в таблице</td>
-                            </tr>
-                            <tr>
-                                <td>table.on( name, function, context, singleExec )</td>
-                                <td>Регистрация функции вызываемой при наступлении указанного события</td>
-                            </tr>
-                            <tr>
-                                <td>table.getLang()</td>
-                                <td>Получение переводов текущего языка</td>
-                            </tr>
-                            <tr>
-                                <td>table.setColumnsShow( columns )</td>
-                                <td>Установка видимых колонок, не указанные колонки будут скрыты</td>
-                            </tr>
-                            <tr>
-                                <td>table.getSearchData()</td>
-                                <td>Получение поисковых данных</td>
-                            </tr>
-                            <tr>
-                                <td>table.getFilterData()</td>
-                                <td>Получение данных из фильтров</td>
-                            </tr>
-                            <tr>
-                                <td>table.searchRecords()</td>
-                                <td>Поиск по таблице с использованием данных из поиска и фильтров</td>
-                            </tr>
-                            <tr>
-                                <td>table.searchRecords()</td>
-                                <td>Поиск по таблице с использованием данных из поиска и фильтров</td>
-                            </tr>
-                            <tr>
-                                <td>table.searchClear()</td>
-                                <td>Очистка поисковых данных</td>
-                            </tr>
-                            <tr>
-                                <td>table.filtersClear()</td>
-                                <td>Очистка поисковых данных в фильтрах</td>
-                            </tr>
-                            <tr>
-                                <td>table.getControlById()</td>
-                                <td>Получение контрола по его id</td>
-                            </tr>
-                            <tr>
-                                <td>table.getSearchControlById()</td>
-                                <td>Получение контрола поиска по его id</td>
-                            </tr>
-                            <tr>
-                                <td>table.sortFields( sorting )</td>
-                                <td>Сортировка по полям</td>
-                            </tr>
-                            <tr>
-                                <td>table.sortDefault()</td>
-                                <td>Сортировка по умолчанию</td>
-                            </tr>
-                            <tr>
-                                <td>table.removeRecordByIndex( index )</td>
-                                <td>Удаление строки из таблицы по индексу</td>
-                            </tr>
-                            <tr>
-                                <td>table.addRecordAfterIndex( recordData, index )</td>
-                                <td>Добавление строки в таблицу после строки с индексом</td>
-                            </tr>
-                            <tr>
-                                <td>table.addRecordBeforeIndex( recordData, index )</td>
-                                <td>Добавление строки в таблицу перед строкой с индексом</td>
-                            </tr>
-                            <tr>
-                                <td>table.addRecordFirst( recordData )</td>
-                                <td>Добавление строки в начало таблицы</td>
-                            </tr>
-                            <tr>
-                                <td>table.addRecordLast( recordData )</td>
-                                <td>Добавление строки в конец таблицы</td>
-                            </tr>
-                            <tr>
-                                <td>table.setRecords( records, total )</td>
-                                <td>Показ указанных записей в таблице</td>
-                            </tr>
-                            <tr>
-                                <td>table.getRecordsCount()</td>
-                                <td>Получение количества строк</td>
-                            </tr>
-                            <tr>
-                                <td>table.expandRecordContent( recordIndex, content, isRebuild )</td>
-                                <td>Раскрытие / скрытие дополнительных данных строки</td>
-                            </tr>
-                            <tr>
-                                <td>table.expandRecordUrl( recordIndex, url, isRebuild )</td>
-                                <td>Раскрытие / скрытие дополнительных данных строки</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div id="methods" class="mb-5">
+                        <h2 class="section-margin">Methods</h2>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped js-options-table">
+                                <thead>
+                                <tr>
+                                    <th style="width: 40%">Method</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        let table = CoreUI.table.create( options )
+                                    </td>
+                                    <td>
+                                        Метод для создания экземпляра таблицы
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        let table = CoreUI.table.get( tableId )
+                                    </td>
+                                    <td>
+                                        Получение ранее созданного экземпляра таблицы
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        table.render( elementId )
+                                    </td>
+                                    <td>
+                                        Формирование html таблицы и размещение его если указан dom элемент.
+                                        Если элемент не указан, то метод возвращает сформированный html
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        table.initEvents()
+                                    </td>
+                                    <td>
+                                        Инициализирует события необходимые для корректной работы таблицы.
+                                        Требует обязательного вызова, если при рендере таблицы не был указан элемент для вставки
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>table.getId()</td>
+                                    <td>Получение id таблицы</td>
+                                </tr>
+                                <tr>
+                                    <td>table.getOptions()</td>
+                                    <td>Получение заданных ранее опций таблицы</td>
+                                </tr>
+                                <tr>
+                                    <td>table.lock()</td>
+                                    <td>Блокирует работу с таблицей и показывает сообщение о загрузке</td>
+                                </tr>
+                                <tr>
+                                    <td>table.unlock()</td>
+                                    <td>Разблокирует работу с таблицей</td>
+                                </tr>
+                                <tr>
+                                    <td>table.reload()</td>
+                                    <td>Перезагрузка строк в таблице, при условии, что ранее был указан адрес для загрузки</td>
+                                </tr>
+                                <tr>
+                                    <td>table.load( url, method ) </td>
+                                    <td>Загрузка строк в таблице по указанному адресу и методу </td>
+                                </tr>
+                                <tr>
+                                    <td>table.reload()</td>
+                                    <td>Перезагрузка записей в таблице</td>
+                                </tr>
+                                <tr>
+                                    <td>table.refresh()</td>
+                                    <td>Пересоздание тела таблицы</td>
+                                </tr>
+                                <tr>
+                                    <td>table.setPageSize()</td>
+                                    <td>Установка общего количества записей на странице</td>
+                                </tr>
+                                <tr>
+                                    <td>table.prevPage()</td>
+                                    <td>Загрузка строк в таблице из предыдущей страницы</td>
+                                </tr>
+                                <tr>
+                                    <td>table.nextPage()</td>
+                                    <td>Загрузка строк в таблице из следующей страницы</td>
+                                </tr>
+                                <tr>
+                                    <td>table.goPage( page )</td>
+                                    <td>Загрузка строк в таблицу из указанной страницы</td>
+                                </tr>
+                                <tr>
+                                    <td>table.getRecords()</td>
+                                    <td>Получение массива всех строк из таблицы</td>
+                                </tr>
+                                <tr>
+                                    <td>table.getRecordById( primaryKey )</td>
+                                    <td>Получение объекта строки из таблицы по указанному primaryKey</td>
+                                </tr>
+                                <tr>
+                                    <td>table.getRecordByIndex()</td>
+                                    <td>Получение записи по индексу</td>
+                                </tr>
+                                <tr>
+                                    <td>table.getRecordByField( field, value )</td>
+                                    <td>Получение записи по полю</td>
+                                </tr>
+                                <tr>
+                                    <td>table.getSelected()</td>
+                                    <td>Получение всех выбранных строк из таблицы в виде массива primaryKey</td>
+                                </tr>
+                                <tr>
+                                    <td>table.getSelectedRecords()</td>
+                                    <td>Получение всех выбранных строк из таблицы в виде массива объектов строк</td>
+                                </tr>
+                                <tr>
+                                    <td>table.getSelectedRecordsId()</td>
+                                    <td>Получение выбранных id</td>
+                                </tr>
+                                <tr>
+                                    <td>table.selectRecord( primaryKey )</td>
+                                    <td>Выделение указанной строки находящийся в таблице</td>
+                                </tr>
+                                <tr>
+                                    <td>table.unselectRecord( primaryKey )</td>
+                                    <td>Снятие выделения указанной строки находящийся в таблице</td>
+                                </tr>
+                                <tr>
+                                    <td>table.selectAll()</td>
+                                    <td>Выделение всех строк в таблице</td>
+                                </tr>
+                                <tr>
+                                    <td>table.unselectAll()</td>
+                                    <td>Снятие выделения всех строк в таблице</td>
+                                </tr>
+                                <tr>
+                                    <td>table.on( name, function, context, singleExec )</td>
+                                    <td>Регистрация функции вызываемой при наступлении указанного события</td>
+                                </tr>
+                                <tr>
+                                    <td>table.getLang()</td>
+                                    <td>Получение переводов текущего языка</td>
+                                </tr>
+                                <tr>
+                                    <td>table.setColumnsShow( columns )</td>
+                                    <td>Установка видимых колонок, не указанные колонки будут скрыты</td>
+                                </tr>
+                                <tr>
+                                    <td>table.getSearchData()</td>
+                                    <td>Получение поисковых данных</td>
+                                </tr>
+                                <tr>
+                                    <td>table.getFilterData()</td>
+                                    <td>Получение данных из фильтров</td>
+                                </tr>
+                                <tr>
+                                    <td>table.searchRecords()</td>
+                                    <td>Поиск по таблице с использованием данных из поиска и фильтров</td>
+                                </tr>
+                                <tr>
+                                    <td>table.searchRecords()</td>
+                                    <td>Поиск по таблице с использованием данных из поиска и фильтров</td>
+                                </tr>
+                                <tr>
+                                    <td>table.searchClear()</td>
+                                    <td>Очистка поисковых данных</td>
+                                </tr>
+                                <tr>
+                                    <td>table.filtersClear()</td>
+                                    <td>Очистка поисковых данных в фильтрах</td>
+                                </tr>
+                                <tr>
+                                    <td>table.getControlById()</td>
+                                    <td>Получение контрола по его id</td>
+                                </tr>
+                                <tr>
+                                    <td>table.getSearchControlById()</td>
+                                    <td>Получение контрола поиска по его id</td>
+                                </tr>
+                                <tr>
+                                    <td>table.sortFields( sorting )</td>
+                                    <td>Сортировка по полям</td>
+                                </tr>
+                                <tr>
+                                    <td>table.sortDefault()</td>
+                                    <td>Сортировка по умолчанию</td>
+                                </tr>
+                                <tr>
+                                    <td>table.removeRecordByIndex( index )</td>
+                                    <td>Удаление строки из таблицы по индексу</td>
+                                </tr>
+                                <tr>
+                                    <td>table.addRecordAfterIndex( recordData, index )</td>
+                                    <td>Добавление строки в таблицу после строки с индексом</td>
+                                </tr>
+                                <tr>
+                                    <td>table.addRecordBeforeIndex( recordData, index )</td>
+                                    <td>Добавление строки в таблицу перед строкой с индексом</td>
+                                </tr>
+                                <tr>
+                                    <td>table.addRecordFirst( recordData )</td>
+                                    <td>Добавление строки в начало таблицы</td>
+                                </tr>
+                                <tr>
+                                    <td>table.addRecordLast( recordData )</td>
+                                    <td>Добавление строки в конец таблицы</td>
+                                </tr>
+                                <tr>
+                                    <td>table.setRecords( records, total )</td>
+                                    <td>Показ указанных записей в таблице</td>
+                                </tr>
+                                <tr>
+                                    <td>table.getRecordsCount()</td>
+                                    <td>Получение количества строк</td>
+                                </tr>
+                                <tr>
+                                    <td>table.expandRecordContent( recordIndex, content, isRebuild )</td>
+                                    <td>Раскрытие / скрытие дополнительных данных строки</td>
+                                </tr>
+                                <tr>
+                                    <td>table.expandRecordUrl( recordIndex, url, isRebuild )</td>
+                                    <td>Раскрытие / скрытие дополнительных данных строки</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <br>
-                    <br>
 
 
-                    <h2 id="events" class="section-margin">Events</h2>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped bs-events-table">
-                            <thead>
-                            <tr>
-                                <th>Event Type</th>
-                                <th>Description</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="text-nowrap">container_show</td>
-                                <td>
-                                    Показ контейнера таблицы на странице. Происходит один раз при отображении
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">table_show</td>
-                                <td>
-                                    Показ таблицы на странице.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">records_show</td>
-                                <td>
-                                    Показ строк в таблице.
-                                    Происходит каждый раз при загрузке строк в таблицу.<br>
-                                    В качестве параметров передаются <code>table.on('records_show', function (table)</code>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">records_load_start</td>
-                                <td>
-                                    Выполняется каждый раз перед началом запроса для загрузки строк в таблицу.<br>
-                                    В качестве параметров передаются <code>table.on('records_load_start', function (table, xhr)</code>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">records_load_end</td>
-                                <td>
-                                    Выполняется каждый раз после запроса для загрузки строк в таблицу.<br>
-                                    В качестве параметров передаются <code>table.on('records_load_end', function (table, xhr, textStatus)</code>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">records_load_error</td>
-                                <td>
-                                    Выполняется каждый раз после не успешного запроса для загрузки строк в таблицу.<br>
-                                    В качестве параметров передаются <code>table.on('records_load_error', function (table, xhr, textStatus)</code>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">record_select_all</td>
-                                <td>
-                                    Происходит при выборе всех строк в таблице.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">record_unselect_all</td>
-                                <td>
-                                    Происходит при снятии выбора всех строк в таблице.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">record_select</td>
-                                <td>
-                                    Происходит при выборе одной строки в таблице.<br>
-                                    В качестве параметров передаются <code>table.on('record_select', function (record)</code>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">record_unselect</td>
-                                <td>
-                                    Происходит при выборе одной строки в таблице.<br>
-                                    В качестве параметров передаются <code>table.on('record_unselect', function (record)</code>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">record_expand_show</td>
-                                <td>
-                                    Происходит при разворачивании какого-либо содержимого под строкой в таблице.<br>
-                                    В качестве параметров передаются <code>table.on('record_expand_show', function (record)</code>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">record_expand_hide</td>
-                                <td>
-                                    Происходит при сворачивании какого-либо содержимого под строкой в таблице.<br>
-                                    В качестве параметров передаются <code>table.on('record_expand_hide', function (record)</code>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">page_size_update</td>
-                                <td>
-                                    Происходит при изменении отображаемого количества строк в таблице.</code>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">columns_change</td>
-                                <td>
-                                    Происходит при изменении показываемых колонок в таблице.</code>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">search_change</td>
-                                <td>
-                                    Происходит при изменении поисковых параметров в таблице.<br>
-                                    В качестве параметров передаются <code>table.on('search_change', function (searchData)</code>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">filters_change</td>
-                                <td>
-                                    Происходит при изменении поисковых фильтров в таблице.
-                                    В качестве параметров передаются <code>table.on('filters_change', function (filterData)</code>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">records_sort</td>
-                                <td>
-                                    Происходит при сортировке в таблице.
-                                    В качестве параметров передаются <code>table.on('records_sort', function (table)</code>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div id="events" class="mb-5">
+                        <h2 class="section-margin">Events</h2>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped bs-events-table">
+                                <thead>
+                                <tr>
+                                    <th>Event Type</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="text-nowrap">container_show</td>
+                                    <td>
+                                        Показ контейнера таблицы на странице. Происходит один раз при отображении
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-nowrap">table_show</td>
+                                    <td>
+                                        Показ таблицы на странице.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-nowrap">records_show</td>
+                                    <td>
+                                        Показ строк в таблице.
+                                        Происходит каждый раз при загрузке строк в таблицу.<br>
+                                        В качестве параметров передаются <code>table.on('records_show', function (table)</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-nowrap">records_load_start</td>
+                                    <td>
+                                        Выполняется каждый раз перед началом запроса для загрузки строк в таблицу.<br>
+                                        В качестве параметров передаются <code>table.on('records_load_start', function (table, xhr)</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-nowrap">records_load_end</td>
+                                    <td>
+                                        Выполняется каждый раз после запроса для загрузки строк в таблицу.<br>
+                                        В качестве параметров передаются <code>table.on('records_load_end', function (table, xhr, textStatus)</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-nowrap">records_load_error</td>
+                                    <td>
+                                        Выполняется каждый раз после не успешного запроса для загрузки строк в таблицу.<br>
+                                        В качестве параметров передаются <code>table.on('records_load_error', function (table, xhr, textStatus)</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-nowrap">record_select_all</td>
+                                    <td>
+                                        Происходит при выборе всех строк в таблице.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-nowrap">record_unselect_all</td>
+                                    <td>
+                                        Происходит при снятии выбора всех строк в таблице.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-nowrap">record_select</td>
+                                    <td>
+                                        Происходит при выборе одной строки в таблице.<br>
+                                        В качестве параметров передаются <code>table.on('record_select', function (record)</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-nowrap">record_unselect</td>
+                                    <td>
+                                        Происходит при выборе одной строки в таблице.<br>
+                                        В качестве параметров передаются <code>table.on('record_unselect', function (record)</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-nowrap">record_expand_show</td>
+                                    <td>
+                                        Происходит при разворачивании какого-либо содержимого под строкой в таблице.<br>
+                                        В качестве параметров передаются <code>table.on('record_expand_show', function (record)</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-nowrap">record_expand_hide</td>
+                                    <td>
+                                        Происходит при сворачивании какого-либо содержимого под строкой в таблице.<br>
+                                        В качестве параметров передаются <code>table.on('record_expand_hide', function (record)</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-nowrap">page_size_update</td>
+                                    <td>
+                                        Происходит при изменении отображаемого количества строк в таблице.</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-nowrap">columns_change</td>
+                                    <td>
+                                        Происходит при изменении показываемых колонок в таблице.</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-nowrap">search_change</td>
+                                    <td>
+                                        Происходит при изменении поисковых параметров в таблице.<br>
+                                        В качестве параметров передаются <code>table.on('search_change', function (searchData)</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-nowrap">filters_change</td>
+                                    <td>
+                                        Происходит при изменении поисковых фильтров в таблице.
+                                        В качестве параметров передаются <code>table.on('filters_change', function (filterData)</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-nowrap">records_sort</td>
+                                    <td>
+                                        Происходит при сортировке в таблице.
+                                        В качестве параметров передаются <code>table.on('records_sort', function (table)</code>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <br>
-                    <br>
 
 
-                    <h2 id="sass-variables" class="section-margin">Sass variables</h2>
-                    <div>
+                    <div id="sass-variables" class="mb-5">
+                        <h2 class="section-margin">Sass variables</h2>
                         <div class="content-markup">
                             <pre><code>
     $coreui-table-thead-bg: #FFF;
@@ -2178,8 +2201,6 @@
                             </code></pre>
                         </div>
                     </div>
-                    <br>
-                    <br>
                 </div>
             </div>
         </div>
