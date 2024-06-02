@@ -110,7 +110,7 @@ coreuiTable.filters.text = {
             }
         }
 
-        return null;
+        return this._value;
     },
 
 

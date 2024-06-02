@@ -151,7 +151,7 @@ coreuiTable.search.datetime_range = {
             }
         }
 
-        return null;
+        return this._value;
     },
 
 

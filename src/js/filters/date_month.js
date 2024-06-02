@@ -112,7 +112,7 @@ coreuiTable.filters.date_month = {
             }
         }
 
-        return null;
+        return this._value;
     },
 
 

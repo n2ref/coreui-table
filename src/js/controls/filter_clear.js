@@ -20,8 +20,8 @@ coreuiTable.controls.filter_clear = {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {object} table
+     * @param {object} options
      */
     init: function (table, options) {
 

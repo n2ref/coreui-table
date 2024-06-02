@@ -105,7 +105,7 @@ coreuiTable.search.text = {
             }
         }
 
-        return null;
+        return this._value;
     },
 
 

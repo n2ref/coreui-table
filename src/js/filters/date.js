@@ -113,7 +113,7 @@ coreuiTable.filters.date = {
             }
         }
 
-        return null;
+        return this._value;
     },
 
 

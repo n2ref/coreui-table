@@ -14,6 +14,11 @@ let coreuiTablePrivate = {
      */
     initColumns(tableWrapper, table, columns) {
 
+        let options        = table.getOptions();
+        let columnsStorage = options.saveState && options.id
+            ? coreuiTablePrivate.getStorageField(table.getId(), 'columns')
+            : null;
+
         $.each(columns, function (key, column) {
             if (typeof column.type === 'undefined' ||
                 ! tableWrapper.columns.hasOwnProperty(column.type)
@@ -24,6 +29,20 @@ let coreuiTablePrivate = {
             if ( ! column.hasOwnProperty('show') || typeof column.show !== 'boolean') {
                 column.show = true;
             }
+
+            if (columnsStorage) {
+                $.each(columnsStorage, function (key2, columnStorage) {
+                    if (columnStorage &&
+                        columnStorage.hasOwnProperty('field') &&
+                        columnStorage.hasOwnProperty('isShow') &&
+                        columnStorage.field === column.field
+                    ) {
+                        column.show = !! columnStorage.isShow;
+                        return false;
+                    }
+                });
+            }
+
 
             if (column.hasOwnProperty('fixed') && typeof column.fixed === 'string') {
                 table._options.overflow = true;

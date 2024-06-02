@@ -155,7 +155,7 @@ coreuiTable.filters.number = {
         }
 
 
-        return null;
+        return this._value;
     },
 
 

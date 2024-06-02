@@ -1723,11 +1723,11 @@ let coreuiTableInstance = {
                         callbackResult
                             .then(function (result) {
                                 coreuiTableElements.addExpandRow(that, recordElement, result);
-                                coreuiTablePrivate._trigger(this, 'record_expand_show', [recordIndex]);
+                                coreuiTablePrivate._trigger(that, 'record_expand_show', [recordIndex]);
 
                             }).catch(function () {
                                 coreuiTableElements.addExpandRow(that, recordElement, '');
-                                coreuiTablePrivate._trigger(this, 'record_expand_show', [recordIndex]);
+                                coreuiTablePrivate._trigger(that, 'record_expand_show', [recordIndex]);
                             });
 
                     } else{

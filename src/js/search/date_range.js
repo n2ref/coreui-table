@@ -152,7 +152,7 @@ coreuiTable.search.date_range = {
         }
 
 
-        return null;
+        return this._value;
     },
 
 

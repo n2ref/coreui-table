@@ -139,7 +139,7 @@ coreuiTable.filters.select = {
                 : null;
 
         } else {
-            return null;
+            return this._value;
         }
     },
 

@@ -148,7 +148,7 @@ coreuiTable.search.number = {
 
         }
 
-        return null;
+        return this._value;
     },
 
 

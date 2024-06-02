@@ -103,7 +103,7 @@ coreuiTable.search.switch = {
         let control = coreuiTableElements.getSearchControl(this._table.getId(), this._id);
         let input   = $('input:checked', control);
 
-        return input[0] ? input.val() : null;
+        return input[0] ? input.val() : this._value;
     },
 
 

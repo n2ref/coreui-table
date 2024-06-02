@@ -111,7 +111,7 @@ coreuiTable.search.datetime = {
             }
         }
 
-        return null;
+        return this._value;
     },
 
 

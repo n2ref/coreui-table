@@ -104,7 +104,7 @@ coreuiTable.filters.switch = {
         let control = coreuiTableElements.getControl(this._table.getId(), this._id);
         let input   = $('input:checked', control);
 
-        return input[0] ? input.val() : null;
+        return input[0] ? input.val() : this._value;
     },
 
 

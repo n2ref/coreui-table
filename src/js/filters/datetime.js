@@ -112,7 +112,7 @@ coreuiTable.filters.datetime = {
             }
         }
 
-        return null;
+        return this._value;
     },
 
 

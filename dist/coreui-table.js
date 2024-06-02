@@ -1953,12 +1953,22 @@
      * @private
      */
     initColumns: function initColumns(tableWrapper, table, columns) {
+      var options = table.getOptions();
+      var columnsStorage = options.saveState && options.id ? coreuiTablePrivate.getStorageField(table.getId(), 'columns') : null;
       $.each(columns, function (key, column) {
         if (typeof column.type === 'undefined' || !tableWrapper.columns.hasOwnProperty(column.type)) {
           column.type = 'text';
         }
         if (!column.hasOwnProperty('show') || typeof column.show !== 'boolean') {
           column.show = true;
+        }
+        if (columnsStorage) {
+          $.each(columnsStorage, function (key2, columnStorage) {
+            if (columnStorage && columnStorage.hasOwnProperty('field') && columnStorage.hasOwnProperty('isShow') && columnStorage.field === column.field) {
+              column.show = !!columnStorage.isShow;
+              return false;
+            }
+          });
         }
         if (column.hasOwnProperty('fixed') && typeof column.fixed === 'string') {
           table._options.overflow = true;
@@ -3658,10 +3668,10 @@
               var that = this;
               callbackResult.then(function (result) {
                 coreuiTableElements.addExpandRow(that, recordElement, result);
-                coreuiTablePrivate._trigger(this, 'record_expand_show', [_recordIndex]);
+                coreuiTablePrivate._trigger(that, 'record_expand_show', [_recordIndex]);
               })["catch"](function () {
                 coreuiTableElements.addExpandRow(that, recordElement, '');
-                coreuiTablePrivate._trigger(this, 'record_expand_show', [_recordIndex]);
+                coreuiTablePrivate._trigger(that, 'record_expand_show', [_recordIndex]);
               });
             } else {
               coreuiTableElements.addExpandRow(this, recordElement, callbackResult);
@@ -5109,8 +5119,8 @@
     },
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {object} table
+     * @param {object} options
      */
     init: function init(table, options) {
       this._options = $.extend(true, {}, this._options, options);
@@ -5311,7 +5321,7 @@
           return value;
         }
       }
-      return null;
+      return this._value;
     },
     /**
      * Инициализация событий
@@ -5488,7 +5498,7 @@
           };
         }
       }
-      return null;
+      return this._value;
     },
     /**
      * Инициализация событий
@@ -5651,7 +5661,7 @@
           return value;
         }
       }
-      return null;
+      return this._value;
     },
     /**
      * Инициализация событий
@@ -5773,7 +5783,7 @@
           return value;
         }
       }
-      return null;
+      return this._value;
     },
     /**
      * Инициализация событий
@@ -5895,7 +5905,7 @@
           return value;
         }
       }
-      return null;
+      return this._value;
     },
     /**
      * Инициализация событий
@@ -6218,7 +6228,7 @@
           };
         }
       }
-      return null;
+      return this._value;
     },
     /**
      * Инициализация событий
@@ -6646,7 +6656,7 @@
         });
         return items.length > 0 ? isMultiple ? items : items[0] : null;
       } else {
-        return null;
+        return this._value;
       }
     },
     /**
@@ -6831,7 +6841,7 @@
     getValue: function getValue() {
       var control = coreuiTableElements.getControl(this._table.getId(), this._id);
       var input = $('input:checked', control);
-      return input[0] ? input.val() : null;
+      return input[0] ? input.val() : this._value;
     },
     /**
      * Инициализация событий
@@ -6934,7 +6944,7 @@
           return value;
         }
       }
-      return null;
+      return this._value;
     },
     /**
      * Инициализация событий
@@ -7086,7 +7096,7 @@
           };
         }
       }
-      return null;
+      return this._value;
     },
     /**
      * Инициализация событий
@@ -7230,7 +7240,7 @@
           return value;
         }
       }
-      return null;
+      return this._value;
     },
     /**
      * Инициализация событий
@@ -7353,7 +7363,7 @@
           return value;
         }
       }
-      return null;
+      return this._value;
     },
     /**
      * Инициализация событий
@@ -7476,7 +7486,7 @@
           return value;
         }
       }
-      return null;
+      return this._value;
     },
     /**
      * Инициализация событий
@@ -7628,7 +7638,7 @@
           };
         }
       }
-      return null;
+      return this._value;
     },
     /**
      * Инициализация событий
@@ -7802,7 +7812,7 @@
           };
         }
       }
-      return null;
+      return this._value;
     },
     /**
      * Инициализация событий
@@ -8413,7 +8423,7 @@
     getValue: function getValue() {
       var control = coreuiTableElements.getSearchControl(this._table.getId(), this._id);
       var input = $('input:checked', control);
-      return input[0] ? input.val() : null;
+      return input[0] ? input.val() : this._value;
     },
     /**
      * Инициализация событий
