@@ -1184,21 +1184,21 @@ document.addEventListener('DOMContentLoaded', function () {
             { field: 'sdate',  label: 'Start Date', type: 'date', width: 140 }
         ],
         records: [
-            { "id": 0,  "name": "Armstrong Cole",    "number": 28, "active": "N", "sdate": "2018-09-18" },
-            { "id": 1,  "name": "Dionne Mccray",     "number": 38, "active": "N", "sdate": "2015-03-06" },
-            { "id": 2,  "name": "Bridgett Melendez", "number": 33, "active": "N", "sdate": "2020-02-13" },
-            { "id": 3,  "name": "Finley Meyer",      "number": 35, "active": "Y", "sdate": "2014-11-17" },
-            { "id": 4,  "name": "Sheila Briggs",     "number": 38, "active": "N", "sdate": "2023-07-04" },
-            { "id": 5,  "name": "Vasquez Shepard",   "number": 23, "active": "Y", "sdate": "2015-10-30" },
-            { "id": 6,  "name": "Meredith Garrison", "number": 27, "active": "N", "sdate": "2021-04-07" },
-            { "id": 7,  "name": "Isabella Poole",    "number": 39, "active": "Y", "sdate": "2023-02-24" },
-            { "id": 8,  "name": "Roach Fischer",     "number": 30, "active": "N", "sdate": "2021-03-12" },
-            { "id": 9,  "name": "Melva Macdonald",   "number": 38, "active": "Y", "sdate": "2015-05-18" },
-            { "id": 10, "name": "Goodwin Foster",    "number": 21, "active": "N", "sdate": "2018-11-18" },
-            { "id": 11, "name": "Jacqueline Gibson", "number": 30, "active": "N", "sdate": "2017-09-30" },
-            { "id": 12, "name": "Amalia Shannon",    "number": 23, "active": "Y", "sdate": "2023-05-24" },
-            { "id": 13, "name": "Dena Floyd",        "number": 37, "active": "N", "sdate": "2024-01-15" },
-            { "id": 14, "name": "Merrill Russo",     "number": 22, "active": "Y", "sdate": "2023-04-09" }
+            { "id": '0',  "name": "Armstrong Cole",    "number": 28, "active": "N", "sdate": "2018-09-18" },
+            { "id": '1',  "name": "Dionne Mccray",     "number": 38, "active": "N", "sdate": "2015-03-06" },
+            { "id": '2',  "name": "Bridgett Melendez", "number": 33, "active": "N", "sdate": "2020-02-13" },
+            { "id": '3',  "name": "Finley Meyer",      "number": 35, "active": "Y", "sdate": "2014-11-17" },
+            { "id": '4',  "name": "Sheila Briggs",     "number": 38, "active": "N", "sdate": "2023-07-04" },
+            { "id": '5',  "name": "Vasquez Shepard",   "number": 23, "active": "Y", "sdate": "2015-10-30" },
+            { "id": '6',  "name": "Meredith Garrison", "number": 27, "active": "N", "sdate": "2021-04-07" },
+            { "id": '7',  "name": "Isabella Poole",    "number": 39, "active": "Y", "sdate": "2023-02-24" },
+            { "id": '8',  "name": "Roach Fischer",     "number": 30, "active": "N", "sdate": "2021-03-12" },
+            { "id": '9',  "name": "Melva Macdonald",   "number": 38, "active": "Y", "sdate": "2015-05-18" },
+            { "id": '10', "name": "Goodwin Foster",    "number": 21, "active": "N", "sdate": "2018-11-18" },
+            { "id": '11', "name": "Jacqueline Gibson", "number": 30, "active": "N", "sdate": "2017-09-30" },
+            { "id": '12', "name": "Amalia Shannon",    "number": 23, "active": "Y", "sdate": "2023-05-24" },
+            { "id": '13', "name": "Dena Floyd",        "number": 37, "active": "N", "sdate": "2024-01-15" },
+            { "id": '14', "name": "Merrill Russo",     "number": 22, "active": "Y", "sdate": "2023-04-09" }
         ]
     }).render('table-filters');
 
