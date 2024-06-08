@@ -1,5 +1,4 @@
 
-import 'ejs/ejs.min';
 import coreuiTableTpl      from '../coreui.table.templates';
 import coreuiTableUtils    from '../coreui.table.utils';
 import coreuiTable         from "../coreui.table";
@@ -83,7 +82,7 @@ coreuiTable.controls.button = {
         }
 
 
-        return ejs.render(coreuiTableTpl['controls/button.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['controls/button.html'], {
             content: this._options.content,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });

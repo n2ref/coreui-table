@@ -133,7 +133,7 @@ coreuiTable.controls.pages = {
             });
         }
 
-        return ejs.render(coreuiTableTpl['controls/pages.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['controls/pages.html'], {
             currentPage: this._table._page,
             isActivePrev: this._table._page > 1,
             isActiveNext: this._table._page < pagesTotal,

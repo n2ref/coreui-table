@@ -140,7 +140,7 @@ coreuiTable.filters.switch = {
             : '';
 
 
-        return ejs.render(coreuiTableTpl['filters/switch.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['filters/switch.html'], {
             id: this._id,
             valueY: valueY,
             field: typeof options.field === 'string' ? options.field : '',

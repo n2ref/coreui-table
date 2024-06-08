@@ -1,5 +1,4 @@
 
-import 'ejs/ejs.min';
 import coreuiTableTpl   from '../coreui.table.templates';
 import coreuiTableUtils from '../coreui.table.utils';
 import coreuiTable      from "../coreui.table";
@@ -81,7 +80,7 @@ coreuiTable.controls.link = {
             });
         }
 
-        return ejs.render(coreuiTableTpl['controls/link.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['controls/link.html'], {
             url: this._options.url,
             content: this._options.content,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',

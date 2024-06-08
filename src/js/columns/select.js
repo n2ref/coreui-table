@@ -2,6 +2,7 @@ import coreuiTable         from "../coreui.table";
 import coreuiTableElements from "../coreui.table.elements";
 import coreuiTablePrivate  from "../coreui.table.private";
 import coreuiTableTpl      from "../coreui.table.templates";
+import coreuiTableUtils    from "../coreui.table.utils";
 
 coreuiTable.columns.select = {
 
@@ -19,8 +20,8 @@ coreuiTable.columns.select = {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {object} table
+     * @param {object} options
      */
     init: function (table, options) {
 
@@ -94,7 +95,7 @@ coreuiTable.columns.select = {
     render: function(content, record) {
 
         let select = $(
-            ejs.render(coreuiTableTpl['columns/select.html'], {
+            coreuiTableUtils.render(coreuiTableTpl['columns/select.html'], {
                 index: record.index
             })
         );

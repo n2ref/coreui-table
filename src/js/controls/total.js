@@ -1,5 +1,4 @@
 
-import 'ejs/ejs.min';
 import coreuiTable      from "../coreui.table";
 import coreuiTableTpl   from "../coreui.table.templates";
 import coreuiTableUtils from '../coreui.table.utils';
@@ -70,7 +69,7 @@ coreuiTable.controls.total = {
                 attributes.push(name + '="' + value + '"');
             });
         }
-        return ejs.render(coreuiTableTpl['controls/total.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['controls/total.html'], {
             recordsTotal: this._table._recordsTotal,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             lang: this._table.getLang(),

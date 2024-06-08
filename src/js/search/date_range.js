@@ -244,7 +244,7 @@ coreuiTable.search.date_range = {
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
 
 
-        return ejs.render(coreuiTableTpl['search/date_range.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['search/date_range.html'], {
             startAttr: startAttr.length > 0 ? (' ' + startAttr.join(' ')) : '',
             endAttr: startEnd.length > 0 ? (' ' + startEnd.join(' ')) : '',
         });

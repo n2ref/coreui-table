@@ -82,7 +82,7 @@ coreuiTable.controls.page_jump = {
             });
         }
 
-        return ejs.render(coreuiTableTpl['controls/page-jump.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['controls/page-jump.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : ''
         });
     }

@@ -18,8 +18,8 @@ coreuiTable.columns.link = {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {object} table
+     * @param {object} options
      */
     init: function (table, options) {
 
@@ -51,6 +51,28 @@ coreuiTable.columns.link = {
      */
     getOptions: function () {
         return $.extend({}, this._options);
+    },
+
+
+    /**
+     * Конвертирование значения колонки в текст
+     * @param {*} columnValue
+     * @returns {string}
+     */
+    convertToString: function (columnValue) {
+
+        if (['string', 'number'].indexOf(typeof columnValue) >= 0) {
+            return String(columnValue);
+
+        } else if (typeof columnValue === 'object' &&
+            columnValue.hasOwnProperty('content') &&
+            typeof columnValue.content === 'string'
+        ) {
+            return columnValue.content;
+
+        } else {
+            return '';
+        }
     },
 
 
@@ -116,7 +138,7 @@ coreuiTable.columns.link = {
         });
 
         let link = $(
-            ejs.render(coreuiTableTpl['columns/link.html'], {
+            coreuiTableUtils.render(coreuiTableTpl['columns/link.html'], {
                 content: linkContent,
                 attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             })

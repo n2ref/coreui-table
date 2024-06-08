@@ -1,5 +1,4 @@
 
-import 'ejs/ejs.min';
 import coreuiTable      from "../coreui.table";
 import coreuiTableTpl   from "../coreui.table.templates";
 import coreuiTableUtils from '../coreui.table.utils';
@@ -64,7 +63,7 @@ coreuiTable.controls.divider = {
             attributes.push(name + '="' + value + '"');
         });
 
-        return ejs.render(coreuiTableTpl['controls/divider.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['controls/divider.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });
     }

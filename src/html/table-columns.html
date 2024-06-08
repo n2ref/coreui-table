@@ -4,7 +4,7 @@
     <span class="coreui-table__column-label"><%- column.label %></span>
     <% if (column.description) { %>
     <small class="coreui-table__column-description bi bi-question-circle text-body-secondary"
-           title="<%= column.description %>"></small>
+           title="<%= column.description %>" data-bs-toggle="tooltip" data-bs-placement="bottom"></small>
     <% } %>
     <% if (column.sortable === 'asc') { %>
       <i class="coreui-table__column-sort bi bi-sort-down-alt"></i>

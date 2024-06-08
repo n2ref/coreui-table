@@ -1,5 +1,4 @@
 
-import 'ejs/ejs.min';
 import coreuiTableTpl   from '../coreui.table.templates';
 import coreuiTableUtils from '../coreui.table.utils';
 import coreuiTable      from "../coreui.table";
@@ -175,7 +174,7 @@ coreuiTable.controls.dropdown = {
             });
         }
 
-        return ejs.render(coreuiTableTpl['controls/dropdown.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['controls/dropdown.html'], {
             content: options.content,
             position: options.hasOwnProperty('position') && typeof options.position === 'string' ? options.position : 'end',
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',

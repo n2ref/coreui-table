@@ -114,7 +114,7 @@ coreuiTable.controls.filter_clear = {
             attr.push(name + '="' + value + '"');
         });
 
-        return ejs.render(coreuiTableTpl['controls/filter_clear.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['controls/filter_clear.html'], {
             attr: attr.length > 0 ? (' ' + attr.join(' ')) : '',
             content: options.content ? options.content : '',
         });

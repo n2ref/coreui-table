@@ -1,5 +1,4 @@
 
-import 'ejs/ejs.min';
 import coreuiTableTpl      from '../coreui.table.templates';
 import coreuiTableUtils    from '../coreui.table.utils';
 import coreuiTable         from "../coreui.table";
@@ -19,7 +18,7 @@ coreuiTable.controls.caption = {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
+     * @param {object} table
      * @param {object} options
      */
     init: function (table, options) {
@@ -55,7 +54,7 @@ coreuiTable.controls.caption = {
      */
     render: function() {
 
-        return ejs.render(coreuiTableTpl['controls/caption.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['controls/caption.html'], {
             title: this._options.title,
             description: this._options.description,
             value: this._options.value,

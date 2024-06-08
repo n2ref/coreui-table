@@ -252,7 +252,7 @@ coreuiTable.filters.select = {
             attributes.push(name + '="' + value + '"');
         });
 
-        return ejs.render(coreuiTableTpl['filters/select.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['filters/select.html'], {
             label: label,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             options: selectOptions

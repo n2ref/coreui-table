@@ -172,7 +172,7 @@ coreuiTable.search.date_month = {
             attributes.push(name + '="' + value + '"');
         });
 
-        return ejs.render(coreuiTableTpl['search/date_month.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['search/date_month.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });
     }

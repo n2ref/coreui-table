@@ -165,7 +165,7 @@ coreuiTable.search.text = {
             attributes.push(name + '="' + value + '"');
         });
 
-        return ejs.render(coreuiTableTpl['search/text.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['search/text.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });
     }

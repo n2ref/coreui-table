@@ -146,7 +146,7 @@ coreuiTable.controls.columns = {
                 }
 
 
-                let content = ejs.render(coreuiTableTpl['controls/columns-container.html'], {
+                let content = coreuiTableUtils.render(coreuiTableTpl['controls/columns-container.html'], {
                     showAll:            showAll,
                     columns:            columns,
                     btnCompleteAttr:    btnCompleteAttr.length > 0 ? (' ' + btnCompleteAttr.join(' ')) : '',
@@ -204,7 +204,7 @@ coreuiTable.controls.columns = {
             });
         }
 
-        return ejs.render(coreuiTableTpl['controls/columns.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['controls/columns.html'], {
             btnContent: this._options.btn.content,
             btnAttr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });

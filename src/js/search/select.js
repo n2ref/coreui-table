@@ -244,7 +244,7 @@ coreuiTable.search.select = {
             attributes.push(name + '="' + value + '"');
         });
 
-        return ejs.render(coreuiTableTpl['search/select.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['search/select.html'], {
             field: options,
             value: this._value,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',

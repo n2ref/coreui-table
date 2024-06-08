@@ -168,7 +168,7 @@ coreuiTable.filters.radio = {
             });
         });
 
-        return ejs.render(coreuiTableTpl['filters/radio.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['filters/radio.html'], {
             label: label,
             items: items,
             field: field + this.getId(),

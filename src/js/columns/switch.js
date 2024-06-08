@@ -1,6 +1,7 @@
 import coreuiTable from "../coreui.table";
 import coreuiTableElements from "../coreui.table.elements";
 import coreuiTableTpl from "../coreui.table.templates";
+import coreuiTableUtils from "../coreui.table.utils";
 
 coreuiTable.columns.switch = {
 
@@ -21,8 +22,8 @@ coreuiTable.columns.switch = {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {object} table
+     * @param {object} options
      */
     init: function (table, options) {
 
@@ -80,7 +81,7 @@ coreuiTable.columns.switch = {
                         record.data[this._options.field] === this._options.valueY;
 
         let formSwitch = $(
-            ejs.render(coreuiTableTpl['columns/switch.html'], {
+            coreuiTableUtils.render(coreuiTableTpl['columns/switch.html'], {
                 index: record.index,
                 field: this._options.field,
                 disabled: this._options.disabled,

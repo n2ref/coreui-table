@@ -61,6 +61,28 @@ coreuiTable.columns.progress = {
 
 
     /**
+     * Конвертирование значения колонки в текст
+     * @param {*} columnValue
+     * @returns {string}
+     */
+    convertToString: function (columnValue) {
+
+        if (['string', 'number'].indexOf(typeof columnValue) >= 0) {
+            return String(columnValue);
+
+        } else if (typeof columnValue === 'object' &&
+            columnValue.hasOwnProperty('percent') &&
+            ['string', 'number'].indexOf(typeof columnValue.percent) >= 0
+        ) {
+            return String(columnValue.percent);
+
+        } else {
+            return '';
+        }
+    },
+
+
+    /**
      * Формирование контента
      * @param {object|string|number} content
      * @param {object}              record
@@ -155,7 +177,7 @@ coreuiTable.columns.progress = {
         });
 
 
-        return ejs.render(coreuiTableTpl['columns/progress.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['columns/progress.html'], {
             description: description,
             percent: percent,
             percentText: percentText,

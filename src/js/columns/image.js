@@ -111,7 +111,7 @@ coreuiTable.columns.image = {
             }
         });
 
-        return ejs.render(coreuiTableTpl['columns/image.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['columns/image.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });
     }

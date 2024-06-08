@@ -178,7 +178,7 @@ coreuiTable.search.radio = {
             }
         });
 
-        return ejs.render(coreuiTableTpl['search/radio.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['search/radio.html'], {
             options: options,
             checkedAll: checkedAll,
             field: typeof this._options.field === 'string' ? this._options.field : '',

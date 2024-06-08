@@ -89,7 +89,7 @@ coreuiTable.columns.button = {
         });
 
         let btn = $(
-            ejs.render(coreuiTableTpl['columns/button.html'], {
+            coreuiTableUtils.render(coreuiTableTpl['columns/button.html'], {
                 content: content.content,
                 attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             })

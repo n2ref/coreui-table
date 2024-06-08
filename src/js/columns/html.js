@@ -22,8 +22,8 @@ coreuiTable.columns.html = {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {object} table
+     * @param {object} options
      */
     init: function (table, options) {
 
@@ -78,6 +78,22 @@ coreuiTable.columns.html = {
      */
     getOptions: function () {
         return $.extend({}, this._options);
+    },
+
+
+    /**
+     * Конвертирование значения колонки в текст
+     * @param {*} columnValue
+     * @returns {string}
+     */
+    convertToString: function (columnValue) {
+
+        if (['string', 'number'].indexOf(typeof columnValue) >= 0) {
+            return String(columnValue).replace(/<[^>]*>?/gm, '');
+
+        } else {
+            return '';
+        }
     },
 
 

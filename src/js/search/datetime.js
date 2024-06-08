@@ -171,7 +171,7 @@ coreuiTable.search.datetime = {
             attributes.push(name + '="' + value + '"');
         });
 
-        return ejs.render(coreuiTableTpl['search/datetime.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['search/datetime.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });
     }

@@ -19,8 +19,8 @@ coreuiTable.columns.menu = {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {object} table
+     * @param {object} options
      */
     init: function (table, options) {
 
@@ -228,7 +228,7 @@ coreuiTable.columns.menu = {
 
 
         let menu = $(
-            ejs.render(coreuiTableTpl['columns/menu.html'], {
+            coreuiTableUtils.render(coreuiTableTpl['columns/menu.html'], {
                 content: menuContent,
                 position: position,
                 attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
@@ -239,6 +239,28 @@ coreuiTable.columns.menu = {
         menu.click(function (event) {
             event.cancelBubble = true;
             event.preventDefault();
+        });
+
+
+        let dropdownMenu = null;
+
+        $(menu).on('show.bs.dropdown', function (e) {
+            dropdownMenu = $(menu).find('.dropdown-menu');
+
+            $('body').append(dropdownMenu.detach());
+
+            var eOffset = $(e.target).offset();
+
+            dropdownMenu.css({
+                'display': 'block',
+                'top'    : eOffset.top + $(e.target).outerHeight(),
+                'left'   : eOffset.left
+            });
+        });
+
+        $(menu).on('hide.bs.dropdown', function (e) {
+            $(menu).append(dropdownMenu.detach());
+            dropdownMenu.hide();
         });
 
 

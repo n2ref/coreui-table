@@ -1,5 +1,4 @@
 
-import 'ejs/ejs.min';
 import coreuiTable         from "../coreui.table";
 import coreuiTableTpl      from "../coreui.table.templates";
 import coreuiTableUtils    from "../coreui.table.utils";
@@ -175,7 +174,7 @@ coreuiTable.filters.datetime = {
             attr.push(name + '="' + value + '"');
         });
 
-        return ejs.render(coreuiTableTpl['filters/datetime.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['filters/datetime.html'], {
             attr: attr.length > 0 ? (' ' + attr.join(' ')) : '',
             label: label
         });

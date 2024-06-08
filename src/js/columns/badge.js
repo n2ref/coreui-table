@@ -55,14 +55,39 @@ coreuiTable.columns.badge = {
 
 
     /**
+     * Конвертирование значения колонки в текст
+     * @param {*} columnValue
+     * @returns {string}
+     */
+    convertToString: function (columnValue) {
+
+        if (['string', 'number'].indexOf(typeof columnValue) >= 0) {
+            return String(columnValue);
+
+        } else if (typeof columnValue === 'object' &&
+            columnValue.hasOwnProperty('text') &&
+            ['string', 'number'].indexOf(typeof columnValue.text) >= 0
+        ) {
+            return String(columnValue.text);
+
+        } else {
+            return '';
+        }
+    },
+
+
+    /**
      * Формирование контента
-     * @param {object|string} content
-     * @param {object}        record
+     * @param {object|string|number} content
+     * @param {object}               record
      * @returns {string}
      */
     render: function(content, record) {
 
-        if ( ! coreuiTableUtils.isObject(content) ||
+        if (['string', 'number'].indexOf(typeof content) >= 0) {
+            content = { type: 'secondary', text: content };
+
+        } else if ( ! coreuiTableUtils.isObject(content) ||
              ! content.hasOwnProperty('type') ||
              ! content.hasOwnProperty('text') ||
              typeof content.type !== 'string' ||
@@ -76,7 +101,7 @@ coreuiTable.columns.badge = {
             return content.text;
         }
 
-        return ejs.render(coreuiTableTpl['columns/badge.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['columns/badge.html'], {
             type: content.type,
             text: content.text
         });

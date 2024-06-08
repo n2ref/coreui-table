@@ -1,5 +1,4 @@
 
-import 'ejs/ejs.min';
 import coreuiTableTpl   from '../coreui.table.templates';
 import coreuiTableUtils from '../coreui.table.utils';
 import coreuiTable      from "../coreui.table";
@@ -318,7 +317,7 @@ coreuiTable.controls.button_group = {
         }
 
 
-        return ejs.render(coreuiTableTpl['controls/button_group.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['controls/button_group.html'], {
             buttons: buttons,
         });
     }

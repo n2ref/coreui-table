@@ -158,7 +158,7 @@ coreuiTable.controls.search = {
                     btnCompleteContent = that._options.btnComplete.content;
                 }
 
-                let content = ejs.render(coreuiTableTpl['controls/search-container.html'], {
+                let content = coreuiTableUtils.render(coreuiTableTpl['controls/search-container.html'], {
                     labelWidth: labelWidth + (typeof labelWidth === 'number' ? 'px' : ''),
                     controls: controls,
                     btnCompleteAttr:    btnCompleteAttr.length > 0 ? (' ' + btnCompleteAttr.join(' ')) : '',
@@ -277,7 +277,7 @@ coreuiTable.controls.search = {
         }
 
 
-        return ejs.render(coreuiTableTpl['controls/search.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['controls/search.html'], {
             btnContent: btnContent,
             btnAttr: btnAttr.length > 0 ? (' ' + btnAttr.join(' ')) : '',
             btnClear: btnClear
@@ -318,7 +318,7 @@ coreuiTable.controls.search = {
         }
 
 
-        return ejs.render(coreuiTableTpl['controls/search-clear.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['controls/search-clear.html'], {
             content: content,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });

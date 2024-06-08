@@ -238,7 +238,7 @@ coreuiTable.search.number = {
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
 
 
-        return ejs.render(coreuiTableTpl['search/number.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['search/number.html'], {
             startAttr: startAttr.length > 0 ? (' ' + startAttr.join(' ')) : '',
             endAttr: startEnd.length > 0 ? (' ' + startEnd.join(' ')) : '',
         });

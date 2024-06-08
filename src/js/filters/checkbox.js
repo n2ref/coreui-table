@@ -188,7 +188,7 @@ coreuiTable.filters.checkbox = {
             });
         });
 
-        return ejs.render(coreuiTableTpl['filters/checkbox.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['filters/checkbox.html'], {
             label: label,
             items: items,
             field: field + this.getId(),

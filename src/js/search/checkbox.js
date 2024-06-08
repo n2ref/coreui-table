@@ -188,7 +188,7 @@ coreuiTable.search.checkbox = {
             }
         });
 
-        return ejs.render(coreuiTableTpl['search/checkbox.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['search/checkbox.html'], {
             options: options,
             field: typeof this._options.field === 'string' ? this._options.field : ''
         });

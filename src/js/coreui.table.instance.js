@@ -1,5 +1,4 @@
 
-import 'ejs/ejs.min';
 import coreuiTableTpl      from './coreui.table.templates';
 import coreuiTableUtils    from "./coreui.table.utils";
 import coreuiTableRender   from "./coreui.table.render";
@@ -130,6 +129,9 @@ let coreuiTableInstance = {
             coreuiTablePrivate.setRecords(this, this._options.records);
         }
 
+        // Очистка записей после инициализации
+        this._options.records = [];
+
         // Инициализация колонок
         if (typeof this._options.columns === 'object' &&
             Array.isArray(this._options.columns) &&
@@ -165,14 +167,20 @@ let coreuiTableInstance = {
         }
 
 
-        // Сортировка
         if (this._options.saveState && this._options.id) {
+
+            // Поиск по сохраненным поисковым данным
+            if ( ! this._isRecordsRequest) {
+                coreuiTablePrivate.searchLocalRecords(this);
+            }
+
+            // Сортировка
             let sort = coreuiTablePrivate.getStorageField(this.getId(), 'sort');
 
             if (Array.isArray(sort) && sort.length > 0) {
                 coreuiTablePrivate.initSort(this, sort);
 
-                if (this._records.length > 0) {
+                if ( ! this._isRecordsRequest && this._records.length > 0) {
                     this._records = coreuiTablePrivate.sortRecordsByFields(this._records, this._sort);
                 }
             }
@@ -305,6 +313,13 @@ let coreuiTableInstance = {
                             that.sortFields(sorting);
                         }
                     }
+                });
+            }
+
+
+            if (window.hasOwnProperty('bootstrap') && bootstrap.hasOwnProperty('Tooltip')) {
+                $('.coreui-table__column-description', coreuiTableElements.getTableThead(that.getId())).each(function () {
+                    new bootstrap.Tooltip(this);
                 });
             }
         });
@@ -470,7 +485,7 @@ let coreuiTableInstance = {
                 if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
                     if (header.type === 'in') {
                         let headerControls = $(
-                            ejs.render(coreuiTableTpl['table-controls-header.html'], {
+                            coreuiTableUtils.render(coreuiTableTpl['table-controls-header.html'], {
                                 controlsLeft: controlsLeft,
                                 controlsCenter: controlsCenter,
                                 controlsRight: controlsRight,
@@ -499,7 +514,7 @@ let coreuiTableInstance = {
 
                     } else {
                         let headerControls = $(
-                            ejs.render(coreuiTableTpl['table-controls-header-out.html'], {
+                            coreuiTableUtils.render(coreuiTableTpl['table-controls-header-out.html'], {
                                 controlsLeft: controlsLeft,
                                 controlsCenter: controlsCenter,
                                 controlsRight: controlsRight,
@@ -572,7 +587,7 @@ let coreuiTableInstance = {
                 if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
                     if (footer.type === 'in') {
                         let footerControls = $(
-                            ejs.render(coreuiTableTpl['table-controls-footer.html'], {
+                            coreuiTableUtils.render(coreuiTableTpl['table-controls-footer.html'], {
                                 controlsLeft: controlsLeft,
                                 controlsCenter: controlsCenter,
                                 controlsRight: controlsRight,
@@ -601,7 +616,7 @@ let coreuiTableInstance = {
                         render.footersIn.push(footerControls);
                     } else {
                         let footerControls = $(
-                            ejs.render(coreuiTableTpl['table-controls-footer-out.html'], {
+                            coreuiTableUtils.render(coreuiTableTpl['table-controls-footer-out.html'], {
                                 controlsLeft: controlsLeft,
                                 controlsCenter: controlsCenter,
                                 controlsRight: controlsRight,
@@ -670,15 +685,12 @@ let coreuiTableInstance = {
 
         let tableElement     = coreuiTableRender.renderTable(this);
         let containerElement = $(
-            ejs.render(coreuiTableTpl['table-wrapper.html'], {
+            coreuiTableUtils.render(coreuiTableTpl['table-wrapper.html'], {
                 id: this._id,
-                lang: this.getLang(),
                 classes: classes.length > 0 ? ' ' + classes.join(' ') : '',
                 classesWrapper: classesWrapper.length > 0 ? ' ' + classesWrapper.join(' ') : '',
                 widthSizes: widthSizes,
                 heightSizes: heightSizes,
-                recordsTotal: this._recordsTotal,
-                overflow: !! options.overflow,
             })
         );
 
@@ -727,7 +739,7 @@ let coreuiTableInstance = {
         let container = coreuiTableElements.getContainer(this.getId());
 
         if (container[0] && ! container.find('.coreui-table-lock')[0]) {
-            let html =  ejs.render(coreuiTableTpl['table-loader.html'], {
+            let html =  coreuiTableUtils.render(coreuiTableTpl['table-loader.html'], {
                 lang: this.getLang()
             });
 
@@ -1254,21 +1266,7 @@ let coreuiTableInstance = {
             this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
 
         } else {
-            $.each(this._records, function (index, record) {
-
-                let isShow = true;
-
-                if (searchData.length > 0) {
-                    isShow = coreuiTablePrivate.isFilteredRecord(searchData, record.data);
-                }
-
-                if (isShow && filterData.length > 0) {
-                    isShow = coreuiTablePrivate.isFilteredRecord(filterData, record.data);
-                }
-
-                record.show = isShow;
-            });
-
+            coreuiTablePrivate.searchLocalRecords(this);
             this.refresh();
         }
 
@@ -1431,7 +1429,8 @@ let coreuiTableInstance = {
             return;
         }
 
-        let that = this;
+        let that              = this;
+        let columnsConverters = {};
 
         this._sort = [];
 
@@ -1460,6 +1459,13 @@ let coreuiTableInstance = {
                     options.sortable
                 ) {
                     columnSortable = true;
+
+                    if (column.hasOwnProperty('convertToString') &&
+                        typeof column.convertToString === 'function'
+                    ) {
+                        columnsConverters[options.field] = column.convertToString;
+                    }
+
                     return false;
                 }
             });
@@ -1480,7 +1486,7 @@ let coreuiTableInstance = {
                 coreuiTablePrivate.setColumnsSort(this, this._sort);
 
             } else {
-                this.records = coreuiTablePrivate.sortRecordsByFields(this._records, this._sort);
+                this.records = coreuiTablePrivate.sortRecordsByFields(this._records, this._sort, columnsConverters);
                 this.refresh();
             }
         }

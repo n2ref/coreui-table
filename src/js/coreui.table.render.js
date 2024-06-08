@@ -1,6 +1,4 @@
 
-
-import 'ejs/ejs.min';
 import coreuiTableTpl   from './coreui.table.templates';
 import coreuiTableUtils from "./coreui.table.utils";
 
@@ -179,7 +177,7 @@ let coreuiTableRender = {
                     });
 
                     rows.push(
-                        ejs.render(coreuiTableTpl['table-columns-header.html'], {
+                        coreuiTableUtils.render(coreuiTableTpl['table-columns-header.html'], {
                             columns: cells,
                         })
                     );
@@ -218,7 +216,7 @@ let coreuiTableRender = {
                     });
 
                     rows.push(
-                        ejs.render(coreuiTableTpl['table-columns-footer.html'], {
+                        coreuiTableUtils.render(coreuiTableTpl['table-columns-footer.html'], {
                             columns: cells,
                         })
                     );
@@ -240,7 +238,7 @@ let coreuiTableRender = {
             classes.push('empty-tfoot');
         }
 
-        let htmlColumns = ejs.render(coreuiTableTpl['table-columns.html'], {
+        let htmlColumns = coreuiTableUtils.render(coreuiTableTpl['table-columns.html'], {
             columns: columns,
         });
 
@@ -254,7 +252,7 @@ let coreuiTableRender = {
         }
 
         let tableElement = $(
-            ejs.render(coreuiTableTpl['table.html'], {
+            coreuiTableUtils.render(coreuiTableTpl['table.html'], {
                 classes: classes.join(' '),
                 theadAttr: theadAttr.length > 0 ? theadAttr.join(' ') : '',
                 showHeaders: options.showHeaders,
@@ -298,6 +296,7 @@ let coreuiTableRender = {
                 : null;
             let groupValue = null;
 
+
             $.each(records, function (key, record) {
 
                 if (record.show) {
@@ -319,7 +318,7 @@ let coreuiTableRender = {
         if (renderRecords.length === 0) {
             renderRecords = [
                 $(
-                    ejs.render(coreuiTableTpl['table-records-empty.html'], {
+                    coreuiTableUtils.render(coreuiTableTpl['table-records-empty.html'], {
                         columnsCount: table._countColumnsShow,
                         lang: table.getLang(),
                     })
@@ -376,17 +375,15 @@ let coreuiTableRender = {
         });
 
         let recordElement = $(
-            ejs.render(coreuiTableTpl['table-record.html'], {
-                record: {
-                    attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
-                    index: record.index,
-                    fields: fields,
-                }
+            coreuiTableUtils.render(coreuiTableTpl['table-record.html'], {
+                attr  : attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
+                index : record.index,
+                fields: fields
             })
         );
 
         $.each(fields, function (key, field) {
-            recordElement.find(' > td:eq(' + key + ')').html(field.content)
+            $(recordElement[0].querySelector(':scope > td:nth-child(' + (key + 1) + ')')).append(field.content)
         });
 
         return recordElement;
@@ -485,7 +482,7 @@ let coreuiTableRender = {
         });
 
         let recordElement = $(
-            ejs.render(coreuiTableTpl['table-record-group.html'], {
+            coreuiTableUtils.render(coreuiTableTpl['table-record-group.html'], {
                 attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
                 colspan: table._countColumnsShow,
             })
@@ -520,7 +517,7 @@ let coreuiTableRender = {
 
 
         let expandRecord = $(
-            ejs.render(coreuiTableTpl['table-record-expand.html'], {
+            coreuiTableUtils.render(coreuiTableTpl['table-record-expand.html'], {
                 colspan: table._countColumnsShow,
             })
         );
@@ -554,7 +551,7 @@ let coreuiTableRender = {
 
         if (coreuiTableUtils.isObject(control)) {
             let controlElement = $(
-                ejs.render(coreuiTableTpl['table-control.html'], {
+                coreuiTableUtils.render(coreuiTableTpl['table-control.html'], {
                     id: control.getId()
                 })
             );

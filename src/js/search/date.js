@@ -172,7 +172,7 @@ coreuiTable.search.date = {
             attributes.push(name + '="' + value + '"');
         });
 
-        return ejs.render(coreuiTableTpl['search/date.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['search/date.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });
     }

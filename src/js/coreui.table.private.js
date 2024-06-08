@@ -270,6 +270,47 @@ let coreuiTablePrivate = {
 
 
     /**
+     * Поиск по данным таблицы
+     * @param {object} table
+     */
+    searchLocalRecords: function (table) {
+
+        let searchData        = table.getSearchData();
+        let filterData        = table.getFilterData();
+        let columnsConverters = {};
+
+        $.each(table._columns, function (index, column) {
+            if (column.hasOwnProperty('convertToString') &&
+                column.hasOwnProperty('getOptions') &&
+                typeof column.convertToString === 'function' &&
+                typeof column.getOptions === 'function'
+            ) {
+                let options = column.getOptions()
+
+                if (options.hasOwnProperty('field') && typeof options.field === 'string') {
+                    columnsConverters[options.field] = column.convertToString;
+                }
+            }
+        });
+
+        $.each(table._records, function (index, record) {
+
+            let isShow = true;
+
+            if (searchData.length > 0) {
+                isShow = coreuiTablePrivate.isFilteredRecord(searchData, record.data, columnsConverters);
+            }
+
+            if (isShow && filterData.length > 0) {
+                isShow = coreuiTablePrivate.isFilteredRecord(filterData, record.data, columnsConverters);
+            }
+
+            record.show = isShow;
+        });
+    },
+
+
+    /**
      * Установка записей
      * @param {Object} table
      * @param {Array}  records
@@ -408,28 +449,38 @@ let coreuiTablePrivate = {
      * Проверка подходит ли запись под поисковые данные
      * @param {Array}  filters
      * @param {object} recordData
+     * @param {object} columnsConverters
      * @return {boolean}
      * @private
      */
-    isFilteredRecord: function (filters, recordData) {
+    isFilteredRecord: function (filters, recordData, columnsConverters) {
 
         let isShow = true;
 
         $.each(filters, function (key, filter) {
 
-            if (recordData.hasOwnProperty(filter.field) &&
-                ['string', 'number'].indexOf(typeof recordData[filter.field]) >= 0
-            ) {
+            let fieldValue = null;
 
+            if (recordData.hasOwnProperty(filter.field) && recordData[filter.field]) {
+                if (columnsConverters && columnsConverters.hasOwnProperty(filter.field)) {
+                    fieldValue = columnsConverters[filter.field](recordData[filter.field]);
+
+                } else if (['string', 'number'].indexOf(typeof recordData[filter.field]) >= 0) {
+                    fieldValue = String(recordData[filter.field]);
+                }
+            }
+
+
+            if (fieldValue) {
                 if (['string', 'number'].indexOf(typeof filter.value) >= 0) {
 
                     if (filter.hasOwnProperty('alg') && filter.alg === 'strict') {
-                        if (recordData[filter.field].toString().toLowerCase() != filter.value.toString().toLowerCase()) {
+                        if (fieldValue.toLowerCase() != filter.value.toString().toLowerCase()) {
                             isShow = false;
                             return false;
                         }
 
-                    } else if (recordData[filter.field].toString().toLowerCase()
+                    } else if (fieldValue.toLowerCase()
                                .indexOf(filter.value.toString().toLowerCase()) < 0
                     ) {
                         isShow = false;
@@ -437,7 +488,7 @@ let coreuiTablePrivate = {
                     }
 
                 } else if (Array.isArray(filter.value)) {
-                    if (filter.value.indexOf(recordData[filter.field].toString()) < 0) {
+                    if (filter.value.indexOf(fieldValue) < 0) {
                         isShow = false;
                         return false;
                     }
@@ -450,19 +501,19 @@ let coreuiTablePrivate = {
                     let issetEnd   = ['string', 'number'].indexOf(typeof filter.value.end) >= 0;
 
                     if (issetStart && issetEnd) {
-                        if (recordData[filter.field] < filter.value.start || filter.value.end < recordData[filter.field]) {
+                        if (fieldValue < filter.value.start || filter.value.end < fieldValue) {
                             isShow = false;
                             return false;
                         }
 
                     } else if (issetStart) {
-                        if (filter.value.start > recordData[filter.field]) {
+                        if (filter.value.start > fieldValue) {
                             isShow = false;
                             return false;
                         }
 
                     } else if (issetEnd) {
-                        if (filter.value.end < recordData[filter.field]) {
+                        if (filter.value.end < fieldValue) {
                             isShow = false;
                             return false;
                         }
@@ -521,10 +572,11 @@ let coreuiTablePrivate = {
 
     /**
      * Сортировка записей по указанным полям
-     * @param records
-     * @param fields
+     * @param {Array}  records
+     * @param {Array}  fields
+     * @param {object} columnsConverters
      */
-    sortRecordsByFields: function (records, fields) {
+    sortRecordsByFields: function (records, fields, columnsConverters) {
 
         return records.sort(function(a, b) {
 
@@ -542,8 +594,26 @@ let coreuiTablePrivate = {
                     return -1;
                 }
 
-                let aVal = a.data[fields[i].field];
-                let bVal = b.data[fields[i].field];
+                let aVal = '';
+                let bVal = '';
+
+                if (a.data.hasOwnProperty(fields[i].field) && a.data[fields[i].field]) {
+                    if (columnsConverters && columnsConverters.hasOwnProperty(fields[i].field)) {
+                        aVal = columnsConverters[fields[i].field](a.data[fields[i].field]);
+
+                    } else if (['string', 'number'].indexOf(typeof a.data[fields[i].field]) >= 0) {
+                        aVal = String(a.data[fields[i].field]);
+                    }
+                }
+
+                if (b.data.hasOwnProperty(fields[i].field) && b.data[fields[i].field]) {
+                    if (columnsConverters && columnsConverters.hasOwnProperty(fields[i].field)) {
+                        bVal = columnsConverters[fields[i].field](b.data[fields[i].field]);
+
+                    } else if (['string', 'number'].indexOf(typeof b.data[fields[i].field]) >= 0) {
+                        bVal = String(b.data[fields[i].field]);
+                    }
+                }
 
                 if (aVal === null || aVal === undefined || typeof aVal === "function") {
                     aVal = '';

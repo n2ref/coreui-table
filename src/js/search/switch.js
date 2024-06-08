@@ -128,7 +128,7 @@ coreuiTable.search.switch = {
             ? options.valueY
             : ''
 
-        return ejs.render(coreuiTableTpl['search/switch.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['search/switch.html'], {
             id: this._id,
             valueY: valueY,
             field: typeof options.field === 'string' ? options.field : '',

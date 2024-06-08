@@ -1,5 +1,9 @@
 
+import 'ejs/ejs.min';
+
 let coreuiTableUtils = {
+
+    _templates: {},
 
 
     /**
@@ -70,7 +74,6 @@ let coreuiTableUtils = {
     /**
      * @param str
      * @returns {number}
-     * @private
      */
     crc32: function (str) {
 
@@ -87,6 +90,24 @@ let coreuiTableUtils = {
         }
 
         return (-1 ^ n) >>> 0;
+    },
+
+
+    /**
+     * Рендер шаблона
+     * @param {string} template
+     * @param {object} options
+     * @returns {string}
+     */
+    render: function (template, options) {
+
+        let tplName = this.crc32(template);
+
+        if ( ! this._templates.hasOwnProperty(tplName)) {
+            this._templates[tplName] = ejs.compile(template)
+        }
+
+        return this._templates[tplName](options);
     }
 }
 

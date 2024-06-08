@@ -1,5 +1,4 @@
 
-import 'ejs/ejs.min';
 import coreuiTable      from "../coreui.table";
 import coreuiTableTpl   from "../coreui.table.templates";
 import coreuiTableUtils from '../coreui.table.utils';
@@ -90,7 +89,7 @@ coreuiTable.controls.page_size = {
             });
         }
 
-        return ejs.render(coreuiTableTpl['controls/page-size.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['controls/page-size.html'], {
             recordsPerPageList: this._options.list,
             recordsPerPage: this._table._recordsPerPage,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',

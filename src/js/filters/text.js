@@ -1,5 +1,4 @@
 
-import 'ejs/ejs.min';
 import coreuiTable         from "../coreui.table";
 import coreuiTableTpl      from "../coreui.table.templates";
 import coreuiTableUtils    from "../coreui.table.utils";
@@ -195,7 +194,7 @@ coreuiTable.filters.text = {
             attrBtn.push(name + '="' + value + '"');
         });
 
-        return ejs.render(coreuiTableTpl['filters/text.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['filters/text.html'], {
             attr: attr.length > 0 ? (' ' + attr.join(' ')) : '',
             label: label,
             btnAttr: attrBtn.length > 0 ? (' ' + attrBtn.join(' ')) : '',
