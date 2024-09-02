@@ -2679,14 +2679,19 @@
         }
 
         // Событие нажатия на строку
-        if (typeof that._options.onClick === 'function') {
+        if (['function', 'string'].indexOf(_typeof(that._options.onClick))) {
           coreuiTableElements.getTrRecords(that.getId()).click(function (event) {
             var recordKey = $(this).data('record-index');
             var record = that.getRecordByIndex(recordKey);
             if (!record) {
               return;
             }
-            that._options.onClick(event, record);
+            if (typeof that._options.onClick === 'function') {
+              that._options.onClick(event, record);
+            } else if (typeof that._options.onClick === 'string') {
+              var func = new Function('event', 'record', that._options.onClick);
+              func(event, record);
+            }
           });
         }
 

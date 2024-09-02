@@ -233,7 +233,8 @@ let coreuiTableInstance = {
             }
 
             // Событие нажатия на строку
-            if (typeof that._options.onClick === 'function') {
+            if (['function', 'string'].indexOf(typeof that._options.onClick)) {
+
                 coreuiTableElements.getTrRecords(that.getId()).click(function (event) {
                     let recordKey = $(this).data('record-index');
                     let record    = that.getRecordByIndex(recordKey);
@@ -242,7 +243,14 @@ let coreuiTableInstance = {
                         return;
                     }
 
-                    that._options.onClick(event, record);
+                    if (typeof that._options.onClick === 'function') {
+                        that._options.onClick(event, record);
+
+                    } else if (typeof that._options.onClick === 'string') {
+                        let func = new Function('event', 'record', that._options.onClick);
+
+                        func(event, record);
+                    }
                 });
             }
 
