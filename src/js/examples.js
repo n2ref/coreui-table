@@ -410,7 +410,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { field: 'name',   label: 'Name' },
             { field: 'email',  label: 'Email',        width: 150 },
             { type:  'date',   field: 'sdate',        label: 'Start Date', width: 100,  format: 'DD.MM.YYYY' },
-            { type:  'switch', field: 'is_active_sw', label: 'On', valueY: 'Y', valueN: 'N', disabled: false,
+            { type:  'switch', field: 'is_active_sw', label: 'On', valueY: 1, valueN: 0, disabled: false,
                 onChange: function (record, value) {
                     alert("Switch record to " + value + ": " + JSON.stringify(record));
                 }
@@ -473,7 +473,7 @@ document.addEventListener('DOMContentLoaded', function () {
         id: 'types_standard',
         columns: [
             { type: 'select' },
-            { type: 'switch',  field: 'is_active_sw', label: 'Switch', valueY: 'Y', valueN: 'N', width: 80 },
+            { type: 'switch',  field: 'is_active_sw', label: 'Switch', valueY: 1, valueN: 0, width: 80 },
             { type: 'image',   field: 'image',        label: 'Image',             width: 100, imgStyle: 'circle', imgWidth: 30, imgHeight: 30, imgBorder: true },
             { type: 'badge',   field: 'badge',        label: 'Badge'},
             { type: 'link',    field: 'link',         label: 'Link',              width: 200 },
@@ -765,7 +765,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { type: 'text',    field: 'email', label: 'Email' },
             { type: 'date',    field: 'sdate', label: 'Start Date', width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
             { type: 'date',    field: 'edate', label: 'End Date',   width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
-            { type: 'switch', field: 'is_active_sw', label: 'On', valueY: 'Y', valueN: 'N',
+            { type: 'switch', field: 'is_active_sw', label: 'On', valueY: 1, valueN: 0,
                 onChange: function (record, value) {
                     console.log(record);
                     console.log(value);
@@ -819,7 +819,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { type: 'text',    field: 'email', label: 'Email' },
             { type: 'date',    field: 'sdate', label: 'Start Date', width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
             { type: 'date',    field: 'edate', label: 'End Date',   width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
-            { type: 'switch', field: 'is_active_sw', label: 'On', valueY: 'Y', valueN: 'N',
+            { type: 'switch', field: 'is_active_sw', label: 'On', valueY: 1, valueN: 0,
                 onChange: function (record, value) {
                     console.log(record);
                     console.log(value);
@@ -951,7 +951,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { type: 'text',    field: 'email', label: 'Email' },
             { type: 'date',    field: 'sdate', label: 'Start Date', width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
             { type: 'date',    field: 'edate', label: 'End Date',   width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
-            { type: 'switch', field: 'is_active_sw', label: 'On', valueY: 'Y', valueN: 'N' },
+            { type: 'switch', field: 'is_active_sw', label: 'On', valueY: 1, valueN: 0 },
         ],
         records: [
             { id: 1,  fname: 'Jane',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-12-03', is_active_sw: "N" },
@@ -1052,8 +1052,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 { type: 'datetime_range', field: 'sdate',  label: 'datetime_range', width: 200, attr: {} },
                 { type: 'radio',          field: 'active', label: 'radio',
                     options: [
-                        { value: 'Y', text: 'Active' },
-                        { value: 'N', text: 'Inactive' },
+                        { value: '1', text: 'Active' },
+                        { value: '0', text: 'Inactive' },
                     ]
                 },
                 { type: 'checkbox', field: 'id', label: 'checkbox',
@@ -1063,7 +1063,20 @@ document.addEventListener('DOMContentLoaded', function () {
                         { value: '3', text: 'Finley Meyer' },
                     ]
                 },
-                { type: 'switch', field: 'active', label: 'switch', valueY: 'Y' },
+                // { type: 'radioBtn', field: 'active', label: 'radio btn',
+                //     options: [
+                //         { value: '1', text: 'Active' },
+                //         { value: '0', text: 'Inactive' },
+                //     ]
+                // },
+                { type: 'checkboxBtn', field: 'id', label: 'checkbox btn',
+                    options: [
+                        { value: '1', text: 'Dionne Mccray' },
+                        { value: '2', text: 'Bridgett Melendez' },
+                        { value: '3', text: 'Finley Meyer' },
+                    ]
+                },
+                { type: 'switch', field: 'active', label: 'switch', valueY: 1 },
                 { type: 'select', field: 'id', label: 'select', width: 200,
                     options: {
                         '1': 'Dionne Mccray',
@@ -1165,7 +1178,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             '5': "Vasquez Shepard",
                         }
                     },
-                    { type: 'filter:switch', field: 'active', label: 'Active', valueY: 'Y'},
+                    { type: 'filter:switch', field: 'active', label: 'Active', valueY: '1'},
                     { type: 'filter_clear',  content: '<i class="bi bi-backspace"></i> Clear', attr: { class: "btn btn-secondary" } },
                 ]
             }
