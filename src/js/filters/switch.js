@@ -16,7 +16,7 @@ coreuiTable.filters.switch = {
         field: null,
         label: null,
         value: null,
-        valueY: 'Y'
+        valueY: 1
     },
 
 

@@ -39,7 +39,9 @@ import "./search/datetime";
 import "./search/date_range";
 import "./search/datetime_range";
 import "./search/checkbox";
+import "./search/checkboxBtn";
 import "./search/radio";
+import "./search/radioBtn";
 import "./search/select";
 import "./search/switch";
 

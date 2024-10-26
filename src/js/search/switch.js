@@ -1,7 +1,7 @@
 
-import coreuiTable      from "../coreui.table";
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTableUtils from "../coreui.table.utils";
+import coreuiTable         from "../coreui.table";
+import coreuiTableTpl      from "../coreui.table.templates";
+import coreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
 
 coreuiTable.search.switch = {
@@ -15,14 +15,14 @@ coreuiTable.search.switch = {
         type: 'switch',
         field: null,
         value: null,
-        valueY: 'Y'
+        valueY: 1
     },
 
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {object} table
+     * @param {object} options
      */
     init: function (table, options) {
 

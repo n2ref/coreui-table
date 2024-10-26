@@ -37,7 +37,7 @@
   tpl['controls/page-size.html'] = ' <select <%- attr %>> <% $.each(recordsPerPageList, function(key, count) { %> <option value="<%= count %>"<% if (recordsPerPage == count) { %>selected<% } %>> <% if (count == \'0\') { %><%= lang.all %><% } else { %><%= count %><% } %> </option> <% }); %> </select>';
   tpl['controls/pages.html'] = ' <nav> <ul <%- attr %>> <% if (showPrev) { %> <li class="page-item coreui-table__page_prev <% if ( ! isActivePrev) { %> disabled<% } %>"> <button type="button" class="page-link"> <i class="bi bi-chevron-left"></i> </button> </li> <% } %> <% if (showPageFirst) { %> <li class="page-item"> <button type="button" class="page-link coreui-table__page"> 1 </button> </li> <% } %> <% if (showDividerStart) { %> <li class="page-item disabled"> <span class="page-link px-1">...</span> </li> <% } %> <% $.each(pages, function(key, page) { %> <% if (page == currentPage) { %> <li class="page-item active"> <span class="page-link"><%= page %></span> </li> <% } else { %> <li class="page-item"> <button type="button" class="page-link coreui-table__page"> <%= page %> </button> </li> <% } %> <% }); %> <% if (showDividerEnd) { %> <li class="page-item disabled"> <span class="page-link px-1">...</span> </li> <% } %> <% if (showPageLast) { %> <li class="page-item"> <button type="button" class="page-link coreui-table__page"> <%= pagesTotal %> </button> </li> <% } %> <% if (showNext) { %> <li class="page-item coreui-table__page_next<% if ( ! isActiveNext) { %> disabled<% } %>"> <button type="button" class="page-link"> <i class="bi bi-chevron-right"></i> </button> </li> <% } %> </ul> </nav>';
   tpl['controls/search-clear.html'] = ' <button type="button" <%- attr %>> <%- content %> </button> ';
-  tpl['controls/search-container.html'] = ' <div class="coreui-table__search px-3 pt-3 pb-4"> <div class="mb-3"> <% $.each(controls, function(key, control) { %> <div class="mb-2 d-flex flex-column flex-md-row "> <label class="col-form-label fw-medium text-start text-md-end pe-2" style="min-width:<%= labelWidth %>;width:<%= labelWidth %>"> <%= control.label %> <% if (control.description) { %> <div class="text-muted fw-normal"> <small><%= control.description %></small> </div> <% } %> </label> <div class="flex-fill search-control-<%= control.id %>"> <%- control.content %> <% if (control.suffix) { %> <%= control.suffix %> <% } %> </div> </div> <% }); %> </div> <div class="d-flex flex-sm-wrap flex-md-nowrap"> <div class="d-none d-md-block" style="width:<%= labelWidth %>;min-width:<%= labelWidth %>"></div> <div class="d-flex justify-content-start flex-wrap gap-2"> <button type="button" <%- btnCompleteAttr %>> <%- btnCompleteContent %> </button> </div> </div> </div>';
+  tpl['controls/search-container.html'] = ' <div class="coreui-table__search px-3 pt-3 pb-4"> <div class="mb-3"> <% $.each(controls, function(key, control) { %> <div class="mb-2 d-flex flex-column flex-md-row "> <label class="col-form-label fw-medium text-start text-md-end pe-2" style="min-width:<%= labelWidth %>;width:<%= labelWidth %>"> <%= control.label %> <% if (control.descriptionLabel) { %> <div class="text-muted fw-normal"> <small><%= control.descriptionLabel %></small> </div> <% } %> </label> <div class="flex-fill search-control-<%= control.id %>"> <%- control.content %> <% if (control.suffix) { %> <%= control.suffix %> <% } %> <% if (control.description) { %> <div class="text-muted fw-normal"> <small><%= control.description %></small> </div> <% } %> </div> </div> <% }); %> </div> <div class="d-flex flex-sm-wrap flex-md-nowrap"> <div class="d-none d-md-block" style="width:<%= labelWidth %>;min-width:<%= labelWidth %>"></div> <div class="d-flex justify-content-start flex-wrap gap-2"> <button type="button" <%- btnCompleteAttr %>> <%- btnCompleteContent %> </button> </div> </div> </div>';
   tpl['controls/search.html'] = '<div class="btn-group"> <button type="button"<%- btnAttr %>><%- btnContent %></button> <%- btnClear %> </div> ';
   tpl['controls/total.html'] = '<div <%- attr %>> <small><%= lang.total %>: <span class="coreui-table__count-total"><%= recordsTotal %></span></small> </div>';
   tpl['filters/checkbox.html'] = ' <div class="btn-group"> <% if (label) { %> <span class="input-group-text"><%= label %></span> <% } %> <% $.each(items, function(key, item) { %> <input type="checkbox" class="btn-check" autocomplete="off" id="<%= (field + key) %>" name="<%= field %>" value="<%= item.value %>" <%= item.checked ? \' checked\' : \'\' %>> <label class="<%= item.class %>" for="<%= (field + key) %>"><%= item.text %></label> <% }); %> </div>';
@@ -51,6 +51,7 @@
   tpl['filters/select.html'] = '<div class="input-group flex-nowrap"> <% if (label) { %> <span class="input-group-text"><%= label %></span> <% } %> <select <%- attr %>> <option>--</option> <% $.each(options, function(key, option) { %> <% if (option.type === \'group\') { %> <optgroup<%- option.attr %>/> <% $.each(option.options, function(key, groupOption) { %> <option <%- groupOption.attr %>/><%= groupOption.text %></option> <% }); %> </optgroup> <% } else { %> <option <%- option.attr %>/><%= option.text %></option> <% } %> <% }); %> </select> </div>';
   tpl['filters/switch.html'] = '<div class="form-check form-switch"> <input class="form-check-input" type="checkbox" id="<%= (field + id) %>" name="<%= field %>" value="<%= valueY %>" <%= checked ? \' checked\' : \'\' %>> <% if (label != \'\') { %> <label class="form-check-label" for="<%= (field + id) %>"><%= label %></label> <% } %> </div>';
   tpl['filters/text.html'] = ' <div class="input-group"> <% if (label) { %> <span class="input-group-text"><%= label %></span> <% } %> <input type="text" <%- attr %>> <button type="button" <%- btnAttr %>> <%- btnContent %> </button> </div>';
+  tpl['search/checkbox-btn.html'] = ' <div class="pt-2"> <div class="btn-group"> <% $.each(options, function(key, option) { %> <input class="btn-check" type="checkbox" name="<%= field %>" value="<%- option.value %>" id="<%= option.hash %>" autocomplete="off" <%= option.checked ? \' checked\' : \'\' %>> <label class="<%= option.optionsClass %>" for="<%= option.hash %>"><%= option.text %></label> <% }); %> </div> </div>';
   tpl['search/checkbox.html'] = ' <div class="pt-2"> <% $.each(options, function(key, option) { %> <div class="form-check"> <label class="form-check-label coreui-table_pointer"> <input class="form-check-input" type="checkbox" name="<%= field %>" value="<%- option.value %>" <%= option.checked ? \' checked\' : \'\' %>> <%= option.text %> </label> </div> <% }); %> </div>';
   tpl['search/date_month.html'] = ' <input type="month" <%- attr %>>';
   tpl['search/date_range.html'] = ' <input type="date" <%- startAttr %>> <input type="date" <%- endAttr %>>';
@@ -58,6 +59,7 @@
   tpl['search/datetime_range.html'] = ' <input type="datetime-local" <%- startAttr %>> <input type="datetime-local" <%- endAttr %>>';
   tpl['search/datetime.html'] = ' <input type="datetime-local" <%- attr %>>';
   tpl['search/number.html'] = ' <input type="number" <%- startAttr %>> <input type="number" <%- endAttr %>>';
+  tpl['search/radio-btn.html'] = '<div class="pt-2"> <div class="btn-group"> <input class="btn-check" type="radio" name="<%= field %>" value="" id="<%= optionAllHash %>" autocomplete="off" <%= checkedAll ? \' checked\' : \'\' %>> <label class="<%= optionOptionsClass %>" for="<%= optionAllHash %>"><%= lang.all %></label> <% $.each(options, function(key, option) { %> <input class="btn-check" type="radio" name="<%= field %>" value="<%- option.value %>" id="<%= option.hash %>" autocomplete="off" <%= option.checked ? \' checked\' : \'\' %>"> <label class="<%= option.optionsClass %>" for="<%= option.hash %>"><%= option.text %></label> <% }); %> </div> </div>';
   tpl['search/radio.html'] = '<div class="pt-2"> <div class="form-check"> <label class="form-check-label coreui-table_pointer"> <input class="form-check-input" type="radio" name="<%= field %>" value=""<%= checkedAll ? \' checked\' : \'\' %>> <%= lang.all %> </label> </div> <% $.each(options, function(key, option) { %> <div class="form-check"> <label class="form-check-label coreui-table_pointer"> <input class="form-check-input" type="radio" name="<%= field %>" value="<%- option.value %>" <%= option.checked ? \' checked\' : \'\' %>> <%= option.text %> </label> </div> <% }); %> </div>';
   tpl['search/select.html'] = ' <select <%- attr %>> <option>--</option> <% $.each(options, function(key, option) { %> <% if (option.type === \'group\') { %> <optgroup<%- option.attr %>/> <% $.each(option.options, function(key, groupOption) { %> <option <%- groupOption.attr %>/><%= groupOption.text %></option> <% }); %> </optgroup> <% } else { %> <option <%- option.attr %>/><%= option.text %></option> <% } %> <% }); %> </select>';
   tpl['search/switch.html'] = '<div class="form-check form-switch pt-2"> <input class="form-check-input" type="checkbox" id="<%= (field + id) %>" name="<%= field %>" value="<%= valueY %>" <%= checked ? \' checked\' : \'\' %>> </div>';
@@ -6853,7 +6855,7 @@
       field: null,
       label: null,
       value: null,
-      valueY: 'Y'
+      valueY: 1
     },
     /**
      * Инициализация
@@ -8088,6 +8090,145 @@
     }
   };
 
+  coreuiTable.search.checkboxBtn = {
+    _id: null,
+    _table: null,
+    _value: null,
+    _render: false,
+    _options: {
+      id: null,
+      type: 'checkboxBtn',
+      field: null,
+      label: null,
+      optionsClass: 'btn btn-outline-secondary',
+      value: null,
+      options: []
+    },
+    /**
+     * Инициализация
+     * @param {object} table
+     * @param {object} options
+     */
+    init: function init(table, options) {
+      this._options = $.extend(true, {}, this._options, options);
+      this._table = table;
+      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : coreuiTableUtils.hashCode();
+      if (this._options.value !== null) {
+        this.setValue(this._options.value);
+      }
+    },
+    /**
+     * Получение параметров
+     * @returns {object}
+     */
+    getOptions: function getOptions() {
+      return $.extend(true, {}, this._options);
+    },
+    /**
+     * Получение id
+     * @returns {string}
+     */
+    getId: function getId() {
+      return this._id;
+    },
+    /**
+     * Установка значения
+     * @param {Array|null} value
+     */
+    setValue: function setValue(value) {
+      if (['string', 'number', 'object'].indexOf(_typeof(value)) < 0) {
+        return;
+      }
+      if (_typeof(value) === 'object') {
+        if (Array.isArray(value)) {
+          var items = [];
+          $.each(value, function (key, item) {
+            if (typeof value !== 'string' && typeof value !== 'number') {
+              return;
+            }
+            items.push(item);
+          });
+          this._value = items;
+        } else {
+          this._value = null;
+        }
+      } else {
+        this._value = [value];
+      }
+      if (this._render) {
+        var control = coreuiTableElements.getSearchControl(this._table.getId(), this._id);
+        if (control[0]) {
+          $('input:checked', control).prop('checked', false);
+          if (Array.isArray(this._value)) {
+            $.each(this._value, function (key, value) {
+              $('input[value="' + value + '"]', control).prop('checked', true);
+            });
+          }
+        }
+      }
+    },
+    /**
+     * Получение значения
+     * @returns {Array|null}
+     */
+    getValue: function getValue() {
+      var control = coreuiTableElements.getSearchControl(this._table.getId(), this._id);
+      if (control[0]) {
+        var inputs = $('input:checked', control);
+        var items = [];
+        $.each(inputs, function (key, input) {
+          var value = $(input).attr('value');
+          if (['string', 'number'].indexOf(_typeof(value)) >= 0 && value !== '') {
+            items.push(value);
+          }
+        });
+        return items.length > 0 ? items : null;
+      } else {
+        return this._value;
+      }
+    },
+    /**
+     * Инициализация событий
+     */
+    initEvents: function initEvents() {},
+    /**
+     * Формирование контента
+     * @returns {string}
+     */
+    render: function render() {
+      this._render = true;
+      var that = this;
+      var options = [];
+      $.each(this._options.options, function (key, option) {
+        if (['string', 'numeric'].indexOf(_typeof(option)) >= 0) {
+          var checked = Array.isArray(that._value) ? that._value.indexOf(key) >= 0 : false;
+          options.push({
+            text: option,
+            value: key,
+            checked: checked
+          });
+        } else {
+          if (!coreuiTableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
+            return;
+          }
+          var _checked = Array.isArray(that._value) ? that._value.indexOf(option.value) >= 0 : false;
+          var text = option.hasOwnProperty('text') ? option.text : option.value;
+          options.push({
+            text: text,
+            value: option.value,
+            checked: _checked,
+            optionsClass: that._options.optionsClass,
+            hash: coreuiTableUtils.hashCode()
+          });
+        }
+      });
+      return coreuiTableUtils.render(tpl['search/checkbox-btn.html'], {
+        options: options,
+        field: typeof this._options.field === 'string' ? this._options.field : ''
+      });
+    }
+  };
+
   coreuiTable.search.radio = {
     _id: null,
     _table: null,
@@ -8211,6 +8352,140 @@
       return coreuiTableUtils.render(tpl['search/radio.html'], {
         options: options,
         checkedAll: checkedAll,
+        field: typeof this._options.field === 'string' ? this._options.field : '',
+        lang: this._table.getLang()
+      });
+    }
+  };
+
+  coreuiTable.search.radioBtn = {
+    _id: null,
+    _table: null,
+    _value: null,
+    _render: false,
+    _options: {
+      id: null,
+      type: 'radioBtn',
+      field: null,
+      optionsClass: 'btn btn-outline-secondary',
+      label: null,
+      value: null,
+      options: []
+    },
+    /**
+     * Инициализация
+     * @param {object} table
+     * @param {object} options
+     */
+    init: function init(table, options) {
+      this._options = $.extend(true, {}, this._options, options);
+      this._table = table;
+      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : coreuiTableUtils.hashCode();
+      if (this._options.value !== null) {
+        this.setValue(this._options.value);
+      }
+    },
+    /**
+     * Получение параметров
+     * @returns {object}
+     */
+    getOptions: function getOptions() {
+      return $.extend(true, {}, this._options);
+    },
+    /**
+     * Получение id
+     * @returns {string}
+     */
+    getId: function getId() {
+      return this._id;
+    },
+    /**
+     * Установка значения
+     * @param {string} value
+     */
+    setValue: function setValue(value) {
+      if (value !== null && typeof value !== 'string' && typeof value !== 'number') {
+        return;
+      }
+      this._value = value;
+      if (this._render) {
+        var control = coreuiTableElements.getSearchControl(this._table.getId(), this._id);
+        if (control[0]) {
+          $('input', control).prop('checked', false);
+          if (this._value !== null) {
+            $('input[value="' + this._value + '"]', control).prop('checked', true);
+          }
+        }
+      }
+    },
+    /**
+     * Получение значения
+     * @returns {string|null}
+     */
+    getValue: function getValue() {
+      var control = coreuiTableElements.getSearchControl(this._table.getId(), this._id);
+      var input = $('input:checked', control);
+      if (input[0]) {
+        var value = input.val();
+        return value === '' ? null : value;
+      } else {
+        return this._value;
+      }
+    },
+    /**
+     * Получение типа поискового алгоритма
+     */
+    getAlgorithm: function getAlgorithm() {
+      return 'strict';
+    },
+    /**
+     * Инициализация событий
+     * @returns {object}
+     */
+    initEvents: function initEvents() {},
+    /**
+     * Формирование контента
+     * @returns {string}
+     */
+    render: function render() {
+      this._render = true;
+      var that = this;
+      var checkedAll = true;
+      var options = [];
+      $.each(this._options.options, function (key, option) {
+        if (['string', 'numeric'].indexOf(_typeof(option)) >= 0) {
+          var checked = key == that._value;
+          if (checked) {
+            checkedAll = false;
+          }
+          options.push({
+            text: option,
+            value: key,
+            checked: checked
+          });
+        } else {
+          if (!coreuiTableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
+            return;
+          }
+          var _checked = option.value == that._value;
+          var text = option.hasOwnProperty('text') ? option.text : option.value;
+          if (_checked) {
+            checkedAll = false;
+          }
+          options.push({
+            text: text,
+            value: option.value,
+            checked: _checked,
+            optionsClass: that._options.optionsClass,
+            hash: coreuiTableUtils.hashCode()
+          });
+        }
+      });
+      return coreuiTableUtils.render(tpl['search/radio-btn.html'], {
+        options: options,
+        checkedAll: checkedAll,
+        optionAllHash: coreuiTableUtils.hashCode(),
+        optionOptionsClass: that._options.optionsClass,
         field: typeof this._options.field === 'string' ? this._options.field : '',
         lang: this._table.getLang()
       });
@@ -8435,12 +8710,12 @@
       type: 'switch',
       field: null,
       value: null,
-      valueY: 'Y'
+      valueY: 1
     },
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {object} table
+     * @param {object} options
      */
     init: function init(table, options) {
       this._options = $.extend(true, {}, this._options, options);
@@ -9100,7 +9375,7 @@
       show: true,
       disabled: false,
       width: 5,
-      valueY: 'Y',
+      valueY: 1,
       attr: {
         "class": 'coreui-table__switch_container'
       },

@@ -7,9 +7,9 @@
             <label class="col-form-label fw-medium text-start text-md-end pe-2"
                    style="min-width:<%= labelWidth %>;width:<%= labelWidth %>">
                 <%= control.label %>
-                <% if (control.description) { %>
+                <% if (control.descriptionLabel) { %>
                 <div class="text-muted fw-normal">
-                    <small><%= control.description %></small>
+                    <small><%= control.descriptionLabel %></small>
                 </div>
                 <% } %>
             </label>
@@ -17,6 +17,11 @@
                 <%- control.content %>
                 <% if (control.suffix) { %>
                     <%= control.suffix %>
+                <% } %>
+                <% if (control.description) { %>
+                <div class="text-muted fw-normal">
+                    <small><%= control.description %></small>
+                </div>
                 <% } %>
             </div>
         </div>

@@ -65,7 +65,7 @@
                     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 }
             },
-            { type: 'switch', field: 'is_active_sw', label: 'On', valueY: 'Y', valueN: 'N',
+            { type: 'switch', field: 'is_active_sw', label: 'On', valueY: 1, valueN: 0,
                 onChange: function (record, value) {
                     console.log(record);
                     console.log(value);
@@ -103,7 +103,7 @@
             { id: 17, fname: 'Shashi',  lname: 'Bahh',        email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
             { id: 18, fname: 'Av',      lname: 'Rachmaninov', email: 'joe@gmail.com',      sdate: '2023-09-03', edate: '2023-12-06', is_active_sw: "N" },
             { id: 19, fname: 'John',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-09-03', edate: '2023-12-06', is_active_sw: "N" ,
-                coreui: {
+                _meta: {
                     attr: { class: 'table-row' },
                     fields: {
                         fname: {
