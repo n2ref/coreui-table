@@ -8006,7 +8006,7 @@
         if (Array.isArray(value)) {
           var items = [];
           $.each(value, function (key, item) {
-            if (typeof value !== 'string' && typeof value !== 'number') {
+            if (typeof item !== 'string' && typeof item !== 'number') {
               return;
             }
             items.push(item);
@@ -8143,7 +8143,7 @@
         if (Array.isArray(value)) {
           var items = [];
           $.each(value, function (key, item) {
-            if (typeof value !== 'string' && typeof value !== 'number') {
+            if (typeof item !== 'string' && typeof item !== 'number') {
               return;
             }
             items.push(item);
@@ -8178,7 +8178,7 @@
         var items = [];
         $.each(inputs, function (key, input) {
           var value = $(input).attr('value');
-          if ((['string', 'number'].indexOf(_typeof(value)) >= 0 || Array.isArray(value)) && value !== '') {
+          if (['string', 'number'].indexOf(_typeof(value)) >= 0 && value !== '') {
             items.push(value);
           }
         });

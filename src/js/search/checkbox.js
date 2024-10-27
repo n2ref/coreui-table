@@ -72,7 +72,7 @@ coreuiTable.search.checkbox = {
                 let items = [];
 
                 $.each(value, function (key, item) {
-                    if (typeof value !== 'string' && typeof value !== 'number') {
+                    if (typeof item !== 'string' && typeof item !== 'number') {
                         return;
                     }
 
