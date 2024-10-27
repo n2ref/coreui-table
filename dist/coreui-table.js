@@ -8178,7 +8178,7 @@
         var items = [];
         $.each(inputs, function (key, input) {
           var value = $(input).attr('value');
-          if (['string', 'number'].indexOf(_typeof(value)) >= 0 && value !== '') {
+          if ((['string', 'number'].indexOf(_typeof(value)) >= 0 || Array.isArray(value)) && value !== '') {
             items.push(value);
           }
         });

@@ -122,7 +122,7 @@ coreuiTable.search.checkboxBtn = {
             $.each(inputs, function (key, input) {
                 let value = $(input).attr('value');
 
-                if (['string', 'number'].indexOf(typeof value) >= 0 &&
+                if ((['string', 'number'].indexOf(typeof value) >= 0 || Array.isArray(value)) &&
                     value !== ''
                 ) {
                     items.push(value);
