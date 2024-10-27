@@ -8205,7 +8205,9 @@
           options.push({
             text: option,
             value: key,
-            checked: checked
+            checked: checked,
+            optionsClass: that._options.optionsClass,
+            hash: coreuiTableUtils.hashCode()
           });
         } else {
           if (!coreuiTableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
@@ -8461,7 +8463,9 @@
           options.push({
             text: option,
             value: key,
-            checked: checked
+            checked: checked,
+            optionsClass: that._options.optionsClass,
+            hash: coreuiTableUtils.hashCode()
           });
         } else {
           if (!coreuiTableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {

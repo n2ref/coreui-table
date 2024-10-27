@@ -166,6 +166,8 @@ coreuiTable.search.checkboxBtn = {
                     text:    option,
                     value:   key,
                     checked: checked,
+                    optionsClass: that._options.optionsClass,
+                    hash: coreuiTableUtils.hashCode()
                 });
 
             } else {
