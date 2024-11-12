@@ -344,8 +344,8 @@
         exports.clearCache = function () {
           exports.cache.reset();
         };
-        function Template(text, opts) {
-          opts = opts || utils.createNullProtoObjWherePossible();
+        function Template(text, optsParam) {
+          var opts = utils.hasOwnOnlyObject(optsParam);
           var options = utils.createNullProtoObjWherePossible();
           this.templateText = text;
           this.mode = null;
@@ -773,6 +773,15 @@
             return {};
           };
         }();
+        exports.hasOwnOnlyObject = function (obj) {
+          var o = exports.createNullProtoObjWherePossible();
+          for (var p in obj) {
+            if (hasOwn(obj, p)) {
+              o[p] = obj[p];
+            }
+          }
+          return o;
+        };
       }, {}],
       3: [function (require, module, exports) {}, {}],
       4: [function (require, module, exports) {
@@ -1138,7 +1147,7 @@
           name: "ejs",
           description: "Embedded JavaScript templates",
           keywords: ["template", "engine", "ejs"],
-          version: "3.1.8",
+          version: "3.1.9",
           author: "Matthew Eernisse <mde@fleegix.org> (http://fleegix.org)",
           license: "Apache-2.0",
           bin: {
@@ -1169,7 +1178,7 @@
             node: ">=0.10.0"
           },
           scripts: {
-            test: "mocha -u tdd"
+            test: "npx jake test"
           }
         };
       }, {}]
@@ -2538,16 +2547,15 @@
       showScrollShadow: false,
       recordsRequest: {
         method: 'GET',
-        url: null,
-        // '/mod/index/orders/?page=[page]'
-        params: {
-          page: 'page',
-          count: 'count',
-          start: 'start',
-          end: 'end',
-          sort: 'sort',
-          search: 'search'
-        }
+        url: null // '/mod/index/orders/?page=[page]'
+      },
+      requestParams: {
+        page: 'page',
+        count: 'count',
+        start: 'start',
+        end: 'end',
+        sort: 'sort',
+        search: 'search'
       },
       group: {
         field: null,
@@ -2604,9 +2612,9 @@
       if (this._options.recordsPerPage > 0) {
         this._recordsPerPage = this._options.recordsPerPage;
       }
-      this._isRecordsRequest = this._options.hasOwnProperty('recordsRequest') && coreuiTableUtils.isObject(this._options.recordsRequest) && this._options.recordsRequest.hasOwnProperty('url') && typeof this._options.recordsRequest.url === 'string' && this._options.recordsRequest.url !== '' && this._options.recordsRequest.url !== '#';
+      this._isRecordsRequest = this._options.hasOwnProperty('recordsRequest') && (typeof this._options.recordsRequest === 'function' || coreuiTableUtils.isObject(this._options.recordsRequest) && this._options.recordsRequest.hasOwnProperty('url') && typeof this._options.recordsRequest.url === 'string' && this._options.recordsRequest.url !== '' && this._options.recordsRequest.url !== '#');
       if (this._isRecordsRequest) {
-        if (!this._options.recordsRequest.hasOwnProperty('method') || typeof this._options.recordsRequest.method !== 'string') {
+        if (_typeof(this._options.recordsRequest) === 'object' && (!this._options.recordsRequest.hasOwnProperty('method') || typeof this._options.recordsRequest.method !== 'string')) {
           this._options.recordsRequest.method = 'GET';
         }
       } else if (Array.isArray(this._options.records)) {
@@ -3011,7 +3019,11 @@
       // Загрузка записей
       if (this._isRecordsRequest) {
         this.on('container_show', function () {
-          that.load(options.recordsRequest.url, options.recordsRequest.method);
+          if (typeof options.recordsRequest === 'function') {
+            that.loadByFunction(options.recordsRequest);
+          } else {
+            that.load(options.recordsRequest.url, options.recordsRequest.method);
+          }
         });
       }
       var classes = [];
@@ -3094,25 +3106,25 @@
       if (url.match(/\[page\]/)) {
         url = url.replace(/\[page\]/g, this._page);
       } else {
-        var paramPage = coreuiTableUtils.isObject(this._options.recordsRequest.params) && this._options.recordsRequest.params.hasOwnProperty('page') ? this._options.recordsRequest.params.page : 'page';
+        var paramPage = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('page') ? this._options.requestParams.page : 'page';
         params[paramPage] = this._page;
       }
       if (url.match(/\[count\]/)) {
         url = url.replace(/\[count\]/g, this._recordsPerPage);
       } else {
-        var paramCount = coreuiTableUtils.isObject(this._options.recordsRequest.params) && this._options.recordsRequest.params.hasOwnProperty('count') ? this._options.recordsRequest.params.count : 'count';
+        var paramCount = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('count') ? this._options.requestParams.count : 'count';
         params[paramCount] = this._recordsPerPage;
       }
       if (url.match(/\[start\]/)) {
         url = url.replace(/\[start\]/g, (this._page - 1) * this._recordsPerPage + 1);
       } else {
-        var paramStart = coreuiTableUtils.isObject(this._options.recordsRequest.params) && this._options.recordsRequest.params.hasOwnProperty('start') ? this._options.recordsRequest.params.start : 'start';
+        var paramStart = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('start') ? this._options.requestParams.start : 'start';
         params[paramStart] = (this._page - 1) * this._recordsPerPage + 1;
       }
       if (url.match(/\[end\]/)) {
         url = url.replace(/\[end\]/g, (this._page - 1) * this._recordsPerPage + Number(this._recordsPerPage));
       } else {
-        var paramEnd = coreuiTableUtils.isObject(this._options.recordsRequest.params) && this._options.recordsRequest.params.hasOwnProperty('end') ? this._options.recordsRequest.params.end : 'end';
+        var paramEnd = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('end') ? this._options.requestParams.end : 'end';
         params[paramEnd] = (this._page - 1) * this._recordsPerPage + Number(this._recordsPerPage);
       }
       var searchData = this.getSearchData();
@@ -3123,11 +3135,11 @@
         });
       }
       if (searchData.length > 0) {
-        var paramSearch = coreuiTableUtils.isObject(this._options.recordsRequest.params) && this._options.recordsRequest.params.hasOwnProperty('search') && typeof this._options.recordsRequest.params.search === 'string' ? this._options.recordsRequest.params.search : 'search';
+        var paramSearch = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('search') && typeof this._options.requestParams.search === 'string' ? this._options.requestParams.search : 'search';
         params[paramSearch] = searchData;
       }
       if (this._sort.length > 0) {
-        var paramSort = coreuiTableUtils.isObject(this._options.recordsRequest.params) && this._options.recordsRequest.params.hasOwnProperty('sort') && typeof this._options.recordsRequest.params.sort === 'string' ? this._options.recordsRequest.params.sort : 'sort';
+        var paramSort = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('sort') && typeof this._options.requestParams.sort === 'string' ? this._options.requestParams.sort : 'sort';
         params[paramSort] = this._sort;
       }
       $.ajax({
@@ -3157,11 +3169,71 @@
       });
     },
     /**
+     * Загрузка строк
+     * @param {function} callback
+     */
+    loadByFunction: function loadByFunction(callback) {
+      var that = this;
+      var params = {};
+      var paramPage = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('page') ? this._options.requestParams.page : 'page';
+      var paramCount = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('count') ? this._options.requestParams.count : 'count';
+      var paramStart = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('start') ? this._options.requestParams.start : 'start';
+      var paramEnd = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('end') ? this._options.requestParams.end : 'end';
+      params[paramCount] = this._recordsPerPage;
+      params[paramPage] = this._page;
+      params[paramStart] = (this._page - 1) * this._recordsPerPage + 1;
+      params[paramEnd] = (this._page - 1) * this._recordsPerPage + Number(this._recordsPerPage);
+      var searchData = this.getSearchData();
+      var filterData = this.getFilterData();
+      if (filterData.length > 0) {
+        $.each(filterData, function (key, filter) {
+          searchData.push(filter);
+        });
+      }
+      if (searchData.length > 0) {
+        var paramSearch = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('search') && typeof this._options.requestParams.search === 'string' ? this._options.requestParams.search : 'search';
+        params[paramSearch] = searchData;
+      }
+      if (this._sort.length > 0) {
+        var paramSort = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('sort') && typeof this._options.requestParams.sort === 'string' ? this._options.requestParams.sort : 'sort';
+        params[paramSort] = this._sort;
+      }
+      var result = callback(params, this);
+
+      /**
+       * Установка записей
+       * @param {Object} data
+       */
+      function setRecords(data) {
+        if (data.hasOwnProperty('records') && _typeof(data.records) === 'object' && Array.isArray(data.records)) {
+          var total = data.hasOwnProperty('total') && coreuiTableUtils.isNumeric(data.total) ? data.total : null;
+          that.setRecords(data.records, total);
+        } else {
+          that.setRecords([]);
+        }
+      }
+      if (result instanceof Promise) {
+        this.lock();
+        result.then(function (data) {
+          that.unlock();
+          setRecords(data);
+        })["catch"](function () {
+          that.unlock();
+        });
+      } else if (_typeof(result) === 'object') {
+        setRecords(result);
+      }
+    },
+    /**
      * Перезагрузка записей в таблице
      */
     reload: function reload() {
       if (this._isRecordsRequest) {
-        this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+        if (typeof this._options.recordsRequest === 'function') {
+          this.loadByFunction(this._options.recordsRequest);
+        } else {
+          this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+        }
       }
     },
     /**
@@ -3426,7 +3498,11 @@
       var searchData = this.getSearchData();
       var filterData = this.getFilterData();
       if (this._isRecordsRequest) {
-        this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+        if (typeof this._options.recordsRequest === 'function') {
+          this.loadByFunction(this._options.recordsRequest);
+        } else {
+          this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+        }
       } else {
         coreuiTablePrivate.searchLocalRecords(this);
         this.refresh();
@@ -3570,7 +3646,11 @@
       });
       if (this._sort.length >= 0) {
         if (this._isRecordsRequest) {
-          this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+          if (typeof this._options.recordsRequest === 'function') {
+            this.loadByFunction(this._options.recordsRequest);
+          } else {
+            this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+          }
           coreuiTablePrivate.setColumnsSort(this, this._sort);
         } else {
           this.records = coreuiTablePrivate.sortRecordsByFields(this._records, this._sort, columnsConverters);
@@ -3585,7 +3665,11 @@
     sortDefault: function sortDefault() {
       this._sort = [];
       if (this._isRecordsRequest) {
-        this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+        if (typeof this._options.recordsRequest === 'function') {
+          this.loadByFunction(this._options.recordsRequest);
+        } else {
+          this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+        }
         coreuiTablePrivate.setColumnsSort(this);
       } else {
         this.records = coreuiTablePrivate.sortRecordsBySeq(this._records);
