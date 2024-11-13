@@ -76,7 +76,7 @@
   tpl['table-record-expand.html'] = '<tr class="coreui-table__record-expanded" style="display: none"> <td colspan="<%= colspan %>"></td> </tr>';
   tpl['table-record-group.html'] = '<tr<%- attr %>> <td colspan="<%= colspan %>"></td> </tr>';
   tpl['table-record.html'] = '<tr<%- attr %> data-record-index="<%= index %>"> <% $.each(fields, function(key, field) { %> <td<%- field.attr %>></td> <% }); %> </tr>';
-  tpl['table-records-empty.html'] = '<tr> <td class="text-center" colspan="<%= columnsCount %>"><%= lang.emptyRecords %></td> </tr>';
+  tpl['table-records-empty.html'] = '<tr class="coreui-table__record-empty"> <td class="text-center" colspan="<%= columnsCount %>"><%= lang.emptyRecords %></td> </tr>';
   tpl['table-wrapper.html'] = ' <div id="coreui-table-<%= id %>" class="coreui-table<%= classes %>"<% if (widthSizes) { %> style="<%= widthSizes.join(\';\') %>"<% } %>> <div class="coreui-table__container position-relative"> <div class="coreui-table__wrapper<%= classesWrapper %>" <% if (heightSizes) { %>style="<%= heightSizes.join(\';\') %>"<% } %>></div> </div> </div>';
   tpl['table.html'] = ' <table class="table <%= classes %> mb-0"> <colgroup> <% $.each(colGroups, function(key, columnGroup) { %> <col<% if (columnGroup.style) { %> style="<%= columnGroup.style %>"<% } %>/> <% }); %> </colgroup> <% if (showHeaders) { %> <thead<% if (theadAttr) { %> <%- theadAttr %>"<% } %>> <%- columnsHeader %> <%- columns %> </thead> <% } %> <tbody></tbody> <% if (columnsFooter != \'\') { %> <tfoot> <%- columnsFooter %> </tfoot> <% } %> </table>';
 
@@ -1792,6 +1792,14 @@
      */
     getTrByIndex: function getTrByIndex(tableId, index) {
       return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr[data-record-index="' + index + '"]');
+    },
+    /**
+     * Получение элемента строки по ключу
+     * @param {string} tableId
+     * @return {jQuery}
+     */
+    getTrEmpty: function getTrEmpty(tableId) {
+      return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr.coreui-table__record-empty');
     },
     /**
      * Получение контента под строкой
@@ -3691,10 +3699,18 @@
       });
       if (recordKey !== null && recordKey >= 0) {
         this._records.splice(recordKey, 1);
+        var that = this;
         var tr = coreuiTableElements.getTrByIndex(this.getId(), index);
         if (tr.length >= 0) {
           tr.fadeOut('fast', function () {
             tr.remove();
+            if (that._records.length === 0) {
+              var tbody = coreuiTableElements.getTableTbody(that.getId());
+              tbody.append(coreuiTableUtils.render(tpl['table-records-empty.html'], {
+                columnsCount: that._countColumnsShow,
+                lang: that.getLang()
+              }));
+            }
           });
         }
         this._recordsNumber--;
@@ -3710,6 +3726,7 @@
       if (tr.length >= 0) {
         var record = coreuiTablePrivate.addRecord(this, recordData, index);
         if (record) {
+          coreuiTableElements.getTrEmpty(this.getId()).remove();
           tr.after(coreuiTableRender.renderRecord(this, record));
           this._recordsNumber++;
         }
@@ -3725,6 +3742,7 @@
       if (tr.length >= 0) {
         var record = coreuiTablePrivate.addRecordBefore(this, recordData, index);
         if (record) {
+          coreuiTableElements.getTrEmpty(this.getId()).remove();
           tr.before(coreuiTableRender.renderRecord(this, record));
           this._recordsNumber++;
         }
@@ -3738,8 +3756,11 @@
       var tbody = coreuiTableElements.getTableTbody(this.getId());
       if (tbody.length >= 0) {
         var record = coreuiTablePrivate.addRecord(this, recordData, 0);
-        tbody.prepend(coreuiTableRender.renderRecord(this, record));
-        this._recordsNumber++;
+        if (record) {
+          coreuiTableElements.getTrEmpty(this.getId()).remove();
+          tbody.prepend(coreuiTableRender.renderRecord(this, record));
+          this._recordsNumber++;
+        }
       }
     },
     /**
@@ -3750,8 +3771,11 @@
       var tbody = coreuiTableElements.getTableTbody(this.getId());
       if (tbody.length >= 0) {
         var record = coreuiTablePrivate.addRecord(this, recordData);
-        tbody.append(coreuiTableRender.renderRecord(this, record));
-        this._recordsNumber++;
+        if (record) {
+          coreuiTableElements.getTrEmpty(this.getId()).remove();
+          tbody.append(coreuiTableRender.renderRecord(this, record));
+          this._recordsNumber++;
+        }
       }
     },
     /**

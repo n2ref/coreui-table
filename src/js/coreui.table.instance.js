@@ -1670,11 +1670,23 @@ let coreuiTableInstance = {
         if (recordKey !== null && recordKey >= 0) {
             this._records.splice(recordKey, 1);
 
-            let tr = coreuiTableElements.getTrByIndex(this.getId(), index);
+            let that = this;
+            let tr   = coreuiTableElements.getTrByIndex(this.getId(), index);
 
             if (tr.length >= 0) {
                 tr.fadeOut('fast', function () {
                     tr.remove();
+
+                    if (that._records.length === 0) {
+                        let tbody = coreuiTableElements.getTableTbody(that.getId());
+
+                        tbody.append(
+                            coreuiTableUtils.render(coreuiTableTpl['table-records-empty.html'], {
+                                columnsCount: that._countColumnsShow,
+                                lang: that.getLang(),
+                            })
+                        );
+                    }
                 });
             }
 
@@ -1696,6 +1708,8 @@ let coreuiTableInstance = {
             let record = coreuiTablePrivate.addRecord(this, recordData, index);
 
             if (record) {
+                coreuiTableElements.getTrEmpty(this.getId()).remove();
+
                 tr.after(
                     coreuiTableRender.renderRecord(this, record)
                 );
@@ -1718,6 +1732,8 @@ let coreuiTableInstance = {
             let record = coreuiTablePrivate.addRecordBefore(this, recordData, index);
 
             if (record) {
+                coreuiTableElements.getTrEmpty(this.getId()).remove();
+
                 tr.before(
                     coreuiTableRender.renderRecord(this, record)
                 );
@@ -1738,10 +1754,14 @@ let coreuiTableInstance = {
         if (tbody.length >= 0) {
             let record = coreuiTablePrivate.addRecord(this, recordData, 0);
 
-            tbody.prepend(
-                coreuiTableRender.renderRecord(this, record)
-            );
-            this._recordsNumber++;
+            if (record) {
+                coreuiTableElements.getTrEmpty(this.getId()).remove();
+
+                tbody.prepend(
+                    coreuiTableRender.renderRecord(this, record)
+                );
+                this._recordsNumber++;
+            }
         }
     },
 
@@ -1757,10 +1777,14 @@ let coreuiTableInstance = {
         if (tbody.length >= 0) {
             let record = coreuiTablePrivate.addRecord(this, recordData);
 
-            tbody.append(
-                coreuiTableRender.renderRecord(this, record)
-            );
-            this._recordsNumber++;
+            if (record) {
+                coreuiTableElements.getTrEmpty(this.getId()).remove();
+
+                tbody.append(
+                    coreuiTableRender.renderRecord(this, record)
+                );
+                this._recordsNumber++;
+            }
         }
     },
 
@@ -1793,7 +1817,7 @@ let coreuiTableInstance = {
 
         $.each(recordsElements, function (key, recordElement) {
             tableBody.append(recordElement);
-        })
+        });
 
 
         coreuiTablePrivate._trigger(this, 'records_show', [ this ]);

@@ -151,6 +151,17 @@ let coreuiTableElements = {
 
 
     /**
+     * Получение элемента строки по ключу
+     * @param {string} tableId
+     * @return {jQuery}
+     */
+    getTrEmpty: function (tableId) {
+
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr.coreui-table__record-empty');
+    },
+
+
+    /**
      * Получение контента под строкой
      * @param {jQuery} recordElement
      * @return {jQuery}
