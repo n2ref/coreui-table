@@ -1,9 +1,9 @@
-import coreuiTable      from "../coreui.table";
+
 import coreuiTableUtils from "../coreui.table.utils";
 import coreuiTableTpl   from "../coreui.table.templates";
 import CoreuiTableUtils from "../coreui.table.utils";
 
-coreuiTable.columns.menu = {
+let ColumnsMenu = {
 
     _table: null,
     _options: {
@@ -295,3 +295,5 @@ coreuiTable.columns.menu = {
         return menu;
     }
 }
+
+export default ColumnsMenu;

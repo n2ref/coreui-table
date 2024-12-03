@@ -1,10 +1,7 @@
-import coreuiTable      from "../coreui.table";
 import coreuiTableUtils from "../coreui.table.utils";
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTablePrivate from "../coreui.table.private";
 import coreuiTableRender from "../coreui.table.render";
 
-coreuiTable.columns.component = {
+let ColumnsComponent = {
 
     _table: null,
     _options: {
@@ -75,3 +72,5 @@ coreuiTable.columns.component = {
         return coreuiTableRender.renderComponents(this._table, content, 'records_show');
     }
 }
+
+export default ColumnsComponent;

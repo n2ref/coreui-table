@@ -1,11 +1,10 @@
 
-import coreuiTableTpl   from '../coreui.table.templates';
-import coreuiTableUtils from '../coreui.table.utils';
-import coreuiTable      from "../coreui.table";
-import CoreuiTableUtils from "../coreui.table.utils";
+import coreuiTableTpl      from '../coreui.table.templates';
+import coreuiTableUtils    from '../coreui.table.utils';
+import CoreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.controls.button_group = {
+let ControlButtonGroup = {
 
     _id: null,
     _table: null,
@@ -322,3 +321,5 @@ coreuiTable.controls.button_group = {
         });
     }
 }
+
+export default ControlButtonGroup;

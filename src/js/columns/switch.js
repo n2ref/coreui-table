@@ -1,9 +1,9 @@
-import coreuiTable from "../coreui.table";
-import coreuiTableElements from "../coreui.table.elements";
-import coreuiTableTpl from "../coreui.table.templates";
-import coreuiTableUtils from "../coreui.table.utils";
 
-coreuiTable.columns.switch = {
+import coreuiTableElements from "../coreui.table.elements";
+import coreuiTableTpl      from "../coreui.table.templates";
+import coreuiTableUtils    from "../coreui.table.utils";
+
+let ColumnsSwitch = {
 
     _table: null,
     _options: {
@@ -14,6 +14,7 @@ coreuiTable.columns.switch = {
         disabled: false,
         width: 5,
         valueY: 1,
+        valueN: 0,
         attr: { class: 'coreui-table__switch_container' },
         attrHeader: { },
         onChange: null
@@ -90,32 +91,37 @@ coreuiTable.columns.switch = {
         );
 
         // События нажатия на переключатель
-        if (this._options.hasOwnProperty('onChange') &&
-            (typeof this._options.onChange === 'function' || typeof this._options.onChange === 'string')
-        ) {
-            let that = this;
+        let that = this;
 
-            $('.coreui-table__switch', formSwitch).change(function (event) {
-                let isChecked = $(this).is(':checked');
+        $('.coreui-table__switch', formSwitch).change(function (event) {
 
+            let input = this;
+
+            $.each(that._table._records, function (key, recordTable) {
+                if (record.index === recordTable.index) {
+                    record.data[that._options.field] = input.checked ? that._options.valueY : that._options.valueN;
+                    return false;
+                }
+            });
+
+
+            if (that._options.hasOwnProperty('onChange') &&
+                (typeof that._options.onChange === 'function' || typeof that._options.onChange === 'string')
+            ) {
                 if (typeof that._options.onChange === 'function') {
-                    that._options.onChange(record, isChecked, this);
+                    that._options.onChange(record, input);
 
-                } else if (typeof that._options.onChange === 'string') {
-                    let id = null;
-
-                    if (record.data.hasOwnProperty(that._table._options.primaryKey)) {
-                        id = record.data[that._table._options.primaryKey];
-                    }
-
-                    let func = new Function('record', 'checked', 'id', that._options.onChange);
-                    func(record, this, id);
+                } else {
+                    let func = new Function('record', 'input', 'id', that._options.onChange);
+                    func(record, input);
                 }
 
                 return false;
-            });
-        }
+            }
+        });
 
         return formSwitch;
     }
 }
+
+export default ColumnsSwitch;

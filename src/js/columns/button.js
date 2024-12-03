@@ -1,8 +1,8 @@
-import coreuiTable      from "../coreui.table";
+
 import coreuiTableUtils from "../coreui.table.utils";
 import coreuiTableTpl   from "../coreui.table.templates";
 
-coreuiTable.columns.button = {
+let ColumnsButton = {
 
     _table: null,
     _options: {
@@ -134,3 +134,5 @@ coreuiTable.columns.button = {
         return btn;
     }
 }
+
+export default ColumnsButton;

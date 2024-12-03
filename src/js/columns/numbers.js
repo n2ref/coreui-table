@@ -1,6 +1,6 @@
-import coreuiTable from "../coreui.table";
 
-coreuiTable.columns.numbers = {
+
+let ColumnsNumbers = {
 
     _table: null,
     _options: {
@@ -52,3 +52,5 @@ coreuiTable.columns.numbers = {
         return this._table._recordsNumber;
     }
 }
+
+export default ColumnsNumbers;

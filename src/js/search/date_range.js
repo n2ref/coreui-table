@@ -1,10 +1,9 @@
 
-import coreuiTable         from "../coreui.table";
 import coreuiTableTpl      from "../coreui.table.templates";
 import coreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.search.date_range = {
+let SearchDateRange = {
 
     _id: null,
     _table: null,
@@ -250,3 +249,5 @@ coreuiTable.search.date_range = {
         });
     }
 }
+
+export default SearchDateRange;

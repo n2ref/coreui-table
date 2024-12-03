@@ -18,7 +18,8 @@ let coreuiTableRender = {
         let columnsHeader   = '';
         let columnsFooter   = '';
         let colGroups       = [];
-        let columns         = [];
+        let columnElements     = $(coreuiTableTpl['table/columns/tr.html']);
+
 
         // Колонки
         if (table._columns.length > 0) {
@@ -27,9 +28,12 @@ let coreuiTableRender = {
                     return;
                 }
 
-                let columnOptions = column.getOptions();
-                let attributes    = [];
-                let sortable      = null;
+                let columnOptions  = column.getOptions();
+                let attributes     = [];
+                let sortable       = null;
+                let menuElements   = [];
+                let menuShowAlways = '';
+                let menuPosition   = 'end';
 
                 if (columnOptions.hasOwnProperty('field') && typeof columnOptions.field === 'string') {
                     columnOptions.attrHeader = coreuiTableUtils.mergeAttr(columnOptions.attrHeader, {
@@ -75,6 +79,111 @@ let coreuiTableRender = {
                     }
                 }
 
+                if (options.showHeaders &&
+                    columnOptions.hasOwnProperty('menu') &&
+                    coreuiTableUtils.isObject(columnOptions.menu) &&
+                    columnOptions.menu.hasOwnProperty('items') &&
+                    Array.isArray(columnOptions.menu.items)
+                ) {
+
+                    if (columnOptions.menu.hasOwnProperty('showAlways') && columnOptions.menu.showAlways) {
+                        menuShowAlways = 'coreui-table__column-menu-always';
+                    }
+
+                    if (columnOptions.menu.hasOwnProperty('position') && typeof columnOptions.menu.position === 'string') {
+                        menuPosition = columnOptions.menu.position;
+                    }
+
+                    columnOptions.menu.items.map(function (item) {
+
+                        if (coreuiTableUtils.isObject(item) &&
+                            item.hasOwnProperty('type') &&
+                            typeof item.type === 'string' &&
+                            item.type
+                        ) {
+                            switch (item.type.toLowerCase()) {
+                                case 'button':
+                                    if (item.hasOwnProperty('text') &&
+                                        typeof item.text === 'string' &&
+                                        item.hasOwnProperty('onClick') &&
+                                        ['string', 'function'].indexOf(typeof item.onClick) >= 0 &&
+                                        item.text.length > 0
+                                    ) {
+                                        let attrItem = [];
+                                        let attr     = {
+                                            type: 'button',
+                                            class: 'dropdown-item',
+                                        };
+
+                                        if (item.hasOwnProperty('attr') && coreuiTableUtils.isObject(item.attr)) {
+                                            attr = coreuiTableUtils.mergeAttr(attr, item.attr);
+                                        }
+
+                                        $.each(attr, function (name, value) {
+                                            attrItem.push(name + '="' + value + '"');
+                                        });
+
+                                        let menuElement = $(coreuiTableUtils.render(coreuiTableTpl['table/columns/menu/button.html'], {
+                                            text: item.text,
+                                            attr: attrItem.join(' '),
+                                        }));
+
+                                        menuElement.find('button').click(function () {
+                                            if (typeof item.onClick === 'function') {
+                                                item.onClick(table);
+
+                                            } else if (typeof item.onClick === 'string') {
+                                                (new Function('table', item.onClick))(table);
+                                            }
+                                        });
+
+                                        menuElements.push(menuElement);
+                                    }
+                                    break;
+
+                                case 'link':
+                                    if (item.hasOwnProperty('text') &&
+                                        item.hasOwnProperty('url') &&
+                                        typeof item.text === 'string' &&
+                                        typeof item.url === 'string' &&
+                                        item.text.length > 0 &&
+                                        item.url.length > 0
+                                    ) {
+                                        let attrItem = [];
+                                        let attr     = {
+                                            href: item.url,
+                                            class: 'dropdown-item',
+                                        };
+
+                                        if (item.hasOwnProperty('attr') && coreuiTableUtils.isObject(item.attr)) {
+                                            attr = coreuiTableUtils.mergeAttr(attr, item.attr);
+                                        }
+
+                                        $.each(attr, function (name, value) {
+                                            attrItem.push(name + '="' + value + '"');
+                                        });
+
+                                        menuElements.push($(coreuiTableUtils.render(coreuiTableTpl['table/columns/menu/link.html'], {
+                                            text: item.text,
+                                            attr: attrItem.join(' '),
+                                        })));
+                                    }
+                                    break;
+
+                                case 'divider':
+                                    menuElements.push($(coreuiTableTpl['table/columns/menu/divider.html']));
+                                    break;
+
+                                case 'header':
+                                    menuElements.push($(coreuiTableUtils.render(coreuiTableTpl['table/columns/menu/header.html'], {
+                                        text: item.text
+                                    })));
+                                    break;
+                            }
+                        }
+                    });
+                }
+
                 if (columnOptions.attrHeader && coreuiTableUtils.isObject(columnOptions.attrHeader)) {
                     $.each(columnOptions.attrHeader, function (name, value) {
                         attributes.push(name + '="' + value + '"');
@@ -109,28 +218,48 @@ let coreuiTableRender = {
 
 
 
-                let label       = '';
-                let description = '';
+                if (options.showHeaders) {
+                    let label = '';
+                    let description = '';
 
-                if (columnOptions.hasOwnProperty('label') &&
-                    typeof columnOptions.label === 'string' &&
-                    ( ! columnOptions.hasOwnProperty('showLabel') || columnOptions.showLabel)
-                ) {
-                    label = columnOptions.label;
+                    if (columnOptions.hasOwnProperty('label') &&
+                        typeof columnOptions.label === 'string' &&
+                        (!columnOptions.hasOwnProperty('showLabel') || columnOptions.showLabel)
+                    ) {
+                        label = columnOptions.label;
+                    }
+
+                    if (columnOptions.hasOwnProperty('description') &&
+                        typeof columnOptions.label === 'string'
+                    ) {
+                        description = columnOptions.description;
+                    }
+
+                    let columnElement = $(coreuiTableUtils.render(coreuiTableTpl['table/columns/td.html'], {
+                        attr          : attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
+                        label         : label,
+                        description   : description,
+                        sortable      : sortable,
+                        issetMenu     : menuElements.length > 0,
+                        menuPosition  : menuPosition,
+                        menuShowAlways: menuShowAlways ? ' ' + menuShowAlways : '',
+                    }));
+
+                    if (menuElements.length) {
+                        let menuContainer = columnElement.find('.coreui-table__column-menu ul');
+                        let menuButton    = columnElement.find('.coreui-table__column-menu .dropdown-toggle');
+
+                        menuButton.click(function (event) {
+                            event.originalEvent.cancelBubble = true;
+                        });
+
+                        menuElements.map(function (element) {
+                            menuContainer.append(element);
+                        });
+                    }
+
+                    columnElements.append(columnElement);
                 }
-
-                if (columnOptions.hasOwnProperty('description') &&
-                    typeof columnOptions.label === 'string'
-                ) {
-                    description = columnOptions.description;
-                }
-
-                columns.push({
-                    attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
-                    label: label,
-                    description: description,
-                    sortable: sortable
-                });
             });
         }
 
@@ -148,7 +277,8 @@ let coreuiTableRender = {
         }
 
 
-        if (options.hasOwnProperty('columnsHeader') &&
+        if (options.showHeaders &&
+            options.hasOwnProperty('columnsHeader') &&
             Array.isArray(options.columnsHeader) &&
             options.columnsHeader.length > 0
         ) {
@@ -177,7 +307,7 @@ let coreuiTableRender = {
                     });
 
                     rows.push(
-                        coreuiTableUtils.render(coreuiTableTpl['table-columns-header.html'], {
+                        coreuiTableUtils.render(coreuiTableTpl['table/columns/header.html'], {
                             columns: cells,
                         })
                     );
@@ -216,7 +346,7 @@ let coreuiTableRender = {
                     });
 
                     rows.push(
-                        coreuiTableUtils.render(coreuiTableTpl['table-columns-footer.html'], {
+                        coreuiTableUtils.render(coreuiTableTpl['table/columns/footer.html'], {
                             columns: cells,
                         })
                     );
@@ -238,10 +368,6 @@ let coreuiTableRender = {
             classes.push('empty-tfoot');
         }
 
-        let htmlColumns = coreuiTableUtils.render(coreuiTableTpl['table-columns.html'], {
-            columns: columns,
-        });
-
         let theadAttr = [];
 
         if (options.hasOwnProperty('theadTop') &&
@@ -258,15 +384,19 @@ let coreuiTableRender = {
                 showHeaders: options.showHeaders,
                 columnsHeader : columnsHeader,
                 colGroups : colGroups,
-                columns : htmlColumns,
                 columnsFooter : columnsFooter,
             })
         );
 
 
+        if (options.showHeaders) {
+            tableElement.find('thead').append(columnElements);
+        }
+
+
         let tbody = tableElement.find('tbody');
 
-        $.each(recordsElements, function (key, recordElement) {
+        recordsElements.map(function (recordElement) {
             tbody.append(recordElement);
         });
 
@@ -318,7 +448,7 @@ let coreuiTableRender = {
         if (renderRecords.length === 0) {
             renderRecords = [
                 $(
-                    coreuiTableUtils.render(coreuiTableTpl['table-records-empty.html'], {
+                    coreuiTableUtils.render(coreuiTableTpl['table/record/empty.html'], {
                         columnsCount: table._countColumnsShow,
                         lang: table.getLang(),
                     })
@@ -375,7 +505,7 @@ let coreuiTableRender = {
         });
 
         let recordElement = $(
-            coreuiTableUtils.render(coreuiTableTpl['table-record.html'], {
+            coreuiTableUtils.render(coreuiTableTpl['table/record.html'], {
                 attr  : attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
                 index : record.index,
                 fields: fields
@@ -482,7 +612,7 @@ let coreuiTableRender = {
         });
 
         let recordElement = $(
-            coreuiTableUtils.render(coreuiTableTpl['table-record-group.html'], {
+            coreuiTableUtils.render(coreuiTableTpl['table/record/group.html'], {
                 attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
                 colspan: table._countColumnsShow,
             })
@@ -517,7 +647,7 @@ let coreuiTableRender = {
 
 
         let expandRecord = $(
-            coreuiTableUtils.render(coreuiTableTpl['table-record-expand.html'], {
+            coreuiTableUtils.render(coreuiTableTpl['table/record/expand.html'], {
                 colspan: table._countColumnsShow,
             })
         );
@@ -551,7 +681,7 @@ let coreuiTableRender = {
 
         if (coreuiTableUtils.isObject(control)) {
             let controlElement = $(
-                coreuiTableUtils.render(coreuiTableTpl['table-control.html'], {
+                coreuiTableUtils.render(coreuiTableTpl['table/control.html'], {
                     id: control.getId()
                 })
             );

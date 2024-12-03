@@ -1,10 +1,9 @@
 
-import coreuiTable      from "../coreui.table";
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTableUtils from "../coreui.table.utils";
+import coreuiTableTpl      from "../coreui.table.templates";
+import coreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.filters.switch = {
+let FilterSwitch = {
 
     _id: null,
     _table: null,
@@ -149,3 +148,5 @@ coreuiTable.filters.switch = {
         });
     }
 }
+
+export default FilterSwitch;

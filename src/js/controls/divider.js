@@ -1,9 +1,8 @@
 
-import coreuiTable      from "../coreui.table";
 import coreuiTableTpl   from "../coreui.table.templates";
 import coreuiTableUtils from '../coreui.table.utils';
 
-coreuiTable.controls.divider = {
+let ControlDivider = {
 
     _id: null,
     _table: null,
@@ -68,3 +67,5 @@ coreuiTable.controls.divider = {
         });
     }
 }
+
+export default ControlDivider;

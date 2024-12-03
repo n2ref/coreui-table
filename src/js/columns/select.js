@@ -1,10 +1,10 @@
-import coreuiTable         from "../coreui.table";
+
 import coreuiTableElements from "../coreui.table.elements";
 import coreuiTablePrivate  from "../coreui.table.private";
 import coreuiTableTpl      from "../coreui.table.templates";
 import coreuiTableUtils    from "../coreui.table.utils";
 
-coreuiTable.columns.select = {
+let ColumnsSelect = {
 
     _table: null,
     _options: {
@@ -124,3 +124,5 @@ coreuiTable.columns.select = {
         return select;
     }
 }
+
+export default ColumnsSelect;

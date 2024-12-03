@@ -1,8 +1,7 @@
-import coreuiTable      from "../coreui.table";
 import coreuiTableUtils from "../coreui.table.utils";
 import coreuiTableTpl   from "../coreui.table.templates";
 
-coreuiTable.columns.badge = {
+let ColumnsBadge = {
 
     _table: null,
     _options: {
@@ -107,3 +106,5 @@ coreuiTable.columns.badge = {
         });
     }
 }
+
+export default ColumnsBadge;

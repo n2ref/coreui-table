@@ -1,10 +1,9 @@
 
-import coreuiTable         from "../coreui.table";
 import coreuiTableTpl      from "../coreui.table.templates";
 import coreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.controls.filter_clear = {
+let ControlFilterClear = {
 
     _id: null,
     _table: null,
@@ -68,7 +67,7 @@ coreuiTable.controls.filter_clear = {
         let that    = this;
 
         $('button', control).click(function () {
-            that._table.filtersClear();
+            that._table.clearFilters();
         });
 
         this._table.on('filters_change', function (filterData) {
@@ -120,3 +119,5 @@ coreuiTable.controls.filter_clear = {
         });
     }
 }
+
+export default ControlFilterClear;

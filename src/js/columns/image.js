@@ -1,8 +1,7 @@
-import coreuiTable      from "../coreui.table";
 import coreuiTableUtils from "../coreui.table.utils";
 import coreuiTableTpl   from "../coreui.table.templates";
 
-coreuiTable.columns.image = {
+let ColumnsImage = {
 
     _table: null,
     _options: {
@@ -116,3 +115,4 @@ coreuiTable.columns.image = {
         });
     }
 }
+export default ColumnsImage;

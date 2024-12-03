@@ -1,11 +1,11 @@
 
-import coreuiTableUtils from '../coreui.table.utils';
-import coreuiTable      from "../coreui.table";
-import coreuiTableTpl from "../coreui.table.templates";
-import CoreuiTableUtils from "../coreui.table.utils";
+import coreuiTableUtils    from '../coreui.table.utils';
+import coreuiTableTpl      from "../coreui.table.templates";
+import CoreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.controls.columns = {
+
+let ControlColumns = {
 
     _id: null,
     _table: null,
@@ -172,7 +172,6 @@ coreuiTable.controls.columns = {
                     });
 
                     that._table.setColumnsShow(columns);
-                    that._table.refresh();
 
                     container.fadeOut('fast');
                 });
@@ -210,3 +209,5 @@ coreuiTable.controls.columns = {
         });
     }
 }
+
+export default ControlColumns;

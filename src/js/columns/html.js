@@ -1,7 +1,7 @@
-import coreuiTable      from "../coreui.table";
+
 import coreuiTableUtils from "../coreui.table.utils";
 
-coreuiTable.columns.html = {
+let ColumnsHtml = {
 
     _table: null,
     _options: {
@@ -123,3 +123,5 @@ coreuiTable.columns.html = {
         return content;
     }
 }
+
+export default ColumnsHtml;

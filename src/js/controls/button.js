@@ -1,10 +1,9 @@
 
 import coreuiTableTpl      from '../coreui.table.templates';
 import coreuiTableUtils    from '../coreui.table.utils';
-import coreuiTable         from "../coreui.table";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.controls.button = {
+let ControlButton = {
 
     _id: null,
     _table: null,
@@ -88,3 +87,5 @@ coreuiTable.controls.button = {
         });
     }
 }
+
+export default ControlButton;

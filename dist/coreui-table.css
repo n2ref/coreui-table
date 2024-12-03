@@ -145,6 +145,25 @@
   text-decoration: underline;
   cursor: pointer;
 }
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td .coreui-table__column-menu .dropdown-toggle {
+  transition: opacity 0.1s linear;
+}
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td .coreui-table__column-menu .dropdown-toggle:not(.coreui-table__column-menu-always) {
+  opacity: 0;
+}
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td .coreui-table__column-menu .dropdown-toggle.coreui-table__column-menu-always {
+  opacity: 0.3;
+}
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td:hover .coreui-table__column-menu .dropdown-toggle,
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td .coreui-table__column-menu .dropdown-toggle.show {
+  opacity: 1;
+}
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td .coreui-table__column-menu .dropdown-toggle {
+  cursor: pointer;
+}
+.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td .coreui-table__column-menu .dropdown-toggle::after {
+  display: none;
+}
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td.coreui-table__fixed_left::after {
   content: "";
   position: absolute;

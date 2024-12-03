@@ -1,7 +1,5 @@
 
-import coreuiTable from "../coreui.table";
-
-coreuiTable.columns.date = {
+let ColumnsDate = {
 
     _table: null,
     _options: {
@@ -109,3 +107,5 @@ coreuiTable.columns.date = {
         return (repeat.repeat(count) + str).slice(-(count));
     }
 }
+
+export default ColumnsDate;

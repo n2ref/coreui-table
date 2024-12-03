@@ -1,10 +1,9 @@
 
-import coreuiTable         from "../coreui.table";
 import coreuiTableTpl      from "../coreui.table.templates";
 import coreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.search.switch = {
+let SearchSwitch = {
 
     _id: null,
     _table: null,
@@ -136,3 +135,5 @@ coreuiTable.search.switch = {
         });
     }
 }
+
+export default SearchSwitch;

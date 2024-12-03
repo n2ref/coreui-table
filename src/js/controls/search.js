@@ -1,11 +1,11 @@
 
-import coreuiTableUtils from '../coreui.table.utils';
-import coreuiTable      from "../coreui.table";
-import coreuiTableTpl   from "../coreui.table.templates";
-import CoreuiTableUtils from "../coreui.table.utils";
+import coreuiTableUtils    from '../coreui.table.utils';
+import coreuiTableTpl      from "../coreui.table.templates";
+import CoreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.controls.search = {
+
+let ControlSearch = {
 
     _id: null,
     _table: null,
@@ -186,7 +186,7 @@ coreuiTable.controls.search = {
 
 
         buttonClear.click(function () {
-            that._table.searchClear();
+            that._table.clearSearch();
 
             let container = coreuiTableElements.getSearchContainer(that._table.getId());
 
@@ -204,7 +204,7 @@ coreuiTable.controls.search = {
                     $(that._renderBtnClear()).insertAfter(buttonToggle);
 
                     $('button.btn-clear', control).click(function () {
-                        that._table.searchClear();
+                        that._table.clearSearch();
 
                         let container = coreuiTableElements.getSearchContainer(that._table.getId());
 
@@ -324,3 +324,5 @@ coreuiTable.controls.search = {
         });
     }
 }
+
+export default ControlSearch;

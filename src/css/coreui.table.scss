@@ -163,6 +163,28 @@
             text-decoration: underline;
             cursor: pointer;
         }
+        table > thead > tr > td .coreui-table__column-menu .dropdown-toggle {
+            transition: opacity 0.1s linear;
+        }
+        table > thead > tr > td .coreui-table__column-menu .dropdown-toggle:not(.coreui-table__column-menu-always) {
+            opacity: 0;
+        }
+        table > thead > tr > td .coreui-table__column-menu .dropdown-toggle.coreui-table__column-menu-always {
+            opacity: 0.3;
+        }
+        table > thead > tr > td:hover .coreui-table__column-menu .dropdown-toggle,
+        table > thead > tr > td .coreui-table__column-menu .dropdown-toggle.show {
+            opacity: 1;
+        }
+        table > thead > tr > td .coreui-table__column-menu {
+            .dropdown-toggle {
+                cursor: pointer;
+            }
+
+            .dropdown-toggle::after {
+                display: none;
+            }
+        }
         table > tbody > tr > td.coreui-table__fixed_left::after {
             content: "";
             position: absolute;

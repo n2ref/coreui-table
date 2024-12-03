@@ -1,8 +1,7 @@
-import coreuiTable      from "../coreui.table";
 import coreuiTableUtils from "../coreui.table.utils";
 import coreuiTableTpl   from "../coreui.table.templates";
 
-coreuiTable.columns.progress = {
+let ColumnsProgress = {
 
     _table: null,
     _options: {
@@ -186,3 +185,5 @@ coreuiTable.columns.progress = {
         });
     }
 }
+
+export default ColumnsProgress;

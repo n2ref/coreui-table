@@ -1,8 +1,7 @@
 
 import coreuiTableUtils from '../coreui.table.utils';
-import coreuiTable      from "../coreui.table";
 
-coreuiTable.controls.custom = {
+let ControlCustom = {
 
     _id: null,
     _table: null,
@@ -59,3 +58,6 @@ coreuiTable.controls.custom = {
         }
     }
 }
+
+
+export default ControlCustom;

@@ -1,0 +1,24 @@
+<td<%- attr%>>
+  <span class="coreui-table__column-label"><%- label %></span>
+
+  <% if (description) { %>
+    <small class="coreui-table__column-description bi bi-question-circle text-body-secondary"
+         title="<%= description %>" data-bs-toggle="tooltip" data-bs-placement="bottom"></small>
+  <% } %>
+
+  <% if (sortable === 'asc') { %>
+    <i class="coreui-table__column-sort bi bi-sort-down-alt"></i>
+  <% } else if (sortable === 'desc') { %>
+    <i class="coreui-table__column-sort bi bi-sort-down"></i>
+  <% } %>
+
+  <% if (issetMenu) { %>
+    <div class="dropdown d-inline fw-normal coreui-table__column-menu">
+      <span class="dropdown-toggle <%= menuShowAlways %>" data-bs-toggle="dropdown">
+        <i class="bi bi-three-dots-vertical"></i>
+      </span>
+
+      <ul class="dropdown-menu dropdown-menu-<%= menuPosition %>"></ul>
+    </div>
+  <% } %>
+</td>

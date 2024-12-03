@@ -21,17 +21,17 @@ let coreuiTable = {
      */
     create: function (options) {
 
-        let instance = $.extend(true, {}, coreuiTableInstance);
-
         if ( ! options.hasOwnProperty('lang') || typeof options.lang !== 'string') {
             options.lang = this.getSetting('lang');
         }
 
-        let langList     = this.lang.hasOwnProperty(options.lang) ? this.lang[options.lang] : {};
-        options.langList = options.hasOwnProperty('langList') && coreuiTableUtils.isObject(options.langList)
-            ? $.extend(true, {}, langList, options.langList)
-            : langList;
+        let langItems     = this.lang.hasOwnProperty(options.lang) ? this.lang[options.lang] : {};
+        options.langItems = options.hasOwnProperty('langItems') && coreuiTableUtils.isObject(options.langItems)
+            ? $.extend(true, {}, langItems, options.langItems)
+            : langItems;
 
+
+        let instance = $.extend(true, {}, coreuiTableInstance);
         instance._init(this, options instanceof Object ? options : {});
 
         let tableId = instance.getId();

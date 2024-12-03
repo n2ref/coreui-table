@@ -1,11 +1,10 @@
 
 import coreuiTableTpl   from '../coreui.table.templates';
 import coreuiTableUtils from '../coreui.table.utils';
-import coreuiTable      from "../coreui.table";
 import CoreuiTableUtils from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.controls.dropdown = {
+let ControlDropdown = {
 
     _id: null,
     _table: null,
@@ -182,3 +181,5 @@ coreuiTable.controls.dropdown = {
         });
     }
 }
+
+export default ControlDropdown;

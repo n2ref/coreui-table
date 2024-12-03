@@ -1,10 +1,9 @@
 
-import coreuiTable         from "../coreui.table";
 import coreuiTableTpl      from "../coreui.table.templates";
 import coreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.search.checkbox = {
+let SearchCheckbox = {
 
     _id: null,
     _table: null,
@@ -194,3 +193,5 @@ coreuiTable.search.checkbox = {
         });
     }
 }
+
+export default SearchCheckbox;

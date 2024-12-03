@@ -1,10 +1,10 @@
 
-import coreuiTable      from "../coreui.table";
 import coreuiTableTpl   from "../coreui.table.templates";
 import coreuiTableUtils from '../coreui.table.utils';
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.controls.page_size = {
+
+let ControlPageSize = {
 
     _id: null,
     _table: null,
@@ -97,3 +97,5 @@ coreuiTable.controls.page_size = {
         });
     }
 }
+
+export default ControlPageSize;

@@ -1,7 +1,5 @@
 
-import coreuiTable from "../coreui.table";
-
-coreuiTable.lang.en = {
+let langEn = {
     "emptyRecords": "No records",
     "loading": "Loading...",
     "total": "Total",
@@ -11,3 +9,5 @@ coreuiTable.lang.en = {
     "searchAction": "Search",
     "clear": "Clear",
 }
+
+export default langEn;

@@ -1,7 +1,7 @@
-import coreuiTable      from "../coreui.table";
+
 import coreuiTableUtils from "../coreui.table.utils";
 
-coreuiTable.columns.money = {
+let ColumnsMoney = {
 
     _table: null,
     _options: {
@@ -126,3 +126,5 @@ coreuiTable.columns.money = {
         return content;
     }
 }
+
+export default ColumnsMoney;

@@ -1,10 +1,9 @@
 
-import coreuiTable      from "../coreui.table";
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTableUtils from "../coreui.table.utils";
+import coreuiTableTpl      from "../coreui.table.templates";
+import coreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.filters.datetime_range = {
+let FilterDatetimeRange = {
 
     _id: null,
     _table: null,
@@ -251,3 +250,5 @@ coreuiTable.filters.datetime_range = {
         });
     }
 }
+
+export default FilterDatetimeRange;

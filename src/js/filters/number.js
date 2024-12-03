@@ -1,10 +1,9 @@
 
-import coreuiTable      from "../coreui.table";
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTableUtils from "../coreui.table.utils";
+import coreuiTableTpl      from "../coreui.table.templates";
+import coreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.filters.number = {
+let FilterNumber = {
 
     _id: null,
     _table: null,
@@ -279,3 +278,5 @@ coreuiTable.filters.number = {
         });
     }
 }
+
+export default FilterNumber;

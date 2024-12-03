@@ -1,10 +1,9 @@
 
-import coreuiTable         from "../coreui.table";
 import coreuiTableTpl      from "../coreui.table.templates";
 import coreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.filters.datetime = {
+let FilterDatetime = {
 
     _id: null,
     _table: null,
@@ -180,3 +179,5 @@ coreuiTable.filters.datetime = {
         });
     }
 }
+
+export default FilterDatetime;

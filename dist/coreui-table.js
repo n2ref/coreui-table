@@ -24,6 +24,7 @@
   tpl['columns/select_label.html'] = '<input class="coreui-table__select-all form-check-input" type="checkbox" value="">';
   tpl['columns/select.html'] = '<input class="coreui-table__select form-check-input" type="checkbox" value="<%= index %>">';
   tpl['columns/switch.html'] = '<div class="form-switch"> <input class="form-check-input coreui-table__switch" type="checkbox" data-field="<%= field %>" value="record.index"<% if (checked) { %> checked<% } %><% if (disabled) { %> disabled<% } %>> </div>';
+  tpl['container.html'] = ' <div id="coreui-table-<%= id %>" class="coreui-table<%= classes %>"<% if (widthSizes) { %> style="<%= widthSizes.join(\';\') %>"<% } %>> <div class="coreui-table__container position-relative"> <div class="coreui-table__wrapper<%= classesWrapper %>" <% if (heightSizes) { %>style="<%= heightSizes.join(\';\') %>"<% } %>></div> </div> </div>';
   tpl['controls/button_group.html'] = ' <div class="btn-group" role="group"> <% $.each(buttons, function(key, button) { %> <% if (button.type === \'link\') { %> <a href="<%= button.url %>"<%- button.attr %>><%= button.content %></a> <% } else if (button.type === \'button\') { %> <button type="button" id="btn-grp-<%= button.id %>"<%- button.attr %>> <%= button.content %> </button> <% } else if (button.type === \'dropdown\') { %> <div class="btn-group" role="group"> <button type="button" data-bs-toggle="dropdown"<%- button.attr %>> <%- button.content %> </button> <ul class="dropdown-menu dropdown-menu-<%= button.position %>"> <% $.each(button.items, function(key, item) { %> <% if (item.type === \'link\') { %> <li><a class="dropdown-item" href="<%= item.url %>"><%= item.content %></a></li> <% } else if (item.type === \'button\') { %> <li> <button type="button" class="dropdown-item" id="btn-dropdown-<%= item.id %>"> <%= item.content %> </button> </li> <% } else if (item.type === \'divider\') { %> <li><hr class="dropdown-divider"></li> <% } %> <% }) %> </ul> </div> <% } %> <% }) %> </div>';
   tpl['controls/button.html'] = '<button type="button"<%- attr %>><%- content %></button>';
   tpl['controls/caption.html'] = '<div class="d-flex flex-column me-3"> <small class="text-body-secondary fw-medium"> <%= title %> <% if (description) { %> <i class="bi bi-question-circle coreui-table__cursor_help" title="<%= description %>"></i> <% } %> </small> <b class="text-nowrap"><%= value %></b> </div>';
@@ -64,21 +65,25 @@
   tpl['search/select.html'] = ' <select <%- attr %>> <option>--</option> <% $.each(options, function(key, option) { %> <% if (option.type === \'group\') { %> <optgroup<%- option.attr %>/> <% $.each(option.options, function(key, groupOption) { %> <option <%- groupOption.attr %>/><%= groupOption.text %></option> <% }); %> </optgroup> <% } else { %> <option <%- option.attr %>/><%= option.text %></option> <% } %> <% }); %> </select>';
   tpl['search/switch.html'] = '<div class="form-check form-switch pt-2"> <input class="form-check-input" type="checkbox" id="<%= (field + id) %>" name="<%= field %>" value="<%= valueY %>" <%= checked ? \' checked\' : \'\' %>> </div>';
   tpl['search/text.html'] = ' <input type="text" <%- attr %>>';
-  tpl['table-columns-footer.html'] = '<tr> <% $.each(columns, function(key, column) { %> <td<%- column.attr%>><%- column.content %></td> <% }); %> </tr>';
-  tpl['table-columns-header.html'] = '<tr class="fw-medium bg-white"> <% $.each(columns, function(key, column) { %> <td<%- column.attr%>><%- column.content %></td> <% }); %> </tr>';
-  tpl['table-columns.html'] = '<tr class="fw-medium bg-white"> <% $.each(columns, function(key, column) { %> <td<%- column.attr%>> <span class="coreui-table__column-label"><%- column.label %></span> <% if (column.description) { %> <small class="coreui-table__column-description bi bi-question-circle text-body-secondary" title="<%= column.description %>" data-bs-toggle="tooltip" data-bs-placement="bottom"></small> <% } %> <% if (column.sortable === \'asc\') { %> <i class="coreui-table__column-sort bi bi-sort-down-alt"></i> <% } else if (column.sortable === \'desc\') { %> <i class="coreui-table__column-sort bi bi-sort-down"></i> <% } %> </td> <% }); %> </tr>';
-  tpl['table-control.html'] = '<div id="coreui-table-control-<%= id %>" class="coreui-table__control"></div>';
-  tpl['table-controls-footer-out.html'] = ' <div class="coreui-table__footer d-flex justify-content-between"> <% if (controlsLeft.length) { %> <div class="coreui-table__controls coreui-table__controls_left d-flex justify-content-start gap-2 flex-wrap flex-fill mb-1 mt-2 align-items-center"></div> <% } %> <% if (controlsCenter.length) { %> <div class="coreui-table__controls coreui-table__controls_center d-flex justify-content-center gap-2 flex-wrap flex-fill mb-1 mt-2 align-items-center"></div> <% } %> <% if (controlsRight.length) { %> <div class="coreui-table__controls coreui-table__controls_right d-flex justify-content-end gap-2 flex-wrap flex-fill mb-1 mt-2 align-items-center"></div> <% } %> </div>';
-  tpl['table-controls-footer.html'] = ' <div class="coreui-table__footer ps-1 pe-1 d-flex justify-content-between border-top border-secondary-subtle"> <% if (controlsLeft.length) { %> <div class="coreui-table__controls coreui-table__controls_left d-flex justify-content-start gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center"></div> <% } %> <% if (controlsCenter.length) { %> <div class="coreui-table__controls coreui-table__controls_center d-flex justify-content-center gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center"></div> <% } %> <% if (controlsRight.length) { %> <div class="coreui-table__controls coreui-table__controls_right d-flex justify-content-end gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center"></div> <% } %> </div>';
-  tpl['table-controls-header-out.html'] = ' <div class="coreui-table__header d-flex justify-content-between"> <% if (controlsLeft.length) { %> <div class="coreui-table__controls coreui-table__controls_left d-flex justify-content-start gap-2 flex-wrap flex-fill mb-2 mt-1 align-items-center"></div> <% } %> <% if (controlsCenter.length) { %> <div class="coreui-table__controls coreui-table__controls_center d-flex justify-content-center gap-2 flex-wrap flex-fill mb-2 mt-1 align-items-center"></div> <% } %> <% if (controlsRight.length) { %> <div class="coreui-table__controls coreui-table__controls_right d-flex justify-content-end gap-2 flex-wrap flex-fill mb-2 mt-1 align-items-center"></div> <% } %> </div>';
-  tpl['table-controls-header.html'] = ' <div class="coreui-table__header ps-1 pe-1 d-flex justify-content-between border-bottom border-secondary-subtle"> <% if (controlsLeft.length) { %> <div class="coreui-table__controls coreui-table__controls_left d-flex justify-content-start gap-2 flex-wrap flex-fill my-1 align-items-center"></div> <% } %> <% if (controlsCenter.length) { %> <div class="coreui-table__controls coreui-table__controls_center d-flex justify-content-center gap-2 flex-wrap flex-fill my-1 align-items-center"></div> <% } %> <% if (controlsRight.length) { %> <div class="coreui-table__controls coreui-table__controls_right d-flex justify-content-end gap-2 flex-wrap flex-fill my-1 align-items-center"></div> <% } %> </div>';
-  tpl['table-loader.html'] = '<div class="coreui-table-lock position-absolute w-100 top-0 bottom-0"> <div class="coreui-table-block bg-secondary-subtle position-absolute opacity-50 w-100 top-0 bottom-0"></div> <div class="coreui-table-message position-relative d-flex align-content-center justify-content-start gap-2 mt-3 py-1 px-2 m-auto border border-secondary-subtle rounded-3 bg-body-secondary"> <div class="spinner-border text-secondary align-self-center"></div> <span class="lh-lg"><%= lang.loading %></span> </div> </div>';
-  tpl['table-record-expand.html'] = '<tr class="coreui-table__record-expanded" style="display: none"> <td colspan="<%= colspan %>"></td> </tr>';
-  tpl['table-record-group.html'] = '<tr<%- attr %>> <td colspan="<%= colspan %>"></td> </tr>';
-  tpl['table-record.html'] = '<tr<%- attr %> data-record-index="<%= index %>"> <% $.each(fields, function(key, field) { %> <td<%- field.attr %>></td> <% }); %> </tr>';
-  tpl['table-records-empty.html'] = '<tr class="coreui-table__record-empty"> <td class="text-center" colspan="<%= columnsCount %>"><%= lang.emptyRecords %></td> </tr>';
-  tpl['table-wrapper.html'] = ' <div id="coreui-table-<%= id %>" class="coreui-table<%= classes %>"<% if (widthSizes) { %> style="<%= widthSizes.join(\';\') %>"<% } %>> <div class="coreui-table__container position-relative"> <div class="coreui-table__wrapper<%= classesWrapper %>" <% if (heightSizes) { %>style="<%= heightSizes.join(\';\') %>"<% } %>></div> </div> </div>';
-  tpl['table.html'] = ' <table class="table <%= classes %> mb-0"> <colgroup> <% $.each(colGroups, function(key, columnGroup) { %> <col<% if (columnGroup.style) { %> style="<%= columnGroup.style %>"<% } %>/> <% }); %> </colgroup> <% if (showHeaders) { %> <thead<% if (theadAttr) { %> <%- theadAttr %>"<% } %>> <%- columnsHeader %> <%- columns %> </thead> <% } %> <tbody></tbody> <% if (columnsFooter != \'\') { %> <tfoot> <%- columnsFooter %> </tfoot> <% } %> </table>';
+  tpl['table.html'] = ' <table class="table <%= classes %> mb-0"> <colgroup> <% $.each(colGroups, function(key, columnGroup) { %> <col<% if (columnGroup.style) { %> style="<%= columnGroup.style %>"<% } %>/> <% }); %> </colgroup> <% if (showHeaders) { %> <thead<% if (theadAttr) { %> <%- theadAttr %>"<% } %>> <%- columnsHeader %> </thead> <% } %> <tbody></tbody> <% if (columnsFooter != \'\') { %> <tfoot> <%- columnsFooter %> </tfoot> <% } %> </table>';
+  tpl['table/columns/footer.html'] = '<tr> <% $.each(columns, function(key, column) { %> <td<%- column.attr%>><%- column.content %></td> <% }); %> </tr>';
+  tpl['table/columns/header.html'] = '<tr class="fw-medium bg-white"> <% $.each(columns, function(key, column) { %> <td<%- column.attr%>><%- column.content %></td> <% }); %> </tr>';
+  tpl['table/columns/menu/button.html'] = '<li><button <%- attr%>><%- text %></button></li>';
+  tpl['table/columns/menu/divider.html'] = '<li><hr class="dropdown-divider"></li>';
+  tpl['table/columns/menu/header.html'] = '<li><h6 class="dropdown-header"><%- text %></h6></li>';
+  tpl['table/columns/menu/link.html'] = '<li><a <%- attr%>><%- text %></a></li>';
+  tpl['table/columns/td.html'] = '<td<%- attr%>> <span class="coreui-table__column-label"><%- label %></span> <% if (description) { %> <small class="coreui-table__column-description bi bi-question-circle text-body-secondary" title="<%= description %>" data-bs-toggle="tooltip" data-bs-placement="bottom"></small> <% } %> <% if (sortable === \'asc\') { %> <i class="coreui-table__column-sort bi bi-sort-down-alt"></i> <% } else if (sortable === \'desc\') { %> <i class="coreui-table__column-sort bi bi-sort-down"></i> <% } %> <% if (issetMenu) { %> <div class="dropdown d-inline fw-normal coreui-table__column-menu"> <span class="dropdown-toggle <%= menuShowAlways %>" data-bs-toggle="dropdown"> <i class="bi bi-three-dots-vertical"></i> </span> <ul class="dropdown-menu dropdown-menu-<%= menuPosition %>"></ul> </div> <% } %> </td>';
+  tpl['table/columns/tr.html'] = '<tr class="fw-medium bg-white"></tr>';
+  tpl['table/control.html'] = '<div id="coreui-table-control-<%= id %>" class="coreui-table__control"></div>';
+  tpl['table/controls/footer-out.html'] = ' <div class="coreui-table__footer d-flex justify-content-between"> <% if (controlsLeft.length) { %> <div class="coreui-table__controls coreui-table__controls_left d-flex justify-content-start gap-2 flex-wrap flex-fill mb-1 mt-2 align-items-center"></div> <% } %> <% if (controlsCenter.length) { %> <div class="coreui-table__controls coreui-table__controls_center d-flex justify-content-center gap-2 flex-wrap flex-fill mb-1 mt-2 align-items-center"></div> <% } %> <% if (controlsRight.length) { %> <div class="coreui-table__controls coreui-table__controls_right d-flex justify-content-end gap-2 flex-wrap flex-fill mb-1 mt-2 align-items-center"></div> <% } %> </div>';
+  tpl['table/controls/footer.html'] = ' <div class="coreui-table__footer ps-1 pe-1 d-flex justify-content-between border-top border-secondary-subtle"> <% if (controlsLeft.length) { %> <div class="coreui-table__controls coreui-table__controls_left d-flex justify-content-start gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center"></div> <% } %> <% if (controlsCenter.length) { %> <div class="coreui-table__controls coreui-table__controls_center d-flex justify-content-center gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center"></div> <% } %> <% if (controlsRight.length) { %> <div class="coreui-table__controls coreui-table__controls_right d-flex justify-content-end gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center"></div> <% } %> </div>';
+  tpl['table/controls/header-out.html'] = ' <div class="coreui-table__header d-flex justify-content-between"> <% if (controlsLeft.length) { %> <div class="coreui-table__controls coreui-table__controls_left d-flex justify-content-start gap-2 flex-wrap flex-fill mb-2 mt-1 align-items-center"></div> <% } %> <% if (controlsCenter.length) { %> <div class="coreui-table__controls coreui-table__controls_center d-flex justify-content-center gap-2 flex-wrap flex-fill mb-2 mt-1 align-items-center"></div> <% } %> <% if (controlsRight.length) { %> <div class="coreui-table__controls coreui-table__controls_right d-flex justify-content-end gap-2 flex-wrap flex-fill mb-2 mt-1 align-items-center"></div> <% } %> </div>';
+  tpl['table/controls/header.html'] = ' <div class="coreui-table__header ps-1 pe-1 d-flex justify-content-between border-bottom border-secondary-subtle"> <% if (controlsLeft.length) { %> <div class="coreui-table__controls coreui-table__controls_left d-flex justify-content-start gap-2 flex-wrap flex-fill my-1 align-items-center"></div> <% } %> <% if (controlsCenter.length) { %> <div class="coreui-table__controls coreui-table__controls_center d-flex justify-content-center gap-2 flex-wrap flex-fill my-1 align-items-center"></div> <% } %> <% if (controlsRight.length) { %> <div class="coreui-table__controls coreui-table__controls_right d-flex justify-content-end gap-2 flex-wrap flex-fill my-1 align-items-center"></div> <% } %> </div>';
+  tpl['table/loader.html'] = '<div class="coreui-table-lock position-absolute w-100 top-0 bottom-0"> <div class="coreui-table-block bg-secondary-subtle position-absolute opacity-50 w-100 top-0 bottom-0"></div> <div class="coreui-table-message position-relative d-flex align-content-center justify-content-start gap-2 mt-3 py-1 px-2 m-auto border border-secondary-subtle rounded-3 bg-body-secondary"> <div class="spinner-border text-secondary align-self-center"></div> <span class="lh-lg"><%= lang.loading %></span> </div> </div>';
+  tpl['table/record.html'] = '<tr<%- attr %> data-record-index="<%= index %>"> <% $.each(fields, function(key, field) { %> <td<%- field.attr %>></td> <% }); %> </tr>';
+  tpl['table/record/empty.html'] = '<tr class="coreui-table__record-empty"> <td class="text-center" colspan="<%= columnsCount %>"><%= lang.emptyRecords %></td> </tr>';
+  tpl['table/record/expand.html'] = '<tr class="coreui-table__record-expanded" style="display: none"> <td colspan="<%= colspan %>"></td> </tr>';
+  tpl['table/record/group.html'] = '<tr<%- attr %>> <td colspan="<%= colspan %>"></td> </tr>';
 
   (function (f) {
     if (typeof exports === "object" && typeof module !== "undefined") {
@@ -1279,7 +1284,7 @@
       var columnsHeader = '';
       var columnsFooter = '';
       var colGroups = [];
-      var columns = [];
+      var columnElements = $(tpl['table/columns/tr.html']);
 
       // Колонки
       if (table._columns.length > 0) {
@@ -1290,6 +1295,9 @@
           var columnOptions = column.getOptions();
           var attributes = [];
           var sortable = null;
+          var menuElements = [];
+          var menuShowAlways = '';
+          var menuPosition = 'end';
           if (columnOptions.hasOwnProperty('field') && typeof columnOptions.field === 'string') {
             columnOptions.attrHeader = coreuiTableUtils.mergeAttr(columnOptions.attrHeader, {
               "data-field": columnOptions.field
@@ -1322,6 +1330,74 @@
               });
             }
           }
+          if (options.showHeaders && columnOptions.hasOwnProperty('menu') && coreuiTableUtils.isObject(columnOptions.menu) && columnOptions.menu.hasOwnProperty('items') && Array.isArray(columnOptions.menu.items)) {
+            if (columnOptions.menu.hasOwnProperty('showAlways') && columnOptions.menu.showAlways) {
+              menuShowAlways = 'coreui-table__column-menu-always';
+            }
+            if (columnOptions.menu.hasOwnProperty('position') && typeof columnOptions.menu.position === 'string') {
+              menuPosition = columnOptions.menu.position;
+            }
+            columnOptions.menu.items.map(function (item) {
+              if (coreuiTableUtils.isObject(item) && item.hasOwnProperty('type') && typeof item.type === 'string' && item.type) {
+                switch (item.type.toLowerCase()) {
+                  case 'button':
+                    if (item.hasOwnProperty('text') && typeof item.text === 'string' && item.hasOwnProperty('onClick') && ['string', 'function'].indexOf(_typeof(item.onClick)) >= 0 && item.text.length > 0) {
+                      var attrItem = [];
+                      var attr = {
+                        type: 'button',
+                        "class": 'dropdown-item'
+                      };
+                      if (item.hasOwnProperty('attr') && coreuiTableUtils.isObject(item.attr)) {
+                        attr = coreuiTableUtils.mergeAttr(attr, item.attr);
+                      }
+                      $.each(attr, function (name, value) {
+                        attrItem.push(name + '="' + value + '"');
+                      });
+                      var menuElement = $(coreuiTableUtils.render(tpl['table/columns/menu/button.html'], {
+                        text: item.text,
+                        attr: attrItem.join(' ')
+                      }));
+                      menuElement.find('button').click(function () {
+                        if (typeof item.onClick === 'function') {
+                          item.onClick(table);
+                        } else if (typeof item.onClick === 'string') {
+                          new Function('table', item.onClick)(table);
+                        }
+                      });
+                      menuElements.push(menuElement);
+                    }
+                    break;
+                  case 'link':
+                    if (item.hasOwnProperty('text') && item.hasOwnProperty('url') && typeof item.text === 'string' && typeof item.url === 'string' && item.text.length > 0 && item.url.length > 0) {
+                      var _attrItem = [];
+                      var _attr = {
+                        href: item.url,
+                        "class": 'dropdown-item'
+                      };
+                      if (item.hasOwnProperty('attr') && coreuiTableUtils.isObject(item.attr)) {
+                        _attr = coreuiTableUtils.mergeAttr(_attr, item.attr);
+                      }
+                      $.each(_attr, function (name, value) {
+                        _attrItem.push(name + '="' + value + '"');
+                      });
+                      menuElements.push($(coreuiTableUtils.render(tpl['table/columns/menu/link.html'], {
+                        text: item.text,
+                        attr: _attrItem.join(' ')
+                      })));
+                    }
+                    break;
+                  case 'divider':
+                    menuElements.push($(tpl['table/columns/menu/divider.html']));
+                    break;
+                  case 'header':
+                    menuElements.push($(coreuiTableUtils.render(tpl['table/columns/menu/header.html'], {
+                      text: item.text
+                    })));
+                    break;
+                }
+              }
+            });
+          }
           if (columnOptions.attrHeader && coreuiTableUtils.isObject(columnOptions.attrHeader)) {
             $.each(columnOptions.attrHeader, function (name, value) {
               attributes.push(name + '="' + value + '"');
@@ -1343,20 +1419,36 @@
           colGroups.push({
             style: style.length > 0 ? style.join(';') : ''
           });
-          var label = '';
-          var description = '';
-          if (columnOptions.hasOwnProperty('label') && typeof columnOptions.label === 'string' && (!columnOptions.hasOwnProperty('showLabel') || columnOptions.showLabel)) {
-            label = columnOptions.label;
+          if (options.showHeaders) {
+            var label = '';
+            var description = '';
+            if (columnOptions.hasOwnProperty('label') && typeof columnOptions.label === 'string' && (!columnOptions.hasOwnProperty('showLabel') || columnOptions.showLabel)) {
+              label = columnOptions.label;
+            }
+            if (columnOptions.hasOwnProperty('description') && typeof columnOptions.label === 'string') {
+              description = columnOptions.description;
+            }
+            var columnElement = $(coreuiTableUtils.render(tpl['table/columns/td.html'], {
+              attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
+              label: label,
+              description: description,
+              sortable: sortable,
+              issetMenu: menuElements.length > 0,
+              menuPosition: menuPosition,
+              menuShowAlways: menuShowAlways ? ' ' + menuShowAlways : ''
+            }));
+            if (menuElements.length) {
+              var menuContainer = columnElement.find('.coreui-table__column-menu ul');
+              var menuButton = columnElement.find('.coreui-table__column-menu .dropdown-toggle');
+              menuButton.click(function (event) {
+                event.originalEvent.cancelBubble = true;
+              });
+              menuElements.map(function (element) {
+                menuContainer.append(element);
+              });
+            }
+            columnElements.append(columnElement);
           }
-          if (columnOptions.hasOwnProperty('description') && typeof columnOptions.label === 'string') {
-            description = columnOptions.description;
-          }
-          columns.push({
-            attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
-            label: label,
-            description: description,
-            sortable: sortable
-          });
         });
       }
 
@@ -1368,7 +1460,7 @@
       } else {
         recordsElements = coreuiTableRender.renderRecords(table, []);
       }
-      if (options.hasOwnProperty('columnsHeader') && Array.isArray(options.columnsHeader) && options.columnsHeader.length > 0) {
+      if (options.showHeaders && options.hasOwnProperty('columnsHeader') && Array.isArray(options.columnsHeader) && options.columnsHeader.length > 0) {
         var rows = [];
         $.each(options.columnsHeader, function (key, headerRow) {
           if (Array.isArray(headerRow)) {
@@ -1388,7 +1480,7 @@
                 });
               }
             });
-            rows.push(coreuiTableUtils.render(tpl['table-columns-header.html'], {
+            rows.push(coreuiTableUtils.render(tpl['table/columns/header.html'], {
               columns: cells
             }));
           }
@@ -1415,7 +1507,7 @@
                 });
               }
             });
-            _rows.push(coreuiTableUtils.render(tpl['table-columns-footer.html'], {
+            _rows.push(coreuiTableUtils.render(tpl['table/columns/footer.html'], {
               columns: cells
             }));
           }
@@ -1429,9 +1521,6 @@
       if (!columnsFooter) {
         classes.push('empty-tfoot');
       }
-      var htmlColumns = coreuiTableUtils.render(tpl['table-columns.html'], {
-        columns: columns
-      });
       var theadAttr = [];
       if (options.hasOwnProperty('theadTop') && ['string', 'number'].indexOf(_typeof(options.theadTop)) >= 0) {
         var unit = coreuiTableUtils.isNumeric(options.theadTop) ? 'px' : '';
@@ -1443,11 +1532,13 @@
         showHeaders: options.showHeaders,
         columnsHeader: columnsHeader,
         colGroups: colGroups,
-        columns: htmlColumns,
         columnsFooter: columnsFooter
       }));
+      if (options.showHeaders) {
+        tableElement.find('thead').append(columnElements);
+      }
       var tbody = tableElement.find('tbody');
-      $.each(recordsElements, function (key, recordElement) {
+      recordsElements.map(function (recordElement) {
         tbody.append(recordElement);
       });
       return tableElement;
@@ -1477,7 +1568,7 @@
         });
       }
       if (renderRecords.length === 0) {
-        renderRecords = [$(coreuiTableUtils.render(tpl['table-records-empty.html'], {
+        renderRecords = [$(coreuiTableUtils.render(tpl['table/record/empty.html'], {
           columnsCount: table._countColumnsShow,
           lang: table.getLang()
         }))];
@@ -1518,7 +1609,7 @@
       $.each(recordAttr, function (name, value) {
         attributes.push(name + '="' + value + '"');
       });
-      var recordElement = $(coreuiTableUtils.render(tpl['table-record.html'], {
+      var recordElement = $(coreuiTableUtils.render(tpl['table/record.html'], {
         attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
         index: record.index,
         fields: fields
@@ -1595,7 +1686,7 @@
           attributes.push(name + '="' + value + '"');
         }
       });
-      var recordElement = $(coreuiTableUtils.render(tpl['table-record-group.html'], {
+      var recordElement = $(coreuiTableUtils.render(tpl['table/record/group.html'], {
         attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
         colspan: table._countColumnsShow
       }));
@@ -1618,7 +1709,7 @@
       if (_typeof(content) === 'object') {
         content = coreuiTableRender.renderComponents(table, content, 'record_expand_show');
       }
-      var expandRecord = $(coreuiTableUtils.render(tpl['table-record-expand.html'], {
+      var expandRecord = $(coreuiTableUtils.render(tpl['table/record/expand.html'], {
         colspan: table._countColumnsShow
       }));
       if (['string', 'number'].indexOf(_typeof(content)) >= 0) {
@@ -1641,7 +1732,7 @@
      */
     renderControl: function renderControl(table, control) {
       if (coreuiTableUtils.isObject(control)) {
-        var controlElement = $(coreuiTableUtils.render(tpl['table-control.html'], {
+        var controlElement = $(coreuiTableUtils.render(tpl['table/control.html'], {
           id: control.getId()
         }));
         controlElement.append(control.render());
@@ -2536,7 +2627,7 @@
       "class": '',
       primaryKey: 'id',
       lang: 'en',
-      langList: {},
+      langItems: {},
       width: null,
       minWidth: null,
       maxWidth: null,
@@ -2738,7 +2829,7 @@
       this.on('table_show', function () {
         var sortableColumns = coreuiTableElements.getTableSortable(that.getId());
         if (sortableColumns[0]) {
-          sortableColumns.click(function () {
+          sortableColumns.click(function (event) {
             var field = $(this).data('field');
             if (field) {
               var sorting = [];
@@ -2788,7 +2879,7 @@
         });
         this.on('columns_change', function () {
           var columns = [];
-          $.each(that._columns, function (key, column) {
+          that._columns.map(function (column) {
             var columnOptions = column.getOptions();
             columns.push({
               field: columnOptions.field,
@@ -2896,7 +2987,7 @@
           }
           if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
             if (header.type === 'in') {
-              var headerControls = $(coreuiTableUtils.render(tpl['table-controls-header.html'], {
+              var headerControls = $(coreuiTableUtils.render(tpl['table/controls/header.html'], {
                 controlsLeft: controlsLeft,
                 controlsCenter: controlsCenter,
                 controlsRight: controlsRight
@@ -2918,7 +3009,7 @@
               }
               render.headersIn.push(headerControls);
             } else {
-              var _headerControls = $(coreuiTableUtils.render(tpl['table-controls-header-out.html'], {
+              var _headerControls = $(coreuiTableUtils.render(tpl['table/controls/header-out.html'], {
                 controlsLeft: controlsLeft,
                 controlsCenter: controlsCenter,
                 controlsRight: controlsRight
@@ -2976,7 +3067,7 @@
           }
           if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
             if (footer.type === 'in') {
-              var footerControls = $(coreuiTableUtils.render(tpl['table-controls-footer.html'], {
+              var footerControls = $(coreuiTableUtils.render(tpl['table/controls/footer.html'], {
                 controlsLeft: controlsLeft,
                 controlsCenter: controlsCenter,
                 controlsRight: controlsRight
@@ -2998,7 +3089,7 @@
               }
               render.footersIn.push(footerControls);
             } else {
-              var _footerControls = $(coreuiTableUtils.render(tpl['table-controls-footer-out.html'], {
+              var _footerControls = $(coreuiTableUtils.render(tpl['table/controls/footer-out.html'], {
                 controlsLeft: controlsLeft,
                 controlsCenter: controlsCenter,
                 controlsRight: controlsRight
@@ -3046,7 +3137,7 @@
         classesWrapper.push('overflow-x-auto');
       }
       var tableElement = coreuiTableRender.renderTable(this);
-      var containerElement = $(coreuiTableUtils.render(tpl['table-wrapper.html'], {
+      var containerElement = $(coreuiTableUtils.render(tpl['container.html'], {
         id: this._id,
         classes: classes.length > 0 ? ' ' + classes.join(' ') : '',
         classesWrapper: classesWrapper.length > 0 ? ' ' + classesWrapper.join(' ') : '',
@@ -3088,7 +3179,7 @@
     lock: function lock() {
       var container = coreuiTableElements.getContainer(this.getId());
       if (container[0] && !container.find('.coreui-table-lock')[0]) {
-        var html = coreuiTableUtils.render(tpl['table-loader.html'], {
+        var html = coreuiTableUtils.render(tpl['table/loader.html'], {
           lang: this.getLang()
         });
         container.prepend(html);
@@ -3292,6 +3383,22 @@
       coreuiTablePrivate._trigger(this, 'record_select', [record]);
     },
     /**
+     * Выбор записи в таблице по индексу
+     * @param {int} index
+     */
+    selectRecordByIndex: function selectRecordByIndex(index) {
+      var record = this.getRecordByIndex(index);
+      if (!record) {
+        return;
+      }
+      var tr = coreuiTableElements.getTrByIndex(this.getId(), record.index);
+      if (tr.length === 0) {
+        return;
+      }
+      coreuiTableElements.selectTr(tr);
+      coreuiTablePrivate._trigger(this, 'record_select', [record]);
+    },
+    /**
      * Отмена выбора записи в таблице
      * @param {string} id
      */
@@ -3439,7 +3546,7 @@
      * @return {object}
      */
     getLang: function getLang() {
-      return $.extend(true, {}, this._options.langList);
+      return $.extend(true, {}, this._options.langItems);
     },
     /**
      * Установка видимых колонок, не указанные колонки будут скрыты
@@ -3449,13 +3556,63 @@
       if (!Array.isArray(columns)) {
         return;
       }
-      $.each(this._columns, function (key, column) {
+      var isChange = false;
+      this._columns.map(function (column) {
         var options = column.getOptions();
         if (options.hasOwnProperty('field') && typeof options.field === 'string') {
-          column.setShow(columns.indexOf(options.field) >= 0);
+          var isShow = columns.indexOf(options.field) >= 0;
+          if (column.isShow() !== isShow) {
+            column.setShow(isShow);
+            isChange = true;
+          }
         }
       });
-      coreuiTablePrivate._trigger(this, 'columns_change');
+      if (isChange) {
+        coreuiTablePrivate._trigger(this, 'columns_change');
+        this.refresh();
+      }
+    },
+    /**
+     * Показ колонок
+     * @param {Array} columns
+     */
+    showColumns: function showColumns(columns) {
+      if (!Array.isArray(columns)) {
+        return;
+      }
+      var isChange = false;
+      this._columns.map(function (column) {
+        var options = column.getOptions();
+        if (options.hasOwnProperty('field') && typeof options.field === 'string' && columns.indexOf(options.field) >= 0 && !column.isShow()) {
+          column.setShow(true);
+          isChange = true;
+        }
+      });
+      if (isChange) {
+        coreuiTablePrivate._trigger(this, 'columns_change');
+        this.refresh();
+      }
+    },
+    /**
+     * Скрытие колонок
+     * @param {Array} columns
+     */
+    hideColumns: function hideColumns(columns) {
+      if (!Array.isArray(columns)) {
+        return;
+      }
+      var isChange = false;
+      this._columns.map(function (column) {
+        var options = column.getOptions();
+        if (options.hasOwnProperty('field') && typeof options.field === 'string' && columns.indexOf(options.field) >= 0 && column.isShow()) {
+          column.setShow(false);
+          isChange = true;
+        }
+      });
+      if (isChange) {
+        coreuiTablePrivate._trigger(this, 'columns_change');
+        this.refresh();
+      }
     },
     /**
      * Получение поисковых данных
@@ -3521,7 +3678,7 @@
     /**
      * Очистка поисковых данных
      */
-    searchClear: function searchClear() {
+    clearSearch: function clearSearch() {
       $.each(this._search, function (key, search) {
         search.setValue(null);
       });
@@ -3530,7 +3687,7 @@
     /**
      * Очистка поисковых данных в фильтрах
      */
-    filtersClear: function filtersClear() {
+    clearFilters: function clearFilters() {
       $.each(this._filters, function (key, filter) {
         filter.setValue(null);
       });
@@ -3661,7 +3818,7 @@
           }
           coreuiTablePrivate.setColumnsSort(this, this._sort);
         } else {
-          this.records = coreuiTablePrivate.sortRecordsByFields(this._records, this._sort, columnsConverters);
+          this._records = coreuiTablePrivate.sortRecordsByFields(this._records, this._sort, columnsConverters);
           this.refresh();
         }
       }
@@ -3680,7 +3837,7 @@
         }
         coreuiTablePrivate.setColumnsSort(this);
       } else {
-        this.records = coreuiTablePrivate.sortRecordsBySeq(this._records);
+        this._records = coreuiTablePrivate.sortRecordsBySeq(this._records);
         this.refresh();
       }
       coreuiTablePrivate._trigger(this, 'records_sort', [this]);
@@ -3706,7 +3863,7 @@
             tr.remove();
             if (that._records.length === 0) {
               var tbody = coreuiTableElements.getTableTbody(that.getId());
-              tbody.append(coreuiTableUtils.render(tpl['table-records-empty.html'], {
+              tbody.append(coreuiTableUtils.render(tpl['table/record/empty.html'], {
                 columnsCount: that._countColumnsShow,
                 lang: that.getLang()
               }));
@@ -3809,7 +3966,7 @@
       if (this._isRecordsRequest) {
         count = this._recordsTotal;
       } else {
-        $.each(this._records, function (key, record) {
+        this._records.map(function (record) {
           if (record.show) {
             count++;
           }
@@ -3919,12 +4076,12 @@
      * @returns {object}
      */
     create: function create(options) {
-      var instance = $.extend(true, {}, coreuiTableInstance);
       if (!options.hasOwnProperty('lang') || typeof options.lang !== 'string') {
         options.lang = this.getSetting('lang');
       }
-      var langList = this.lang.hasOwnProperty(options.lang) ? this.lang[options.lang] : {};
-      options.langList = options.hasOwnProperty('langList') && coreuiTableUtils.isObject(options.langList) ? $.extend(true, {}, langList, options.langList) : langList;
+      var langItems = this.lang.hasOwnProperty(options.lang) ? this.lang[options.lang] : {};
+      options.langItems = options.hasOwnProperty('langItems') && coreuiTableUtils.isObject(options.langItems) ? $.extend(true, {}, langItems, options.langItems) : langItems;
+      var instance = $.extend(true, {}, coreuiTableInstance);
       instance._init(this, options instanceof Object ? options : {});
       var tableId = instance.getId();
       this._instances[tableId] = instance;
@@ -3964,18 +4121,7 @@
     }
   };
 
-  coreuiTable.lang.ru = {
-    "emptyRecords": "Нет записей",
-    "loading": "Загрузка...",
-    "total": "Всего",
-    "all": "Все",
-    "complete": "Применить",
-    "search": "Поиск",
-    "searchAction": "Искать",
-    "clear": "Очистить"
-  };
-
-  coreuiTable.lang.en = {
+  var langEn = {
     "emptyRecords": "No records",
     "loading": "Loading...",
     "total": "Total",
@@ -3986,7 +4132,18 @@
     "clear": "Clear"
   };
 
-  coreuiTable.controls.link = {
+  var langRu = {
+    "emptyRecords": "Нет записей",
+    "loading": "Загрузка...",
+    "total": "Всего",
+    "all": "Все",
+    "complete": "Применить",
+    "search": "Поиск",
+    "searchAction": "Искать",
+    "clear": "Очистить"
+  };
+
+  var ControlLink = {
     _id: null,
     _table: null,
     _options: {
@@ -4050,7 +4207,7 @@
     }
   };
 
-  coreuiTable.controls.button = {
+  var ControlButton = {
     _id: null,
     _table: null,
     _options: {
@@ -4114,7 +4271,7 @@
     }
   };
 
-  coreuiTable.controls.dropdown = {
+  var ControlDropdown = {
     _id: null,
     _table: null,
     _options: {
@@ -4244,7 +4401,7 @@
     }
   };
 
-  coreuiTable.controls.button_group = {
+  var ControlButtonGroup = {
     _id: null,
     _table: null,
     _options: {
@@ -4469,7 +4626,7 @@
     }
   };
 
-  coreuiTable.controls.custom = {
+  var ControlCustom = {
     _id: null,
     _table: null,
     _options: {
@@ -4511,7 +4668,7 @@
     }
   };
 
-  coreuiTable.controls.page_size = {
+  var ControlPageSize = {
     _id: null,
     _table: null,
     _options: {
@@ -4584,7 +4741,7 @@
     }
   };
 
-  coreuiTable.controls.page_jump = {
+  var ControlPageJump = {
     _id: null,
     _table: null,
     _options: {
@@ -4650,7 +4807,7 @@
     }
   };
 
-  coreuiTable.controls.pages = {
+  var ControlPages = {
     _id: null,
     _table: null,
     _options: {
@@ -4798,7 +4955,7 @@
     }
   };
 
-  coreuiTable.controls.total = {
+  var ControlTotal = {
     _id: null,
     _table: null,
     _options: {
@@ -4856,7 +5013,7 @@
     }
   };
 
-  coreuiTable.controls.search = {
+  var ControlSearch = {
     _id: null,
     _table: null,
     _options: {
@@ -4991,7 +5148,7 @@
         }
       });
       buttonClear.click(function () {
-        that._table.searchClear();
+        that._table.clearSearch();
         var container = coreuiTableElements.getSearchContainer(that._table.getId());
         if (container[0]) {
           container.fadeOut('fast');
@@ -5003,7 +5160,7 @@
           if (!buttonClear[0]) {
             $(that._renderBtnClear()).insertAfter(buttonToggle);
             $('button.btn-clear', control).click(function () {
-              that._table.searchClear();
+              that._table.clearSearch();
               var container = coreuiTableElements.getSearchContainer(that._table.getId());
               if (container[0]) {
                 container.fadeOut('fast');
@@ -5091,7 +5248,7 @@
     }
   };
 
-  coreuiTable.controls.columns = {
+  var ControlColumns = {
     _id: null,
     _table: null,
     _options: {
@@ -5212,7 +5369,6 @@
               columns.push($(input).val());
             });
             that._table.setColumnsShow(columns);
-            that._table.refresh();
             container.fadeOut('fast');
           });
         }
@@ -5243,7 +5399,7 @@
     }
   };
 
-  coreuiTable.controls.caption = {
+  var ControlCaption = {
     _id: null,
     _table: null,
     _options: {
@@ -5287,7 +5443,7 @@
     }
   };
 
-  coreuiTable.controls.filter_clear = {
+  var ControlFilterClear = {
     _id: null,
     _table: null,
     _options: {
@@ -5333,7 +5489,7 @@
       var control = coreuiTableElements.getControl(this._table.getId(), this._id);
       var that = this;
       $('button', control).click(function () {
-        that._table.filtersClear();
+        that._table.clearFilters();
       });
       this._table.on('filters_change', function (filterData) {
         if (filterData.length > 0) {
@@ -5374,7 +5530,7 @@
     }
   };
 
-  coreuiTable.controls.divider = {
+  var ControlDivider = {
     _id: null,
     _table: null,
     _options: {
@@ -5424,7 +5580,7 @@
     }
   };
 
-  coreuiTable.filters.text = {
+  var FilterText = {
     _id: null,
     _table: null,
     _value: null,
@@ -5569,7 +5725,7 @@
     }
   };
 
-  coreuiTable.filters.number = {
+  var FilterNumber = {
     _id: null,
     _table: null,
     _value: null,
@@ -5767,7 +5923,7 @@
     }
   };
 
-  coreuiTable.filters.date = {
+  var FilterDate = {
     _id: null,
     _table: null,
     _value: null,
@@ -5889,7 +6045,7 @@
     }
   };
 
-  coreuiTable.filters.datetime = {
+  var FilterDatetime = {
     _id: null,
     _table: null,
     _value: null,
@@ -6011,7 +6167,7 @@
     }
   };
 
-  coreuiTable.filters.date_month = {
+  var FilterDateMonth = {
     _id: null,
     _table: null,
     _value: null,
@@ -6133,7 +6289,7 @@
     }
   };
 
-  coreuiTable.filters.date_range = {
+  var FilterDateRange = {
     _id: null,
     _table: null,
     _value: null,
@@ -6305,7 +6461,7 @@
     }
   };
 
-  coreuiTable.filters.datetime_range = {
+  var FilterDatetimeRange = {
     _id: null,
     _table: null,
     _value: null,
@@ -6477,7 +6633,7 @@
     }
   };
 
-  coreuiTable.filters.checkbox = {
+  var FilterCheckbox = {
     _id: null,
     _table: null,
     _value: null,
@@ -6617,7 +6773,7 @@
     }
   };
 
-  coreuiTable.filters.radio = {
+  var FilterRadio = {
     _id: null,
     _table: null,
     _value: null,
@@ -6739,7 +6895,7 @@
     }
   };
 
-  coreuiTable.filters.select = {
+  var FilterSelect = {
     _id: null,
     _table: null,
     _value: null,
@@ -6952,7 +7108,7 @@
     }
   };
 
-  coreuiTable.filters["switch"] = {
+  var FilterSwitch = {
     _id: null,
     _table: null,
     _value: null,
@@ -7053,7 +7209,7 @@
     }
   };
 
-  coreuiTable.search.text = {
+  var SearchText = {
     _id: null,
     _table: null,
     _value: null,
@@ -7173,7 +7329,7 @@
     }
   };
 
-  coreuiTable.search.number = {
+  var SearchNumber = {
     _id: null,
     _table: null,
     _value: null,
@@ -7346,7 +7502,7 @@
     }
   };
 
-  coreuiTable.search.date = {
+  var SearchDate = {
     _id: null,
     _table: null,
     _value: null,
@@ -7469,7 +7625,7 @@
     }
   };
 
-  coreuiTable.search.date_month = {
+  var SearchDateMonth = {
     _id: null,
     _table: null,
     _value: null,
@@ -7592,7 +7748,7 @@
     }
   };
 
-  coreuiTable.search.datetime = {
+  var SearchDatetime = {
     _id: null,
     _table: null,
     _value: null,
@@ -7715,7 +7871,7 @@
     }
   };
 
-  coreuiTable.search.date_range = {
+  var SearchDateRange = {
     _id: null,
     _table: null,
     _value: null,
@@ -7889,7 +8045,7 @@
     }
   };
 
-  coreuiTable.search.datetime_range = {
+  var SearchDatetimeRange = {
     _id: null,
     _table: null,
     _value: null,
@@ -8062,7 +8218,7 @@
     }
   };
 
-  coreuiTable.search.checkbox = {
+  var SearchCheckbox = {
     _id: null,
     _table: null,
     _value: null,
@@ -8198,7 +8354,7 @@
     }
   };
 
-  coreuiTable.search.checkboxBtn = {
+  var SearchCheckboxBtn = {
     _id: null,
     _table: null,
     _value: null,
@@ -8339,7 +8495,7 @@
     }
   };
 
-  coreuiTable.search.radio = {
+  var SearchRadio = {
     _id: null,
     _table: null,
     _value: null,
@@ -8468,7 +8624,7 @@
     }
   };
 
-  coreuiTable.search.radioBtn = {
+  var SearchRadioBtn = {
     _id: null,
     _table: null,
     _value: null,
@@ -8604,7 +8760,7 @@
     }
   };
 
-  coreuiTable.search.select = {
+  var SearchSelect = {
     _id: null,
     _table: null,
     _value: null,
@@ -8812,7 +8968,7 @@
     }
   };
 
-  coreuiTable.search["switch"] = {
+  var SearchSwitch = {
     _id: null,
     _table: null,
     _value: null,
@@ -8904,7 +9060,7 @@
     }
   };
 
-  coreuiTable.columns.date = {
+  var ColumnsDate = {
     _table: null,
     _options: {
       type: 'date',
@@ -8983,7 +9139,7 @@
     }
   };
 
-  coreuiTable.columns.datetime = {
+  var ColumnsDatetime = {
     _table: null,
     _options: {
       type: 'datetime',
@@ -9062,7 +9218,7 @@
     }
   };
 
-  coreuiTable.columns.html = {
+  var ColumnsHtml = {
     _table: null,
     _options: {
       type: 'html',
@@ -9155,7 +9311,7 @@
     }
   };
 
-  coreuiTable.columns.number = {
+  var ColumnsNumber = {
     _table: null,
     _options: {
       type: 'number',
@@ -9238,7 +9394,7 @@
     }
   };
 
-  coreuiTable.columns.money = {
+  var ColumnsMoney = {
     _table: null,
     _options: {
       type: 'money',
@@ -9333,7 +9489,7 @@
     }
   };
 
-  coreuiTable.columns.numbers = {
+  var ColumnsNumbers = {
     _table: null,
     _options: {
       type: 'numbers',
@@ -9377,7 +9533,7 @@
     }
   };
 
-  coreuiTable.columns.select = {
+  var ColumnsSelect = {
     _table: null,
     _options: {
       type: 'select',
@@ -9478,7 +9634,7 @@
     }
   };
 
-  coreuiTable.columns["switch"] = {
+  var ColumnsSwitch = {
     _table: null,
     _options: {
       type: 'switch',
@@ -9488,6 +9644,7 @@
       disabled: false,
       width: 5,
       valueY: 1,
+      valueN: 0,
       attr: {
         "class": 'coreui-table__switch_container'
       },
@@ -9549,28 +9706,30 @@
       }));
 
       // События нажатия на переключатель
-      if (this._options.hasOwnProperty('onChange') && (typeof this._options.onChange === 'function' || typeof this._options.onChange === 'string')) {
-        var that = this;
-        $('.coreui-table__switch', formSwitch).change(function (event) {
-          var isChecked = $(this).is(':checked');
+      var that = this;
+      $('.coreui-table__switch', formSwitch).change(function (event) {
+        var input = this;
+        $.each(that._table._records, function (key, recordTable) {
+          if (record.index === recordTable.index) {
+            record.data[that._options.field] = input.checked ? that._options.valueY : that._options.valueN;
+            return false;
+          }
+        });
+        if (that._options.hasOwnProperty('onChange') && (typeof that._options.onChange === 'function' || typeof that._options.onChange === 'string')) {
           if (typeof that._options.onChange === 'function') {
-            that._options.onChange(record, isChecked, this);
-          } else if (typeof that._options.onChange === 'string') {
-            var id = null;
-            if (record.data.hasOwnProperty(that._table._options.primaryKey)) {
-              id = record.data[that._table._options.primaryKey];
-            }
-            var func = new Function('record', 'checked', 'id', that._options.onChange);
-            func(record, this, id);
+            that._options.onChange(record, input);
+          } else {
+            var func = new Function('record', 'input', 'id', that._options.onChange);
+            func(record, input);
           }
           return false;
-        });
-      }
+        }
+      });
       return formSwitch;
     }
   };
 
-  coreuiTable.columns.text = {
+  var ColumnsText = {
     _table: null,
     _options: {
       type: 'text',
@@ -9653,7 +9812,7 @@
     }
   };
 
-  coreuiTable.columns.button = {
+  var ColumnsButton = {
     _table: null,
     _options: {
       type: 'button',
@@ -9753,7 +9912,7 @@
     }
   };
 
-  coreuiTable.columns.link = {
+  var ColumnsLink = {
     _table: null,
     _options: {
       type: 'link',
@@ -9854,7 +10013,7 @@
     }
   };
 
-  coreuiTable.columns.menu = {
+  var ColumnsMenu = {
     _table: null,
     _options: {
       type: 'menu',
@@ -10049,7 +10208,7 @@
     }
   };
 
-  coreuiTable.columns.badge = {
+  var ColumnsBadge = {
     _table: null,
     _options: {
       type: 'badge',
@@ -10128,7 +10287,7 @@
     }
   };
 
-  coreuiTable.columns.component = {
+  var ColumnsComponent = {
     _table: null,
     _options: {
       type: 'component',
@@ -10182,7 +10341,7 @@
     }
   };
 
-  coreuiTable.columns.progress = {
+  var ColumnsProgress = {
     _table: null,
     _options: {
       type: 'progress',
@@ -10320,7 +10479,7 @@
     }
   };
 
-  coreuiTable.columns.image = {
+  var ColumnsImage = {
     _table: null,
     _options: {
       type: 'image',
@@ -10424,6 +10583,63 @@
       });
     }
   };
+
+  coreuiTable.lang.ru = langRu;
+  coreuiTable.lang.en = langEn;
+  coreuiTable.controls.link = ControlLink;
+  coreuiTable.controls.button = ControlButton;
+  coreuiTable.controls.dropdown = ControlDropdown;
+  coreuiTable.controls.button_group = ControlButtonGroup;
+  coreuiTable.controls.custom = ControlCustom;
+  coreuiTable.controls.page_size = ControlPageSize;
+  coreuiTable.controls.page_jump = ControlPageJump;
+  coreuiTable.controls.pages = ControlPages;
+  coreuiTable.controls.total = ControlTotal;
+  coreuiTable.controls.search = ControlSearch;
+  coreuiTable.controls.columns = ControlColumns;
+  coreuiTable.controls.caption = ControlCaption;
+  coreuiTable.controls.filter_clear = ControlFilterClear;
+  coreuiTable.controls.divider = ControlDivider;
+  coreuiTable.filters.text = FilterText;
+  coreuiTable.filters.number = FilterNumber;
+  coreuiTable.filters.date = FilterDate;
+  coreuiTable.filters.datetime = FilterDatetime;
+  coreuiTable.filters.date_month = FilterDateMonth;
+  coreuiTable.filters.date_range = FilterDateRange;
+  coreuiTable.filters.datetime_range = FilterDatetimeRange;
+  coreuiTable.filters.checkbox = FilterCheckbox;
+  coreuiTable.filters.radio = FilterRadio;
+  coreuiTable.filters.select = FilterSelect;
+  coreuiTable.filters["switch"] = FilterSwitch;
+  coreuiTable.search.text = SearchText;
+  coreuiTable.search.number = SearchNumber;
+  coreuiTable.search.date = SearchDate;
+  coreuiTable.search.date_month = SearchDateMonth;
+  coreuiTable.search.datetime = SearchDatetime;
+  coreuiTable.search.date_range = SearchDateRange;
+  coreuiTable.search.datetime_range = SearchDatetimeRange;
+  coreuiTable.search.checkbox = SearchCheckbox;
+  coreuiTable.search.checkboxBtn = SearchCheckboxBtn;
+  coreuiTable.search.radio = SearchRadio;
+  coreuiTable.search.radioBtn = SearchRadioBtn;
+  coreuiTable.search.select = SearchSelect;
+  coreuiTable.search["switch"] = SearchSwitch;
+  coreuiTable.columns.date = ColumnsDate;
+  coreuiTable.columns.datetime = ColumnsDatetime;
+  coreuiTable.columns.html = ColumnsHtml;
+  coreuiTable.columns.number = ColumnsNumber;
+  coreuiTable.columns.money = ColumnsMoney;
+  coreuiTable.columns.numbers = ColumnsNumbers;
+  coreuiTable.columns.select = ColumnsSelect;
+  coreuiTable.columns["switch"] = ColumnsSwitch;
+  coreuiTable.columns.text = ColumnsText;
+  coreuiTable.columns.button = ColumnsButton;
+  coreuiTable.columns.link = ColumnsLink;
+  coreuiTable.columns.menu = ColumnsMenu;
+  coreuiTable.columns.badge = ColumnsBadge;
+  coreuiTable.columns.component = ColumnsComponent;
+  coreuiTable.columns.progress = ColumnsProgress;
+  coreuiTable.columns.image = ColumnsImage;
 
   return coreuiTable;
 

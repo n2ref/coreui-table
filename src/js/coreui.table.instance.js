@@ -13,7 +13,7 @@ let coreuiTableInstance = {
         class: '',
         primaryKey: 'id',
         lang: 'en',
-        langList: {},
+        langItems: {},
         width: null,
         minWidth: null,
         maxWidth: null,
@@ -289,7 +289,7 @@ let coreuiTableInstance = {
 
             let sortableColumns = coreuiTableElements.getTableSortable(that.getId());
             if (sortableColumns[0]) {
-                sortableColumns.click(function () {
+                sortableColumns.click(function (event) {
                     let field = $(this).data('field');
 
                     if (field) {
@@ -355,7 +355,7 @@ let coreuiTableInstance = {
             this.on('columns_change', function () {
                 let columns = [];
 
-                $.each(that._columns, function (key, column) {
+                that._columns.map(function (column) {
                     let columnOptions = column.getOptions();
 
                     columns.push({
@@ -498,7 +498,7 @@ let coreuiTableInstance = {
                 if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
                     if (header.type === 'in') {
                         let headerControls = $(
-                            coreuiTableUtils.render(coreuiTableTpl['table-controls-header.html'], {
+                            coreuiTableUtils.render(coreuiTableTpl['table/controls/header.html'], {
                                 controlsLeft: controlsLeft,
                                 controlsCenter: controlsCenter,
                                 controlsRight: controlsRight,
@@ -527,7 +527,7 @@ let coreuiTableInstance = {
 
                     } else {
                         let headerControls = $(
-                            coreuiTableUtils.render(coreuiTableTpl['table-controls-header-out.html'], {
+                            coreuiTableUtils.render(coreuiTableTpl['table/controls/header-out.html'], {
                                 controlsLeft: controlsLeft,
                                 controlsCenter: controlsCenter,
                                 controlsRight: controlsRight,
@@ -600,7 +600,7 @@ let coreuiTableInstance = {
                 if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
                     if (footer.type === 'in') {
                         let footerControls = $(
-                            coreuiTableUtils.render(coreuiTableTpl['table-controls-footer.html'], {
+                            coreuiTableUtils.render(coreuiTableTpl['table/controls/footer.html'], {
                                 controlsLeft: controlsLeft,
                                 controlsCenter: controlsCenter,
                                 controlsRight: controlsRight,
@@ -629,7 +629,7 @@ let coreuiTableInstance = {
                         render.footersIn.push(footerControls);
                     } else {
                         let footerControls = $(
-                            coreuiTableUtils.render(coreuiTableTpl['table-controls-footer-out.html'], {
+                            coreuiTableUtils.render(coreuiTableTpl['table/controls/footer-out.html'], {
                                 controlsLeft: controlsLeft,
                                 controlsCenter: controlsCenter,
                                 controlsRight: controlsRight,
@@ -702,7 +702,7 @@ let coreuiTableInstance = {
 
         let tableElement     = coreuiTableRender.renderTable(this);
         let containerElement = $(
-            coreuiTableUtils.render(coreuiTableTpl['table-wrapper.html'], {
+            coreuiTableUtils.render(coreuiTableTpl['container.html'], {
                 id: this._id,
                 classes: classes.length > 0 ? ' ' + classes.join(' ') : '',
                 classesWrapper: classesWrapper.length > 0 ? ' ' + classesWrapper.join(' ') : '',
@@ -756,7 +756,7 @@ let coreuiTableInstance = {
         let container = coreuiTableElements.getContainer(this.getId());
 
         if (container[0] && ! container.find('.coreui-table-lock')[0]) {
-            let html =  coreuiTableUtils.render(coreuiTableTpl['table-loader.html'], {
+            let html =  coreuiTableUtils.render(coreuiTableTpl['table/loader.html'], {
                 lang: this.getLang()
             });
 
@@ -1083,6 +1083,30 @@ let coreuiTableInstance = {
 
 
     /**
+     * Выбор записи в таблице по индексу
+     * @param {int} index
+     */
+    selectRecordByIndex: function (index) {
+
+        let record = this.getRecordByIndex(index);
+
+        if ( ! record) {
+            return;
+        }
+
+        let tr = coreuiTableElements.getTrByIndex(this.getId(), record.index);
+
+        if (tr.length === 0) {
+            return;
+        }
+
+        coreuiTableElements.selectTr(tr)
+
+        coreuiTablePrivate._trigger(this, 'record_select', [ record ]);
+    },
+
+
+    /**
      * Отмена выбора записи в таблице
      * @param {string} id
      */
@@ -1290,7 +1314,7 @@ let coreuiTableInstance = {
      */
     getLang: function () {
 
-        return $.extend(true, {}, this._options.langList);
+        return $.extend(true, {}, this._options.langItems);
     },
 
 
@@ -1304,16 +1328,92 @@ let coreuiTableInstance = {
             return;
         }
 
-        $.each(this._columns, function (key, column) {
+        let isChange = false;
+
+        this._columns.map(function (column) {
             let options = column.getOptions();
 
             if (options.hasOwnProperty('field') && typeof options.field === 'string') {
-                column.setShow(columns.indexOf(options.field) >= 0);
+
+                let isShow = columns.indexOf(options.field) >= 0;
+
+                if (column.isShow() !== isShow) {
+                    column.setShow(isShow);
+                    isChange = true;
+                }
             }
         });
 
 
-        coreuiTablePrivate._trigger(this, 'columns_change');
+        if (isChange) {
+            coreuiTablePrivate._trigger(this, 'columns_change');
+            this.refresh();
+        }
+    },
+
+
+    /**
+     * Показ колонок
+     * @param {Array} columns
+     */
+    showColumns: function (columns) {
+
+        if ( ! Array.isArray(columns)) {
+            return;
+        }
+
+        let isChange = false;
+
+        this._columns.map(function (column) {
+            let options = column.getOptions();
+
+            if (options.hasOwnProperty('field') &&
+                typeof options.field === 'string' &&
+                columns.indexOf(options.field) >= 0 &&
+                ! column.isShow()
+            ) {
+                column.setShow(true);
+                isChange = true;
+            }
+        });
+
+
+        if (isChange) {
+            coreuiTablePrivate._trigger(this, 'columns_change');
+            this.refresh();
+        }
+    },
+
+
+    /**
+     * Скрытие колонок
+     * @param {Array} columns
+     */
+    hideColumns: function (columns) {
+
+        if ( ! Array.isArray(columns)) {
+            return;
+        }
+
+        let isChange = false;
+
+        this._columns.map(function (column) {
+            let options = column.getOptions();
+
+            if (options.hasOwnProperty('field') &&
+                typeof options.field === 'string' &&
+                columns.indexOf(options.field) >= 0 &&
+                column.isShow()
+            ) {
+                column.setShow(false);
+                isChange = true;
+            }
+        });
+
+        if (isChange) {
+            coreuiTablePrivate._trigger(this, 'columns_change');
+            this.refresh();
+        }
     },
 
 
@@ -1408,7 +1508,7 @@ let coreuiTableInstance = {
     /**
      * Очистка поисковых данных
      */
-    searchClear: function () {
+    clearSearch: function () {
 
         $.each(this._search, function (key, search) {
             search.setValue(null);
@@ -1421,7 +1521,7 @@ let coreuiTableInstance = {
     /**
      * Очистка поисковых данных в фильтрах
      */
-    filtersClear: function () {
+    clearFilters: function () {
 
         $.each(this._filters, function (key, filter) {
             filter.setValue(null);
@@ -1619,7 +1719,7 @@ let coreuiTableInstance = {
                 coreuiTablePrivate.setColumnsSort(this, this._sort);
 
             } else {
-                this.records = coreuiTablePrivate.sortRecordsByFields(this._records, this._sort, columnsConverters);
+                this._records = coreuiTablePrivate.sortRecordsByFields(this._records, this._sort, columnsConverters);
                 this.refresh();
             }
         }
@@ -1644,7 +1744,7 @@ let coreuiTableInstance = {
             coreuiTablePrivate.setColumnsSort(this);
 
         } else {
-            this.records = coreuiTablePrivate.sortRecordsBySeq(this._records);
+            this._records = coreuiTablePrivate.sortRecordsBySeq(this._records);
             this.refresh();
         }
 
@@ -1681,7 +1781,7 @@ let coreuiTableInstance = {
                         let tbody = coreuiTableElements.getTableTbody(that.getId());
 
                         tbody.append(
-                            coreuiTableUtils.render(coreuiTableTpl['table-records-empty.html'], {
+                            coreuiTableUtils.render(coreuiTableTpl['table/record/empty.html'], {
                                 columnsCount: that._countColumnsShow,
                                 lang: that.getLang(),
                             })
@@ -1837,7 +1937,7 @@ let coreuiTableInstance = {
 
         } else {
 
-            $.each(this._records, function (key, record) {
+            this._records.map(function (record) {
                 if (record.show) {
                     count++;
                 }

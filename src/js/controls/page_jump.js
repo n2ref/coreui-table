@@ -1,10 +1,9 @@
 
-import coreuiTableUtils from '../coreui.table.utils';
-import coreuiTable      from "../coreui.table";
-import coreuiTableTpl from "../coreui.table.templates";
+import coreuiTableUtils    from '../coreui.table.utils';
+import coreuiTableTpl      from "../coreui.table.templates";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.controls.page_jump = {
+let ControlPageJump = {
 
     _id: null,
     _table: null,
@@ -87,3 +86,5 @@ coreuiTable.controls.page_jump = {
         });
     }
 }
+
+export default ControlPageJump;

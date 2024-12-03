@@ -1,9 +1,8 @@
 
-import coreuiTableTpl      from '../coreui.table.templates';
-import coreuiTableUtils    from '../coreui.table.utils';
-import coreuiTable         from "../coreui.table";
+import coreuiTableTpl   from '../coreui.table.templates';
+import coreuiTableUtils from '../coreui.table.utils';
 
-coreuiTable.controls.caption = {
+let ControlCaption = {
 
     _id: null,
     _table: null,
@@ -61,3 +60,5 @@ coreuiTable.controls.caption = {
         });
     }
 }
+
+export default ControlCaption;

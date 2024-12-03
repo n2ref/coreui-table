@@ -1,8 +1,8 @@
-import coreuiTable      from "../coreui.table";
+
 import coreuiTableUtils from "../coreui.table.utils";
 import coreuiTableTpl   from "../coreui.table.templates";
 
-coreuiTable.columns.link = {
+let ColumnsLink = {
 
     _table: null,
     _options: {
@@ -153,3 +153,5 @@ coreuiTable.columns.link = {
         return link;
     }
 }
+
+export default ColumnsLink;

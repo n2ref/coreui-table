@@ -1,10 +1,9 @@
 
-import coreuiTable         from "../coreui.table";
 import coreuiTableTpl      from "../coreui.table.templates";
 import coreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
 
-coreuiTable.search.radioBtn = {
+let SearchRadioBtn = {
 
     _id: null,
     _table: null,
@@ -193,3 +192,5 @@ coreuiTable.search.radioBtn = {
         });
     }
 }
+
+export default SearchRadioBtn;

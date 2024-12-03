@@ -1,7 +1,5 @@
 
-import coreuiTable from "../coreui.table";
-
-coreuiTable.lang.ru = {
+let langRu = {
     "emptyRecords": "Нет записей",
     "loading": "Загрузка...",
     "total": "Всего",
@@ -11,3 +9,5 @@ coreuiTable.lang.ru = {
     "searchAction": "Искать",
     "clear": "Очистить",
 }
+
+export default langRu;
