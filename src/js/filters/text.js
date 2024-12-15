@@ -20,6 +20,7 @@ class FilterText extends Filter {
             label: null,
             value: null,
             width: 200,
+            autoSearchLength: null,
             attr: {
                 class: "form-control",
             },
@@ -147,6 +148,12 @@ class FilterText extends Filter {
 
         $('input', this._control).keyup(function(e) {
             if (e.key === 'Enter' || e.keyCode === 13) {
+                table.searchRecords();
+
+            } else if (typeof options.autoSearchLength === 'number' &&
+                options.autoSearchLength >= 0 &&
+                String(this.value).length >= options.autoSearchLength
+            ) {
                 table.searchRecords();
             }
         });
