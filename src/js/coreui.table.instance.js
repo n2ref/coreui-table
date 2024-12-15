@@ -829,7 +829,7 @@ let coreuiTableInstance = {
         let filterData = this.getFilterData();
 
         if (filterData.length > 0) {
-            $.each(filterData, function (key, filter) {
+            filterData.map(function (filter) {
                 searchData.push(filter);
             });
         }
@@ -841,7 +841,11 @@ let coreuiTableInstance = {
                 ? this._options.requestParams.search
                 : 'search';
 
-            params[paramSearch] = searchData;
+            params[paramSearch] = {};
+
+            searchData.map(function (searchItem) {
+                params[paramSearch][searchItem.field] = searchItem.value
+            });
         }
 
         if (this._sort.length > 0) {
@@ -938,7 +942,11 @@ let coreuiTableInstance = {
                 ? this._options.requestParams.search
                 : 'search';
 
-            params[paramSearch] = searchData;
+            params[paramSearch] = {};
+
+            searchData.map(function (searchItem) {
+                params[paramSearch][searchItem.field] = searchItem.value
+            });
         }
 
         if (this._sort.length > 0) {
@@ -1419,27 +1427,31 @@ let coreuiTableInstance = {
 
     /**
      * Получение поисковых данных
+     * @property {boolean} extOptions
      * @return {*[]}
      */
-    getSearchData: function () {
+    getSearchData: function (extOptions) {
 
         let searchData = [];
 
-        $.each(this._search, function (key, control) {
-            let options = control.getOptions();
+        this._search.map(function (control) {
+            let field = control.getField();
 
-            if (options.hasOwnProperty('field') &&
-                typeof options.field === 'string' &&
-                options.field
-            ) {
+            if (field) {
                 let value = control.getValue();
 
                 if (value !== null) {
-                    searchData.push({
-                        field: options.field,
+                    let search = {
+                        field: field,
                         value: value,
-                        alg: control.hasOwnProperty('getAlgorithm') && typeof control.getAlgorithm === 'function' ? control.getAlgorithm() : null
-                    });
+                    }
+
+                    if (extOptions) {
+                        search.filter = typeof control.filter === 'function' ? control.filter : null;
+                        search.type   = control._options.type;
+                    }
+
+                    searchData.push(search);
                 }
             }
         });
@@ -1450,28 +1462,30 @@ let coreuiTableInstance = {
 
     /**
      * Получение данных из фильтров
+     * @property {boolean} extOptions
      * @return {*[]}
      */
-    getFilterData: function () {
+    getFilterData: function (extOptions) {
 
         let filterData = [];
 
-        $.each(this._filters, function (key, control) {
-            let options = control.getOptions();
+        this._filters.map(function (control) {
+            let field = control.getField();
 
-            if (options.hasOwnProperty('field') &&
-                typeof options.field === 'string' &&
-                options.field
-            ) {
-
+            if (field) {
                 let value = control.getValue();
 
                 if (value !== null) {
-                    filterData.push({
-                        field: options.field,
+                    let filter = {
+                        field: field,
                         value: value,
-                        alg: control.hasOwnProperty('getAlgorithm') && typeof control.getAlgorithm === 'function' ? control.getAlgorithm() : null
-                    });
+                    }
+
+                    if (extOptions) {
+                        filter.filter = typeof control.filter === 'function' ? control.filter : null;
+                    }
+
+                    filterData.push(filter);
                 }
             }
         });

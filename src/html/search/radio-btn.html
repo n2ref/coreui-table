@@ -1,11 +1,10 @@
 <div class="pt-2">
     <div class="btn-group">
-
-        <input class="btn-check" type="radio" name="<%= field %>" value="" id="<%= optionAllHash %>" autocomplete="off" <%= checkedAll ? ' checked' : '' %>>
+        <input class="btn-check coreui-table__all" type="radio" name="<%= field %>" value="" id="<%= optionAllHash %>" autocomplete="off" <%= checkedAll ? ' checked' : '' %>>
         <label class="<%= optionOptionsClass %>" for="<%= optionAllHash %>"><%= lang.all %></label>
 
-        <% $.each(options, function(key, option) { %>
-            <input class="btn-check" type="radio" name="<%= field %>" value="<%- option.value %>" id="<%= option.hash %>" autocomplete="off" <%= option.checked ? ' checked' : '' %>">
+        <% options.map(function(option) { %>
+            <input class="btn-check" type="radio" name="<%= field %>" value="<%- option.value %>" id="<%= option.hash %>" autocomplete="off" <%= option.checked ? ' checked="checked"' : '' %>">
             <label class="<%= option.optionsClass %>" for="<%= option.hash %>"><%= option.text %></label>
         <% }); %>
     </div>

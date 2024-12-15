@@ -2,68 +2,43 @@
 import coreuiTableTpl      from "../coreui.table.templates";
 import coreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
+import Filter              from "../abstract/Filter";
 
-let FilterDatetime = {
-
-    _id: null,
-    _table: null,
-    _value: null,
-    _render: false,
-    _options: {
-        id: null,
-        type: 'datetime',
-        field: null,
-        label: null,
-        value: null,
-        width: 200,
-        attr: {
-            class: "form-control",
-        }
-    },
-
+class FilterDatetime extends Filter {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._options = $.extend(true, {}, this._options, options);
-        this._table   = table;
-        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
-            ? this._options.id
-            : coreuiTableUtils.hashCode();
+        options = $.extend(true, {
+            id: null,
+            type: 'datetime',
+            field: null,
+            label: null,
+            value: null,
+            width: 200,
+            attr: {
+                class: "form-control",
+            }
+        }, options);
+
+        super(table, options);
+
 
         if (this._options.value !== null) {
             this.setValue(this._options.value);
         }
-    },
-
-
-    /**
-     * Получение параметров
-     * @returns {object}
-     */
-    getOptions: function () {
-        return $.extend(true, {}, this._options);
-    },
-
-
-    /**
-     * Получение id
-     * @returns {string}
-     */
-    getId: function () {
-        return this._id;
-    },
+    }
 
 
     /**
      * Установка значения
      * @param {string|null} value
      */
-    setValue: function (value) {
+    setValue(value) {
 
         if (typeof value !== 'string' && value !== null) {
             return;
@@ -71,7 +46,7 @@ let FilterDatetime = {
 
         if (value &&
             (
-                value.match(/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/) === null ||
+                value.match(/^\d{4}\-\d{2}\-\d{2}(T| )\d{2}:\d{2}(:\d{2}|)$/) === null ||
                 isNaN(new Date(value))
             )
         ) {
@@ -81,62 +56,57 @@ let FilterDatetime = {
         this._value = value;
 
 
-        if (this._render) {
-            let control = coreuiTableElements.getControl(this._table.getId(), this._id);
-
-            if (control[0]) {
-                $('input', control).val(
-                    this._value === null ? '' : this._value
-                );
-            }
+        if (this._control) {
+            $('input', this._control).val(
+                this._value === null ? '' : this._value
+            );
         }
-    },
+    }
 
 
     /**
      * Получение значения
      * @returns {string|null}
      */
-    getValue: function () {
+    getValue() {
 
-        let control = coreuiTableElements.getControl(this._table.getId(), this._id);
-        let input   = $('input', control);
-
-        if (input[0]) {
-            let value = input.val();
+        if (this._control) {
+            let value = $('input', this._control).val();
 
             if (typeof value === 'string' && value !== '') {
                 return value;
             }
+
+            return null;
         }
 
         return this._value;
-    },
-
+    }
 
 
     /**
-     * Инициализация событий
-     * @returns {object}
+     * Фильтрация данных
+     * @returns {string}              fieldValue
+     * @returns {Array|string|number} searchValue
+     * @returns {boolean}
      */
-    initEvents: function () {
+    filter(fieldValue, searchValue) {
 
-        let control = coreuiTableElements.getControl(this._table.getId(), this._id);
-        let that    = this;
+        if (['string', 'number'].indexOf(typeof fieldValue) < 0 ||
+            ['string', 'number'].indexOf(typeof searchValue) < 0
+        ) {
+            return false;
+        }
 
-        $('input', control).change(function(e) {
-            that._table.searchRecords();
-        });
-    },
+        return fieldValue.toString() === searchValue.toString();
+    }
 
 
     /**
      * Формирование контента
      * @returns {string}
      */
-    render: function() {
-
-        this._render = true;
+    render() {
 
         let options = this.getOptions();
         let label   = typeof options.label === 'string' || typeof options.label === 'number'
@@ -157,7 +127,6 @@ let FilterDatetime = {
             }
         }
 
-        options.attr['name']  = typeof options.field === 'string' ? options.field : '';
         options.attr['value'] = typeof this._value === 'string' || typeof this._value === 'number'
             ? this._value
             : '';
@@ -167,16 +136,23 @@ let FilterDatetime = {
         }
 
 
-        let attr = [];
+        let attr  = [];
+        let table = this._table;
 
         $.each(options.attr, function (name, value) {
             attr.push(name + '="' + value + '"');
         });
 
-        return coreuiTableUtils.render(coreuiTableTpl['filters/datetime.html'], {
+        this._control = $(coreuiTableUtils.render(coreuiTableTpl['filters/datetime.html'], {
             attr: attr.length > 0 ? (' ' + attr.join(' ')) : '',
             label: label
+        }));
+
+        $('input', this._control).change(function(e) {
+            table.searchRecords();
         });
+
+        return this._control;
     }
 }
 

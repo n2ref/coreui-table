@@ -3,40 +3,34 @@ import coreuiTableUtils    from '../coreui.table.utils';
 import coreuiTableTpl      from "../coreui.table.templates";
 import CoreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
+import Control             from "../abstract/Control";
 
 
-let ControlColumns = {
-
-    _id: null,
-    _table: null,
-    _options: {
-        id: null,
-        type: 'columns',
-        btn: {
-            content: '<i class="bi bi-layout-three-columns"></i>',
-            attr: {
-                class: 'btn btn-outline-secondary'
-            }
-        },
-        btnComplete: {
-            content: null,
-            attr: { class: 'btn btn-primary' }
-        }
-    },
-
+class ControlColumns extends Control {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object} options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._options = $.extend({}, this._options, options);
-        this._table   = table;
-        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
-            ? this._options.id
-            : coreuiTableUtils.hashCode();
+        options = $.extend(true, {
+            id: null,
+            type: 'columns',
+            btn: {
+                content: '<i class="bi bi-layout-three-columns"></i>',
+                attr: {
+                    class: 'btn btn-outline-secondary'
+                }
+            },
+            btnComplete: {
+                content: null,
+                attr: { class: 'btn btn-primary' }
+            }
+        }, options);
+
+        super(table, options);
 
 
         if ( ! CoreuiTableUtils.isObject(this._options.btn)) {
@@ -52,31 +46,36 @@ let ControlColumns = {
         ) {
             this._options.btnComplete.content = table.getLang().complete
         }
-    },
+    }
 
 
     /**
-     * Получение параметров
-     * @returns {object}
+     * Формирование контента для размещения на странице
+     * @returns {jQuery}
      */
-    getOptions: function () {
-        return $.extend(true, {}, this._options);
-    },
+    render() {
+
+        let that       = this;
+        let table      = this._table;
+        let attributes = [];
+
+        if (coreuiTableUtils.isObject(this._options.btn.attr)) {
+            $.each(this._options.btn.attr, function (name, value) {
+                if (['string', 'number'].indexOf(typeof value) >= 0) {
+                    attributes.push(name + '="' + value + '"');
+                }
+            });
+        }
+
+        let btn = $(coreuiTableUtils.render(coreuiTableTpl['controls/columns.html'], {
+            btnContent: this._options.btn.content,
+            btnAttr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
+        }));
 
 
-    /**
-     * Инициализация событий связанных с элементом управления
-     */
-    initEvents: function () {
-
-        let that    = this;
-        let options = this.getOptions();
-        let control = coreuiTableElements.getControl(this._table.getId(), this._id);
-        let button  = $('button', control);
-
-        button.click(function () {
-            let container       = coreuiTableElements.getColumnsContainer(that._table.getId());
-            let containerSearch = coreuiTableElements.getSearchContainer(that._table.getId());
+        btn.click(function () {
+            let container       = coreuiTableElements.getColumnsContainer(table.getId());
+            let containerSearch = coreuiTableElements.getSearchContainer(table.getId());
 
             if (containerSearch[0]) {
                 containerSearch.hide();
@@ -90,9 +89,9 @@ let ControlColumns = {
                 let showAll            = true;
                 let btnCompleteAttr    = [];
                 let btnCompleteContent = '';
-                let wrapper            = coreuiTableElements.getWrapper(that._table.getId());
+                let wrapper            = coreuiTableElements.getWrapper(table.getId());
 
-                $.each(that._table._columns, function (key, column) {
+                table._columns.map(function (column) {
                     let options = column.getOptions();
 
                     if (options.hasOwnProperty('field') &&
@@ -114,6 +113,7 @@ let ControlColumns = {
                 });
 
 
+                let options = that.getOptions();
 
                 if ( ! coreuiTableUtils.isObject(options.btnComplete)) {
                     options.btnComplete = {};
@@ -137,7 +137,9 @@ let ControlColumns = {
 
                 if (coreuiTableUtils.isObject(options.btnComplete.attr)) {
                     $.each(options.btnComplete.attr, function (name, value) {
-                        btnCompleteAttr.push(name + '="' + value + '"');
+                        if (['string', 'number'].indexOf(typeof value) >= 0) {
+                            btnCompleteAttr.push(name + '="' + value + '"');
+                        }
                     });
                 }
 
@@ -146,67 +148,38 @@ let ControlColumns = {
                 }
 
 
-                let content = coreuiTableUtils.render(coreuiTableTpl['controls/columns-container.html'], {
+                let containerList = $(coreuiTableUtils.render(coreuiTableTpl['controls/columns/list.html'], {
                     showAll:            showAll,
                     columns:            columns,
                     btnCompleteAttr:    btnCompleteAttr.length > 0 ? (' ' + btnCompleteAttr.join(' ')) : '',
                     btnCompleteContent: btnCompleteContent,
-                    lang:               that._table.getLang(),
-                });
-                wrapper.before(content);
+                    lang:               table.getLang(),
+                }));
 
 
-
-                container = wrapper.parent().find('> .coreui-table__columns');
-
-                $('.coreui-table__check_all input', container).change(function () {
-                    $('.coreui-table_check-column input', container).prop('checked', $(this).is(":checked"));
+                $('.coreui-table__check_all input', containerList).change(function () {
+                    $('.coreui-table_check-column input', containerList).prop('checked', $(this).is(":checked"));
                 });
 
 
-                $('.btn-complete', container).click(function () {
+                $('.btn-complete', containerList).click(function () {
                     let columns = [];
 
-                    $('.coreui-table_check-column input:checked', container).each(function (key, input) {
+                    $('.coreui-table_check-column input:checked', containerList).each(function (key, input) {
                         columns.push($(input).val());
                     });
 
-                    that._table.setColumnsShow(columns);
+                    table.setColumnsShow(columns);
 
-                    container.fadeOut('fast');
+                    containerList.fadeOut('fast');
                 });
+
+
+                wrapper.before(containerList);
             }
         });
-    },
 
-
-    /**
-     * Получение ID элемента управления
-     * @returns {string}
-     */
-    getId: function () {
-        return this._id;
-    },
-
-
-    /**
-     * Формирование контента для размещения на странице
-     * @returns {string}
-     */
-    render: function() {
-
-        let attributes = [];
-
-        if (coreuiTableUtils.isObject(this._options.btn.attr)) {
-            $.each(this._options.btn.attr, function (name, value) {
-                attributes.push(name + '="' + value + '"');
-            });
-        }
-
-        return coreuiTableUtils.render(coreuiTableTpl['controls/columns.html'], {
-            btnContent: this._options.btn.content,
-            btnAttr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
-        });
+        return btn;
     }
 }
 

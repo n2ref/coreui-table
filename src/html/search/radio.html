@@ -1,14 +1,14 @@
 <div class="pt-2">
     <div class="form-check">
         <label class="form-check-label coreui-table_pointer">
-            <input class="form-check-input" type="radio" name="<%= field %>" value=""<%= checkedAll ? ' checked' : '' %>>
+            <input class="form-check-input coreui-table__all" type="radio" name="<%= field %>" value=""<%= checkedAll ? ' checked' : '' %>>
             <%= lang.all %>
         </label>
     </div>
-    <% $.each(options, function(key, option) { %>
+    <% options.map(function(option) { %>
         <div class="form-check">
             <label class="form-check-label coreui-table_pointer">
-                <input class="form-check-input" type="radio" name="<%= field %>" value="<%- option.value %>" <%= option.checked ? ' checked' : '' %>>
+                <input class="form-check-input" type="radio" name="<%= field %>" value="<%- option.value %>" <%= option.checked ? ' checked="checked"' : '' %>>
                 <%= option.text %>
             </label>
         </div>

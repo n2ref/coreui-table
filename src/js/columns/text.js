@@ -1,35 +1,34 @@
 
 import coreuiTableUtils from "../coreui.table.utils";
+import Column           from "../abstract/Column";
 
-let ColumnsText = {
 
-    _table: null,
-    _options: {
-        type: 'text',
-        field: null,
-        label: null,
-        show: true,
-        showLabel: true,
-        width: null,
-        minWidth: null,
-        maxWidth: null,
-        attr: null,
-        noWrap: null,
-        noWrapToggle: null,
-        attrHeader: null,
-        render: null
-    },
-
+class ColumnsText extends Column {
 
     /**
      * Инициализация
-     * @param {object} table
-     * @param {object} options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._table   = table;
-        this._options = $.extend({}, this._options, options);
+        options = $.extend(true, {
+            type: 'text',
+            field: null,
+            label: null,
+            show: true,
+            showLabel: true,
+            width: null,
+            minWidth: null,
+            maxWidth: null,
+            attr: null,
+            noWrap: null,
+            noWrapToggle: null,
+            attrHeader: null,
+            render: null
+        }, options);
+
+        super(table, options);
 
         let tableOptions = this._table.getOptions();
 
@@ -53,33 +52,7 @@ let ColumnsText = {
                 this._options.noWrapToggle = true;
             }
         }
-    },
-
-
-    /**
-     * Установка видимости колонки
-     * @param {boolean} isShow
-     */
-    setShow: function (isShow) {
-        this._options.show = !! isShow;
-    },
-
-
-    /**
-     * Видимости колонки
-     */
-    isShow: function () {
-        return !! this._options.show;
-    },
-
-
-    /**
-     * Получение параметров
-     * @returns {object}
-     */
-    getOptions: function () {
-        return $.extend({}, this._options);
-    },
+    }
 
 
     /**
@@ -88,7 +61,7 @@ let ColumnsText = {
      * @param {object} record
      * @returns {string}
      */
-    render: function(content, record) {
+    render(content, record) {
 
         if (['string', 'bigint', 'symbol', 'number'].indexOf(typeof content) < 0) {
             return '';
@@ -109,5 +82,6 @@ let ColumnsText = {
         return content;
     }
 }
+
 
 export default ColumnsText;

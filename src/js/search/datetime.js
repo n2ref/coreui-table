@@ -2,68 +2,43 @@
 import coreuiTableTpl      from "../coreui.table.templates";
 import coreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
+import Search              from "../abstract/Search";
 
-let SearchDatetime = {
-
-    _id: null,
-    _table: null,
-    _value: null,
-    _render: false,
-    _options: {
-        id: null,
-        type: 'datetime',
-        field: null,
-        label: null,
-        value: null,
-        width: 200,
-        attr: {
-            class: "form-control d-inline-block",
-        }
-    },
-
+class SearchDatetime extends Search {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._options = $.extend(true, {}, this._options, options);
-        this._table   = table;
-        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
-            ? this._options.id
-            : coreuiTableUtils.hashCode();
+        options = $.extend(true, {
+            id: null,
+            type: 'datetime',
+            field: null,
+            label: null,
+            value: null,
+            width: 200,
+            attr: {
+                class: "form-control d-inline-block",
+            }
+        }, options);
+
+        super(table, options);
+
 
         if (this._options.value !== null) {
             this.setValue(this._options.value);
         }
-    },
-
-
-    /**
-     * Получение параметров
-     * @returns {object}
-     */
-    getOptions: function () {
-        return $.extend(true, {}, this._options);
-    },
-
-
-    /**
-     * Получение id
-     * @returns {string}
-     */
-    getId: function () {
-        return this._id;
-    },
+    }
 
 
     /**
      * Установка значения
      * @param {string} value
      */
-    setValue: function (value) {
+    setValue(value) {
 
         if (typeof value !== 'string' && value !== null) {
             return;
@@ -71,7 +46,7 @@ let SearchDatetime = {
 
         if (value &&
             (
-                value.match(/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/) === null ||
+                value.match(/^\d{4}\-\d{2}\-\d{2}(T| )\d{2}:\d{2}(:\d{2}|)$/) === null ||
                 isNaN(new Date(value))
             )
         ) {
@@ -80,30 +55,22 @@ let SearchDatetime = {
 
         this._value = value;
 
-
-        if (this._render) {
-            let control = coreuiTableElements.getSearchControl(this._table.getId(), this._id);
-
-            if (control[0]) {
-                $('input', control).val(
-                    this._value === null ? '' : this._value
-                );
-            }
+        if (this._control) {
+            this._control.val(
+                this._value === null ? '' : this._value
+            );
         }
-    },
+    }
 
 
     /**
      * Получение значения
      * @returns {string}
      */
-    getValue: function () {
+    getValue() {
 
-        let control = coreuiTableElements.getSearchControl(this._table.getId(), this._id);
-        let input   = $('input', control);
-
-        if (input[0]) {
-            let value = input.val();
+        if (this._control) {
+            let value = this._control.val();
 
             if (typeof value === 'string' && value !== '') {
                 return value;
@@ -111,35 +78,32 @@ let SearchDatetime = {
         }
 
         return this._value;
-    },
+    }
 
 
     /**
-     * Инициализация событий
-     * @returns {object}
+     * Фильтрация данных
+     * @returns {string}              fieldValue
+     * @returns {Array|string|number} searchValue
+     * @returns {boolean}
      */
-    initEvents: function () {
+    filter(fieldValue, searchValue) {
 
-        let container = coreuiTableElements.getSearchContainer(this._table.getId());
-        let control   = coreuiTableElements.getSearchControl(this._table.getId(), this._id);
-        let that      = this;
+        if (['string', 'number'].indexOf(typeof fieldValue) < 0 ||
+            ['string', 'number'].indexOf(typeof searchValue) < 0
+        ) {
+            return false;
+        }
 
-        $('input', control).keyup(function(e) {
-            if (e.key === 'Enter' || e.keyCode === 13) {
-                that._table.searchRecords();
-                container.fadeOut('fast');
-            }
-        });
-    },
+        return fieldValue.toString() === searchValue.toString();
+    }
 
 
     /**
      * Формирование контента
-     * @returns {string}
+     * @returns {jQuery}
      */
-    render: function() {
-
-        this._render = true;
+    render() {
 
         if ( ! coreuiTableUtils.isObject(this._options.attr)) {
             this._options.attr = {};
@@ -155,7 +119,6 @@ let SearchDatetime = {
             }
         }
 
-        this._options.attr['name']  = typeof this._options.field === 'string' ? this._options.field : '';
         this._options.attr['value'] = typeof this._value === 'string' || typeof this._value === 'number'
             ? this._value
             : '';
@@ -165,14 +128,28 @@ let SearchDatetime = {
         }
 
         let attributes = [];
+        let table      = this._table;
 
         $.each(this._options.attr, function (name, value) {
-            attributes.push(name + '="' + value + '"');
+            if (['string', 'number'].indexOf(typeof value) >= 0) {
+                attributes.push(name + '="' + value + '"');
+            }
         });
 
-        return coreuiTableUtils.render(coreuiTableTpl['search/datetime.html'], {
+        this._control = $(coreuiTableUtils.render(coreuiTableTpl['search/datetime.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
+        }));
+
+        this._control.keyup(function(e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                table.searchRecords();
+
+                let container = coreuiTableElements.getSearchContainer(table.getId());
+                container.fadeOut('fast');
+            }
         });
+
+        return this._control;
     }
 }
 

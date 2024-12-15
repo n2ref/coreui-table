@@ -8,7 +8,7 @@
             </label>
         </div>
 
-        <% $.each(columns, function(key, column) { %>
+        <% columns.map(function(column) { %>
         <div class="form-check coreui-table_check-column">
             <label class="form-check-label">
                 <input class="form-check-input" type="checkbox" value="<%= column.field %>"

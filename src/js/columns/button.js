@@ -1,57 +1,30 @@
 
 import coreuiTableUtils from "../coreui.table.utils";
 import coreuiTableTpl   from "../coreui.table.templates";
+import Column           from "../abstract/Column";
 
-let ColumnsButton = {
 
-    _table: null,
-    _options: {
-        type: 'button',
-        field: null,
-        label: null,
-        show: true,
-        width: null,
-        minWidth: null,
-        maxWidth: null,
-    },
-
+class ColumnsButton extends Column {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._table   = table;
-        this._options = $.extend({}, this._options, options);
-    },
+        options = $.extend(true, {
+            type: 'button',
+            field: null,
+            label: null,
+            show: true,
+            width: null,
+            minWidth: null,
+            maxWidth: null,
+        }, options);
 
-
-    /**
-     * Установка видимости колонки
-     * @param {boolean} isShow
-     */
-    setShow: function (isShow) {
-        this._options.show = !! isShow;
-    },
-
-
-    /**
-     * Видимости колонки
-     */
-    isShow: function () {
-        return !! this._options.show;
-    },
-
-
-    /**
-     * Получение параметров
-     * @returns {object}
-     */
-    getOptions: function () {
-        return $.extend({}, this._options);
-    },
+        super(table, options);
+    }
 
 
     /**
@@ -60,7 +33,7 @@ let ColumnsButton = {
      * @param {object} record
      * @returns {string}
      */
-    render: function(content, record) {
+    render(content, record) {
 
         if ( ! coreuiTableUtils.isObject(content)) {
             return '';

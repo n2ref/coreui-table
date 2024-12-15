@@ -108,6 +108,27 @@ let coreuiTableUtils = {
         }
 
         return this._templates[tplName](options);
+    },
+
+
+    /**
+     * Размерность строки
+     * @param {string} str
+     * @param {int}    count
+     * @param {string} repeat
+     * @returns {string}
+     */
+    strPadLeft: function(str, count, repeat) {
+
+        str = String(str);
+
+        if (str.length >= count) {
+            return str;
+        }
+
+        repeat = repeat ? repeat : '0';
+
+        return (repeat.repeat(count) + str).slice(-(count));
     }
 }
 

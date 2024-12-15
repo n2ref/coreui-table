@@ -1,39 +1,35 @@
 
 import coreuiTableTpl   from "../coreui.table.templates";
 import coreuiTableUtils from '../coreui.table.utils';
-import coreuiTableElements from "../coreui.table.elements";
+import Control          from "../abstract/Control";
 
 
-let ControlPageSize = {
-
-    _id: null,
-    _table: null,
-    _options: {
-        id: null,
-        type: 'page_size',
-        attr: {
-            class: 'form-select'
-        },
-        list: [ 25, 50, 100, 1000 ]
-    },
-
+class ControlPageSize extends Control {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
+
+        let optionsOriginal = {
+            id: null,
+            type: 'page_size',
+            attr: {
+                class: 'form-select'
+            },
+            list: [ 25, 50, 100, 1000 ]
+        };
 
         if (options.hasOwnProperty('attr') && coreuiTableUtils.isObject(options.attr)) {
-            options.attr = coreuiTableUtils.mergeAttr(this._options.attr, options.attr);
+            options.attr = coreuiTableUtils.mergeAttr(optionsOriginal.attr, options.attr);
         }
 
-        this._options = $.extend({}, this._options, options);
-        this._table   = table;
-        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
-            ? this._options.id
-            : coreuiTableUtils.hashCode();
+        options = $.extend(true, optionsOriginal, options);
+
+        super(table, options);
+
 
         if ( ! Array.isArray(this._options.list)) {
             this._options.list = [];
@@ -42,59 +38,46 @@ let ControlPageSize = {
         if (this._options.list.indexOf(this._table._recordsPerPage) < 0) {
             this._options.list.unshift(this._table._recordsPerPage);
         }
-    },
-
-
-    /**
-     * Инициализация событий связанных с элементом управления
-     */
-    initEvents: function () {
-
-        let that           = this;
-        let control        = coreuiTableElements.getControl(this._table.getId(), this.getId());
-        let selectPageSize = $('select', control);
-
-        selectPageSize.change(function () {
-            that._table._page = 1;
-            that._table.setPageSize(Number(selectPageSize.val()));
-            that._table.reload();
-        });
-
-        this._table.on('page_size_update', function () {
-            selectPageSize.val(that._table._recordsPerPage);
-        });
-    },
-
-
-    /**
-     * Получение ID элемента управления
-     * @returns {string}
-     */
-    getId: function () {
-        return this._id;
-    },
+    }
 
 
     /**
      * Формирование контента для размещения на странице
      * @returns {string}
      */
-    render: function() {
+    render() {
 
         let attributes = [];
+        let table      = this._table;
 
         if (coreuiTableUtils.isObject(this._options.attr)) {
             $.each(this._options.attr, function (name, value) {
-                attributes.push(name + '="' + value + '"');
+                if (['string', 'number'].indexOf(typeof value) >= 0) {
+                    attributes.push(name + '="' + value + '"');
+                }
             });
         }
 
-        return coreuiTableUtils.render(coreuiTableTpl['controls/page-size.html'], {
+        let control = coreuiTableUtils.render(coreuiTableTpl['controls/page-size.html'], {
             recordsPerPageList: this._options.list,
-            recordsPerPage: this._table._recordsPerPage,
+            recordsPerPage: table._recordsPerPage,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
-            lang: this._table.getLang(),
+            lang: table.getLang(),
         });
+
+        let selectPageSize = $('select', control);
+
+        selectPageSize.change(function () {
+            table._page = 1;
+            table.setPageSize(Number(selectPageSize.val()));
+            table.reload();
+        });
+
+        table.on('page_size_update', function () {
+            selectPageSize.val(table._recordsPerPage);
+        });
+
+        return control;
     }
 }
 

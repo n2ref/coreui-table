@@ -24,7 +24,7 @@
         <% } %>
 
 
-        <% $.each(pages, function(key, page) { %>
+        <% pages.map(function(page) { %>
             <% if (page == currentPage) { %>
                 <li class="page-item active">
                     <span class="page-link"><%= page %></span>

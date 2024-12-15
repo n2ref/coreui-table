@@ -1,73 +1,47 @@
 
-import coreuiTableTpl      from "../coreui.table.templates";
-import coreuiTableUtils    from "../coreui.table.utils";
-import coreuiTableElements from "../coreui.table.elements";
+import coreuiTableTpl   from "../coreui.table.templates";
+import coreuiTableUtils from "../coreui.table.utils";
+import Filter           from "../abstract/Filter";
 
-let FilterNumber = {
-
-    _id: null,
-    _table: null,
-    _value: null,
-    _render: false,
-    _options: {
-        id: null,
-        type: 'number',
-        field: null,
-        label: null,
-        value: null,
-        width: 90,
-        attr: {
-            class: "form-control",
-        },
-        btn: {
-            attr: { class: "btn btn-outline-secondary border-secondary-subtle" },
-            content: '<i class="bi bi-search"></i>'
-        }
-    },
-
+class FilterNumber extends Filter {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._options = $.extend(true, {}, this._options, options);
-        this._table   = table;
-        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
-            ? this._options.id
-            : coreuiTableUtils.hashCode();
+        options = $.extend(true, {
+            id: null,
+            type: 'number',
+            field: null,
+            label: null,
+            value: null,
+            width: 90,
+            attr: {
+                class: "form-control",
+            },
+            btn: {
+                attr: { class: "btn btn-outline-secondary border-secondary-subtle" },
+                content: '<i class="bi bi-search"></i>'
+            }
+        }, options);
+
+        super(table, options);
+
 
         if (this._options.value !== null) {
             this.setValue(this._options.value);
         }
-    },
-
-
-    /**
-     * Получение параметров
-     * @returns {object}
-     */
-    getOptions: function () {
-        return $.extend(true, {}, this._options);
-    },
-
-
-    /**
-     * Получение id
-     * @returns {string}
-     */
-    getId: function () {
-        return this._id;
-    },
+    }
 
 
     /**
      * Установка значения
      * @param {object|null} value
      */
-    setValue: function (value) {
+    setValue(value) {
 
         if (value) {
             if ( ! coreuiTableUtils.isObject(value)) {
@@ -79,14 +53,16 @@ let FilterNumber = {
 
             if (value.hasOwnProperty('start') &&
                 (typeof value.start === 'string' || typeof value.start !== 'number') &&
-                value.start !== ''
+                value.start !== '' &&
+                ! isNaN(Number(value.start))
             ) {
                 numberStart = value.start;
             }
 
             if (value.hasOwnProperty('end') &&
                 (typeof value.end === 'string' || typeof value.end !== 'number') &&
-                value.end !== ''
+                value.end !== '' &&
+                ! isNaN(Number(value.end))
             ) {
                 numberEnd = value.end;
             }
@@ -106,86 +82,94 @@ let FilterNumber = {
         }
 
 
-        if (this._render) {
-            let control = coreuiTableElements.getControl(this._table.getId(), this._id);
+        if (this._control) {
+            let inputStart = this._control.parent().find('input.number-start');
+            let inputEnd   = this._control.parent().find('input.number-end');
 
-            if (control[0]) {
-                let inputStart = $('input.number-start', control);
-                let inputEnd   = $('input.number-end', control);
+            if (this._value === null) {
+                inputStart.val('');
+                inputEnd.val('');
 
-                if (this._value === null) {
-                    inputStart.val('');
-                    inputEnd.val('');
-
-                } else if (coreuiTableUtils.isObject(this._value)) {
-                    inputStart.val(typeof this._value.start !== null ? this._value.start : '');
-                    inputEnd.val(typeof this._value.end !== null ? this._value.end : '');
-                }
+            } else if (coreuiTableUtils.isObject(this._value)) {
+                inputStart.val(typeof this._value.start !== null ? this._value.start : '');
+                inputEnd.val(typeof this._value.end !== null ? this._value.end : '');
             }
         }
-    },
+    }
 
 
     /**
      * Получение значения
      * @returns {string}
      */
-    getValue: function () {
+    getValue() {
 
-        let control    = coreuiTableElements.getControl(this._table.getId(), this._id);
-        let inputStart = $('input.number-start', control);
-        let inputEnd   = $('input.number-end', control);
+        if (this._control) {
+            let inputStart = this._control.parent().find('input.number-start');
+            let inputEnd   = this._control.parent().find('input.number-end');
 
-        if (inputStart[0] && inputEnd[0]) {
+            if (inputStart[0] && inputEnd[0]) {
+                let valueStart = inputStart.val();
+                let valueEnd   = inputEnd.val();
 
-            let valueStart = inputStart.val();
-            let valueEnd   = inputEnd.val();
-
-            if (
-                (typeof valueStart === 'string' && valueStart !== '') ||
-                (typeof valueEnd === 'string' && valueEnd !== '')
-            ) {
-                return {
-                    start: valueStart !== '' ? valueStart : null,
-                    end: valueEnd !== '' ? valueEnd : null,
+                if (
+                    (typeof valueStart === 'string' && valueStart !== '') ||
+                    (typeof valueEnd === 'string' && valueEnd !== '')
+                ) {
+                    return {
+                        start: valueStart !== '' && ! isNaN(Number(valueStart)) ? Number(valueStart) : null,
+                        end: valueEnd !== '' && ! isNaN(Number(valueEnd)) ? Number(valueEnd) : null,
+                    }
                 }
             }
+
+            return null;
         }
 
 
         return this._value;
-    },
-
+    }
 
 
     /**
-     * Инициализация событий
-     * @returns {object}
+     * Фильтрация данных
+     * @returns {string}              fieldValue
+     * @returns {Array|string|number} searchValue
+     * @returns {boolean}
      */
-    initEvents: function () {
+    filter(fieldValue, searchValue) {
 
-        let control = coreuiTableElements.getControl(this._table.getId(), this._id);
-        let that    = this;
+        if (['string', 'number'].indexOf(typeof fieldValue) < 0 ||
+            ! coreuiTableUtils.isObject(searchValue) ||
+            (
+                ['string', 'number'].indexOf(typeof searchValue.start) < 0 &&
+                ['string', 'number'].indexOf(typeof searchValue.end) < 0
+            )
+        ) {
+            return false;
+        }
 
-        $('input.number-start, input.number-end', control).keyup(function(e) {
-            if (e.key === 'Enter' || e.keyCode === 13) {
-                that._table.searchRecords();
-            }
-        });
 
-        $('button', control).click(function(e) {
-            that._table.searchRecords();
-        });
-    },
+        let issetStart = ['string', 'number'].indexOf(typeof searchValue.start) >= 0;
+        let issetEnd   = ['string', 'number'].indexOf(typeof searchValue.end) >= 0;
+
+        if (issetStart && issetEnd) {
+            return fieldValue >= searchValue.start && fieldValue <= searchValue.end;
+
+        } else if (issetStart) {
+            return fieldValue >= searchValue.start;
+
+        } else {
+            return fieldValue <= searchValue.end;
+        }
+    }
 
 
     /**
      * Формирование контента
      * @returns {string}
      */
-    render: function() {
-
-        this._render = true;
+    render() {
 
         let options = this.getOptions();
         let label   = typeof options.label === 'string' || typeof options.label === 'number'
@@ -219,6 +203,7 @@ let FilterNumber = {
         let startAttr = [];
         let endAttr   = [];
         let attrBtn   = [];
+        let table     = this._table;
 
 
         $.each(options.attr, function (name, value) {
@@ -269,13 +254,26 @@ let FilterNumber = {
             attrBtn.push(name + '="' + value + '"');
         });
 
-        return coreuiTableUtils.render(coreuiTableTpl['filters/number.html'], {
+        this._control = $(coreuiTableUtils.render(coreuiTableTpl['filters/number.html'], {
             attrStart: startAttr.length > 0 ? (' ' + startAttr.join(' ')) : '',
             attrEnd: endAttr.length > 0 ? (' ' + endAttr.join(' ')) : '',
             label: label,
             btnAttr: attrBtn.length > 0 ? (' ' + attrBtn.join(' ')) : '',
             btnContent: options.btn.content ? options.btn.content : '',
+        }));
+
+
+        $('input.number-start, input.number-end', this._control).keyup(function(e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                table.searchRecords();
+            }
         });
+
+        $('button', this._control).click(function(e) {
+            table.searchRecords();
+        });
+
+        return this._control;
     }
 }
 

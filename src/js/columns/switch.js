@@ -2,37 +2,36 @@
 import coreuiTableElements from "../coreui.table.elements";
 import coreuiTableTpl      from "../coreui.table.templates";
 import coreuiTableUtils    from "../coreui.table.utils";
+import Column              from "../abstract/Column";
 
-let ColumnsSwitch = {
-
-    _table: null,
-    _options: {
-        type: 'switch',
-        label: '',
-        field: '',
-        show: true,
-        disabled: false,
-        width: 5,
-        valueY: 1,
-        valueN: 0,
-        attr: { class: 'coreui-table__switch_container' },
-        attrHeader: { },
-        onChange: null
-    },
-
+class ColumnsSwitch extends Column {
 
     /**
      * Инициализация
-     * @param {object} table
-     * @param {object} options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._table   = table;
-        this._options = $.extend(true, {}, this._options, options);
+        options = $.extend(true, {
+            type: 'switch',
+            label: '',
+            field: '',
+            show: true,
+            disabled: false,
+            width: 5,
+            valueY: '1',
+            valueN: '0',
+            attr: { class: 'coreui-table__switch_container' },
+            attrHeader: { },
+            onChange: null
+        }, options);
+
+        super(table, options);
+
 
         // Показ строк
-        this._table.on('records_show', function () {
+        table.on('records_show', function () {
 
             let containers = coreuiTableElements.getRowsSwitches(table.getId());
 
@@ -41,54 +40,26 @@ let ColumnsSwitch = {
                 event.stopPropagation();
             });
         });
-    },
-
-
-    /**
-     * Установка видимости колонки
-     * @param {boolean} isShow
-     */
-    setShow: function (isShow) {
-        this._options.show = !! isShow;
-    },
-
-
-    /**
-     * Видимости колонки
-     */
-    isShow: function () {
-        return !! this._options.show;
-    },
-
-
-    /**
-     * Получение параметров
-     * @returns {object}
-     */
-    getOptions: function () {
-        return $.extend(true, {}, this._options);
-    },
+    }
 
 
     /**
      * Формирование контента
      * @param {string} content
      * @param {object} record
-     * @returns {string}
+     * @returns {jQuery}
      */
-    render: function(content, record) {
+    render(content, record) {
 
         let isChecked = record.data.hasOwnProperty(this._options.field) &&
                         record.data[this._options.field] === this._options.valueY;
 
-        let formSwitch = $(
-            coreuiTableUtils.render(coreuiTableTpl['columns/switch.html'], {
-                index: record.index,
-                field: this._options.field,
-                disabled: this._options.disabled,
-                checked: isChecked
-            })
-        );
+        let formSwitch = $(coreuiTableUtils.render(coreuiTableTpl['columns/switch.html'], {
+            index: record.index,
+            field: this._options.field,
+            disabled: this._options.disabled,
+            checked: isChecked
+        }));
 
         // События нажатия на переключатель
         let that = this;

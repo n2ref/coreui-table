@@ -1,62 +1,35 @@
 import coreuiTableUtils from "../coreui.table.utils";
 import coreuiTableTpl   from "../coreui.table.templates";
+import Column           from "../abstract/Column";
 
-let ColumnsProgress = {
 
-    _table: null,
-    _options: {
-        type: 'progress',
-        field: null,
-        label: null,
-        show: true,
-        width: null,
-        minWidth: null,
-        maxWidth: null,
-        attr: {},
-
-        showPercent: null,
-        barColor: 'primary',
-        barWidth: null,
-        barHeight: null,
-    },
-
+class ColumnsProgress extends Column {
 
     /**
      * Инициализация
-     * @param {object} table
-     * @param {object} options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._table   = table;
-        this._options = $.extend(true, {}, this._options, options);
-    },
+        options = $.extend(true, {
+            type: 'progress',
+            field: null,
+            label: null,
+            show: true,
+            width: null,
+            minWidth: null,
+            maxWidth: null,
+            attr: {},
 
+            showPercent: null,
+            barColor: 'primary',
+            barWidth: null,
+            barHeight: null,
+        }, options);
 
-    /**
-     * Установка видимости колонки
-     * @param {boolean} isShow
-     */
-    setShow: function (isShow) {
-        this._options.show = !! isShow;
-    },
-
-
-    /**
-     * Видимости колонки
-     */
-    isShow: function () {
-        return !! this._options.show;
-    },
-
-
-    /**
-     * Получение параметров
-     * @returns {object}
-     */
-    getOptions: function () {
-        return $.extend(true, {}, this._options);
-    },
+        super(table, options);
+    }
 
 
     /**
@@ -64,7 +37,7 @@ let ColumnsProgress = {
      * @param {*} columnValue
      * @returns {string}
      */
-    convertToString: function (columnValue) {
+    convertToString(columnValue) {
 
         if (['string', 'number'].indexOf(typeof columnValue) >= 0) {
             return String(columnValue);
@@ -78,7 +51,7 @@ let ColumnsProgress = {
         } else {
             return '';
         }
-    },
+    }
 
 
     /**
@@ -87,7 +60,7 @@ let ColumnsProgress = {
      * @param {object}              record
      * @returns {string}
      */
-    render: function(content, record) {
+    render(content, record) {
 
         if (
             ( ! coreuiTableUtils.isNumeric(content)) &&

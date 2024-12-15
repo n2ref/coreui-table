@@ -2,72 +2,47 @@
 import coreuiTableTpl      from "../coreui.table.templates";
 import coreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
+import Filter              from "../abstract/Filter";
 
-let FilterText = {
-
-    _id: null,
-    _table: null,
-    _value: null,
-    _render: false,
-    _options: {
-        id: null,
-        type: 'text',
-        field: null,
-        label: null,
-        value: null,
-        width: 200,
-        attr: {
-            class: "form-control",
-        },
-        btn: {
-            attr: { class: "btn btn-outline-secondary border-secondary-subtle" },
-            content: '<i class="bi bi-search"></i>'
-        }
-    },
-
+class FilterText extends Filter {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._options = $.extend(true, {}, this._options, options);
-        this._table   = table;
-        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
-            ? this._options.id
-            : coreuiTableUtils.hashCode();
+        options = $.extend(true, {
+            id: null,
+            type: 'text',
+            field: null,
+            label: null,
+            value: null,
+            width: 200,
+            attr: {
+                class: "form-control",
+            },
+            btn: {
+                attr: { class: "btn btn-outline-secondary border-secondary-subtle" },
+                content: '<i class="bi bi-search"></i>'
+            }
+        }, options);
+
+        super(table, options);
+
 
         if (this._options.value !== null) {
             this.setValue(this._options.value);
         }
-    },
-
-
-    /**
-     * Получение параметров
-     * @returns {object}
-     */
-    getOptions: function () {
-        return $.extend(true, {}, this._options);
-    },
-
-
-    /**
-     * Получение id
-     * @returns {string}
-     */
-    getId: function () {
-        return this._id;
-    },
+    }
 
 
     /**
      * Установка значения
      * @param {string|number|null} value
      */
-    setValue: function (value) {
+    setValue(value) {
 
         if (value !== null &&
             typeof value !== 'string' &&
@@ -79,29 +54,22 @@ let FilterText = {
         this._value = value
 
 
-        if (this._render) {
-            let control = coreuiTableElements.getControl(this._table.getId(), this._id);
-
-            if (control[0]) {
-                $('input', control).val(
-                    this._value === null ? '' : this._value
-                );
-            }
+        if (this._control) {
+            $('input', this._control).val(
+                this._value === null ? '' : this._value
+            );
         }
-    },
+    }
 
 
     /**
      * Получение значения
      * @returns {string|null}
      */
-    getValue: function () {
+    getValue() {
 
-        let control = coreuiTableElements.getControl(this._table.getId(), this._id);
-        let input   = $('input', control);
-
-        if (input[0]) {
-            let value = input.val();
+        if (this._control) {
+            let value = $('input', this._control).val();
 
             if (typeof value === 'string' && value !== '') {
                 return value;
@@ -109,37 +77,14 @@ let FilterText = {
         }
 
         return this._value;
-    },
-
-
-    /**
-     * Инициализация событий
-     * @returns {object}
-     */
-    initEvents: function () {
-
-        let control = coreuiTableElements.getControl(this._table.getId(), this._id);
-        let that    = this;
-
-        $('input', control).keyup(function(e) {
-            if (e.key === 'Enter' || e.keyCode === 13) {
-                that._table.searchRecords();
-            }
-        });
-
-        $('button', control).click(function(e) {
-            that._table.searchRecords();
-        });
-    },
+    }
 
 
     /**
      * Формирование контента
      * @returns {string}
      */
-    render: function() {
-
-        this._render = true;
+    render() {
 
         let options = this.getOptions();
         let label   = typeof options.label === 'string' || typeof options.label === 'number'
@@ -160,7 +105,6 @@ let FilterText = {
             }
         }
 
-        options.attr['name']  = typeof options.field === 'string' ? options.field : '';
         options.attr['value'] = typeof this._value === 'string' || typeof this._value === 'number'
             ? this._value
             : '';
@@ -185,6 +129,7 @@ let FilterText = {
 
         let attr    = [];
         let attrBtn = [];
+        let table   = this._table;
 
         $.each(options.attr, function (name, value) {
             attr.push(name + '="' + value + '"');
@@ -193,12 +138,24 @@ let FilterText = {
             attrBtn.push(name + '="' + value + '"');
         });
 
-        return coreuiTableUtils.render(coreuiTableTpl['filters/text.html'], {
+        this._control = $(coreuiTableUtils.render(coreuiTableTpl['filters/text.html'], {
             attr: attr.length > 0 ? (' ' + attr.join(' ')) : '',
             label: label,
             btnAttr: attrBtn.length > 0 ? (' ' + attrBtn.join(' ')) : '',
             btnContent: options.btn.content ? options.btn.content : '',
+        }));
+
+        $('input', this._control).keyup(function(e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                table.searchRecords();
+            }
         });
+
+        $('button', this._control).click(function(e) {
+            table.searchRecords();
+        });
+
+        return this._control;
     }
 }
 

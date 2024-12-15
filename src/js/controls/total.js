@@ -2,77 +2,62 @@
 import coreuiTableTpl      from "../coreui.table.templates";
 import coreuiTableUtils    from '../coreui.table.utils';
 import coreuiTableElements from "../coreui.table.elements";
+import Control             from "../abstract/Control";
 
-let ControlTotal = {
-
-    _id: null,
-    _table: null,
-    _options: {
-        type: 'total',
-        attr: {
-            class: 'px-1'
-        }
-    },
-
+class ControlTotal extends Control {
 
     /**
      * Инициализация
-     * @param {object} table
-     * @param {object} options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
+
+        let optionsOriginal = {
+            type: 'total',
+            attr: {
+                class: 'px-1'
+            }
+        };
 
         if (options.hasOwnProperty('attr') && coreuiTableUtils.isObject(options.attr)) {
-            options.attr = coreuiTableUtils.mergeAttr(this._options.attr, options.attr);
+            options.attr = coreuiTableUtils.mergeAttr(optionsOriginal.attr, options.attr);
         }
 
-        this._options = $.extend({}, this._options, options);
-        this._table   = table;
-        this._id      = coreuiTableUtils.hashCode();
-    },
+        options = $.extend(true, optionsOriginal, options);
 
-
-    /**
-     * Инициализация событий связанных с элементом управления
-     */
-    initEvents: function () {
-
-        let that    = this;
-        let control = coreuiTableElements.getControl(this._table.getId(), this.getId());
-
-        this._table.on('records_show', function () {
-            control.html(that.render());
-        });
-    },
-
-
-    /**
-     * Получение ID элемента управления
-     * @returns {string}
-     */
-    getId: function () {
-        return this._id;
-    },
+        super(table, options);
+    }
 
 
     /**
      * Формирование контента для размещения на странице
      * @returns {string}
      */
-    render: function() {
+    render() {
 
         let attributes = [];
+        let table      = this._table;
 
         if (coreuiTableUtils.isObject(this._options.attr)) {
             $.each(this._options.attr, function (name, value) {
-                attributes.push(name + '="' + value + '"');
+                if (['string', 'number'].indexOf(typeof value) >= 0) {
+                    attributes.push(name + '="' + value + '"');
+                }
             });
         }
-        return coreuiTableUtils.render(coreuiTableTpl['controls/total.html'], {
-            recordsTotal: this._table._recordsTotal,
+
+        let control = $(coreuiTableUtils.render(coreuiTableTpl['controls/total.html'], {
+            recordsTotal: table._recordsTotal,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
-            lang: this._table.getLang(),
+            lang: table.getLang(),
+        }));
+
+        table.on('records_show', function () {
+            control.find('.coreui-table__count-total').text(table._recordsTotal);
         });
+
+        return control;
     }
 }
 

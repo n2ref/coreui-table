@@ -1,0 +1,19 @@
+<div class="mb-2 d-flex flex-column flex-md-row ">
+    <label class="col-form-label fw-medium text-start text-md-end pe-2"
+           style="min-width:<%= labelWidth %>;width:<%= labelWidth %>">
+        <%= label %>
+        <% if (descriptionLabel) { %>
+        <div class="text-muted fw-normal">
+            <small><%= descriptionLabel %></small>
+        </div>
+        <% } %>
+    </label>
+    <div class="flex-fill coreui-table__search-control_content">
+        <% if (suffix) { %><%- suffix %><% } %>
+        <% if (description) { %>
+        <div class="text-muted fw-normal">
+            <small><%= description %></small>
+        </div>
+        <% } %>
+    </div>
+</div>

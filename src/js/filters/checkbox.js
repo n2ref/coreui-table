@@ -2,66 +2,42 @@
 import coreuiTableTpl      from "../coreui.table.templates";
 import coreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
+import Filter              from "../abstract/Filter";
 
-let FilterCheckbox = {
+class FilterCheckbox extends Filter {
 
-    _id: null,
-    _table: null,
-    _value: null,
-    _class: 'btn btn-outline-secondary',
-    _render: false,
-    _options: {
-        id: null,
-        type: 'checkbox',
-        field: null,
-        label: null,
-        value: null,
-        options: [],
-    },
-
+    _class = 'btn btn-outline-secondary';
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._options = $.extend(true, {}, this._options, options);
-        this._table   = table;
-        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
-            ? this._options.id
-            : coreuiTableUtils.hashCode();
+        options = $.extend(true, {
+            id: null,
+            type: 'checkbox',
+            field: null,
+            label: null,
+            value: null,
+            options: [],
+        }, options);
+
+        super(table, options);
+
 
         if (this._options.value !== null) {
             this.setValue(this._options.value);
         }
-    },
-
-
-    /**
-     * Получение параметров
-     * @returns {object}
-     */
-    getOptions: function () {
-        return $.extend(true, {}, this._options);
-    },
-
-
-    /**
-     * Получение id
-     * @returns {string}
-     */
-    getId: function () {
-        return this._id;
-    },
+    }
 
 
     /**
      * Установка значения
      * @param {Array|string|number|null} value
      */
-    setValue: function (value) {
+    setValue (value) {
 
         if (['string', 'number', 'object'].indexOf(typeof value) < 0) {
             return;
@@ -90,32 +66,28 @@ let FilterCheckbox = {
         }
 
 
-        if (this._render) {
-            let control = coreuiTableElements.getControl(this._table.getId(), this._id);
+        if (this._control) {
+            $('input:checked', this._control).prop('checked', false);
 
-            if (control[0]) {
-                $('input:checked', control).prop('checked', false);
+            if (Array.isArray(this._value)) {
+                let control = this._control;
 
-                if (Array.isArray(this._value)) {
-                    $.each(this._value, function (key, value) {
-                        $('input[value="' + value + '"]', control).prop('checked', true);
-                    })
-                }
+                this._value.map(function (value) {
+                    $('input[value="' + value + '"]', control).prop('checked', true);
+                })
             }
         }
-    },
+    }
 
 
     /**
      * Получение значения
      * @returns {Array|null}
      */
-    getValue: function () {
+    getValue() {
 
-        let control = coreuiTableElements.getControl(this._table.getId(), this._id);
-
-        if (control[0]) {
-            let inputs = $('input:checked', control);
+        if (this._control) {
+            let inputs = $('input:checked', this._control);
             let items  = [];
 
             $.each(inputs, function (key, input) {
@@ -133,30 +105,32 @@ let FilterCheckbox = {
         } else {
             return this._value;
         }
-    },
+    }
 
 
     /**
-     * Инициализация событий
+     * Фильтрация данных
+     * @returns {string} fieldValue
+     * @returns {Array}  searchValue
+     * @returns {boolean}
      */
-    initEvents: function () {
+    filter(fieldValue, searchValue) {
 
-        let control = coreuiTableElements.getControl(this._table.getId(), this._id);
-        let that    = this;
+        if (['string', 'number'].indexOf(typeof fieldValue) < 0 ||
+            ! Array.isArray(searchValue)
+        ) {
+            return false;
+        }
 
-        $('input', control).change(function(e) {
-            that._table.searchRecords();
-        });
-    },
+        return searchValue.indexOf(fieldValue) >= 0;
+    }
 
 
     /**
      * Формирование контента
      * @returns {string}
      */
-    render: function() {
-
-        this._render = true;
+    render() {
 
         let that    = this;
         let options = this.getOptions();
@@ -187,12 +161,18 @@ let FilterCheckbox = {
             });
         });
 
-        return coreuiTableUtils.render(coreuiTableTpl['filters/checkbox.html'], {
+        this._control = $(coreuiTableUtils.render(coreuiTableTpl['filters/checkbox.html'], {
             label: label,
             items: items,
             field: field + this.getId(),
             lang: this._table.getLang()
+        }));
+
+        $('input', this._control).change(function(e) {
+            that._table.searchRecords();
         });
+
+        return this._control;
     }
 }
 

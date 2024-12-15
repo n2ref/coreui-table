@@ -1,71 +1,44 @@
 
-import coreuiTableTpl      from "../coreui.table.templates";
-import coreuiTableUtils    from "../coreui.table.utils";
-import CoreuiTableUtils    from "../coreui.table.utils";
-import coreuiTableElements from "../coreui.table.elements";
+import coreuiTableTpl   from "../coreui.table.templates";
+import coreuiTableUtils from "../coreui.table.utils";
+import Search           from "../abstract/Search";
 
-let SearchSelect = {
-
-    _id: null,
-    _table: null,
-    _value: null,
-    _render: false,
-    _options: {
-        id: null,
-        type: 'select',
-        field: null,
-        label: null,
-        width: null,
-        value: null,
-        attr: {
-            class: 'form-select d-inline-block'
-        },
-        options: []
-    },
-
+class SearchSelect extends Search {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._options = $.extend(true, {}, this._options, options);
-        this._table   = table;
-        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
-            ? this._options.id
-            : coreuiTableUtils.hashCode();
+        options = $.extend(true, {
+            id: null,
+            type: 'select',
+            field: null,
+            label: null,
+            width: null,
+            value: null,
+            attr: {
+                class: 'form-select d-inline-block'
+            },
+            options: []
+        }, options);
+
+        super(table, options);
+
 
         if (this._options.value !== null) {
             this.setValue(this._options.value);
         }
-    },
-
-
-    /**
-     * Получение параметров
-     * @returns {object}
-     */
-    getOptions: function () {
-        return $.extend(true, {}, this._options);
-    },
-
-
-    /**
-     * Получение id
-     * @returns {string}
-     */
-    getId: function () {
-        return this._id;
-    },
+    }
 
 
     /**
      * Установка значения
-     * @param {Array} value
+     * @param {string|number|Array} value
      */
-    setValue: function (value) {
+    setValue(value) {
 
         if (['string', 'number', 'object'].indexOf(typeof value) < 0) {
             return;
@@ -75,7 +48,7 @@ let SearchSelect = {
             if (Array.isArray(value)) {
                 let items = [];
 
-                $.each(value, function (key, item) {
+                value.map(function (item) {
                     if (typeof value !== 'string' && typeof value !== 'number') {
                         return;
                     }
@@ -94,33 +67,27 @@ let SearchSelect = {
         }
 
 
-        if (this._render) {
-            let control = coreuiTableElements.getSearchControl(this._table.getId(), this._id);
+        if (this._control) {
+            $('option:selected', this._control).prop('selected', false);
 
-            if (control[0]) {
-                $('select option:selected', control).prop('selected', false);
-
-                if (Array.isArray(this._value)) {
-                    $.each(this._value, function (key, value) {
-                        $('select option[value="' + value + '"]', control).prop('selected', true);
-                    })
-                }
+            if (Array.isArray(this._value)) {
+                this._value.map(function (value) {
+                    $('option[value="' + value + '"]', this._control).prop('selected', true);
+                });
             }
         }
-    },
+    }
 
 
     /**
      * Получение значения
      * @returns {Array|string|null}
      */
-    getValue: function () {
+    getValue() {
 
-        let control = coreuiTableElements.getSearchControl(this._table.getId(), this._id);
-
-        if (control[0]) {
-            let isMultiple = !! $('select', control).attr('multiple');
-            let options    = $('select option:selected', control);
+        if (this._control) {
+            let isMultiple = !! this._control.attr('multiple');
+            let options    = $('option:selected', this._control);
             let items      = [];
 
             $.each(options, function (key, option) {
@@ -140,26 +107,38 @@ let SearchSelect = {
         } else {
             return this._value;
         }
-    },
-
+    }
 
 
     /**
-     * Инициализация событий
-     * @returns {object}
+     * Фильтрация данных
+     * @returns {string}              fieldValue
+     * @returns {Array|string|number} searchValue
+     * @returns {boolean}
      */
-    initEvents: function () {
+    filter(fieldValue, searchValue) {
 
-    },
+        if (['string', 'number'].indexOf(typeof fieldValue) < 0 ||
+            (['string', 'number'].indexOf(typeof searchValue) < 0 && ! Array.isArray(searchValue))
+        ) {
+            return false;
+        }
+
+
+        if (Array.isArray(searchValue)) {
+            return searchValue.indexOf(fieldValue) >= 0;
+
+        } else {
+            return fieldValue.toString().toLowerCase() === searchValue.toString().toLowerCase();
+        }
+    }
 
 
     /**
      * Формирование контента
      * @returns {string}
      */
-    render: function() {
-
-        this._render = true;
+    render() {
 
         let that          = this;
         let options       = this.getOptions();
@@ -196,7 +175,7 @@ let SearchSelect = {
                         text: option
                     }));
 
-                } else if (CoreuiTableUtils.isObject(option)) {
+                } else if (coreuiTableUtils.isObject(option)) {
                     let type = option.hasOwnProperty('type') && typeof option.type === 'string'
                         ? option.type
                         : 'option';
@@ -243,13 +222,16 @@ let SearchSelect = {
             attributes.push(name + '="' + value + '"');
         });
 
-        return coreuiTableUtils.render(coreuiTableTpl['search/select.html'], {
+
+        this._control = $(coreuiTableUtils.render(coreuiTableTpl['search/select.html'], {
             field: options,
             value: this._value,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             options: selectOptions
-        });
-    },
+        }));
+
+        return this._control;
+    }
 
 
     /**
@@ -258,7 +240,7 @@ let SearchSelect = {
      * @return {object}
      * @private
      */
-    _buildOption: function (option) {
+    _buildOption(option) {
 
         let optionAttr = [];
         let optionText = option.hasOwnProperty('text') && ['string', 'number'].indexOf(typeof(option.text)) >= 0

@@ -1,62 +1,36 @@
 import coreuiTableUtils from "../coreui.table.utils";
 import coreuiTableTpl   from "../coreui.table.templates";
+import Column           from "../abstract/Column";
 
-let ColumnsImage = {
-
-    _table: null,
-    _options: {
-        type: 'image',
-        field: null,
-        label: null,
-        show: true,
-        width: null,
-        minWidth: null,
-        maxWidth: null,
-        attr: {},
-
-        imgWidth: null,
-        imgHeight: null,
-        imgBorder: null,
-        imgStyle: null,
-    },
-
+class ColumnsImage extends Column {
 
     /**
      * Инициализация
-     * @param {object} table
-     * @param {object} options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
+
+        options = $.extend(true, {
+            type: 'image',
+            field: null,
+            label: null,
+            show: true,
+            width: null,
+            minWidth: null,
+            maxWidth: null,
+            attr: {},
+            imgWidth: null,
+            imgHeight: null,
+            imgBorder: null,
+            imgStyle: null,
+        }, options);
+
+        super(table, options);
 
         this._table   = table;
         this._options = $.extend(true, {}, this._options, options);
-    },
-
-
-    /**
-     * Установка видимости колонки
-     * @param {boolean} isShow
-     */
-    setShow: function (isShow) {
-        this._options.show = !! isShow;
-    },
-
-
-    /**
-     * Видимости колонки
-     */
-    isShow: function () {
-        return !! this._options.show;
-    },
-
-
-    /**
-     * Получение параметров
-     * @returns {object}
-     */
-    getOptions: function () {
-        return $.extend(true, {}, this._options);
-    },
+    }
 
 
     /**
@@ -65,7 +39,7 @@ let ColumnsImage = {
      * @param {object} record
      * @returns {string}
      */
-    render: function(content, record) {
+    render(content, record) {
 
         if (typeof content !== 'string' || content === '') {
             return '';
@@ -115,4 +89,6 @@ let ColumnsImage = {
         });
     }
 }
+
+
 export default ColumnsImage;

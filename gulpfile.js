@@ -16,6 +16,7 @@ const sort             = require('gulp-sort');
 
 
 var conf = {
+    name: 'CoreUI.table',
     dist: "./dist",
     js: {
         fileMin: 'coreui-table.min.js',
@@ -75,9 +76,15 @@ gulp.task('build_js_min_fast', function() {
     return rollup({
         input: conf.js.main,
         output: {
-            sourcemap: false,
+            sourcemap: true,
             format: 'umd',
-            name: "CoreUI.table"
+            name: conf.name
+        },
+        onwarn: function (log, handler) {
+            if (log.code === 'CIRCULAR_DEPENDENCY') {
+                return; // Ignore circular dependency warnings
+            }
+            handler(log.message);
         },
         context: "window",
         plugins: [
@@ -96,9 +103,15 @@ gulp.task('build_js_min', function() {
     return rollup({
         input: conf.js.main,
         output: {
-            sourcemap: false,
+            sourcemap: true,
             format: 'umd',
-            name: "CoreUI.table"
+            name: conf.name
+        },
+        onwarn: function (log, handler) {
+            if (log.code === 'CIRCULAR_DEPENDENCY') {
+                return; // Ignore circular dependency warnings
+            }
+            handler(log.message);
         },
         context: "window",
         plugins: [
@@ -121,7 +134,13 @@ gulp.task('build_js', function() {
         output: {
             sourcemap: false,
             format: 'umd',
-            name: "CoreUI.table"
+            name: conf.name
+        },
+        onwarn: function (log, handler) {
+            if (log.code === 'CIRCULAR_DEPENDENCY') {
+                return; // Ignore circular dependency warnings
+            }
+            handler(log.message);
         },
         context: "window",
         plugins: [

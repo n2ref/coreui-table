@@ -606,7 +606,7 @@ let coreuiTableRender = {
         let attributes = [];
 
         $.each(attr, function (name, value) {
-            if (typeof value === 'string') {
+            if (['string', 'number'].indexOf(typeof value) >= 0) {
                 attributes.push(name + '="' + value + '"');
             }
         });
@@ -646,11 +646,9 @@ let coreuiTableRender = {
         }
 
 
-        let expandRecord = $(
-            coreuiTableUtils.render(coreuiTableTpl['table/record/expand.html'], {
-                colspan: table._countColumnsShow,
-            })
-        );
+        let expandRecord = $(coreuiTableUtils.render(coreuiTableTpl['table/record/expand.html'], {
+            colspan: table._countColumnsShow,
+        }));
 
         if (['string', 'number'].indexOf(typeof content) >= 0) {
             expandRecord.find('td').html(content)
@@ -680,19 +678,11 @@ let coreuiTableRender = {
     renderControl: function (table, control) {
 
         if (coreuiTableUtils.isObject(control)) {
-            let controlElement = $(
-                coreuiTableUtils.render(coreuiTableTpl['table/control.html'], {
-                    id: control.getId()
-                })
-            );
+            let controlElement = $(coreuiTableUtils.render(coreuiTableTpl['table/control.html'], {
+                id: control.getId()
+            }));
 
             controlElement.append(control.render());
-
-            if (control.hasOwnProperty('initEvents') && typeof control.initEvents === 'function') {
-                table.on('container_show', function () {
-                    control.initEvents()
-                });
-            }
 
             return controlElement;
         }

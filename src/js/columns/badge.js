@@ -1,56 +1,28 @@
 import coreuiTableUtils from "../coreui.table.utils";
 import coreuiTableTpl   from "../coreui.table.templates";
+import Column           from "../abstract/Column";
 
-let ColumnsBadge = {
-
-    _table: null,
-    _options: {
-        type: 'badge',
-        field: null,
-        label: null,
-        show: true,
-        width: null,
-        minWidth: null,
-        maxWidth: null,
-    },
-
+class ColumnsBadge extends Column {
 
     /**
      * Инициализация
-     * @param {object} table
-     * @param {object} options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._table   = table;
-        this._options = $.extend(true, {}, this._options, options);
-    },
+        options = $.extend(true, {
+            type: 'badge',
+            field: null,
+            label: null,
+            show: true,
+            width: null,
+            minWidth: null,
+            maxWidth: null,
+        }, options);
 
-
-    /**
-     * Установка видимости колонки
-     * @param {boolean} isShow
-     */
-    setShow: function (isShow) {
-        this._options.show = !! isShow;
-    },
-
-
-    /**
-     * Видимости колонки
-     */
-    isShow: function () {
-        return !! this._options.show;
-    },
-
-
-    /**
-     * Получение параметров
-     * @returns {object}
-     */
-    getOptions: function () {
-        return $.extend(true, {}, this._options);
-    },
+        super(table, options);
+    }
 
 
     /**
@@ -58,9 +30,12 @@ let ColumnsBadge = {
      * @param {*} columnValue
      * @returns {string}
      */
-    convertToString: function (columnValue) {
+    convertToString(columnValue) {
 
-        if (['string', 'number'].indexOf(typeof columnValue) >= 0) {
+        if (typeof columnValue === 'string') {
+            return columnValue;
+
+        } else if (typeof columnValue === 'number') {
             return String(columnValue);
 
         } else if (typeof columnValue === 'object' &&
@@ -72,7 +47,7 @@ let ColumnsBadge = {
         } else {
             return '';
         }
-    },
+    }
 
 
     /**
@@ -81,7 +56,7 @@ let ColumnsBadge = {
      * @param {object}               record
      * @returns {string}
      */
-    render: function(content, record) {
+    render(content, record) {
 
         if (['string', 'number'].indexOf(typeof content) >= 0) {
             content = { type: 'secondary', text: content };

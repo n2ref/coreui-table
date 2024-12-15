@@ -3,38 +3,34 @@ import coreuiTableUtils    from '../coreui.table.utils';
 import coreuiTableTpl      from "../coreui.table.templates";
 import CoreuiTableUtils    from "../coreui.table.utils";
 import coreuiTableElements from "../coreui.table.elements";
+import Control from "../abstract/Control";
 
 
-let ControlSearch = {
-
-    _id: null,
-    _table: null,
-    _options: {
-        btn: {
-            attr: { class: 'btn btn-outline-secondary' },
-            content: null,
-        },
-        btnClear: {
-            content: "<i class=\"bi bi-x text-danger\"></i>",
-            attr: { class: 'btn btn-outline-secondary' }
-        },
-        btnComplete: {
-            attr: { class: 'btn btn-primary' },
-            content: null
-        }
-    },
-
+class ControlSearch extends Control {
 
     /**
      * Инициализация
-     * @param {object} table
-     * @param {object} options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._options = $.extend(true, {}, this._options, options);
-        this._table   = table;
-        this._id      = coreuiTableUtils.hashCode();
+        options = $.extend(true, {
+            btn: {
+                attr: { class: 'btn btn-outline-secondary' },
+                content: null,
+            },
+            btnClear: {
+                content: "<i class=\"bi bi-x text-danger\"></i>",
+                attr: { class: 'btn btn-outline-secondary' }
+            },
+            btnComplete: {
+                attr: { class: 'btn btn-primary' },
+                content: null
+            }
+        }, options);
+
+        super(table, options);
 
 
         if ( ! CoreuiTableUtils.isObject(this._options.btn)) {
@@ -68,183 +64,20 @@ let ControlSearch = {
         ) {
             this._options.btnComplete.content = table.getLang().searchAction
         }
-    },
-
-
-    /**
-     * Инициализация событий связанных с элементом управления
-     */
-    initEvents: function () {
-
-        let that         = this;
-        let control      = coreuiTableElements.getControl(this._table.getId(), this.getId());
-        let buttonToggle = $('button.btn-search-toggle', control);
-        let buttonClear  = $('button.btn-clear', control);
-
-        buttonToggle.click(function () {
-            let container        = coreuiTableElements.getSearchContainer(that._table.getId());
-            let columnsContainer = coreuiTableElements.getColumnsContainer(that._table.getId());
-
-            if (columnsContainer[0]) {
-                columnsContainer.hide();
-            }
-
-            if (container[0]) {
-                container.fadeToggle('fast');
-
-            } else {
-                let controls           = [];
-                let controlsEvents     = [];
-                let btnCompleteAttr    = [];
-                let btnCompleteContent = '';
-                let wrapper            = coreuiTableElements.getWrapper(that._table.getId());
-                let tableOptions       = that._table.getOptions();
-                let labelWidth         = tableOptions.search.hasOwnProperty('labelWidth') && tableOptions.search.labelWidth
-                    ? tableOptions.search.labelWidth
-                    : 160;
-
-                $.each(that._table._search, function (key, control) {
-                    let options = control.getOptions();
-
-                    if (options.hasOwnProperty('field') &&
-                        typeof options.field === 'string' &&
-                        options.field
-                    ) {
-                        controls.push({
-                            label:       options.hasOwnProperty('label') && typeof options.label === 'string' ? options.label : '',
-                            description: options.hasOwnProperty('description') && typeof options.description === 'string' ? options.description : '',
-                            suffix:      options.hasOwnProperty('suffix') && typeof options.suffix === 'string' ? options.suffix : '',
-                            id:          control.getId(),
-                            content:     control.render(),
-                        });
-
-                        if (control.hasOwnProperty('initEvents') && typeof control.initEvents === 'function') {
-                            controlsEvents.push({
-                                event: control.initEvents,
-                                control: control,
-                            });
-                        }
-                    }
-                });
-
-
-
-                if ( ! coreuiTableUtils.isObject(that._options.btnComplete)) {
-                    that._options.btnComplete = {};
-                }
-
-                if ( ! coreuiTableUtils.isObject(that._options.btnComplete.attr)) {
-                    that._options.btnComplete.attr = {};
-                }
-
-                if (that._options.btnComplete.attr.hasOwnProperty('type')) {
-                    delete that._options.btnComplete.attr.type;
-                }
-
-                if ( ! that._options.btnComplete.attr.hasOwnProperty('class') ||
-                    typeof that._options.btnComplete.attr.class !== 'string'
-                ) {
-                    that._options.btnComplete.attr.class = 'btn-complete';
-                } else {
-                    that._options.btnComplete.attr.class += ' btn-complete';
-                }
-
-                if (coreuiTableUtils.isObject(that._options.btnComplete.attr)) {
-                    $.each(that._options.btnComplete.attr, function (name, value) {
-                        btnCompleteAttr.push(name + '="' + value + '"');
-                    });
-                }
-                if (typeof that._options.btnComplete.content === 'string') {
-                    btnCompleteContent = that._options.btnComplete.content;
-                }
-
-                let content = coreuiTableUtils.render(coreuiTableTpl['controls/search-container.html'], {
-                    labelWidth: labelWidth + (typeof labelWidth === 'number' ? 'px' : ''),
-                    controls: controls,
-                    btnCompleteAttr:    btnCompleteAttr.length > 0 ? (' ' + btnCompleteAttr.join(' ')) : '',
-                    btnCompleteContent: btnCompleteContent,
-                });
-                wrapper.before(content);
-
-
-                if (controlsEvents.length > 0) {
-                    $.each(controlsEvents, function (key, controlsEvent) {
-                        controlsEvent.event.apply(controlsEvent.control);
-                    })
-                }
-
-
-                container = wrapper.parent().find('> .coreui-table__search');
-
-                $('.btn-complete', container).click(function () {
-                    that._table.searchRecords();
-
-                    container.fadeOut('fast');
-                });
-            }
-        });
-
-
-        buttonClear.click(function () {
-            that._table.clearSearch();
-
-            let container = coreuiTableElements.getSearchContainer(that._table.getId());
-
-            if (container[0]) {
-                container.fadeOut('fast');
-            }
-        });
-
-
-        this._table.on('search_change', function (searchData) {
-            let buttonClear = $('button.btn-clear', control);
-
-            if (searchData.length > 0) {
-                if ( ! buttonClear[0]) {
-                    $(that._renderBtnClear()).insertAfter(buttonToggle);
-
-                    $('button.btn-clear', control).click(function () {
-                        that._table.clearSearch();
-
-                        let container = coreuiTableElements.getSearchContainer(that._table.getId());
-
-                        if (container[0]) {
-                            container.fadeOut('fast');
-                        }
-                    });
-                }
-
-            } else {
-                buttonClear.remove();
-
-                let container = coreuiTableElements.getSearchContainer(that._table.getId());
-
-                if (container[0]) {
-                    container.fadeOut('fast');
-                }
-            }
-        });
-    },
-
-
-    /**
-     * Получение ID элемента управления
-     * @returns {string}
-     */
-    getId: function () {
-        return this._id;
-    },
+    }
 
 
     /**
      * Формирование контента для размещения на странице
-     * @returns {string}
+     * @returns {jQuery}
      */
-    render: function() {
+    render() {
 
         let btnAttr    = [];
         let btnContent = '';
         let btnClear   = '';
+        let that       = this;
+        let table      = this._table;
 
 
         if ( ! coreuiTableUtils.isObject(this._options.btn)) {
@@ -277,19 +110,177 @@ let ControlSearch = {
         }
 
 
-        return coreuiTableUtils.render(coreuiTableTpl['controls/search.html'], {
+        let control = $(coreuiTableUtils.render(coreuiTableTpl['controls/search.html'], {
             btnContent: btnContent,
             btnAttr: btnAttr.length > 0 ? (' ' + btnAttr.join(' ')) : '',
             btnClear: btnClear
+        }));
+
+        let buttonToggle = control.find('.btn-search-toggle');
+        let buttonClear  = control.find('.btn-clear');
+
+        buttonToggle.click(function () {
+            let container        = coreuiTableElements.getSearchContainer(table.getId());
+            let columnsContainer = coreuiTableElements.getColumnsContainer(table.getId());
+
+            if (columnsContainer[0]) {
+                columnsContainer.hide();
+            }
+
+            if (container[0]) {
+                container.fadeToggle('fast');
+
+            } else {
+                let controls           = [];
+                let btnCompleteAttr    = [];
+                let btnCompleteContent = '';
+                let tableOptions       = table.getOptions();
+                let labelWidth         = tableOptions.search.hasOwnProperty('labelWidth') && tableOptions.search.labelWidth
+                    ? tableOptions.search.labelWidth
+                    : 160;
+
+                table._search.map(function (searchControl) {
+                    let options = searchControl.getOptions();
+
+                    if (options.hasOwnProperty('field') &&
+                        typeof options.field === 'string' &&
+                        options.field
+                    ) {
+                        let descriptionLabel = options.hasOwnProperty('descriptionLabel') && options.descriptionLabel
+                            ? options.descriptionLabel
+                            : null;
+
+                        let controlContainer = $(coreuiTableUtils.render(coreuiTableTpl['controls/search/control.html'], {
+                            labelWidth:       labelWidth + (typeof labelWidth === 'number' ? 'px' : ''),
+                            descriptionLabel: descriptionLabel,
+                            label:            options.hasOwnProperty('label') && typeof options.label === 'string' ? options.label : '',
+                            description:      options.hasOwnProperty('description') && typeof options.description === 'string' ? options.description : '',
+                            suffix:           options.hasOwnProperty('suffix') && typeof options.suffix === 'string' ? options.suffix : '',
+                        }));
+
+                        controlContainer.find('.coreui-table__search-control_content').prepend(searchControl.render());
+
+                        controls.push(controlContainer);
+                    }
+                });
+
+
+
+                if ( ! coreuiTableUtils.isObject(that._options.btnComplete)) {
+                    that._options.btnComplete = {};
+                }
+
+                if ( ! coreuiTableUtils.isObject(that._options.btnComplete.attr)) {
+                    that._options.btnComplete.attr = {};
+                }
+
+                if (that._options.btnComplete.attr.hasOwnProperty('type')) {
+                    delete that._options.btnComplete.attr.type;
+                }
+
+                if ( ! that._options.btnComplete.attr.hasOwnProperty('class') ||
+                    typeof that._options.btnComplete.attr.class !== 'string'
+                ) {
+                    that._options.btnComplete.attr.class = 'btn-complete';
+                } else {
+                    that._options.btnComplete.attr.class += ' btn-complete';
+                }
+
+                if (coreuiTableUtils.isObject(that._options.btnComplete.attr)) {
+                    $.each(that._options.btnComplete.attr, function (name, value) {
+                        if (['string', 'number'].indexOf(typeof value) >= 0) {
+                            btnCompleteAttr.push(name + '="' + value + '"');
+                        }
+                    });
+                }
+                if (typeof that._options.btnComplete.content === 'string') {
+                    btnCompleteContent = that._options.btnComplete.content;
+                }
+
+                let searchContainer = $(coreuiTableUtils.render(coreuiTableTpl['controls/search/container.html'], {
+                    labelWidth: labelWidth + (typeof labelWidth === 'number' ? 'px' : ''),
+                    btnCompleteAttr:    btnCompleteAttr.length > 0 ? (' ' + btnCompleteAttr.join(' ')) : '',
+                    btnCompleteContent: btnCompleteContent,
+                }));
+
+                $('.btn-complete', searchContainer).click(function () {
+                    table.searchRecords();
+
+                    let container = coreuiTableElements.getSearchContainer(table.getId());
+
+                    if (container[0]) {
+                        container.fadeOut(200);
+                    }
+                });
+
+                if (controls.length > 0) {
+                    let searchControls = searchContainer.find('.coreui-table__search_controls');
+
+                    controls.map(function (control) {
+                        searchControls.append(control);
+                    })
+                }
+
+                let wrapper = coreuiTableElements.getWrapper(table.getId());
+                wrapper.before(searchContainer);
+            }
         });
-    },
+
+
+        buttonClear.click(function () {
+            table.clearSearch();
+
+            let container = coreuiTableElements.getSearchContainer(table.getId());
+
+            if (container[0]) {
+                container.fadeOut('fast');
+            }
+            buttonClear.remove();
+        });
+
+
+        table.on('search_change', function (searchData) {
+            let buttonClear = $('button.btn-clear', control);
+
+            if (searchData.length > 0) {
+                if ( ! buttonClear[0]) {
+                    let btnClear = $(that._renderBtnClear());
+
+                    btnClear.click(function () {
+                        table.clearSearch();
+
+                        let container = coreuiTableElements.getSearchContainer(table.getId());
+
+                        if (container[0]) {
+                            container.fadeOut('fast');
+                        }
+                        btnClear.remove();
+                    });
+
+                    btnClear.insertAfter(buttonToggle);
+                }
+
+            } else {
+                buttonClear.remove();
+
+                let container = coreuiTableElements.getSearchContainer(table.getId());
+
+                if (container[0]) {
+                    container.fadeOut('fast');
+                }
+            }
+        });
+
+
+        return control;
+    }
 
 
     /**
      * Рендер кнопки отмены
      * @private
      */
-    _renderBtnClear: function () {
+    _renderBtnClear () {
 
         let attributes = [];
         let content    = '';
@@ -318,7 +309,7 @@ let ControlSearch = {
         }
 
 
-        return coreuiTableUtils.render(coreuiTableTpl['controls/search-clear.html'], {
+        return coreuiTableUtils.render(coreuiTableTpl['controls/search/clear.html'], {
             content: content,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });

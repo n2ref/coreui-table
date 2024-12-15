@@ -1,65 +1,44 @@
 
 import coreuiTableTpl   from "../coreui.table.templates";
 import coreuiTableUtils from '../coreui.table.utils';
+import Control          from "../abstract/Control";
 
-let ControlDivider = {
-
-    _id: null,
-    _table: null,
-    _options: {
-        type: 'divider',
-        width: 40,
-        attr: {
-            class: 'd-inline-block',
-            style: 'height:20px'
-        }
-    },
-
+class ControlDivider extends Control {
 
     /**
      * Инициализация
-     * @param {object} table
-     * @param {object} options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._options = $.extend({}, this._options, options);
-        this._table   = table;
-        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
-            ? this._options.id
-            : coreuiTableUtils.hashCode();
-    },
+        options = $.extend(true, {
+            type: 'divider',
+            width: 40,
+            attr: {
+                class: 'd-inline-block',
+                style: 'height:20px'
+            }
+        }, options);
 
-
-    /**
-     * Инициализация событий связанных с элементом управления
-     */
-    initEvents: function () {
-
-    },
-
-
-    /**
-     * Получение ID элемента управления
-     * @returns {string}
-     */
-    getId: function () {
-        return this._id;
-    },
+        super(table, options);
+    }
 
 
     /**
      * Формирование контента для размещения на странице
      * @returns {string}
      */
-    render: function() {
+    render() {
 
         let attributes = [];
 
         this._options.attr = coreuiTableUtils.mergeAttr(this._options.attr, { style: 'width:' + this._options.width + 'px' });
 
         $.each(this._options.attr, function (name, value) {
-            attributes.push(name + '="' + value + '"');
+            if (['string', 'number'].indexOf(typeof value) >= 0) {
+                attributes.push(name + '="' + value + '"');
+            }
         });
 
         return coreuiTableUtils.render(coreuiTableTpl['controls/divider.html'], {

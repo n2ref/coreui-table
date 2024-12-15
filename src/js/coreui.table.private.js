@@ -1,6 +1,7 @@
 
 import coreuiTableUtils    from "./coreui.table.utils";
 import coreuiTableElements from "./coreui.table.elements";
+import coreuiTable from "./coreui.table";
 
 
 let coreuiTablePrivate = {
@@ -48,8 +49,7 @@ let coreuiTablePrivate = {
                 table._options.overflow = true;
             }
 
-            let columnInstance = $.extend(true, {}, tableWrapper.columns[column.type]);
-            columnInstance.init(table, column);
+            let columnInstance = new coreuiTable.columns[column.type](table, column);
             table._columns.push(columnInstance);
 
             if (columnInstance.isShow()) {
@@ -103,8 +103,7 @@ let coreuiTablePrivate = {
                 }
             }
 
-            let controlInstance = $.extend(true, {}, tableWrapper.search[control.type]);
-            controlInstance.init(table, control);
+            let controlInstance = new coreuiTable.search[control.type](table, control);
             table._search.push(controlInstance);
         });
     },
@@ -191,9 +190,7 @@ let coreuiTablePrivate = {
         if (coreuiTableUtils.isObject(control) && typeof control.type === 'string') {
 
             if (tableWrapper.controls.hasOwnProperty(control.type)) {
-                instance = $.extend(true, {}, tableWrapper.controls[control.type]);
-                instance.init(table, control);
-
+                instance = new coreuiTable.controls[control.type](table, control);
                 table._controls.push(instance);
 
             } else if (control.type.indexOf('filter:') === 0) {
@@ -227,9 +224,7 @@ let coreuiTablePrivate = {
                         }
                     }
 
-                    instance = $.extend(true, {}, tableWrapper.filters[filterName]);
-                    instance.init(table, control);
-
+                    instance = new coreuiTable.filters[filterName](table, control);
                     table._filters.push(instance);
                 }
             }
@@ -275,34 +270,32 @@ let coreuiTablePrivate = {
      */
     searchLocalRecords: function (table) {
 
-        let searchData        = table.getSearchData();
-        let filterData        = table.getFilterData();
-        let columnsConverters = {};
+        let searchData     = table.getSearchData(true);
+        let filterData     = table.getFilterData(true);
+        let columnsOptions = {};
 
-        $.each(table._columns, function (index, column) {
-            if (column.hasOwnProperty('convertToString') &&
-                column.hasOwnProperty('getOptions') &&
-                typeof column.convertToString === 'function' &&
-                typeof column.getOptions === 'function'
+        table._columns.map(function (column) {
+            if (typeof column.convertToString === 'function' &&
+                typeof column.getField === 'function'
             ) {
-                let options = column.getOptions()
-
-                if (options.hasOwnProperty('field') && typeof options.field === 'string') {
-                    columnsConverters[options.field] = column.convertToString;
+                let field = column.getField()
+                if (field) {
+                    columnsOptions[field] = {};
+                    columnsOptions[field].convertToString = column.convertToString;
                 }
             }
         });
 
-        $.each(table._records, function (index, record) {
 
+        table._records.map(function (record) {
             let isShow = true;
 
             if (searchData.length > 0) {
-                isShow = coreuiTablePrivate.isFilteredRecord(searchData, record.data, columnsConverters);
+                isShow = coreuiTablePrivate.isFilteredRecord(searchData, record.data, columnsOptions);
             }
 
             if (isShow && filterData.length > 0) {
-                isShow = coreuiTablePrivate.isFilteredRecord(filterData, record.data, columnsConverters);
+                isShow = coreuiTablePrivate.isFilteredRecord(filterData, record.data, columnsOptions);
             }
 
             record.show = isShow;
@@ -449,75 +442,37 @@ let coreuiTablePrivate = {
      * Проверка подходит ли запись под поисковые данные
      * @param {Array}  filters
      * @param {object} recordData
-     * @param {object} columnsConverters
+     * @param {object} columnsOptions
      * @return {boolean}
      * @private
      */
-    isFilteredRecord: function (filters, recordData, columnsConverters) {
+    isFilteredRecord: function (filters, recordData, columnsOptions) {
 
         let isShow = true;
-
         $.each(filters, function (key, filter) {
 
             let fieldValue = null;
 
             if (recordData.hasOwnProperty(filter.field) && recordData[filter.field]) {
-                if (columnsConverters && columnsConverters.hasOwnProperty(filter.field)) {
-                    fieldValue = columnsConverters[filter.field](recordData[filter.field]);
+                if (columnsOptions &&
+                    columnsOptions.hasOwnProperty(filter.field) &&
+                    typeof columnsOptions[filter.field].convertToString === 'function'
+                ) {
+                    fieldValue = columnsOptions[filter.field].convertToString(recordData[filter.field]);
 
-                } else if (['string', 'number'].indexOf(typeof recordData[filter.field]) >= 0) {
+                } else if (typeof recordData[filter.field] === 'string') {
+                    fieldValue = recordData[filter.field];
+
+                } else if (typeof recordData[filter.field] === 'number') {
                     fieldValue = String(recordData[filter.field]);
                 }
             }
 
 
-            if (fieldValue) {
-                if (['string', 'number'].indexOf(typeof filter.value) >= 0) {
-
-                    if (filter.hasOwnProperty('alg') && filter.alg === 'strict') {
-                        if (fieldValue.toLowerCase() != filter.value.toString().toLowerCase()) {
-                            isShow = false;
-                            return false;
-                        }
-
-                    } else if (fieldValue.toLowerCase()
-                               .indexOf(filter.value.toString().toLowerCase()) < 0
-                    ) {
-                        isShow = false;
-                        return false;
-                    }
-
-                } else if (Array.isArray(filter.value)) {
-                    if (filter.value.indexOf(fieldValue) < 0) {
-                        isShow = false;
-                        return false;
-                    }
-
-                } else if (coreuiTableUtils.isObject(filter.value) &&
-                    filter.value.hasOwnProperty('start') &&
-                    filter.value.hasOwnProperty('end')
-                ) {
-                    let issetStart = ['string', 'number'].indexOf(typeof filter.value.start) >= 0;
-                    let issetEnd   = ['string', 'number'].indexOf(typeof filter.value.end) >= 0;
-
-                    if (issetStart && issetEnd) {
-                        if (fieldValue < filter.value.start || filter.value.end < fieldValue) {
-                            isShow = false;
-                            return false;
-                        }
-
-                    } else if (issetStart) {
-                        if (filter.value.start > fieldValue) {
-                            isShow = false;
-                            return false;
-                        }
-
-                    } else if (issetEnd) {
-                        if (filter.value.end < fieldValue) {
-                            isShow = false;
-                            return false;
-                        }
-                    }
+            if (fieldValue !== null) {
+                if ( ! filter.filter(fieldValue, filter.value)) {
+                    isShow = false;
+                    return false;
                 }
 
             } else {

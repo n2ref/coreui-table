@@ -1,8 +1,8 @@
 
 <div class="pt-2">
     <div class="btn-group">
-        <% $.each(options, function(key, option) { %>
-            <input class="btn-check" type="checkbox" name="<%= field %>" value="<%- option.value %>" id="<%= option.hash %>" autocomplete="off" <%= option.checked ? ' checked' : '' %>>
+        <% options.map(function(option) { %>
+            <input class="btn-check" type="checkbox" value="<%- option.value %>" id="<%= option.hash %>" autocomplete="off" <%= option.checked ? ' checked' : '' %>>
             <label class="<%= option.optionsClass %>" for="<%= option.hash %>"><%= option.text %></label>
         <% }); %>
     </div>

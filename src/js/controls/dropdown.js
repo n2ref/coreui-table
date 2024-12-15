@@ -2,117 +2,46 @@
 import coreuiTableTpl   from '../coreui.table.templates';
 import coreuiTableUtils from '../coreui.table.utils';
 import CoreuiTableUtils from "../coreui.table.utils";
-import coreuiTableElements from "../coreui.table.elements";
+import Control          from "../abstract/Control";
 
-let ControlDropdown = {
-
-    _id: null,
-    _table: null,
-    _options: {
-        id: null,
-        type: 'dropdown',
-        content: null,
-        items: null,
-        attr: {
-            class: 'btn btn-primary',
-        }
-    },
-
+class ControlDropdown extends Control {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object} options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._options = $.extend({}, this._options, options);
-        this._table   = table;
-        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
-            ? this._options.id
-            : coreuiTableUtils.hashCode();
+        options = $.extend(true, {
+            id: null,
+            type: 'dropdown',
+            content: null,
+            items: null,
+            attr: {
+                class: 'btn btn-primary',
+            }
+        }, options);
 
-        if (Array.isArray(this._options.items)) {
-            $.each(this._options.items, function (key, item) {
-                if (CoreuiTableUtils.isObject(item) && typeof item.type === 'string') {
-
-                    item.id = coreuiTableUtils.hashCode();
-                }
-            });
-        }
-    },
-
-
-    /**
-     * Получение параметров
-     * @returns {object}
-     */
-    getOptions: function () {
-        return $.extend(true, {}, this._options);
-    },
-
-
-    /**
-     * Инициализация событий связанных с элементом управления
-     */
-    initEvents: function () {
-
-        let that    = this;
-        let options = this.getOptions();
-
-        if (Array.isArray(options.items)) {
-            $.each(options.items, function (key, item) {
-                if (CoreuiTableUtils.isObject(item) && typeof item.type === 'string') {
-
-                    if (item.type === 'button') {
-                        if (item.hasOwnProperty('content') &&
-                            item.hasOwnProperty('onClick') &&
-                            ['string', 'function'].indexOf(typeof item.onClick) >= 0 &&
-                            typeof item.content === 'string'
-                        ) {
-
-                            let control = coreuiTableElements.getControl(that._table.getId(), that.getId());
-
-                            $('button#btn-dropdown-' + item.id, control)
-                                .click(function (event) {
-                                    if (typeof item.onClick === 'function') {
-                                        item.onClick(event, that._table, that);
-
-                                    } else if (typeof item.onClick === 'string') {
-                                        let func = new Function('event', 'table', 'control', item.onClick);
-                                        func(event, that._table, that);
-                                    }
-                                });
-                        }
-                    }
-                }
-            });
-        }
-    },
-
-
-    /**
-     * Получение ID элемента управления
-     * @returns {string}
-     */
-    getId: function () {
-        return this._id;
-    },
+        super(table, options);
+    }
 
 
     /**
      * Формирование контента для размещения на странице
      * @returns {string}
      */
-    render: function() {
+    render() {
 
         let options    = this.getOptions();
+        let table      = this._table;
+        let that       = this;
         let items      = [];
         let attributes = [];
 
 
         if (Array.isArray(options.items)) {
-            $.each(options.items, function (key, item) {
+            options.items.map(function (item) {
                 if (CoreuiTableUtils.isObject(item) && typeof item.type === 'string') {
 
                     if (item.type === 'link') {
@@ -121,11 +50,12 @@ let ControlDropdown = {
                             typeof item.url === 'string' &&
                             typeof item.content === 'string'
                         ) {
-                            items.push({
-                                type: 'link',
+                            let link = coreuiTableUtils.render(coreuiTableTpl['controls/dropdown/link.html'], {
                                 url: item.url,
                                 content: item.content,
                             });
+
+                            items.push(link);
                         }
 
                     } else if (item.type === 'button') {
@@ -134,18 +64,27 @@ let ControlDropdown = {
                             typeof item.content === 'string' &&
                             ['string', 'function'].indexOf(typeof item.onClick) >= 0
                         ) {
-                            items.push({
-                                type: 'button',
-                                id: item.id,
+                            let button = $(coreuiTableUtils.render(coreuiTableTpl['controls/dropdown/button.html'], {
+                                url: item.url,
                                 content: item.content,
+                            }));
+
+                            button.click(function (event) {
+                                if (typeof item.onClick === 'function') {
+                                    item.onClick(event, table, that);
+
+                                } else if (typeof item.onClick === 'string') {
+                                    let func = new Function('event', 'table', 'control', item.onClick);
+                                    func(event, table, that);
+                                }
                             });
+
+                            items.push(button);
                         }
 
 
                     } else if (item.type === 'divider') {
-                        items.push({
-                            type: 'divider',
-                        });
+                        items.push(coreuiTableTpl['controls/dropdown/divider.html']);
                     }
                 }
             });
@@ -173,12 +112,23 @@ let ControlDropdown = {
             });
         }
 
-        return coreuiTableUtils.render(coreuiTableTpl['controls/dropdown.html'], {
+        let dropdown = $(coreuiTableUtils.render(coreuiTableTpl['controls/dropdown.html'], {
             content: options.content,
             position: options.hasOwnProperty('position') && typeof options.position === 'string' ? options.position : 'end',
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
-            items: items,
-        });
+        }));
+
+
+        if (items.length > 0) {
+            let menu = dropdown.find('.dropdown-menu');
+
+            items.map(function (item) {
+                menu.append(item)
+            });
+        }
+
+
+        return dropdown;
     }
 }
 

@@ -1,44 +1,26 @@
 
+import Column from "../abstract/Column";
 
-let ColumnsNumbers = {
 
-    _table: null,
-    _options: {
-        type: 'numbers',
-        label: '№',
-        width: 20,
-        attr: { class: 'text-end' },
-        attrHeader: null
-    },
-
+class ColumnsNumbers extends Column {
 
     /**
      * Инициализация
-     * @param {CoreUI.table.instance} table
-     * @param {object}                options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._table    = table;
-        this._options  = $.extend(true, {}, this._options, options);
-    },
+        options = $.extend(true, {
+            type: 'numbers',
+            label: '№',
+            width: 20,
+            attr: { class: 'text-end' },
+            attrHeader: null
+        }, options);
 
-
-    /**
-     * Видимости колонки
-     */
-    isShow: function () {
-        return true;
-    },
-
-
-    /**
-     * Получение параметров
-     * @returns {object}
-     */
-    getOptions: function () {
-        return $.extend({}, this._options);
-    },
+        super(table, options);
+    }
 
 
     /**
@@ -47,7 +29,7 @@ let ColumnsNumbers = {
      * @param {object} record
      * @returns {string}
      */
-    render: function(content, record) {
+    render(content, record) {
 
         return this._table._recordsNumber;
     }

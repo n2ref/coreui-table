@@ -1,93 +1,45 @@
 
-import coreuiTableTpl      from "../coreui.table.templates";
-import coreuiTableUtils    from "../coreui.table.utils";
-import coreuiTableElements from "../coreui.table.elements";
+import coreuiTableTpl   from "../coreui.table.templates";
+import coreuiTableUtils from "../coreui.table.utils";
+import Control          from "../abstract/Control";
 
-let ControlFilterClear = {
 
-    _id: null,
-    _table: null,
-    _options: {
-        id: null,
-        type: 'filter_clear',
-        content: null,
-        attr: {
-            class: 'btn btn-secondary'
-        },
-    },
-
+class ControlFilterClear extends Control {
 
     /**
      * Инициализация
-     * @param {object} table
-     * @param {object} options
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
      */
-    init: function (table, options) {
+    constructor(table, options) {
 
-        this._options = $.extend(true, {}, this._options, options);
-        this._table   = table;
-        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
-            ? this._options.id
-            : coreuiTableUtils.hashCode();
+        options = $.extend(true, {
+            id: null,
+            type: 'filter_clear',
+            content: null,
+            attr: {
+                class: 'btn btn-secondary'
+            },
+        }, options);
 
+        super(table, options);
 
         if ( ! this._options.hasOwnProperty('content') ||
             typeof this._options.content !== 'string'
         ) {
             this._options.content = '<i class="bi bi-x"></i> ' + table.getLang().clear
         }
-    },
-
-
-    /**
-     * Получение параметров
-     * @returns {object}
-     */
-    getOptions: function () {
-        return $.extend(true, {}, this._options);
-    },
-
-
-    /**
-     * Получение id
-     * @returns {string}
-     */
-    getId: function () {
-        return this._id;
-    },
-
-
-    /**
-     * Инициализация событий
-     * @returns {object}
-     */
-    initEvents: function () {
-
-        let control = coreuiTableElements.getControl(this._table.getId(), this._id);
-        let that    = this;
-
-        $('button', control).click(function () {
-            that._table.clearFilters();
-        });
-
-        this._table.on('filters_change', function (filterData) {
-
-            if (filterData.length > 0) {
-                $('button', control).show();
-            } else {
-                $('button', control).hide();
-            }
-        });
-    },
+    }
 
 
     /**
      * Формирование контента
      * @returns {string}
      */
-    render: function() {
+    render() {
 
         let options = this.getOptions();
+        let table   = this._table;
 
         if ( ! coreuiTableUtils.isObject(options.attr)) {
             options.attr = {};
@@ -97,7 +49,7 @@ let ControlFilterClear = {
             delete options.attr.type;
         }
 
-        let filterData = this._table.getFilterData();
+        let filterData = table.getFilterData();
 
         if (filterData.length === 0) {
             if (options.attr.hasOwnProperty('style') && typeof options.attr.style === 'string') {
@@ -110,13 +62,32 @@ let ControlFilterClear = {
         let attr = [];
 
         $.each(options.attr, function (name, value) {
-            attr.push(name + '="' + value + '"');
+            if (['string', 'number'].indexOf(typeof value) >= 0) {
+                attr.push(name + '="' + value + '"');
+            }
         });
 
-        return coreuiTableUtils.render(coreuiTableTpl['controls/filter_clear.html'], {
+
+        let button = $(coreuiTableUtils.render(coreuiTableTpl['controls/filter_clear.html'], {
             attr: attr.length > 0 ? (' ' + attr.join(' ')) : '',
             content: options.content ? options.content : '',
+        }));
+
+
+        button.click(function () {
+            table.clearFilters();
         });
+
+
+        table.on('filters_change', function (filterData) {
+            if (filterData.length > 0) {
+                button.show();
+            } else {
+                button.hide();
+            }
+        });
+
+        return button;
     }
 }
 
