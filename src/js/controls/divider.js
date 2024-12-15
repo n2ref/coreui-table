@@ -15,8 +15,9 @@ class ControlDivider extends Control {
         options = $.extend(true, {
             type: 'divider',
             width: 40,
+            text: '',
             attr: {
-                class: 'd-inline-block',
+                class: 'd-inline-block text-body-tertiary text-center',
                 style: 'height:20px'
             }
         }, options);
@@ -43,6 +44,7 @@ class ControlDivider extends Control {
 
         return coreuiTableUtils.render(coreuiTableTpl['controls/divider.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
+            text: typeof this._options.text === 'string' && this._options.text !== '' ? this._options.text : '',
         });
     }
 }

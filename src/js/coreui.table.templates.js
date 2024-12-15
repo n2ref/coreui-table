@@ -20,7 +20,7 @@ tpl['controls/button.html'] = '<button type="button"<%- attr %>><%- content %></
 tpl['controls/caption.html'] = '<div class="d-flex flex-column me-3"> <small class="text-body-secondary fw-medium"> <%= title %> <% if (description) { %> <i class="bi bi-question-circle coreui-table__cursor_help" title="<%= description %>"></i> <% } %> </small> <b class="text-nowrap"><%= value %></b> </div>'
 tpl['controls/columns.html'] = '<button type="button"<%- btnAttr %>><%-btnContent%></button>'
 tpl['controls/columns/list.html'] = ' <div class="coreui-table__columns px-3 pt-3 pb-4"> <div class="mb-3"> <div class="form-check coreui-table__check_all"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" <% if (showAll === true) { %>checked<% } %>> <%= lang.all %> </label> </div> <% columns.map(function(column) { %> <div class="form-check coreui-table_check-column"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="<%= column.field %>" <% if (column.show === true) { %>checked<% } %>> <%= column.label %> </label> </div> <% }); %> </div> <button type="button" <%- btnCompleteAttr %>> <%- btnCompleteContent %> </button> </div>'
-tpl['controls/divider.html'] = '<div <%- attr %>></div>'
+tpl['controls/divider.html'] = '<div <%- attr %>><%= text %></div>'
 tpl['controls/dropdown.html'] = ' <div class="btn-group" role="group"> <button type="button" data-bs-toggle="dropdown"<%- attr %>><%- content %></button> <ul class="dropdown-menu dropdown-menu-<%= position %>"></ul> </div>'
 tpl['controls/dropdown/button.html'] = '<li> <button type="button" class="dropdown-item"><%= content %></button> </li>'
 tpl['controls/dropdown/divider.html'] = '<li><hr class="dropdown-divider"></li>'
