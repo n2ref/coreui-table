@@ -20,7 +20,7 @@ class FilterText extends Filter {
             label: null,
             value: null,
             width: 200,
-            autoSearchLength: null,
+            autoSearch: null,
             attr: {
                 class: "form-control",
             },
@@ -150,10 +150,7 @@ class FilterText extends Filter {
             if (e.key === 'Enter' || e.keyCode === 13) {
                 table.searchRecords();
 
-            } else if (typeof options.autoSearchLength === 'number' &&
-                options.autoSearchLength >= 0 &&
-                String(this.value).length >= options.autoSearchLength
-            ) {
+            } else if (typeof options.autoSearch === 'boolean' && options.autoSearch) {
                 table.searchRecords();
             }
         });

@@ -1,5 +1,5 @@
 <tr<%- attr %> data-record-index="<%= index %>">
-    <% $.each(fields, function(key, field) { %>
+    <% fields.map(function(field) { %>
         <td<%- field.attr %>></td>
     <% }); %>
 </tr>

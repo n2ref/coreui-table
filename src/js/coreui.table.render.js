@@ -18,7 +18,7 @@ let coreuiTableRender = {
         let columnsHeader   = '';
         let columnsFooter   = '';
         let colGroups       = [];
-        let columnElements     = $(coreuiTableTpl['table/columns/tr.html']);
+        let columnElements  = $(coreuiTableTpl['table/columns/tr.html']);
 
 
         // Колонки
@@ -377,16 +377,14 @@ let coreuiTableRender = {
             theadAttr.push('style="top:' + options.theadTop + unit + '"');
         }
 
-        let tableElement = $(
-            coreuiTableUtils.render(coreuiTableTpl['table.html'], {
-                classes: classes.join(' '),
-                theadAttr: theadAttr.length > 0 ? theadAttr.join(' ') : '',
-                showHeaders: options.showHeaders,
-                columnsHeader : columnsHeader,
-                colGroups : colGroups,
-                columnsFooter : columnsFooter,
-            })
-        );
+        let tableElement = $(coreuiTableUtils.render(coreuiTableTpl['table.html'], {
+            classes: classes.join(' '),
+            theadAttr: theadAttr.length > 0 ? theadAttr.join(' ') : '',
+            showHeaders: options.showHeaders,
+            columnsHeader : columnsHeader,
+            colGroups : colGroups,
+            columnsFooter : columnsFooter,
+        }));
 
 
         if (options.showHeaders) {
@@ -476,17 +474,15 @@ let coreuiTableRender = {
             class: 'coreui-table__record'
         };
 
-        record = $.extend(true, {}, record);
-
-        $.each(table._columns, function (key, column) {
+        table._columns.map(function (column) {
             if ( ! column.isShow()) {
                 return;
             }
 
-            let field = that.renderField(table, column, record);
+            let fieldContent = that.renderField(table, column, record);
 
-            if (field) {
-                fields.push(field);
+            if (fieldContent) {
+                fields.push(fieldContent);
             }
         });
 
@@ -512,7 +508,7 @@ let coreuiTableRender = {
             })
         );
 
-        $.each(fields, function (key, field) {
+        fields.map(function (field, key) {
             $(recordElement[0].querySelector(':scope > td:nth-child(' + (key + 1) + ')')).append(field.content)
         });
 
@@ -531,7 +527,7 @@ let coreuiTableRender = {
     renderField: function (table, column, record) {
 
         let columnOptions = column.getOptions();
-        let columnField   = typeof columnOptions.field === 'string' ? columnOptions.field : null;
+        let columnField   = column.getField();
         let content       = null;
         let fieldProps    = record.meta && record.meta.hasOwnProperty('fields') && record.meta.fields.hasOwnProperty(columnField)
             ? record.meta.fields[columnField]

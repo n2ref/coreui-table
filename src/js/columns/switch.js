@@ -62,15 +62,16 @@ class ColumnsSwitch extends Column {
         }));
 
         // События нажатия на переключатель
-        let that = this;
+        let that  = this;
+        let table = this._table;
 
         $('.coreui-table__switch', formSwitch).change(function (event) {
 
             let input = this;
 
-            $.each(that._table._records, function (key, recordTable) {
+            table._records.map(function (recordTable) {
                 if (record.index === recordTable.index) {
-                    record.data[that._options.field] = input.checked ? that._options.valueY : that._options.valueN;
+                    recordTable.data[that._options.field] = input.checked ? that._options.valueY : that._options.valueN;
                     return false;
                 }
             });
@@ -83,7 +84,7 @@ class ColumnsSwitch extends Column {
                     that._options.onChange(record, input);
 
                 } else {
-                    let func = new Function('record', 'input', 'id', that._options.onChange);
+                    let func = new Function('record', 'input', that._options.onChange);
                     func(record, input);
                 }
 
