@@ -1337,6 +1337,10 @@ let coreuiTableInstance = {
         }
 
         let isChange = false;
+        let table    = this;
+
+        this._countColumnsShow = 0;
+
 
         this._columns.map(function (column) {
             let options = column.getOptions();
@@ -1349,6 +1353,10 @@ let coreuiTableInstance = {
                     column.setShow(isShow);
                     isChange = true;
                 }
+            }
+
+            if (column.isShow()) {
+                table._countColumnsShow++;
             }
         });
 
@@ -1371,6 +1379,10 @@ let coreuiTableInstance = {
         }
 
         let isChange = false;
+        let table    = this;
+
+        this._countColumnsShow = 0;
+
 
         this._columns.map(function (column) {
             let options = column.getOptions();
@@ -1382,6 +1394,10 @@ let coreuiTableInstance = {
             ) {
                 column.setShow(true);
                 isChange = true;
+            }
+
+            if (column.isShow()) {
+                table._countColumnsShow++;
             }
         });
 
@@ -1404,6 +1420,10 @@ let coreuiTableInstance = {
         }
 
         let isChange = false;
+        let table    = this;
+
+        this._countColumnsShow = 0;
+
 
         this._columns.map(function (column) {
             let options = column.getOptions();
@@ -1415,6 +1435,10 @@ let coreuiTableInstance = {
             ) {
                 column.setShow(false);
                 isChange = true;
+            }
+
+            if (column.isShow()) {
+                table._countColumnsShow++;
             }
         });
 
