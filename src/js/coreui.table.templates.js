@@ -77,5 +77,5 @@ tpl['table/loader.html'] = '<div class="coreui-table-lock position-absolute w-10
 tpl['table/record.html'] = '<tr<%- attr %> data-record-index="<%= index %>"> <% fields.map(function(field) { %> <td<%- field.attr %>></td> <% }); %> </tr>'
 tpl['table/record/empty.html'] = '<tr class="coreui-table__record-empty"> <td class="text-center" colspan="<%= columnsCount %>"><%= lang.emptyRecords %></td> </tr>'
 tpl['table/record/expand.html'] = '<tr class="coreui-table__record-expanded" style="display: none"> <td colspan="<%= colspan %>"></td> </tr>'
-tpl['table/record/group.html'] = '<tr<%- attr %>> <td colspan="<%= colspan %>"></td> </tr>';
+tpl['table/record/group.html'] = '<tr<%- attr %>> <td colspan="<%= colspan %>" class="border-end"></td> </tr>';
 export default tpl;
