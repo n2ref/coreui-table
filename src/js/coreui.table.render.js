@@ -422,35 +422,67 @@ let coreuiTableRender = {
                           options.group.field
                 ? options.group
                 : null;
-            let groupValue = null;
 
 
-            $.each(records, function (key, record) {
+            if (group) {
+                let groupValue    = null;
+                let groupIndex    = 0;
+                let recordsGroups = {};
 
-                if (record.show) {
-                    if (group &&
-                        record.data.hasOwnProperty(group.field) &&
-                        ['string', 'number'].indexOf(typeof record.data[group.field]) >= 0 &&
-                        groupValue != record.data[group.field]
-                    ) {
-                        groupValue = record.data[group.field];
-                        renderRecords.push(that.renderGroup(table, group, record));
+                records.map(function (record) {
+                    if (record.show) {
+                        if (record.data.hasOwnProperty(group.field) &&
+                            ['string', 'number'].indexOf(typeof record.data[group.field]) >= 0 &&
+                            groupValue != record.data[group.field]
+                        ) {
+                            groupValue = record.data[group.field];
+                            groupIndex++;
+                        }
+
+                        if ( ! recordsGroups.hasOwnProperty(groupIndex)) {
+                            recordsGroups[groupIndex] = {
+                                isGroup: groupIndex > 0,
+                                records: [],
+                            };
+                        }
+
+                        recordsGroups[groupIndex].records.push(record);
+                    }
+                });
+
+                $.each(recordsGroups, function (key, recordsGroup) {
+                    let renderRecordsGroup = [];
+
+                    recordsGroup.records.map(function (record) {
+                        renderRecordsGroup.push(that.renderRecord(table, record));
+                        table._recordsNumber++;
+                    });
+
+                    if (recordsGroup.isGroup) {
+                        renderRecords.push(that.renderGroup(table, group, recordsGroup.records[0], renderRecordsGroup));
                     }
 
-                    renderRecords.push(that.renderRecord(table, record));
-                    table._recordsNumber++;
-                }
-            });
+                    renderRecordsGroup.map(function (record) {
+                        renderRecords.push(record);
+                    });
+                });
+
+            } else {
+                records.map(function (record) {
+                    if (record.show) {
+                        renderRecords.push(that.renderRecord(table, record));
+                        table._recordsNumber++;
+                    }
+                });
+            }
         }
 
         if (renderRecords.length === 0) {
             renderRecords = [
-                $(
-                    coreuiTableUtils.render(coreuiTableTpl['table/record/empty.html'], {
-                        columnsCount: table._countColumnsShow,
-                        lang: table.getLang(),
-                    })
-                )
+                $(coreuiTableUtils.render(coreuiTableTpl['table/record/empty.html'], {
+                    columnsCount: table._countColumnsShow,
+                    lang: table.getLang(),
+                }))
             ];
         }
 
@@ -584,10 +616,11 @@ let coreuiTableRender = {
      * @param {object} table
      * @param {object} group
      * @param {object} record
+     * @param {Array}  renderRecords
      * @returns {{ attr: (string), fields: (object) }}}
      * @private
      */
-    renderGroup: function (table, group, record) {
+    renderGroup: function (table, group, record, renderRecords) {
 
         let attr = group.hasOwnProperty('attr') && coreuiTableUtils.isObject(group.attr)
             ? group.attr
@@ -607,26 +640,62 @@ let coreuiTableRender = {
             }
         });
 
-        let recordElement = $(
-            coreuiTableUtils.render(coreuiTableTpl['table/record/group.html'], {
-                attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
-                colspan: table._countColumnsShow,
-            })
-        );
+        let isCollapsing = group.hasOwnProperty('isCollapsing') ? !! group.isCollapsing : false;
 
+        let groupElement = $(coreuiTableUtils.render(coreuiTableTpl['table/record/group.html'], {
+            attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
+            colspan: table._countColumnsShow,
+            isCollapsing: isCollapsing
+        }));
+
+        let td      = groupElement.find(' > td');
         let content = record.data[group.field];
 
-        if (group.hasOwnProperty('render') && typeof group.render === 'function') {
-            let renderContent = group.render(record);
+
+        if (group.hasOwnProperty('render')) {
+            let renderContent = null;
+
+            if (typeof group.render === 'function') {
+                renderContent = group.render(record);
+
+            } else if (typeof group.render === 'string') {
+                renderContent = (new Function('record', group.render))(record);
+            }
 
             if (renderContent) {
                 content = renderContent;
             }
         }
 
-        recordElement.find(' > td').html(content);
 
-        return recordElement;
+        if (isCollapsing) {
+            let collapsed = $('<i class="bi bi-chevron-down coreui-table_pointer me-1"></i>');
+
+            collapsed.click(function () {
+                if ($(this).hasClass('bi-chevron-down')) {
+                    $(this).removeClass('bi-chevron-down')
+                        .addClass('bi-chevron-right');
+
+                    renderRecords.map(function (renderRecord) {
+                        $(renderRecord).fadeOut(100);
+                    });
+
+                } else {
+                    $(this).removeClass('bi-chevron-right')
+                        .addClass('bi-chevron-down');
+
+                    renderRecords.map(function (renderRecord) {
+                        $(renderRecord).fadeIn(100);
+                    });
+                }
+            });
+
+            td.append(collapsed);
+        }
+
+        td.append(content);
+
+        return groupElement;
     },
 
 
