@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             { type: 'button', content: 'Button 2', onClick: function (event, table) { console.log(2) } },
                         ]
                     },
-                    { type: "button_group", attr: { class: 'btn-group' },
+                    { type: "buttonGroup", attr: { class: 'btn-group' },
                         buttons: [
                             { type: "link",     content: "Link",     attr: { class: 'btn btn-outline-secondary' }, url: "#" },
                             { type: "button",   content: "Button",   attr: { class: 'btn btn-outline-secondary' }, onClick: function (event, table) { console.log(1) } },
@@ -334,8 +334,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     { type: 'pages', count: 3, attr: { class: 'pagination-sm' } },
                 ],
                 right: [
-                    { type: 'page_jump', attr: { class: 'input-group-sm' } },
-                    { type: 'page_size', list: [ 25, 50, 100, 1000, 0 ], attr: { class: 'form-select-sm' } } // 0 - all
+                    { type: 'pageJump', attr: { class: 'input-group-sm' } },
+                    { type: 'pageSize', list: [ 25, 50, 100, 1000, 0 ], attr: { class: 'form-select-sm' } } // 0 - all
                 ]
             },
             {
@@ -426,8 +426,6 @@ document.addEventListener('DOMContentLoaded', function () {
         ]
     });
 
-    tableEvents.render('table-events')
-
     tableEvents.on('record_select', function (record) {
         alert('Select record: ' + JSON.stringify(record));
     });
@@ -446,6 +444,8 @@ document.addEventListener('DOMContentLoaded', function () {
     tableEvents.on('records_show', function () {
         console.log('records_show')
     });
+
+    tableEvents.render('table-events')
 
 
     // Column types basic
@@ -473,53 +473,57 @@ document.addEventListener('DOMContentLoaded', function () {
         id: 'types_standard',
         columns: [
             { type: 'select' },
-            { type: 'switch',  field: 'is_active_sw', label: 'Switch', valueY: 1, valueN: 0, width: 80 },
-            { type: 'image',   field: 'image',        label: 'Image',             width: 100, imgStyle: 'circle', imgWidth: 30, imgHeight: 30, imgBorder: true },
-            { type: 'badge',   field: 'badge',        label: 'Badge'},
-            { type: 'link',    field: 'link',         label: 'Link',              width: 200 },
-            { type: 'button',  field: 'button',       label: 'Button',            width: 100 },
+            { type: 'switch',    field: 'is_active_sw', label: 'Switch', valueY: 1, valueN: 0, width: 80 },
+            { type: 'image',     field: 'image',        label: 'Image',             width: 100, imgStyle: 'circle', imgWidth: 30, imgHeight: 30, imgBorder: true },
+            { type: 'badge',     field: 'badge',        label: 'Badge'},
+            { type: 'dateHuman', field: 'datetime',     label: 'Date Human'},
+            { type: 'link',      field: 'link',         label: 'Link',              width: 200 },
+            { type: 'button',    field: 'button',       label: 'Button',            width: 100 },
         ],
         records: [
             {
                 is_active_sw: "N",
                 image: 'data/img/thumb1.png',
-                button: {
-                    content: "Button",
-                    attr: { class: 'btn btn-sm btn-outline-secondary' },
-                    onClick: function (record, table) { console.log(record) }
-                },
                 badge: { type: 'secondary', text: 'Secondary' },
+                datetime: '2024-12-21 19:04:10',
                 link: {
                     content: "Link content",
                     url: "#/link-url",
                     attr: {}
+                },
+                button: {
+                    content: "Button",
+                    attr: { class: 'btn btn-sm btn-outline-secondary' },
+                    onClick: function (record, table) { console.log(record) }
                 }
             },
             {
                 is_active_sw: "N",
                 image: 'data/img/thumb2.png',
+                badge: { type: 'primary',   text: 'Primary' },
+                datetime: '2024-10-24 07:04:10',
+                link: "#/link-url",
                 button: {
                     content: "Button",
                     attr: { class: 'btn btn-sm btn-outline-secondary' },
                     onClick: function (record, table) { console.log(record) }
-                },
-                badge: { type: 'primary',   text: 'Primary' },
-                link: "#/link-url"
+                }
             },
             {
                 is_active_sw: "Y",
                 image: 'data/img/thumb3.png',
-                button: {
-                    content: "Button",
-                    attr: { class: 'btn btn-sm btn-outline-secondary' },
-                    onClick: "console.log(record)"
-                },
                 badge: { type: 'success',   text: 'Success' },
+                datetime: '2023-12-03 12:04:10',
                 link: {
                     content: "Link",
                     url: "#/link-url",
                     attr: { class: 'btn btn-sm btn-outline-secondary' }
                 },
+                button: {
+                    content: "Button",
+                    attr: { class: 'btn btn-sm btn-outline-secondary' },
+                    onClick: "console.log(record)"
+                }
             },
             {
                 is_active_sw: "Y",
@@ -529,6 +533,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     attr: { class: 'btn btn-sm btn-outline-secondary' },
                     onClick: "console.log(record)"
                 },
+                datetime: '2025-04-06 17:04:10',
                 badge: { type: 'warning',   text: 'Warning' },
                 link: {
                     content: "<i class=\"bi bi-arrow-right\"></i>",
@@ -742,6 +747,67 @@ document.addEventListener('DOMContentLoaded', function () {
         ]
     }).render('table-columns-fixed');
 
+    // Columns menu
+    CoreUI.table.create({
+        columns: [
+            { field: 'fname', label: 'First Name', width: '15%',
+                menu: {
+                    items: [
+                        { type: 'button', text: '<i class="bi bi-layout-text-sidebar-reverse"></i> Hide',
+                            onClick: function (table) {
+                                table.hideColumns([ 'fname' ]);
+                            },
+                        },
+                    ]
+                }
+            },
+            { field: 'lname', label: 'Last Name',  width: 150, sortable: true,
+                menu: {
+                    position: 'end',
+                    items: [
+                        { type: 'button', text: '<i class="bi bi-filter-left"></i> Sort asc',
+                            onClick: function (table) {
+                                table.sortFields([ { field: 'lname', order: 'asc' } ]);
+                            },
+                        },
+                        { type: 'button', text: '<i class="bi bi-filter-right"></i> Sort desc',
+                            onClick: function (table) {
+                                table.sortFields([ { field: 'lname', order: 'desc' } ]);
+                            },
+                        },
+                        { type: 'divider' },
+                        { type: 'button', text: '<i class="bi bi-filter-right"></i> Sort default',
+                            onClick: function (table) {
+                                table.sortDefault()
+                            },
+                        }
+                    ]
+                }
+            },
+            { field: 'email', label: 'Email',
+                menu: {
+                    showAlways: true,
+                    items: [
+                        { type: 'header', text: 'Header text' },
+                        { type: 'link', text: 'Link', url: '#link-url' },
+                        { type: 'button', text: 'Button', onClick: "alert('button click')" },
+                        { type: 'divider' },
+                        { type: 'button', text: '<i class="bi bi-trash"></i> Delete', attr: { 'class': 'text-danger' },
+                            onClick: function () {
+                                alert('delete action')
+                            },
+                        }
+                    ]
+                }
+            }
+        ],
+        records: [
+            { id: "1", fname: 'Jane',   lname: 'Doe',     email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
+            { id: "2", fname: 'Stuart', lname: 'Motzart', email: 'frank@gmail.com', sdate: '2023-04-03' },
+            { id: "3", fname: 'Jin',    lname: 'Franson', email: 'peter@gmail.com', sdate: '2023-02-03' }
+        ]
+    }).render('table-columns-menu');
+
 
     // Header column groups
     CoreUI.table.create({
@@ -910,9 +976,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Group
     CoreUI.table.create({
+        id: 'group',
+        saveState: true,
+        header: [
+            {
+                type: 'in',
+                left: [
+                    {
+                        type: 'columns',
+                        btn: {
+                            content: "<i class=\"bi bi-layout-three-columns\"></i> Columns",
+                            attr: { class: 'btn btn-sm btn-secondary' }
+                        },
+                        btnComplete: {
+                            content: "Complete",
+                            attr: { class: 'btn btn-sm btn-primary' },
+                        }
+                    }
+                ]
+            },
+        ],
         group: {
             field: 'fname',
             attr: { class: 'table-secondary' },
+            isCollapsing: true,
             render: function (record) {
                 return 'Group: ' + record.data.fname + ' ' + record.data.lname
             },
@@ -979,6 +1066,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Sorting
     CoreUI.table.create({
+        id: 'sort',
         saveState: true,
         sort: [ { field: 'fname', order: 'asc' } ],
         maxHeight: 400,
@@ -1010,6 +1098,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Search
     CoreUI.table.create({
+        id: 'search',
         header: [
             {
                 type: 'in',
@@ -1038,19 +1127,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 left: [ { type: 'total' } ]
             }
         ],
+        saveState: true,
         search: {
-            labelWidth: 200,
+            labelWidth: 150,
             controls: [
                 { type: 'text',           field: 'name',  label: 'text',           width: 200, attr: { placeholder: 'text' },
-                    description: "Description text", prefix: "Prefix content"
+                    description: "Description text", suffix: "<small>Suffix content</small>"
                 },
-                { type: 'number',         field: 'number', label: 'number',         width: 200, attr: { placeholder: 'number' } },
-                { type: 'date',           field: 'sdate',  label: 'date',           width: 200, attr: {} },
-                { type: 'date_month',     field: 'sdate',  label: 'date_month',     width: 200, attr: {} },
-                { type: 'datetime',       field: 'sdate',  label: 'datetime',       width: 200, attr: {} },
-                { type: 'date_range',     field: 'sdate',  label: 'date_range',     width: 200, attr: {} },
-                { type: 'datetime_range', field: 'sdate',  label: 'datetime_range', width: 200, attr: {} },
-                { type: 'radio',          field: 'active', label: 'radio',
+                { type: 'number',         field: 'number', label: 'number',         width: 200, attr: { placeholder: 'number' },
+                    descriptionLabel: "Description label",
+                },
+                { type: 'date',          field: 'sdate',  label: 'date',           width: 200, attr: {} },
+                { type: 'dateMonth',     field: 'sdate',  label: 'date month',     width: 200, attr: {} },
+                { type: 'datetime',      field: 'sdate',  label: 'datetime',       width: 200, attr: {} },
+                { type: 'dateRange',     field: 'sdate',  label: 'date range',     width: 200, attr: {} },
+                { type: 'datetimeRange', field: 'sdate',  label: 'datetime range', width: 200, attr: {} },
+                { type: 'radio',         field: 'active', label: 'radio',
                     options: [
                         { value: '1', text: 'Active' },
                         { value: '0', text: 'Inactive' },
@@ -1063,12 +1155,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         { value: '3', text: 'Finley Meyer' },
                     ]
                 },
-                // { type: 'radioBtn', field: 'active', label: 'radio btn',
-                //     options: [
-                //         { value: '1', text: 'Active' },
-                //         { value: '0', text: 'Inactive' },
-                //     ]
-                // },
+                { type: 'radioBtn', field: 'active', label: 'radio btn',
+                    options: [
+                        { value: '1', text: 'Active' },
+                        { value: '0', text: 'Inactive' },
+                    ]
+                },
                 { type: 'checkboxBtn', field: 'id', label: 'checkbox btn',
                     options: [
                         { value: '1', text: 'Dionne Mccray' },
@@ -1114,21 +1206,21 @@ document.addEventListener('DOMContentLoaded', function () {
             { field: 'sdate',  label: 'Start Date', type: 'date', width: 140 }
         ],
         records: [
-            { "id": 0,  "name": "Armstrong Cole",    "number": 28, "active": "N", "sdate": "2018-09-18" },
-            { "id": 1,  "name": "Dionne Mccray",     "number": 38, "active": "N", "sdate": "2015-03-06" },
-            { "id": 2,  "name": "Bridgett Melendez", "number": 33, "active": "N", "sdate": "2020-02-13" },
-            { "id": 3,  "name": "Finley Meyer",      "number": 35, "active": "Y", "sdate": "2014-11-17" },
-            { "id": 4,  "name": "Sheila Briggs",     "number": 38, "active": "N", "sdate": "2023-07-04" },
-            { "id": 5,  "name": "Vasquez Shepard",   "number": 23, "active": "Y", "sdate": "2015-10-30" },
-            { "id": 6,  "name": "Meredith Garrison", "number": 27, "active": "N", "sdate": "2021-04-07" },
-            { "id": 7,  "name": "Isabella Poole",    "number": 39, "active": "Y", "sdate": "2023-02-24" },
-            { "id": 8,  "name": "Roach Fischer",     "number": 30, "active": "N", "sdate": "2021-03-12" },
-            { "id": 9,  "name": "Melva Macdonald",   "number": 38, "active": "Y", "sdate": "2015-05-18" },
-            { "id": 10, "name": "Goodwin Foster",    "number": 21, "active": "N", "sdate": "2018-11-18" },
-            { "id": 11, "name": "Jacqueline Gibson", "number": 30, "active": "N", "sdate": "2017-09-30" },
-            { "id": 12, "name": "Amalia Shannon",    "number": 23, "active": "Y", "sdate": "2023-05-24" },
-            { "id": 13, "name": "Dena Floyd",        "number": 37, "active": "N", "sdate": "2024-01-15" },
-            { "id": 14, "name": "Merrill Russo",     "number": 22, "active": "Y", "sdate": "2023-04-09" }
+            { "id": "0",  "name": "Armstrong Cole",    "number": 28, "active": "0", "sdate": "2018-09-18" },
+            { "id": "1",  "name": "Dionne Mccray",     "number": 38, "active": "0", "sdate": "2015-03-06" },
+            { "id": "2",  "name": "Bridgett Melendez", "number": 33, "active": "0", "sdate": "2020-02-13" },
+            { "id": "3",  "name": "Finley Meyer",      "number": 35, "active": "1", "sdate": "2014-11-17" },
+            { "id": "4",  "name": "Sheila Briggs",     "number": 38, "active": "0", "sdate": "2023-07-04" },
+            { "id": "5",  "name": "Vasquez Shepard",   "number": 23, "active": "1", "sdate": "2015-10-30" },
+            { "id": "6",  "name": "Meredith Garrison", "number": 27, "active": "0", "sdate": "2021-04-07" },
+            { "id": "7",  "name": "Isabella Poole",    "number": 39, "active": "1", "sdate": "2023-02-24" },
+            { "id": "8",  "name": "Roach Fischer",     "number": 30, "active": "0", "sdate": "2021-03-12" },
+            { "id": "9",  "name": "Melva Macdonald",   "number": 38, "active": "1", "sdate": "2015-05-18" },
+            { "id": "10", "name": "Goodwin Foster",    "number": 21, "active": "0", "sdate": "2018-11-18" },
+            { "id": "11", "name": "Jacqueline Gibson", "number": 30, "active": "0", "sdate": "2017-09-30" },
+            { "id": "12", "name": "Amalia Shannon",    "number": 23, "active": "1", "sdate": "2023-05-24" },
+            { "id": "13", "name": "Dena Floyd",        "number": 37, "active": "0", "sdate": "2024-01-15" },
+            { "id": "14", "name": "Merrill Russo",     "number": 22, "active": "1", "sdate": "2023-04-09" }
         ]
     }).render('table-search');
 
@@ -1140,18 +1232,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 type: 'out',
                 left: [
                     { type: 'filter:text',           field: 'name',  label: 'text', width: 150,
-                        attr: { class: "form-control" },
+                        attr: { class: "form-control" }, autoSearch: true,
                         btn: { attr: { class: "btn btn-sm btn-outline-secondary border-secondary-subtle" } }
                     },
                     { type: 'filter:number',         field: 'number', label: '', width: 90,
                         attr: { class: "form-control" },
                         btn: { attr: { class: "btn btn-sm btn-outline-secondary border-secondary-subtle" } }
                     },
-                    { type: 'filter:date',           field: 'sdate',  label: '', width: 140, attr: {} },
-                    { type: 'filter:datetime',       field: 'sdate',  label: '', width: 180, attr: {} },
-                    { type: 'filter:date_month',     field: 'sdate',  label: '', width: 200, attr: {} },
-                    { type: 'filter:date_range',     field: 'sdate',  label: '', width: 140, attr: {} },
-                    { type: 'filter:datetime_range', field: 'sdate',  label: '', width: 180, attr: {} },
+                    { type: 'divider', width: 20, text: '|' },
+                    { type: 'filter:date',          field: 'sdate',  label: '', width: 140, attr: {} },
+                    { type: 'filter:datetime',      field: 'sdate',  label: '', width: 180, attr: {} },
+                    { type: 'filter:dateMonth',     field: 'sdate',  label: '', width: 200, attr: {} },
+                    { type: 'filter:dateRange',     field: 'sdate',  label: '', width: 140, attr: {} },
+                    { type: 'filter:datetimeRange', field: 'sdate',  label: '', width: 180, attr: {} },
                 ],
             },
             {
@@ -1179,7 +1272,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     },
                     { type: 'filter:switch', field: 'active', label: 'Active', valueY: '1'},
-                    { type: 'filter_clear',  content: '<i class="bi bi-backspace"></i> Clear', attr: { class: "btn btn-secondary" } },
+                    { type: 'filterClear',  content: '<i class="bi bi-backspace"></i> Clear', attr: { class: "btn btn-secondary" } },
                 ]
             }
         ],
@@ -1197,21 +1290,21 @@ document.addEventListener('DOMContentLoaded', function () {
             { field: 'sdate',  label: 'Start Date', type: 'date', width: 140 }
         ],
         records: [
-            { "id": '0',  "name": "Armstrong Cole",    "number": 28, "active": "N", "sdate": "2018-09-18" },
-            { "id": '1',  "name": "Dionne Mccray",     "number": 38, "active": "N", "sdate": "2015-03-06" },
-            { "id": '2',  "name": "Bridgett Melendez", "number": 33, "active": "N", "sdate": "2020-02-13" },
-            { "id": '3',  "name": "Finley Meyer",      "number": 35, "active": "Y", "sdate": "2014-11-17" },
-            { "id": '4',  "name": "Sheila Briggs",     "number": 38, "active": "N", "sdate": "2023-07-04" },
-            { "id": '5',  "name": "Vasquez Shepard",   "number": 23, "active": "Y", "sdate": "2015-10-30" },
-            { "id": '6',  "name": "Meredith Garrison", "number": 27, "active": "N", "sdate": "2021-04-07" },
-            { "id": '7',  "name": "Isabella Poole",    "number": 39, "active": "Y", "sdate": "2023-02-24" },
-            { "id": '8',  "name": "Roach Fischer",     "number": 30, "active": "N", "sdate": "2021-03-12" },
-            { "id": '9',  "name": "Melva Macdonald",   "number": 38, "active": "Y", "sdate": "2015-05-18" },
-            { "id": '10', "name": "Goodwin Foster",    "number": 21, "active": "N", "sdate": "2018-11-18" },
-            { "id": '11', "name": "Jacqueline Gibson", "number": 30, "active": "N", "sdate": "2017-09-30" },
-            { "id": '12', "name": "Amalia Shannon",    "number": 23, "active": "Y", "sdate": "2023-05-24" },
-            { "id": '13', "name": "Dena Floyd",        "number": 37, "active": "N", "sdate": "2024-01-15" },
-            { "id": '14', "name": "Merrill Russo",     "number": 22, "active": "Y", "sdate": "2023-04-09" }
+            { "id": '0',  "name": "Armstrong Cole",    "number": 28, "active": "0", "sdate": "2018-09-18" },
+            { "id": '1',  "name": "Dionne Mccray",     "number": 38, "active": "0", "sdate": "2015-03-06" },
+            { "id": '2',  "name": "Bridgett Melendez", "number": 33, "active": "0", "sdate": "2020-02-13" },
+            { "id": '3',  "name": "Finley Meyer",      "number": 35, "active": "1", "sdate": "2014-11-17" },
+            { "id": '4',  "name": "Sheila Briggs",     "number": 38, "active": "0", "sdate": "2023-07-04" },
+            { "id": '5',  "name": "Vasquez Shepard",   "number": 23, "active": "1", "sdate": "2015-10-30" },
+            { "id": '6',  "name": "Meredith Garrison", "number": 27, "active": "0", "sdate": "2021-04-07" },
+            { "id": '7',  "name": "Isabella Poole",    "number": 39, "active": "1", "sdate": "2023-02-24" },
+            { "id": '8',  "name": "Roach Fischer",     "number": 30, "active": "0", "sdate": "2021-03-12" },
+            { "id": '9',  "name": "Melva Macdonald",   "number": 38, "active": "1", "sdate": "2015-05-18" },
+            { "id": '10', "name": "Goodwin Foster",    "number": 21, "active": "0", "sdate": "2018-11-18" },
+            { "id": '11', "name": "Jacqueline Gibson", "number": 30, "active": "0", "sdate": "2017-09-30" },
+            { "id": '12', "name": "Amalia Shannon",    "number": 23, "active": "1", "sdate": "2023-05-24" },
+            { "id": '13', "name": "Dena Floyd",        "number": 37, "active": "0", "sdate": "2024-01-15" },
+            { "id": '14', "name": "Merrill Russo",     "number": 22, "active": "1", "sdate": "2023-04-09" }
         ]
     }).render('table-filters');
 

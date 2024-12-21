@@ -74,6 +74,7 @@
                                     <li><a href="#example-column-types-advanced">Column types advanced</a></li>
                                     <li><a href="#example-column-manage">Column Manage</a></li>
                                     <li><a href="#example-columns-fixed">Columns fixed</a></li>
+                                    <li><a href="#example-columns-menu">Columns menu</a></li>
                                     <li><a href="#example-headers">Headers</a></li>
                                     <li><a href="#example-footers">Footers</a></li>
                                     <li><a href="#example-columns-row-span">Col-Row span</a></li>
@@ -672,8 +673,6 @@
             ]
         });
 
-        tableEvents.render('table-events')
-
         tableEvents.on('record_select', function (record) {
             alert('Select record: ' + JSON.stringify(record));
         });
@@ -692,6 +691,8 @@
         tableEvents.on('records_show', function () {
             console.log('records_show')
         });
+
+        tableEvents.render('table-events');
     &lt;/script&gt;
                                 </code></pre>
                             </div>
@@ -850,7 +851,7 @@
                     },
                     progress: 25,
                     menu: {
-                        content: '&gt;i class="bi bi-three-dots-vertical"&lt;&gt;/i&lt;',
+                        content: '&lt;i class="bi bi-three-dots-vertical"&gt;&lt;/i&gt;',
                         attr: { class: 'btn btn-sm btn-outline-secondary rounded-1' },
                         position: 'end',
                         items: [
@@ -864,7 +865,7 @@
                             { type: 'divider' },
                             {
                                 type: 'button',
-                                content: '&gt;i class="bi bi-trash"&lt;&gt;/i&lt; Delete',
+                                content: '&lt;i class="bi bi-trash"&gt;&lt;/i&gt; Delete',
                                 attr: { class: 'text-danger' },
                                 onClick: function (record, table, event) { console.log('delete record ' + record.index) }
                             },
@@ -1055,6 +1056,23 @@
                 { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' }
             ]
         }).render('table-columns-fixed');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+
+                        <div id="example-columns-menu" class="mb-5">
+                            <h3>Columns menu</h3>
+
+                            <div class="content-example">
+                                <div id="table-columns-menu"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-columns-menu"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+
     &lt;/script&gt;
                                 </code></pre>
                             </div>
@@ -1941,6 +1959,10 @@
                                     <td>Выделение указанной строки находящийся в таблице</td>
                                 </tr>
                                 <tr>
+                                    <td>table.selectRecordByIndex( index )</td>
+                                    <td>Выделение указанной строки находящийся в таблице по индексу</td>
+                                </tr>
+                                <tr>
                                     <td>table.unselectRecord( primaryKey )</td>
                                     <td>Снятие выделения указанной строки находящийся в таблице</td>
                                 </tr>
@@ -1965,6 +1987,14 @@
                                     <td>Установка видимых колонок, не указанные колонки будут скрыты</td>
                                 </tr>
                                 <tr>
+                                    <td>table.showColumns( columns )</td>
+                                    <td>Показ колонок</td>
+                                </tr>
+                                <tr>
+                                    <td>table.hideColumns( columns )</td>
+                                    <td>Скрытие колонок</td>
+                                </tr>
+                                <tr>
                                     <td>table.getSearchData()</td>
                                     <td>Получение поисковых данных</td>
                                 </tr>
@@ -1981,11 +2011,11 @@
                                     <td>Поиск по таблице с использованием данных из поиска и фильтров</td>
                                 </tr>
                                 <tr>
-                                    <td>table.searchClear()</td>
+                                    <td>table.clearSearch()</td>
                                     <td>Очистка поисковых данных</td>
                                 </tr>
                                 <tr>
-                                    <td>table.filtersClear()</td>
+                                    <td>table.clearFilters()</td>
                                     <td>Очистка поисковых данных в фильтрах</td>
                                 </tr>
                                 <tr>
