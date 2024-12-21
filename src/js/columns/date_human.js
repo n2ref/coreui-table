@@ -1,0 +1,68 @@
+
+import Column from "../abstract/Column";
+import 'moment';
+import 'moment/locale/ru'
+
+
+class ColumnsDateHuman extends Column {
+
+    _lang = null;
+
+    /**
+     * Инициализация
+     * @param {coreuiTableInstance} table
+     * @param {Object}              options
+     */
+    constructor(table, options) {
+
+        options = $.extend(true, {
+            type: 'date',
+            field: null,
+            label: null,
+            show: true,
+            width: null,
+            format: 'DD.MM.YYYY',
+            attr: {},
+            attrHeader: {},
+            render: null
+        }, options);
+
+        super(table, options);
+
+        this._lang = table.getOptions().lang;
+    }
+
+
+    /**
+     * Формирование контента
+     * @param {string|number|Date} content
+     * @param {object} record
+     * @returns {string}
+     */
+    render(content, record) {
+
+        if (['string', 'number'].indexOf(typeof content) < 0 || ! content instanceof Date) {
+            return '';
+        }
+
+
+        try {
+            if (content !== '') {
+                let dateContent = content instanceof Date ? content : new Date(content);
+                let dateFormat  = moment(dateContent).format('MM.DD.yyyy HH:mm:ss');
+
+                content = moment(dateContent).locale(this._lang).fromNow();
+                content = '<span title="' + dateFormat + '">' + content + '</span>';
+            }
+
+        } catch (e) {
+            console.warn(e)
+        }
+
+
+        return content;
+    }
+}
+
+
+export default ColumnsDateHuman;

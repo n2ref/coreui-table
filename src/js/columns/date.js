@@ -43,14 +43,19 @@ class ColumnsDate extends Column {
 
         try {
             if (content !== '') {
+                let lang = this._table.getLang()
                 let date = new Date(content);
 
                 content = this._options.format
                     .replace(/YYYY/g, coreuiTableUtils.strPadLeft(date.getFullYear(), 4))
+                    .replace(/MMMM/g, lang.monthNames[date.getMonth() + 1])
+                    .replace(/MMM/g, lang.monthNamesShort[date.getMonth() + 1])
                     .replace(/MM/g, coreuiTableUtils.strPadLeft(date.getMonth() + 1, 2))
                     .replace(/M/g, date.getMonth() + 1)
                     .replace(/DD/g, coreuiTableUtils.strPadLeft(date.getDate(), 2))
-                    .replace(/D/g, date.getDate());
+                    .replace(/D/g, date.getDate())
+                    .replace(/dddd/g, lang.dayNames[date.getMonth() + 1])
+                    .replace(/ddd/g, lang.dayNamesMin[date.getMonth() + 1]);
             }
 
         } catch (e) {
