@@ -79,7 +79,7 @@ class ColumnsProgress extends Column {
         let color       = typeof this._options.barColor === 'string' ? this._options.barColor : 'primary';
         let attr        = this._options.attr;
 
-        attr = coreuiTableUtils.mergeAttr(attr, { class: 'progress' });
+        attr = coreuiTableUtils.mergeAttr(attr, { class: 'progress me-1' });
 
         if (this._options.barWidth) {
             let barWidth = coreuiTableUtils.isNumeric(this._options.barWidth)
@@ -107,8 +107,6 @@ class ColumnsProgress extends Column {
                 percent = content;
             }
 
-            attr = coreuiTableUtils.mergeAttr(attr, { class: 'mt-1' });
-
         } else {
             if (content.percent < 0 ) {
                 percent = 0;
@@ -130,8 +128,6 @@ class ColumnsProgress extends Column {
                 content.description !== ''
             ) {
                 description = content.description;
-            } else {
-                attr = coreuiTableUtils.mergeAttr(attr, { class: 'mt-1' });
             }
         }
 

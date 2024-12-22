@@ -1,6 +1,9 @@
 <% if (description !== null) { %>
 <small class="text-body-secondary"><%= description %></small>
 <% } %>
-<div <%- attr %>>
-    <div class="progress-bar bg-<%= color %>" style="width:<%= percent %>%;"><%= percentText %></div>
+<div class="d-inline-flex align-items-center">
+    <div <%- attr %>>
+        <div class="progress-bar bg-<%= color %>" style="width:<%= percent %>%;"></div>
+    </div>
+    <span><%= percentText %></span>
 </div>
