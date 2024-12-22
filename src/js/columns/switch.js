@@ -51,8 +51,7 @@ class ColumnsSwitch extends Column {
      */
     render(content, record) {
 
-        let isChecked = record.data.hasOwnProperty(this._options.field) &&
-                        record.data[this._options.field] === this._options.valueY;
+        let isChecked = content === this._options.valueY;
 
         let formSwitch = $(coreuiTableUtils.render(coreuiTableTpl['columns/switch.html'], {
             index: record.index,

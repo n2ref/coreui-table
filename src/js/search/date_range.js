@@ -190,7 +190,6 @@ class SearchDateRange extends Search {
 
         let startAttr = [];
         let startEnd  = [];
-        let table     = this._table;
 
 
         $.each(options.attr, function (name, value) {

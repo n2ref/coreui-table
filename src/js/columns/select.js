@@ -69,11 +69,9 @@ class ColumnsSelect extends Column {
      */
     render(content, record) {
 
-        let select = $(
-            coreuiTableUtils.render(coreuiTableTpl['columns/select.html'], {
-                index: record.index
-            })
-        );
+        let select = $(coreuiTableUtils.render(coreuiTableTpl['columns/select.html'], {
+            index: record.index
+        }));
 
         let that = this;
 

@@ -2,7 +2,7 @@
 import coreuiTableUtils from "../coreui.table.utils";
 import coreuiTableTpl   from "../coreui.table.templates";
 import CoreuiTableUtils from "../coreui.table.utils";
-import Column from "../abstract/Column";
+import Column           from "../abstract/Column";
 
 
 class ColumnsMenu extends Column {
