@@ -128,8 +128,8 @@ class SearchDateRange extends Search {
 
     /**
      * Фильтрация данных
-     * @returns {string}              fieldValue
-     * @returns {Array|string|number} searchValue
+     * @returns {string} fieldValue
+     * @returns {Object} searchValue
      * @returns {boolean}
      */
     filter(fieldValue, searchValue) {
@@ -218,19 +218,23 @@ class SearchDateRange extends Search {
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
 
 
-        this._control = $(coreuiTableUtils.render(coreuiTableTpl['search/date_range.html'], {
+        let control = $(coreuiTableUtils.render(coreuiTableTpl['search/date_range.html'], {
             startAttr: startAttr.length > 0 ? (' ' + startAttr.join(' ')) : '',
             endAttr: startEnd.length > 0 ? (' ' + startEnd.join(' ')) : '',
         }));
 
-        $('input.date-start, input.date-end', this._control).keyup(function(e) {
-            if (e.key === 'Enter' || e.keyCode === 13) {
-                table.searchRecords();
+        $('input.date-start', control).change(function() {
+            let dateEnd = $('input.date-end', control).attr('min', $(this).val());
 
-                let container = coreuiTableElements.getSearchContainer(table.getId());
-                container.fadeOut('fast');
+            if ("showPicker" in HTMLInputElement.prototype) {
+                $(dateEnd)[0].showPicker();
             }
         });
+        $('input.date-end', control).change(function() {
+            $('input.date-start', control).attr('max', $(this).val());
+        });
+
+        this._control = control;
 
         return this._control;
     }

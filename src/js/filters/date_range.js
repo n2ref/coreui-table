@@ -230,15 +230,29 @@ class FilterDateRange extends Filter {
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
 
 
-        this._control = $(coreuiTableUtils.render(coreuiTableTpl['filters/date_range.html'], {
+        let control = $(coreuiTableUtils.render(coreuiTableTpl['filters/date_range.html'], {
             label: label,
             startAttr: startAttr.length > 0 ? (' ' + startAttr.join(' ')) : '',
             endAttr: startEnd.length > 0 ? (' ' + startEnd.join(' ')) : '',
         }));
 
-        $('input', this._control).change(function(e) {
+        $('input', control).change(function(e) {
             table.searchRecords();
         });
+
+
+        $('input.date-start', control).change(function() {
+            let dateEnd = $('input.date-end', control).attr('min', $(this).val());
+
+            if ("showPicker" in HTMLInputElement.prototype) {
+                $(dateEnd)[0].showPicker();
+            }
+        });
+        $('input.date-end', control).change(function() {
+            $('input.date-start', control).attr('max', $(this).val());
+        });
+
+        this._control = control;
 
         return this._control;
     }
