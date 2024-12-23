@@ -113,7 +113,7 @@
   tpl['columns/image.html'] = '<img <%- attr %>/>';
   tpl['columns/link.html'] = '<a <%- attr %>><%- content %></a>';
   tpl['columns/menu.html'] = ' <div class="btn-group" role="group"> <button type="button" data-bs-toggle="dropdown"<%- attr %>> <%- content %> </button> <ul class="dropdown-menu dropdown-menu-<%= position %>"> <% $.each(items, function(key, item) { %> <% if (item.type === \'link\') { %> <li><a href="<%= item.url %>"<%- item.attr %>><%= item.content %></a></li> <% } else if (item.type === \'button\') { %> <li> <button type="button" id="btn-dropdown-<%= item.id %>"<%- item.attr %>> <%- item.content %> </button> </li> <% } else if (item.type === \'divider\') { %> <li><hr class="dropdown-divider"></li> <% } else if (item.type === \'header\') { %> <li><h6 class="dropdown-header"><%= item.content %></h6></li> <% } %> <% }) %> </ul> </div>';
-  tpl['columns/progress.html'] = '<% if (description !== null) { %> <small class="text-body-secondary"><%= description %></small> <% } %> <div <%- attr %>> <div class="progress-bar bg-<%= color %>" style="width:<%= percent %>%;"><%= percentText %></div> </div>';
+  tpl['columns/progress.html'] = '<% if (description !== null) { %> <small class="text-body-secondary"><%= description %></small> <% } %> <div class="d-inline-flex align-items-center"> <div <%- attr %>> <div class="progress-bar bg-<%= color %>" style="width:<%= percent %>%;"></div> </div> <span><%= percentText %></span> </div>';
   tpl['columns/select_label.html'] = '<input class="coreui-table__select-all form-check-input" type="checkbox" value="">';
   tpl['columns/select.html'] = '<input class="coreui-table__select form-check-input" type="checkbox" value="<%= index %>">';
   tpl['columns/switch.html'] = '<div class="form-switch"> <input class="form-check-input coreui-table__switch" type="checkbox" data-field="<%= field %>" value="<%= index %>"<% if (checked) { %> checked<% } %><% if (disabled) { %> disabled<% } %>> </div>';
@@ -158,9 +158,9 @@
   tpl['search/checkbox-btn.html'] = ' <div class="pt-2"> <div class="btn-group"> <% options.map(function(option) { %> <input class="btn-check" type="checkbox" value="<%- option.value %>" id="<%= option.hash %>" autocomplete="off" <%= option.checked ? \' checked\' : \'\' %>> <label class="<%= option.optionsClass %>" for="<%= option.hash %>"><%= option.text %></label> <% }); %> </div> </div>';
   tpl['search/checkbox.html'] = ' <div class="pt-2"> <% options.map(function(option) { %> <div class="form-check"> <label class="form-check-label coreui-table_pointer"> <input class="form-check-input" type="checkbox" value="<%- option.value %>" <%= option.checked ? \' checked\' : \'\' %>> <%= option.text %> </label> </div> <% }); %> </div>';
   tpl['search/date_month.html'] = ' <input type="month" <%- attr %>>';
-  tpl['search/date_range.html'] = ' <input type="date" <%- startAttr %>> <input type="date" <%- endAttr %>>';
+  tpl['search/date_range.html'] = '<div> <input type="date" <%- startAttr %>> <input type="date" <%- endAttr %>> </div>';
   tpl['search/date.html'] = ' <input type="date" <%- attr %>>';
-  tpl['search/datetime_range.html'] = ' <input type="datetime-local" <%- startAttr %>> <input type="datetime-local" <%- endAttr %>>';
+  tpl['search/datetime_range.html'] = '<div> <input type="datetime-local" <%- startAttr %>> <input type="datetime-local" <%- endAttr %>> </div>';
   tpl['search/datetime.html'] = ' <input type="datetime-local" <%- attr %>>';
   tpl['search/number.html'] = ' <input type="number" <%- startAttr %>> <input type="number" <%- endAttr %>>';
   tpl['search/radio-btn.html'] = '<div class="pt-2"> <div class="btn-group"> <input class="btn-check coreui-table__all" type="radio" name="<%= field %>" value="" id="<%= optionAllHash %>" autocomplete="off" <%= checkedAll ? \' checked\' : \'\' %>> <label class="<%= optionOptionsClass %>" for="<%= optionAllHash %>"><%= lang.all %></label> <% options.map(function(option) { %> <input class="btn-check" type="radio" name="<%= field %>" value="<%- option.value %>" id="<%= option.hash %>" autocomplete="off" <%= option.checked ? \' checked="checked"\' : \'\' %>"> <label class="<%= option.optionsClass %>" for="<%= option.hash %>"><%= option.text %></label> <% }); %> </div> </div>';
@@ -6912,14 +6912,24 @@
         }
         startAttr.push('value="' + (this._value ? this._value.start : '') + '"');
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
-        this._control = $(coreuiTableUtils.render(tpl['filters/date_range.html'], {
+        var control = $(coreuiTableUtils.render(tpl['filters/date_range.html'], {
           label: label,
           startAttr: startAttr.length > 0 ? ' ' + startAttr.join(' ') : '',
           endAttr: startEnd.length > 0 ? ' ' + startEnd.join(' ') : ''
         }));
-        $('input', this._control).change(function (e) {
+        $('input', control).change(function (e) {
           table.searchRecords();
         });
+        $('input.date-start', control).change(function () {
+          var dateEnd = $('input.date-end', control).attr('min', $(this).val());
+          if ("showPicker" in HTMLInputElement.prototype) {
+            $(dateEnd)[0].showPicker();
+          }
+        });
+        $('input.date-end', control).change(function () {
+          $('input.date-start', control).attr('max', $(this).val());
+        });
+        this._control = control;
         return this._control;
       }
     }]);
@@ -7107,14 +7117,24 @@
         }
         startAttr.push('value="' + (this._value ? this._value.start : '') + '"');
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
-        this._control = $(coreuiTableUtils.render(tpl['filters/datetime_range.html'], {
+        var control = $(coreuiTableUtils.render(tpl['filters/datetime_range.html'], {
           label: label,
           startAttr: startAttr.length > 0 ? ' ' + startAttr.join(' ') : '',
           endAttr: startEnd.length > 0 ? ' ' + startEnd.join(' ') : ''
         }));
-        $('input', this._control).change(function (e) {
+        $('input', control).change(function (e) {
           table.searchRecords();
         });
+        $('input.date-start', control).change(function () {
+          var dateEnd = $('input.date-end', control).attr('min', $(this).val());
+          if ("showPicker" in HTMLInputElement.prototype) {
+            $(dateEnd)[0].showPicker();
+          }
+        });
+        $('input.date-end', control).change(function () {
+          $('input.date-start', control).attr('max', $(this).val());
+        });
+        this._control = control;
         return this._control;
       }
     }]);
@@ -8680,8 +8700,8 @@
 
       /**
        * Фильтрация данных
-       * @returns {string}              fieldValue
-       * @returns {Array|string|number} searchValue
+       * @returns {string} fieldValue
+       * @returns {Object} searchValue
        * @returns {boolean}
        */
     }, {
@@ -8727,7 +8747,6 @@
         }
         var startAttr = [];
         var startEnd = [];
-        var table = this._table;
         $.each(options.attr, function (name, value) {
           if (['name', 'value', 'class'].indexOf(name) >= 0 || ['string', 'number'].indexOf(_typeof(value)) < 0) {
             return;
@@ -8744,17 +8763,20 @@
         }
         startAttr.push('value="' + (this._value ? this._value.start : '') + '"');
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
-        this._control = $(coreuiTableUtils.render(tpl['search/date_range.html'], {
+        var control = $(coreuiTableUtils.render(tpl['search/date_range.html'], {
           startAttr: startAttr.length > 0 ? ' ' + startAttr.join(' ') : '',
           endAttr: startEnd.length > 0 ? ' ' + startEnd.join(' ') : ''
         }));
-        $('input.date-start, input.date-end', this._control).keyup(function (e) {
-          if (e.key === 'Enter' || e.keyCode === 13) {
-            table.searchRecords();
-            var container = coreuiTableElements.getSearchContainer(table.getId());
-            container.fadeOut('fast');
+        $('input.date-start', control).change(function () {
+          var dateEnd = $('input.date-end', control).attr('min', $(this).val());
+          if ("showPicker" in HTMLInputElement.prototype) {
+            $(dateEnd)[0].showPicker();
           }
         });
+        $('input.date-end', control).change(function () {
+          $('input.date-start', control).attr('max', $(this).val());
+        });
+        this._control = control;
         return this._control;
       }
     }]);
@@ -8917,7 +8939,7 @@
         }
         var startAttr = [];
         var startEnd = [];
-        var table = this._table;
+        this._table;
         $.each(this._options.attr, function (name, value) {
           if (['name', 'value', 'class'].indexOf(name) >= 0 || ['string', 'number'].indexOf(_typeof(value)) < 0) {
             return;
@@ -8934,17 +8956,20 @@
         }
         startAttr.push('value="' + (this._value ? this._value.start : '') + '"');
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
-        this._control = $(coreuiTableUtils.render(tpl['search/datetime_range.html'], {
+        var control = $(coreuiTableUtils.render(tpl['search/datetime_range.html'], {
           startAttr: startAttr.length > 0 ? ' ' + startAttr.join(' ') : '',
           endAttr: startEnd.length > 0 ? ' ' + startEnd.join(' ') : ''
         }));
-        $('input.date-start, input.date-end', this._control).keyup(function (e) {
-          if (e.key === 'Enter' || e.keyCode === 13) {
-            table.searchRecords();
-            var container = coreuiTableElements.getSearchContainer(table.getId());
-            container.fadeOut('fast');
+        $('input.date-start', control).change(function () {
+          var dateEnd = $('input.date-end', control).attr('min', $(this).val());
+          if ("showPicker" in HTMLInputElement.prototype) {
+            $(dateEnd)[0].showPicker();
           }
         });
+        $('input.date-end', control).change(function () {
+          $('input.date-start', control).attr('max', $(this).val());
+        });
+        this._control = control;
         return this._control;
       }
     }]);
@@ -15375,7 +15400,7 @@
     return _createClass(ColumnsSwitch, [{
       key: "render",
       value: function render(content, record) {
-        var isChecked = record.data.hasOwnProperty(this._options.field) && record.data[this._options.field] === this._options.valueY;
+        var isChecked = content === this._options.valueY;
         var formSwitch = $(coreuiTableUtils.render(tpl['columns/switch.html'], {
           index: record.index,
           field: this._options.field,
@@ -16094,7 +16119,7 @@
         var color = typeof this._options.barColor === 'string' ? this._options.barColor : 'primary';
         var attr = this._options.attr;
         attr = coreuiTableUtils.mergeAttr(attr, {
-          "class": 'progress'
+          "class": 'progress me-1'
         });
         if (this._options.barWidth) {
           var barWidth = coreuiTableUtils.isNumeric(this._options.barWidth) ? this._options.barWidth + 'px' : this._options.barWidth;
@@ -16116,9 +16141,6 @@
           } else {
             percent = content;
           }
-          attr = coreuiTableUtils.mergeAttr(attr, {
-            "class": 'mt-1'
-          });
         } else {
           if (content.percent < 0) {
             percent = 0;
@@ -16132,10 +16154,6 @@
           }
           if (content.hasOwnProperty('description') && typeof content.description === 'string' && content.description !== '') {
             description = content.description;
-          } else {
-            attr = coreuiTableUtils.mergeAttr(attr, {
-              "class": 'mt-1'
-            });
           }
         }
         if (this._options.showPercent) {
