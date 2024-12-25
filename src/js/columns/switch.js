@@ -52,13 +52,22 @@ class ColumnsSwitch extends Column {
     getActions(content, field, record) {
 
         return {
+
+            /**
+             * Активация переключателя
+             */
             setActive: function () {
+
                 if (content) {
                     $('.coreui-table__switch', content).prop('checked', true).trigger('change');
                 }
             },
 
+            /**
+             * Деактивация переключателя
+             */
             setInactive: function () {
+
                 if (content) {
                     $('.coreui-table__switch', content).prop('checked', false).trigger('change');
                 }
