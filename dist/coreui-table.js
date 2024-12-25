@@ -1767,9 +1767,9 @@
     },
     /**
      * Сборка ячейки таблицы
-     * @param {object} table
-     * @param {object} column
-     * @param {object} record
+     * @param {coreuiTableInstance} table
+     * @param {Column}              column
+     * @param {object}              record
      * @returns {{ attr: (string), content: (string) }}
      * @private
      */
@@ -1802,6 +1802,12 @@
         content = columnField && record.data.hasOwnProperty(columnField) ? record.data[columnField] : null;
       }
       content = column.render(content, record);
+      if (typeof column.getActions === 'function') {
+        var actions = column.getActions(content, columnField, record);
+        if (coreuiTableUtils.isObject(actions)) {
+          record.fields[columnField] = actions;
+        }
+      }
       var fieldAttrResult = [];
       $.each(fieldAttr, function (name, value) {
         fieldAttrResult.push(name + '="' + value + '"');
@@ -1813,10 +1819,10 @@
     },
     /**
      * Сборка записи-группы
-     * @param {object} table
-     * @param {object} group
-     * @param {object} record
-     * @param {Array}  renderRecords
+     * @param {coreuiTableInstance} table
+     * @param {object}              group
+     * @param {object}              record
+     * @param {Array}               renderRecords
      * @returns {{ attr: (string), fields: (object) }}}
      * @private
      */
@@ -2468,6 +2474,7 @@
         var record = {
           index: table._recordsIndex++,
           data: data,
+          fields: {},
           show: true,
           meta: meta,
           seq: table._seq++
@@ -3899,9 +3906,6 @@
      * @return {object|null}
      */
     getRecordByField: function getRecordByField(field, value) {
-      if (['string', 'number'].indexOf(_typeof(field)) < 0 || field === '') {
-        return null;
-      }
       var record = null;
       $.each(this._records, function (key, recordItem) {
         if (recordItem.data.hasOwnProperty(field) && recordItem.data[field] === value) {
@@ -15305,13 +15309,36 @@
     }
 
     /**
-     * Формирование контента
-     * @param {string} content
+     * Получение списка методов которые можно совершать с ячейкой строки
+     * @param {jQuery} content
+     * @param {string} field
      * @param {object} record
-     * @returns {string}
      */
     _inherits(ColumnsSelect, _Column);
     return _createClass(ColumnsSelect, [{
+      key: "getActions",
+      value: function getActions(content, field, record) {
+        return {
+          setActive: function setActive() {
+            if (content) {
+              $(content).prop('checked', true).trigger('click');
+            }
+          },
+          setInactive: function setInactive() {
+            if (content) {
+              $(content).prop('checked', false).trigger('click');
+            }
+          }
+        };
+      }
+
+      /**
+       * Формирование контента
+       * @param {string} content
+       * @param {object} record
+       * @returns {jQuery}
+       */
+    }, {
       key: "render",
       value: function render(content, record) {
         var select = $(coreuiTableUtils.render(tpl['columns/select.html'], {
@@ -15391,13 +15418,36 @@
     }
 
     /**
-     * Формирование контента
-     * @param {string} content
+     * Получение списка методов которые можно совершать с ячейкой строки
+     * @param {jQuery} content
+     * @param {string} field
      * @param {object} record
-     * @returns {jQuery}
      */
     _inherits(ColumnsSwitch, _Column);
     return _createClass(ColumnsSwitch, [{
+      key: "getActions",
+      value: function getActions(content, field, record) {
+        return {
+          setActive: function setActive() {
+            if (content) {
+              $('.coreui-table__switch', content).prop('checked', true).trigger('change');
+            }
+          },
+          setInactive: function setInactive() {
+            if (content) {
+              $('.coreui-table__switch', content).prop('checked', false).trigger('change');
+            }
+          }
+        };
+      }
+
+      /**
+       * Формирование контента
+       * @param {string} content
+       * @param {object} record
+       * @returns {jQuery}
+       */
+    }, {
       key: "render",
       value: function render(content, record) {
         var isChecked = content === this._options.valueY;

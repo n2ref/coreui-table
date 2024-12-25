@@ -44,6 +44,30 @@ class ColumnsSwitch extends Column {
 
 
     /**
+     * Получение списка методов которые можно совершать с ячейкой строки
+     * @param {jQuery} content
+     * @param {string} field
+     * @param {object} record
+     */
+    getActions(content, field, record) {
+
+        return {
+            setActive: function () {
+                if (content) {
+                    $('.coreui-table__switch', content).prop('checked', true).trigger('change');
+                }
+            },
+
+            setInactive: function () {
+                if (content) {
+                    $('.coreui-table__switch', content).prop('checked', false).trigger('change');
+                }
+            }
+        }
+    }
+
+
+    /**
      * Формирование контента
      * @param {string} content
      * @param {object} record

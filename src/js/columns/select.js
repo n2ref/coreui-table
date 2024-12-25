@@ -62,10 +62,34 @@ class ColumnsSelect extends Column {
 
 
     /**
+     * Получение списка методов которые можно совершать с ячейкой строки
+     * @param {jQuery} content
+     * @param {string} field
+     * @param {object} record
+     */
+    getActions(content, field, record) {
+
+        return {
+            setActive: function () {
+                if (content) {
+                    $(content).prop('checked', true).trigger('click');
+                }
+            },
+
+            setInactive: function () {
+                if (content) {
+                    $(content).prop('checked', false).trigger('click');
+                }
+            }
+        }
+    }
+
+
+    /**
      * Формирование контента
      * @param {string} content
      * @param {object} record
-     * @returns {string}
+     * @returns {jQuery}
      */
     render(content, record) {
 

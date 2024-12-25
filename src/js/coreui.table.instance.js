@@ -1622,10 +1622,6 @@ let coreuiTableInstance = {
      */
     getRecordByField: function (field, value) {
 
-        if (['string', 'number'].indexOf(typeof field) < 0 || field === '') {
-            return null;
-        }
-
         let record = null;
 
         $.each(this._records, function (key, recordItem) {

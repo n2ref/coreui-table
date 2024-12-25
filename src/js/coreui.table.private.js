@@ -347,6 +347,7 @@ let coreuiTablePrivate = {
             let record = {
                 index: table._recordsIndex++,
                 data: data,
+                fields: {},
                 show: true,
                 meta: meta,
                 seq: table._seq++,

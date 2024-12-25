@@ -532,13 +532,11 @@ let coreuiTableRender = {
             attributes.push(name + '="' + value + '"');
         });
 
-        let recordElement = $(
-            coreuiTableUtils.render(coreuiTableTpl['table/record.html'], {
-                attr  : attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
-                index : record.index,
-                fields: fields
-            })
-        );
+        let recordElement = $(coreuiTableUtils.render(coreuiTableTpl['table/record.html'], {
+            attr  : attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
+            index : record.index,
+            fields: fields
+        }));
 
         fields.map(function (field, key) {
             $(recordElement[0].querySelector(':scope > td:nth-child(' + (key + 1) + ')')).append(field.content)
@@ -550,9 +548,9 @@ let coreuiTableRender = {
 
     /**
      * Сборка ячейки таблицы
-     * @param {object} table
-     * @param {object} column
-     * @param {object} record
+     * @param {coreuiTableInstance} table
+     * @param {Column}              column
+     * @param {object}              record
      * @returns {{ attr: (string), content: (string) }}
      * @private
      */
@@ -596,7 +594,16 @@ let coreuiTableRender = {
                 : null;
         }
 
+
         content = column.render(content, record);
+
+        if (typeof column.getActions === 'function') {
+            let actions = column.getActions(content, columnField, record);
+
+            if (coreuiTableUtils.isObject(actions)) {
+                record.fields[columnField] = actions;
+            }
+        }
 
         let fieldAttrResult = [];
 
@@ -613,10 +620,10 @@ let coreuiTableRender = {
 
     /**
      * Сборка записи-группы
-     * @param {object} table
-     * @param {object} group
-     * @param {object} record
-     * @param {Array}  renderRecords
+     * @param {coreuiTableInstance} table
+     * @param {object}              group
+     * @param {object}              record
+     * @param {Array}               renderRecords
      * @returns {{ attr: (string), fields: (object) }}}
      * @private
      */
