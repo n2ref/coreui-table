@@ -20,8 +20,8 @@ class ColumnsSwitch extends Column {
             show: true,
             disabled: false,
             width: 5,
-            valueY: '1',
-            valueN: '0',
+            valueY: 1,
+            valueN: 0,
             attr: { class: 'coreui-table__switch_container' },
             attrHeader: { },
             onChange: null
