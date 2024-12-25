@@ -6,7 +6,7 @@
         border-radius: $coreui-table-border-radius;
     }
     > .coreui-table__container.fixed-columns {
-        --bs-bg-opacity: 1;
+        //--bs-bg-opacity: 1;
     }
 
     > .coreui-table__container > .coreui-table__header {
@@ -262,7 +262,7 @@
 
         table > thead > tr > td,
         table > tbody > tr.coreui-table__record:not(.table-primary) > td {
-            background-color: rgba(var(--bs-white-rgb),var(--bs-bg-opacity));
+            //background-color: rgba(var(--bs-white-rgb),var(--bs-bg-opacity));
         }
         table > tbody > tr > td > .form-switch {
             padding-left: 0;

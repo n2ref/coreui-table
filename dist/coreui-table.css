@@ -3,9 +3,6 @@
   border: var(--bs-border-width) solid #c4c8cb;
   border-radius: 0.25rem;
 }
-.coreui-table > .coreui-table__container.fixed-columns {
-  --bs-bg-opacity: 1;
-}
 .coreui-table > .coreui-table__container > .coreui-table__header {
   background-color: #FFF;
   border-bottom: var(--bs-border-width) solid #c4c8cb;
@@ -231,10 +228,6 @@
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td:last-child,
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot > tr > td:last-child {
   border-right: none;
-}
-.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td,
-.coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr.coreui-table__record:not(.table-primary) > td {
-  background-color: rgba(var(--bs-white-rgb), var(--bs-bg-opacity));
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td > .form-switch {
   padding-left: 0;
