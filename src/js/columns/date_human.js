@@ -16,12 +16,11 @@ class ColumnsDateHuman extends Column {
     constructor(table, options) {
 
         options = $.extend(true, {
-            type: 'date',
+            type: 'dateHuman',
             field: null,
             label: null,
             show: true,
             width: null,
-            format: 'DD.MM.YYYY',
             attr: {},
             attrHeader: {},
             render: null
