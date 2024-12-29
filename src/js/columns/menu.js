@@ -157,7 +157,7 @@ class ColumnsMenu extends Column {
             });
         }
 
-        if (content.hasOwnProperty('attr') ||
+        if (content.hasOwnProperty('attr') &&
             coreuiTableUtils.isObject(content.attr)
         ) {
             attr = content.attr;
