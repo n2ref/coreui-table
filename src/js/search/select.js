@@ -49,11 +49,9 @@ class SearchSelect extends Search {
                 let items = [];
 
                 value.map(function (item) {
-                    if (typeof value !== 'string' && typeof value !== 'number') {
-                        return;
+                    if (['string', 'number'].indexOf(typeof item) >= 0) {
+                        items.push(item)
                     }
-
-                    items.push(item);
                 });
 
                 this._value = items;

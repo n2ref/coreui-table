@@ -45,12 +45,10 @@ class SearchCheckboxBtn extends Search {
             if (Array.isArray(value)) {
                 let items = [];
 
-                $.each(value, function (key, item) {
-                    if (typeof item !== 'string' && typeof item !== 'number') {
-                        return;
+                value.map(function (item) {
+                    if (['string', 'number'].indexOf(typeof item) >= 0) {
+                        items.push(item)
                     }
-
-                    items.push(item);
                 });
 
                 this._value = items;

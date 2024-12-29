@@ -200,14 +200,12 @@ class ColumnsMenu extends Column {
             : 'end';
 
 
-        let menu = $(
-            coreuiTableUtils.render(coreuiTableTpl['columns/menu.html'], {
-                content: menuContent,
-                position: position,
-                attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
-                items: items,
-            })
-        );
+        let menu = $(coreuiTableUtils.render(coreuiTableTpl['columns/menu.html'], {
+            content: menuContent,
+            position: position,
+            attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
+            items: items,
+        }));
 
         menu.click(function (event) {
             event.cancelBubble = true;

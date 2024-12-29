@@ -112,7 +112,7 @@
   tpl['columns/button.html'] = '<button type="button"<%- attr %>><%- content %></button>';
   tpl['columns/image.html'] = '<img <%- attr %>/>';
   tpl['columns/link.html'] = '<a <%- attr %>><%- content %></a>';
-  tpl['columns/menu.html'] = ' <div class="btn-group" role="group"> <button type="button" data-bs-toggle="dropdown"<%- attr %>> <%- content %> </button> <ul class="dropdown-menu dropdown-menu-<%= position %>"> <% $.each(items, function(key, item) { %> <% if (item.type === \'link\') { %> <li><a href="<%= item.url %>"<%- item.attr %>><%= item.content %></a></li> <% } else if (item.type === \'button\') { %> <li> <button type="button" id="btn-dropdown-<%= item.id %>"<%- item.attr %>> <%- item.content %> </button> </li> <% } else if (item.type === \'divider\') { %> <li><hr class="dropdown-divider"></li> <% } else if (item.type === \'header\') { %> <li><h6 class="dropdown-header"><%= item.content %></h6></li> <% } %> <% }) %> </ul> </div>';
+  tpl['columns/menu.html'] = ' <div class="btn-group" role="group"> <button type="button" data-bs-toggle="dropdown"<%- attr %>> <%- content %> </button> <ul class="dropdown-menu dropdown-menu-<%= position %>"> <% $.each(items, function(key, item) { %> <% if (item.type === \'link\') { %> <li><a href="<%= item.url %>"<%- item.attr %>><%- item.content %></a></li> <% } else if (item.type === \'button\') { %> <li> <button type="button" id="btn-dropdown-<%= item.id %>"<%- item.attr %>> <%- item.content %> </button> </li> <% } else if (item.type === \'divider\') { %> <li><hr class="dropdown-divider"></li> <% } else if (item.type === \'header\') { %> <li><h6 class="dropdown-header"><%- item.content %></h6></li> <% } %> <% }) %> </ul> </div>';
   tpl['columns/progress.html'] = '<% if (description !== null) { %> <small class="text-body-secondary"><%= description %></small> <% } %> <div class="d-inline-flex align-items-center"> <div <%- attr %>> <div class="progress-bar bg-<%= color %>" style="width:<%= percent %>%;"></div> </div> <span><%= percentText %></span> </div>';
   tpl['columns/select_label.html'] = '<input class="coreui-table__select-all form-check-input" type="checkbox" value="">';
   tpl['columns/select.html'] = '<input class="coreui-table__select form-check-input" type="checkbox" value="<%= index %>">';
@@ -6789,10 +6789,10 @@
           }
           var dateStart = null;
           var dateEnd = null;
-          if (value.hasOwnProperty('start') && typeof value.start === 'string' && value.start.match(/^\d{4}\-\d{2}\-\d{2}$/) === null && isNaN(new Date(value.start))) {
+          if (value.hasOwnProperty('start') && typeof value.start === 'string' && value.start.match(/^\d{4}\-\d{2}\-\d{2}$/) !== null && !isNaN(new Date(value.start))) {
             dateStart = value.start;
           }
-          if (value.hasOwnProperty('end') && typeof value.end === 'string' && value.end.match(/^\d{4}\-\d{2}\-\d{2}$/) === null && isNaN(new Date(value.end))) {
+          if (value.hasOwnProperty('end') && typeof value.end === 'string' && value.end.match(/^\d{4}\-\d{2}\-\d{2}$/) !== null && !isNaN(new Date(value.end))) {
             dateEnd = value.end;
           }
           if (dateStart === null && dateEnd === null) {
@@ -6994,10 +6994,10 @@
           }
           var dateStart = null;
           var dateEnd = null;
-          if (value.hasOwnProperty('start') && typeof value.start === 'string' && value.start.match(/^\d{4}\-\d{2}\-\d{2}(T| )\d{2}:\d{2}(:\d{2}|)$/) === null && isNaN(new Date(value.start))) {
+          if (value.hasOwnProperty('start') && typeof value.start === 'string' && value.start.match(/^\d{4}\-\d{2}\-\d{2}(T| )\d{2}:\d{2}(:\d{2}|)$/) !== null && !isNaN(new Date(value.start))) {
             dateStart = value.start;
           }
-          if (value.hasOwnProperty('end') && typeof value.end === 'string' && value.end.match(/^\d{4}\-\d{2}\-\d{2}(T| )\d{2}:\d{2}(:\d{2}|)$/) === null && isNaN(new Date(value.end))) {
+          if (value.hasOwnProperty('end') && typeof value.end === 'string' && value.end.match(/^\d{4}\-\d{2}\-\d{2}(T| )\d{2}:\d{2}(:\d{2}|)$/) !== null && !isNaN(new Date(value.end))) {
             dateEnd = value.end;
           }
           if (dateStart === null && dateEnd === null) {
@@ -7197,11 +7197,10 @@
         if (_typeof(value) === 'object') {
           if (Array.isArray(value)) {
             var items = [];
-            $.each(value, function (key, item) {
-              if (typeof value !== 'string' && typeof value !== 'number') {
-                return;
+            value.map(function (item) {
+              if (['string', 'number'].indexOf(_typeof(item)) >= 0) {
+                items.push(item);
               }
-              items.push(item);
             });
             this._value = items;
           } else {
@@ -7485,11 +7484,10 @@
         if (_typeof(value) === 'object') {
           if (Array.isArray(value)) {
             var items = [];
-            $.each(value, function (key, item) {
-              if (typeof value !== 'string' && typeof value !== 'number') {
-                return;
+            value.map(function (item) {
+              if (['string', 'number'].indexOf(_typeof(item)) >= 0) {
+                items.push(item);
               }
-              items.push(item);
             });
             this._value = items;
           } else {
@@ -9031,11 +9029,10 @@
         if (_typeof(value) === 'object') {
           if (Array.isArray(value)) {
             var items = [];
-            $.each(value, function (key, item) {
-              if (typeof item !== 'string' && typeof item !== 'number') {
-                return;
+            value.map(function (item) {
+              if (['string', 'number'].indexOf(_typeof(item)) >= 0) {
+                items.push(item);
               }
-              items.push(item);
             });
             this._value = items;
           } else {
@@ -9182,11 +9179,10 @@
         if (_typeof(value) === 'object') {
           if (Array.isArray(value)) {
             var items = [];
-            $.each(value, function (key, item) {
-              if (typeof item !== 'string' && typeof item !== 'number') {
-                return;
+            value.map(function (item) {
+              if (['string', 'number'].indexOf(_typeof(item)) >= 0) {
+                items.push(item);
               }
-              items.push(item);
             });
             this._value = items;
           } else {
@@ -9634,10 +9630,9 @@
           if (Array.isArray(value)) {
             var items = [];
             value.map(function (item) {
-              if (typeof value !== 'string' && typeof value !== 'number') {
-                return;
+              if (['string', 'number'].indexOf(_typeof(item)) >= 0) {
+                items.push(item);
               }
-              items.push(item);
             });
             this._value = items;
           } else {
@@ -15428,11 +15423,17 @@
       key: "getActions",
       value: function getActions(content, field, record) {
         return {
+          /**
+           * Активация переключателя
+           */
           setActive: function setActive() {
             if (content) {
               $('.coreui-table__switch', content).prop('checked', true).trigger('change');
             }
           },
+          /**
+           * Деактивация переключателя
+           */
           setInactive: function setInactive() {
             if (content) {
               $('.coreui-table__switch', content).prop('checked', false).trigger('change');

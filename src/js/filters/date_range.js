@@ -50,16 +50,16 @@ class FilterDateRange extends Filter {
 
             if (value.hasOwnProperty('start') &&
                 typeof value.start === 'string' &&
-                value.start.match(/^\d{4}\-\d{2}\-\d{2}$/) === null &&
-                isNaN(new Date(value.start))
+                value.start.match(/^\d{4}\-\d{2}\-\d{2}$/) !== null &&
+                ! isNaN(new Date(value.start))
             ) {
                 dateStart = value.start;
             }
 
             if (value.hasOwnProperty('end') &&
                 typeof value.end === 'string' &&
-                value.end.match(/^\d{4}\-\d{2}\-\d{2}$/) === null &&
-                isNaN(new Date(value.end))
+                value.end.match(/^\d{4}\-\d{2}\-\d{2}$/) !== null &&
+                ! isNaN(new Date(value.end))
             ) {
                 dateEnd = value.end;
             }

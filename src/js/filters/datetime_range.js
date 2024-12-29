@@ -1,8 +1,7 @@
 
-import coreuiTableTpl      from "../coreui.table.templates";
-import coreuiTableUtils    from "../coreui.table.utils";
-import coreuiTableElements from "../coreui.table.elements";
-import Filter              from "../abstract/Filter";
+import coreuiTableTpl   from "../coreui.table.templates";
+import coreuiTableUtils from "../coreui.table.utils";
+import Filter           from "../abstract/Filter";
 
 class FilterDatetimeRange extends Filter {
 
@@ -50,16 +49,16 @@ class FilterDatetimeRange extends Filter {
 
             if (value.hasOwnProperty('start') &&
                 typeof value.start === 'string' &&
-                value.start.match(/^\d{4}\-\d{2}\-\d{2}(T| )\d{2}:\d{2}(:\d{2}|)$/) === null &&
-                isNaN(new Date(value.start))
+                value.start.match(/^\d{4}\-\d{2}\-\d{2}(T| )\d{2}:\d{2}(:\d{2}|)$/) !== null &&
+                ! isNaN(new Date(value.start))
             ) {
                 dateStart = value.start;
             }
 
             if (value.hasOwnProperty('end') &&
                 typeof value.end === 'string' &&
-                value.end.match(/^\d{4}\-\d{2}\-\d{2}(T| )\d{2}:\d{2}(:\d{2}|)$/) === null &&
-                isNaN(new Date(value.end))
+                value.end.match(/^\d{4}\-\d{2}\-\d{2}(T| )\d{2}:\d{2}(:\d{2}|)$/) !== null &&
+                ! isNaN(new Date(value.end))
             ) {
                 dateEnd = value.end;
             }
