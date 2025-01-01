@@ -29,7 +29,7 @@ var conf = {
         file: 'coreui-table.css',
         main: 'src/css/main.scss',
         src: [
-            'src/css/*.scss',
+            'src/css/**/*.scss',
         ]
     },
     css_bootstrap: {
@@ -182,7 +182,7 @@ gulp.task('build_bootstrap', function() {
 gulp.task('build_watch', function() {
     gulp.watch(conf.css.src, gulp.series(['build_css_min_fast']));
     gulp.watch(conf.tpl.src, gulp.series(['build_tpl', 'build_js_min_fast']));
-    gulp.watch(conf.js.src, gulp.parallel(['build_js_min_fast']));
+    gulp.watch([conf.js.src, '!' + conf.tpl.dist + '/' + conf.tpl.file], gulp.parallel(['build_js_min_fast']));
 });
 
 gulp.task("default", gulp.series([ 'build_tpl', 'build_js_min', 'build_js', 'build_css_min', 'build_css' ]));

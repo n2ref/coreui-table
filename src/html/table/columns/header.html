@@ -1,5 +1,8 @@
 <tr class="fw-medium bg-white">
-  <% $.each(columns, function(key, column) { %>
-  <td<%- column.attr%>><%- column.content %></td>
+  <% columns.map(function(column) { %>
+  <td<%- column.attr%>>
+    <span class="coreui-table__column-border"></span>
+    <span class="coreui-table__column-label"><%- column.content %></span>
+  </td>
   <% }); %>
 </tr>

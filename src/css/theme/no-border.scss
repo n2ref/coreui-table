@@ -1,0 +1,15 @@
+
+.coreui-table.coreui-theme-no-border {
+
+  .coreui-table__container {
+    border: none;
+  }
+
+  > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td::before {
+    box-shadow: none;
+  }
+
+  > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td > .coreui-table__column-border {
+    display: none;
+  }
+}

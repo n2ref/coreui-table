@@ -170,12 +170,12 @@
   tpl['search/text.html'] = '<input type="text" <%- attr %>>';
   tpl['table.html'] = ' <table class="table <%= classes %> mb-0"> <colgroup> <% $.each(colGroups, function(key, columnGroup) { %> <col<% if (columnGroup.style) { %> style="<%= columnGroup.style %>"<% } %>/> <% }); %> </colgroup> <% if (showHeaders) { %> <thead<% if (theadAttr) { %> <%- theadAttr %>"<% } %>> <%- columnsHeader %> </thead> <% } %> <tbody></tbody> <% if (columnsFooter != \'\') { %> <tfoot> <%- columnsFooter %> </tfoot> <% } %> </table>';
   tpl['table/columns/footer.html'] = '<tr> <% $.each(columns, function(key, column) { %> <td<%- column.attr%>><%- column.content %></td> <% }); %> </tr>';
-  tpl['table/columns/header.html'] = '<tr class="fw-medium bg-white"> <% $.each(columns, function(key, column) { %> <td<%- column.attr%>><%- column.content %></td> <% }); %> </tr>';
+  tpl['table/columns/header.html'] = '<tr class="fw-medium bg-white"> <% columns.map(function(column) { %> <td<%- column.attr%>> <span class="coreui-table__column-border"></span> <span class="coreui-table__column-label"><%- column.content %></span> </td> <% }); %> </tr>';
   tpl['table/columns/menu/button.html'] = '<li><button <%- attr%>><%- text %></button></li>';
   tpl['table/columns/menu/divider.html'] = '<li><hr class="dropdown-divider"></li>';
   tpl['table/columns/menu/header.html'] = '<li><h6 class="dropdown-header"><%- text %></h6></li>';
   tpl['table/columns/menu/link.html'] = '<li><a <%- attr%>><%- text %></a></li>';
-  tpl['table/columns/td.html'] = '<td<%- attr%>> <span class="coreui-table__column-label"><%- label %></span> <% if (description) { %> <small class="coreui-table__column-description bi bi-question-circle text-body-secondary" title="<%= description %>" data-bs-toggle="tooltip" data-bs-placement="bottom"></small> <% } %> <% if (sortable === \'asc\') { %> <i class="coreui-table__column-sort bi bi-sort-down-alt"></i> <% } else if (sortable === \'desc\') { %> <i class="coreui-table__column-sort bi bi-sort-down"></i> <% } %> <% if (issetMenu) { %> <div class="dropdown d-inline fw-normal coreui-table__column-menu"> <span class="dropdown-toggle <%= menuShowAlways %>" data-bs-toggle="dropdown"> <i class="bi bi-three-dots-vertical"></i> </span> <ul class="dropdown-menu dropdown-menu-<%= menuPosition %>"></ul> </div> <% } %> </td>';
+  tpl['table/columns/td.html'] = '<td<%- attr%>> <span class="coreui-table__column-border"></span> <span class="coreui-table__column-label"><%- label %></span> <% if (description) { %> <small class="coreui-table__column-description bi bi-question-circle text-body-secondary" title="<%= description %>" data-bs-toggle="tooltip" data-bs-placement="bottom"></small> <% } %> <% if (sortable === \'asc\') { %> <i class="coreui-table__column-sort bi bi-sort-down-alt"></i> <% } else if (sortable === \'desc\') { %> <i class="coreui-table__column-sort bi bi-sort-down"></i> <% } %> <% if (issetMenu) { %> <div class="dropdown d-inline fw-normal coreui-table__column-menu"> <span class="dropdown-toggle <%= menuShowAlways %>" data-bs-toggle="dropdown"> <i class="bi bi-three-dots-vertical"></i> </span> <ul class="dropdown-menu dropdown-menu-<%= menuPosition %>"></ul> </div> <% } %> </td>';
   tpl['table/columns/tr.html'] = '<tr class="fw-medium bg-white"></tr>';
   tpl['table/control.html'] = '<div id="coreui-table-control-<%= id %>" class="coreui-table__control"></div>';
   tpl['table/controls/footer-out.html'] = ' <div class="coreui-table__footer d-flex justify-content-between"> <% if (controlsLeft.length) { %> <div class="coreui-table__controls coreui-table__controls_left d-flex justify-content-start gap-2 flex-wrap flex-fill mb-1 mt-2 align-items-center"></div> <% } %> <% if (controlsCenter.length) { %> <div class="coreui-table__controls coreui-table__controls_center d-flex justify-content-center gap-2 flex-wrap flex-fill mb-1 mt-2 align-items-center"></div> <% } %> <% if (controlsRight.length) { %> <div class="coreui-table__controls coreui-table__controls_right d-flex justify-content-end gap-2 flex-wrap flex-fill mb-1 mt-2 align-items-center"></div> <% } %> </div>';
@@ -1580,10 +1580,10 @@
       }
       if (options.showHeaders && options.hasOwnProperty('columnsHeader') && Array.isArray(options.columnsHeader) && options.columnsHeader.length > 0) {
         var rows = [];
-        $.each(options.columnsHeader, function (key, headerRow) {
+        options.columnsHeader.map(function (headerRow) {
           if (Array.isArray(headerRow)) {
             var cells = [];
-            $.each(headerRow, function (key, headerColumn) {
+            headerRow.map(function (headerColumn) {
               if (coreuiTableUtils.isObject(headerColumn)) {
                 var attributes = [];
                 if (headerColumn.hasOwnProperty('attr') && coreuiTableUtils.isObject(headerColumn.attr)) {
@@ -2781,7 +2781,6 @@
       recordsPerPage: 25,
       theadTop: 0,
       saveState: false,
-      noBorder: false,
       noWrap: false,
       noWrapToggle: false,
       showHeaders: true,
@@ -3099,12 +3098,12 @@
 
       // Верхние элементы управления
       if (Array.isArray(this._controlsPositions.header) && this._controlsPositions.header.length > 0) {
-        $.each(this._controlsPositions.header, function (key, header) {
+        this._controlsPositions.header.map(function (header) {
           var controlsLeft = [];
           var controlsCenter = [];
           var controlsRight = [];
           if (Array.isArray(header.left) && header.left.length > 0) {
-            $.each(header.left, function (key, control) {
+            header.left.map(function (control) {
               var controlRender = coreuiTableRender.renderControl(that, control);
               if (controlRender) {
                 controlsLeft.push(controlRender);
@@ -3112,7 +3111,7 @@
             });
           }
           if (Array.isArray(header.center) && header.center.length > 0) {
-            $.each(header.center, function (key, control) {
+            header.center.map(function (control) {
               var controlRender = coreuiTableRender.renderControl(that, control);
               if (controlRender) {
                 controlsCenter.push(controlRender);
@@ -3120,7 +3119,7 @@
             });
           }
           if (Array.isArray(header.right) && header.right.length > 0) {
-            $.each(header.right, function (key, control) {
+            header.right.map(function (control) {
               var controlRender = coreuiTableRender.renderControl(that, control);
               if (controlRender) {
                 controlsRight.push(controlRender);
@@ -3179,7 +3178,7 @@
 
       // Нижние элементы управления
       if (Array.isArray(this._controlsPositions.footer) && this._controlsPositions.footer.length > 0) {
-        $.each(this._controlsPositions.footer, function (key, footer) {
+        this._controlsPositions.footer.map(function (footer) {
           var controlsLeft = [];
           var controlsCenter = [];
           var controlsRight = [];
@@ -3269,8 +3268,8 @@
       }
       var classes = [];
       var classesWrapper = [];
-      if (options.hasOwnProperty('noBorder') && typeof options.noBorder === 'boolean' && options.noBorder) {
-        classes.push('coreui-table__no_border');
+      if (options.hasOwnProperty('theme') && typeof options.theme === 'string' && options.theme) {
+        classes.push('coreui-theme-' + options.theme);
       }
       if (options.hasOwnProperty('showScrollShadow') && typeof options.showScrollShadow === 'boolean' && options.showScrollShadow) {
         classesWrapper.push('table-scroll-shadow');
@@ -3283,6 +3282,7 @@
         id: this._id,
         classes: classes.length > 0 ? ' ' + classes.join(' ') : '',
         classesWrapper: classesWrapper.length > 0 ? ' ' + classesWrapper.join(' ') : '',
+        classesRoot: classesWrapper.length > 0 ? ' ' + classesWrapper.join(' ') : '',
         widthSizes: widthSizes,
         heightSizes: heightSizes
       }));
@@ -4945,7 +4945,7 @@
 
     /**
      * Формирование контента для размещения на странице
-     * @returns {string}
+     * @returns {jQuery}
      */
     _inherits(ControlPageSize, _Control);
     return _createClass(ControlPageSize, [{
@@ -4960,20 +4960,19 @@
             }
           });
         }
-        var control = coreuiTableUtils.render(tpl['controls/page-size.html'], {
+        var control = $(coreuiTableUtils.render(tpl['controls/page-size.html'], {
           recordsPerPageList: this._options.list,
           recordsPerPage: table._recordsPerPage,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
           lang: table.getLang()
-        });
-        var selectPageSize = $('select', control);
-        selectPageSize.change(function () {
+        }));
+        control.change(function () {
           table._page = 1;
-          table.setPageSize(Number(selectPageSize.val()));
+          table.setPageSize(Number(control.val()));
           table.reload();
         });
         table.on('page_size_update', function () {
-          selectPageSize.val(table._recordsPerPage);
+          control.val(table._recordsPerPage);
         });
         return control;
       }
@@ -14849,12 +14848,11 @@
       var _this2;
       _classCallCheck(this, ColumnsDateHuman);
       options = $.extend(true, {
-        type: 'date',
+        type: 'dateHuman',
         field: null,
         label: null,
         show: true,
         width: null,
-        format: 'DD.MM.YYYY',
         attr: {},
         attrHeader: {},
         render: null
@@ -15893,7 +15891,7 @@
             }
           });
         }
-        if (content.hasOwnProperty('attr') || coreuiTableUtils.isObject(content.attr)) {
+        if (content.hasOwnProperty('attr') && coreuiTableUtils.isObject(content.attr)) {
           attr = content.attr;
         }
         if (!attr.hasOwnProperty('class') || ['string', 'number'].indexOf(_typeof(attr["class"])) < 0) {

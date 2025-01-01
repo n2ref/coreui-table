@@ -56,6 +56,7 @@
         }
         table > tbody > tr > td {
             font-size: $coreui-table-font-size;
+            border-color: $coreui-table-border-color;
         }
         table > thead > tr > td,
         .coreui-table__header {
@@ -108,6 +109,7 @@
         table > thead > tr:first-child > td {
             border-top: none;
             background-color: $coreui-table-thead-bg;
+            color: $coreui-table-thead-color;
         }
         table > tbody > tr:first-child,
         table > tbody > tr:first-child > td {
@@ -274,17 +276,6 @@
             > tr > td {
                 background-color: $coreui-table-tfoot-bg;
             }
-        }
-    }
-
-
-    &.coreui-table__no_border {
-        .coreui-table__container {
-            border: none;
-        }
-
-        > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td::before {
-            box-shadow: none;
         }
     }
 

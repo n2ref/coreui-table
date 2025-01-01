@@ -284,11 +284,11 @@ let coreuiTableRender = {
         ) {
             let rows = [];
 
-            $.each(options.columnsHeader, function (key, headerRow) {
+            options.columnsHeader.map(function (headerRow) {
                 if (Array.isArray(headerRow)) {
                     let cells = [];
 
-                    $.each(headerRow, function (key, headerColumn) {
+                    headerRow.map(function (headerColumn) {
                         if (coreuiTableUtils.isObject(headerColumn)) {
                             let attributes = [];
 
@@ -306,11 +306,9 @@ let coreuiTableRender = {
                         }
                     });
 
-                    rows.push(
-                        coreuiTableUtils.render(coreuiTableTpl['table/columns/header.html'], {
-                            columns: cells,
-                        })
-                    );
+                    rows.push(coreuiTableUtils.render(coreuiTableTpl['table/columns/header.html'], {
+                        columns: cells,
+                    }));
                 }
             });
 

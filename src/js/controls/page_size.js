@@ -43,7 +43,7 @@ class ControlPageSize extends Control {
 
     /**
      * Формирование контента для размещения на странице
-     * @returns {string}
+     * @returns {jQuery}
      */
     render() {
 
@@ -58,23 +58,21 @@ class ControlPageSize extends Control {
             });
         }
 
-        let control = coreuiTableUtils.render(coreuiTableTpl['controls/page-size.html'], {
+        let control = $(coreuiTableUtils.render(coreuiTableTpl['controls/page-size.html'], {
             recordsPerPageList: this._options.list,
             recordsPerPage: table._recordsPerPage,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             lang: table.getLang(),
-        });
+        }));
 
-        let selectPageSize = $('select', control);
-
-        selectPageSize.change(function () {
+        control.change(function () {
             table._page = 1;
-            table.setPageSize(Number(selectPageSize.val()));
+            table.setPageSize(Number(control.val()));
             table.reload();
         });
 
         table.on('page_size_update', function () {
-            selectPageSize.val(table._recordsPerPage);
+            control.val(table._recordsPerPage);
         });
 
         return control;

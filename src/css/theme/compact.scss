@@ -1,0 +1,109 @@
+
+$coreui-compact-table-border-radius: 10px !default;
+$coreui-compact-table-border-color: #e0e0e0 !default;
+
+
+.coreui-table.coreui-theme-compact {
+
+  .coreui-table__container {
+    border: none;
+    background-color: transparent;
+  }
+
+  > .coreui-table__container > .coreui-table__wrapper {
+        padding-top: 11px;
+  }
+
+  > .coreui-table__container > .coreui-table__wrapper > table {
+
+    > thead > tr {
+      > td::before {
+        box-shadow: none;
+      }
+      > td::after {
+        box-shadow: none;
+      }
+    }
+
+    > thead > tr > td {
+
+      > .coreui-table__column-border {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        display: inline-block;
+        box-shadow: 0 0 0 1px $coreui-table-border-color;
+        z-index: -1;
+      }
+    }
+
+    > thead > tr:first-child > td:first-child > .coreui-table__column-border {
+      border-top-left-radius: $coreui-table-border-radius;
+    }
+    > thead > tr:last-child > td:first-child > .coreui-table__column-border {
+      border-bottom-left-radius: $coreui-table-border-radius;
+    }
+    > thead > tr:first-child > td:last-child > .coreui-table__column-border {
+      border-top-right-radius: $coreui-table-border-radius;
+    }
+    > thead > tr:last-child > td:last-child > .coreui-table__column-border {
+      border-bottom-right-radius: $coreui-table-border-radius;
+    }
+
+
+    > thead > tr:first-child > td:first-child,
+    > thead > tr:first-child > td:first-child > .coreui-table__column-border {
+      border-top-left-radius: $coreui-compact-table-border-radius;
+    }
+    > thead > tr:first-child > td:last-child,
+    > thead > tr:first-child > td:last-child > .coreui-table__column-border {
+      border-top-right-radius: $coreui-compact-table-border-radius;
+    }
+    > thead > tr:last-child > td:first-child > .coreui-table__column-border {
+      border-bottom-left-radius: $coreui-compact-table-border-radius;
+    }
+    > thead > tr:last-child > td:last-child > .coreui-table__column-border {
+      border-bottom-right-radius: $coreui-compact-table-border-radius;
+    }
+    > thead > tr:last-child > td:first-child {
+      border-bottom-left-radius: calc($coreui-compact-table-border-radius + 1px);
+    }
+    > thead > tr:last-child > td:last-child {
+      border-bottom-right-radius: calc($coreui-compact-table-border-radius + 1px);
+    }
+
+    > thead > tr > td:not(.coreui-table__fixed_left):first-child {
+      position: relative;
+      left: 1px;
+    }
+    > thead > tr > td.coreui-table__fixed_left:first-child {
+      left: 1px;
+    }
+    > thead > tr > td:not(.coreui-table__fixed_right):last-child {
+      position: relative;
+      right: 1px;
+    }
+    > thead > tr > td.coreui-table__fixed_right:last-child {
+      right: 1px;
+    }
+
+    > thead > tr {
+      position: relative;
+      top: -10px;
+    }
+
+    > thead > tr:last-child > td {
+      border-bottom: 0;
+    }
+
+    > thead > tr > td {
+      border-color: transparent;
+    }
+
+    > tbody > tr > td {
+      border-color: $coreui-compact-table-border-color;
+    }
+  }
+}

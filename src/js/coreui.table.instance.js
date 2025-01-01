@@ -25,7 +25,6 @@ let coreuiTableInstance = {
         recordsPerPage: 25,
         theadTop: 0,
         saveState: false,
-        noBorder: false,
         noWrap: false,
         noWrapToggle: false,
         showHeaders: true,
@@ -460,13 +459,13 @@ let coreuiTableInstance = {
         if (Array.isArray(this._controlsPositions.header) &&
             this._controlsPositions.header.length > 0
         ) {
-            $.each(this._controlsPositions.header, function (key, header) {
+            this._controlsPositions.header.map(function (header) {
                 let controlsLeft   = [];
                 let controlsCenter = [];
                 let controlsRight  = [];
 
                 if (Array.isArray(header.left) && header.left.length > 0) {
-                    $.each(header.left, function (key, control) {
+                    header.left.map(function (control) {
                         let controlRender = coreuiTableRender.renderControl(that, control);
 
                         if (controlRender) {
@@ -476,7 +475,7 @@ let coreuiTableInstance = {
                 }
 
                 if (Array.isArray(header.center) && header.center.length > 0) {
-                    $.each(header.center, function (key, control) {
+                    header.center.map(function (control) {
                         let controlRender = coreuiTableRender.renderControl(that, control);
 
                         if (controlRender) {
@@ -486,7 +485,7 @@ let coreuiTableInstance = {
                 }
 
                 if (Array.isArray(header.right) && header.right.length > 0) {
-                    $.each(header.right, function (key, control) {
+                    header.right.map(function (control) {
                         let controlRender = coreuiTableRender.renderControl(that, control);
 
                         if (controlRender) {
@@ -562,7 +561,7 @@ let coreuiTableInstance = {
         if (Array.isArray(this._controlsPositions.footer) &&
             this._controlsPositions.footer.length > 0
         ) {
-            $.each(this._controlsPositions.footer, function (key, footer) {
+            this._controlsPositions.footer.map(function (footer) {
                 let controlsLeft   = [];
                 let controlsCenter = [];
                 let controlsRight  = [];
@@ -677,11 +676,11 @@ let coreuiTableInstance = {
         let classes        = [];
         let classesWrapper = [];
 
-        if (options.hasOwnProperty('noBorder') &&
-            typeof options.noBorder === 'boolean' &&
-            options.noBorder
+        if (options.hasOwnProperty('theme') &&
+            typeof options.theme === 'string' &&
+            options.theme
         ) {
-            classes.push('coreui-table__no_border');
+            classes.push('coreui-theme-' + options.theme);
         }
 
 
@@ -701,15 +700,14 @@ let coreuiTableInstance = {
 
 
         let tableElement     = coreuiTableRender.renderTable(this);
-        let containerElement = $(
-            coreuiTableUtils.render(coreuiTableTpl['container.html'], {
-                id: this._id,
-                classes: classes.length > 0 ? ' ' + classes.join(' ') : '',
-                classesWrapper: classesWrapper.length > 0 ? ' ' + classesWrapper.join(' ') : '',
-                widthSizes: widthSizes,
-                heightSizes: heightSizes,
-            })
-        );
+        let containerElement = $(coreuiTableUtils.render(coreuiTableTpl['container.html'], {
+            id: this._id,
+            classes: classes.length > 0 ? ' ' + classes.join(' ') : '',
+            classesWrapper: classesWrapper.length > 0 ? ' ' + classesWrapper.join(' ') : '',
+            classesRoot: classesWrapper.length > 0 ? ' ' + classesWrapper.join(' ') : '',
+            widthSizes: widthSizes,
+            heightSizes: heightSizes,
+        }));
 
 
         if (render.headersOut.length > 0) {

@@ -42,6 +42,7 @@
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td {
   font-size: 14px;
+  border-color: #c4c8cb;
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td,
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > .coreui-table__header {
@@ -90,6 +91,7 @@
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:first-child > td {
   border-top: none;
   background-color: #FFF;
+  color: #626262;
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr:first-child,
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr:first-child > td {
@@ -238,12 +240,6 @@
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot > tr > td {
   background-color: #FFF;
 }
-.coreui-table.coreui-table__no_border .coreui-table__container {
-  border: none;
-}
-.coreui-table.coreui-table__no_border > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td::before {
-  box-shadow: none;
-}
 .coreui-table .coreui-table__control .coreui-table__page_jump_container input {
   width: 65px;
 }
@@ -262,4 +258,97 @@
 }
 .coreui-table .coreui-table__cursor_help {
   cursor: help;
+}
+
+.coreui-table.coreui-theme-compact .coreui-table__container {
+  border: none;
+  background-color: transparent;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper {
+  padding-top: 11px;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td::before {
+  box-shadow: none;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td::after {
+  box-shadow: none;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td > .coreui-table__column-border {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: inline-block;
+  box-shadow: 0 0 0 1px #c4c8cb;
+  z-index: -1;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:first-child > td:first-child > .coreui-table__column-border {
+  border-top-left-radius: 0.25rem;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:last-child > td:first-child > .coreui-table__column-border {
+  border-bottom-left-radius: 0.25rem;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:first-child > td:last-child > .coreui-table__column-border {
+  border-top-right-radius: 0.25rem;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:last-child > td:last-child > .coreui-table__column-border {
+  border-bottom-right-radius: 0.25rem;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:first-child > td:first-child,
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:first-child > td:first-child > .coreui-table__column-border {
+  border-top-left-radius: 10px;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:first-child > td:last-child,
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:first-child > td:last-child > .coreui-table__column-border {
+  border-top-right-radius: 10px;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:last-child > td:first-child > .coreui-table__column-border {
+  border-bottom-left-radius: 10px;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:last-child > td:last-child > .coreui-table__column-border {
+  border-bottom-right-radius: 10px;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:last-child > td:first-child {
+  border-bottom-left-radius: 11px;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:last-child > td:last-child {
+  border-bottom-right-radius: 11px;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td:not(.coreui-table__fixed_left):first-child {
+  position: relative;
+  left: 1px;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td.coreui-table__fixed_left:first-child {
+  left: 1px;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td:not(.coreui-table__fixed_right):last-child {
+  position: relative;
+  right: 1px;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td.coreui-table__fixed_right:last-child {
+  right: 1px;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr {
+  position: relative;
+  top: -10px;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:last-child > td {
+  border-bottom: 0;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td {
+  border-color: transparent;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td {
+  border-color: #e0e0e0;
+}
+
+.coreui-table.coreui-theme-no-border .coreui-table__container {
+  border: none;
+}
+.coreui-table.coreui-theme-no-border > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td::before {
+  box-shadow: none;
+}
+.coreui-table.coreui-theme-no-border > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td > .coreui-table__column-border {
+  display: none;
 }
