@@ -137,7 +137,7 @@
   tpl['controls/filter_clear.html'] = '<button type="button" <%- attr %>><%- content %></button>';
   tpl['controls/link.html'] = '<a href="<%- url %>"<%- attr %>><%- content %></a>';
   tpl['controls/page-jump.html'] = ' <div class="coreui-table__page_jump_container"> <div <%- attr %>> <input type="number" class="form-control border-secondary-subtle" min="1"> <button class="btn btn-outline-secondary border-secondary-subtle" type="button"> <i class="bi bi-chevron-compact-right"></i> </button> </div> </div>';
-  tpl['controls/page-size.html'] = ' <select <%- attr %>> <% $.each(recordsPerPageList, function(key, count) { %> <option value="<%= count %>"<% if (recordsPerPage == count) { %>selected<% } %>> <% if (count == \'0\') { %><%= lang.all %><% } else { %><%= count %><% } %> </option> <% }); %> </select>';
+  tpl['controls/page-size.html'] = ' <select <%- attr %>> <% recordsPerPageList.map(function(count) { %> <option value="<%= count %>"<% if (recordsPerPage == count) { %>selected<% } %>> <% if (count == \'0\') { %><%= lang.all %><% } else { %><%= count %><% } %> </option> <% }); %> </select>';
   tpl['controls/pages.html'] = ' <nav> <ul <%- attr %>> <% if (showPrev) { %> <li class="page-item coreui-table__page_prev <% if ( ! isActivePrev) { %> disabled<% } %>"> <button type="button" class="page-link"> <i class="bi bi-chevron-left"></i> </button> </li> <% } %> <% if (showPageFirst) { %> <li class="page-item"> <button type="button" class="page-link coreui-table__page"> 1 </button> </li> <% } %> <% if (showDividerStart) { %> <li class="page-item disabled"> <span class="page-link px-1">...</span> </li> <% } %> <% pages.map(function(page) { %> <% if (page == currentPage) { %> <li class="page-item active"> <span class="page-link"><%= page %></span> </li> <% } else { %> <li class="page-item"> <button type="button" class="page-link coreui-table__page"> <%= page %> </button> </li> <% } %> <% }); %> <% if (showDividerEnd) { %> <li class="page-item disabled"> <span class="page-link px-1">...</span> </li> <% } %> <% if (showPageLast) { %> <li class="page-item"> <button type="button" class="page-link coreui-table__page"> <%= pagesTotal %> </button> </li> <% } %> <% if (showNext) { %> <li class="page-item coreui-table__page_next<% if ( ! isActiveNext) { %> disabled<% } %>"> <button type="button" class="page-link"> <i class="bi bi-chevron-right"></i> </button> </li> <% } %> </ul> </nav>';
   tpl['controls/search.html'] = '<div class="btn-group"> <button type="button"<%- btnAttr %>><%- btnContent %></button> <%- btnClear %> </div> ';
   tpl['controls/search/clear.html'] = '<button type="button" <%- attr %>><%- content %></button> ';
@@ -170,13 +170,13 @@
   tpl['search/text.html'] = '<input type="text" <%- attr %>>';
   tpl['table.html'] = ' <table class="table <%= classes %> mb-0"> <colgroup> <% $.each(colGroups, function(key, columnGroup) { %> <col<% if (columnGroup.style) { %> style="<%= columnGroup.style %>"<% } %>/> <% }); %> </colgroup> <% if (showHeaders) { %> <thead<% if (theadAttr) { %> <%- theadAttr %>"<% } %>> <%- columnsHeader %> </thead> <% } %> <tbody></tbody> <% if (columnsFooter != \'\') { %> <tfoot> <%- columnsFooter %> </tfoot> <% } %> </table>';
   tpl['table/columns/footer.html'] = '<tr> <% $.each(columns, function(key, column) { %> <td<%- column.attr%>><%- column.content %></td> <% }); %> </tr>';
-  tpl['table/columns/header.html'] = '<tr class="fw-medium bg-white"> <% columns.map(function(column) { %> <td<%- column.attr%>> <span class="coreui-table__column-border"></span> <span class="coreui-table__column-label"><%- column.content %></span> </td> <% }); %> </tr>';
+  tpl['table/columns/header.html'] = '<tr class="fw-medium bg-body"> <% columns.map(function(column) { %> <td<%- column.attr%>> <span class="coreui-table__column-border"></span> <span class="coreui-table__column-label"><%- column.content %></span> </td> <% }); %> </tr>';
   tpl['table/columns/menu/button.html'] = '<li><button <%- attr%>><%- text %></button></li>';
   tpl['table/columns/menu/divider.html'] = '<li><hr class="dropdown-divider"></li>';
   tpl['table/columns/menu/header.html'] = '<li><h6 class="dropdown-header"><%- text %></h6></li>';
   tpl['table/columns/menu/link.html'] = '<li><a <%- attr%>><%- text %></a></li>';
   tpl['table/columns/td.html'] = '<td<%- attr%>> <span class="coreui-table__column-border"></span> <span class="coreui-table__column-label"><%- label %></span> <% if (description) { %> <small class="coreui-table__column-description bi bi-question-circle text-body-secondary" title="<%= description %>" data-bs-toggle="tooltip" data-bs-placement="bottom"></small> <% } %> <% if (sortable === \'asc\') { %> <i class="coreui-table__column-sort bi bi-sort-down-alt"></i> <% } else if (sortable === \'desc\') { %> <i class="coreui-table__column-sort bi bi-sort-down"></i> <% } %> <% if (issetMenu) { %> <div class="dropdown d-inline fw-normal coreui-table__column-menu"> <span class="dropdown-toggle <%= menuShowAlways %>" data-bs-toggle="dropdown"> <i class="bi bi-three-dots-vertical"></i> </span> <ul class="dropdown-menu dropdown-menu-<%= menuPosition %>"></ul> </div> <% } %> </td>';
-  tpl['table/columns/tr.html'] = '<tr class="fw-medium bg-white"></tr>';
+  tpl['table/columns/tr.html'] = '<tr class="fw-medium bg-body"></tr>';
   tpl['table/control.html'] = '<div id="coreui-table-control-<%= id %>" class="coreui-table__control"></div>';
   tpl['table/controls/footer-out.html'] = ' <div class="coreui-table__footer d-flex justify-content-between"> <% if (controlsLeft.length) { %> <div class="coreui-table__controls coreui-table__controls_left d-flex justify-content-start gap-2 flex-wrap flex-fill mb-1 mt-2 align-items-center"></div> <% } %> <% if (controlsCenter.length) { %> <div class="coreui-table__controls coreui-table__controls_center d-flex justify-content-center gap-2 flex-wrap flex-fill mb-1 mt-2 align-items-center"></div> <% } %> <% if (controlsRight.length) { %> <div class="coreui-table__controls coreui-table__controls_right d-flex justify-content-end gap-2 flex-wrap flex-fill mb-1 mt-2 align-items-center"></div> <% } %> </div>';
   tpl['table/controls/footer.html'] = ' <div class="coreui-table__footer ps-1 pe-1 d-flex justify-content-between border-top border-secondary-subtle"> <% if (controlsLeft.length) { %> <div class="coreui-table__controls coreui-table__controls_left d-flex justify-content-start gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center"></div> <% } %> <% if (controlsCenter.length) { %> <div class="coreui-table__controls coreui-table__controls_center d-flex justify-content-center gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center"></div> <% } %> <% if (controlsRight.length) { %> <div class="coreui-table__controls coreui-table__controls_right d-flex justify-content-end gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center"></div> <% } %> </div>';
@@ -2241,15 +2241,15 @@
   var coreuiTablePrivate = {
     /**
      * Инициализация колонок
-     * @param {object} tableWrapper
-     * @param {object} table
-     * @param {Array} columns
+     * @param {coreuiTable}         tableWrapper
+     * @param {coreuiTableInstance} table
+     * @param {Array}               columns
      * @private
      */
     initColumns: function initColumns(tableWrapper, table, columns) {
       var options = table.getOptions();
       var columnsStorage = options.saveState && options.id ? coreuiTablePrivate.getStorageField(table.getId(), 'columns') : null;
-      $.each(columns, function (key, column) {
+      columns.map(function (column) {
         if (typeof column.type === 'undefined' || !tableWrapper.columns.hasOwnProperty(column.type)) {
           column.type = 'text';
         }
@@ -2316,7 +2316,7 @@
      */
     initControls: function initControls(tableWrapper, table, rows, position) {
       var that = this;
-      $.each(rows, function (key, row) {
+      rows.map(function (row) {
         var type = 'in';
         var controlsLeft = [];
         var controlsCenter = [];
@@ -2325,7 +2325,7 @@
           type = row.type.toLowerCase();
         }
         if (row.hasOwnProperty('left') && Array.isArray(row.left)) {
-          $.each(row.left, function (key, control) {
+          row.left.map(function (control) {
             var instance = that.initControl(tableWrapper, table, control);
             if (coreuiTableUtils.isObject(instance)) {
               controlsLeft.push(instance);
@@ -2333,7 +2333,7 @@
           });
         }
         if (row.hasOwnProperty('center') && Array.isArray(row.center)) {
-          $.each(row.center, function (key, control) {
+          row.center.map(function (control) {
             var instance = that.initControl(tableWrapper, table, control);
             if (coreuiTableUtils.isObject(instance)) {
               controlsCenter.push(instance);
@@ -2341,7 +2341,7 @@
           });
         }
         if (row.hasOwnProperty('right') && Array.isArray(row.right)) {
-          $.each(row.right, function (key, control) {
+          row.right.map(function (control) {
             var instance = that.initControl(tableWrapper, table, control);
             if (coreuiTableUtils.isObject(instance)) {
               controlsRight.push(instance);
@@ -2849,7 +2849,9 @@
       if (this._options.page > 0) {
         this._page = this._options.page;
       }
-      if (this._options.recordsPerPage > 0) {
+      if (this._options.saveState && this._options.id) {
+        this._recordsPerPage = coreuiTablePrivate.getStorageField(this._id, 'page_size');
+      } else if (this._options.recordsPerPage > 0) {
         this._recordsPerPage = this._options.recordsPerPage;
       }
       this._isRecordsRequest = this._options.hasOwnProperty('recordsRequest') && (typeof this._options.recordsRequest === 'function' || coreuiTableUtils.isObject(this._options.recordsRequest) && this._options.recordsRequest.hasOwnProperty('url') && typeof this._options.recordsRequest.url === 'string' && this._options.recordsRequest.url !== '' && this._options.recordsRequest.url !== '#');
@@ -2905,19 +2907,19 @@
      * Инициализация событий таблицы
      */
     initEvents: function initEvents() {
-      var that = this;
+      var table = this;
 
       // Показ строк
       this.on('records_show', function () {
         // Переход по ссылке
-        if (typeof that._options.onClickUrl === 'string' && that._options.onClickUrl) {
-          coreuiTableElements.getTrRecords(that.getId()).click(function () {
+        if (typeof table._options.onClickUrl === 'string' && table._options.onClickUrl) {
+          coreuiTableElements.getTrRecords(table.getId()).click(function () {
             var recordKey = $(this).data('record-index');
-            var record = that.getRecordByIndex(recordKey);
+            var record = table.getRecordByIndex(recordKey);
             if (!record) {
               return;
             }
-            var url = that._options.onClickUrl;
+            var url = table._options.onClickUrl;
             $.each(record.data, function (field, value) {
               var fieldQuote = field.replace(/([^\w\d])/g, '\\$1');
               url = url.replace(new RegExp('\\[' + fieldQuote + '\\]', 'g'), value);
@@ -2929,24 +2931,24 @@
         }
 
         // Событие нажатия на строку
-        if (['function', 'string'].indexOf(_typeof(that._options.onClick))) {
-          coreuiTableElements.getTrRecords(that.getId()).click(function (event) {
+        if (['function', 'string'].indexOf(_typeof(table._options.onClick))) {
+          coreuiTableElements.getTrRecords(table.getId()).click(function (event) {
             var recordKey = $(this).data('record-index');
-            var record = that.getRecordByIndex(recordKey);
+            var record = table.getRecordByIndex(recordKey);
             if (!record) {
               return;
             }
-            if (typeof that._options.onClick === 'function') {
-              that._options.onClick(event, record);
-            } else if (typeof that._options.onClick === 'string') {
-              var func = new Function('event', 'record', that._options.onClick);
+            if (typeof table._options.onClick === 'function') {
+              table._options.onClick(event, record);
+            } else if (typeof table._options.onClick === 'string') {
+              var func = new Function('event', 'record', table._options.onClick);
               func(event, record);
             }
           });
         }
 
         // Раскрытие строки
-        coreuiTableElements.getNoWrapToggles(that.getId()).click(function (event) {
+        coreuiTableElements.getNoWrapToggles(table.getId()).click(function (event) {
           event.cancelBubble = true;
           event.preventDefault();
           var parent = $(this).parent();
@@ -2962,20 +2964,20 @@
         });
 
         // Фиксация колонок
-        coreuiTableElements.fixedColsLeft(that.getId());
-        coreuiTableElements.fixedColsRight(that.getId());
+        coreuiTableElements.fixedColsLeft(table.getId());
+        coreuiTableElements.fixedColsRight(table.getId());
       });
 
       // Показ таблицы
       this.on('table_show', function () {
-        var sortableColumns = coreuiTableElements.getTableSortable(that.getId());
+        var sortableColumns = coreuiTableElements.getTableSortable(table.getId());
         if (sortableColumns[0]) {
           sortableColumns.click(function (event) {
             var field = $(this).data('field');
             if (field) {
               var sorting = [];
               var currentOrder = null;
-              $.each(that._sort, function (key, sortField) {
+              $.each(table._sort, function (key, sortField) {
                 if (field === sortField.field) {
                   currentOrder = sortField.order;
                   return false;
@@ -2993,15 +2995,15 @@
                 });
               }
               if (sorting.length === 0) {
-                that.sortDefault();
+                table.sortDefault();
               } else {
-                that.sortFields(sorting);
+                table.sortFields(sorting);
               }
             }
           });
         }
         if (window.hasOwnProperty('bootstrap') && bootstrap.hasOwnProperty('Tooltip')) {
-          $('.coreui-table__column-description', coreuiTableElements.getTableThead(that.getId())).each(function () {
+          $('.coreui-table__column-description', coreuiTableElements.getTableThead(table.getId())).each(function () {
             new bootstrap.Tooltip(this);
           });
         }
@@ -3010,24 +3012,27 @@
       // События смены состояния
       if (this._options.saveState && this._options.id) {
         this.on('records_sort', function () {
-          coreuiTablePrivate.setStorageField(that.getId(), 'sort', that._sort);
+          coreuiTablePrivate.setStorageField(table.getId(), 'sort', table._sort);
         });
         this.on('search_change', function () {
-          coreuiTablePrivate.setStorageField(that.getId(), 'search', that.getSearchData());
+          coreuiTablePrivate.setStorageField(table.getId(), 'search', table.getSearchData());
         });
         this.on('filters_change', function () {
-          coreuiTablePrivate.setStorageField(that.getId(), 'filters', that.getFilterData());
+          coreuiTablePrivate.setStorageField(table.getId(), 'filters', table.getFilterData());
+        });
+        this.on('page_size_update', function () {
+          coreuiTablePrivate.setStorageField(table.getId(), 'page_size', table._recordsPerPage);
         });
         this.on('columns_change', function () {
           var columns = [];
-          that._columns.map(function (column) {
+          table._columns.map(function (column) {
             var columnOptions = column.getOptions();
             columns.push({
               field: columnOptions.field,
               isShow: column.isShow()
             });
           });
-          coreuiTablePrivate.setStorageField(that.getId(), 'columns', columns);
+          coreuiTablePrivate.setStorageField(table.getId(), 'columns', columns);
         });
       }
       coreuiTablePrivate._trigger(this, 'table_show', [this]);
@@ -5053,8 +5058,8 @@
   var controlPages = {
     /**
      * Формирование контрола
-     * @param table
-     * @param options
+     * @param {coreuiTableInstance} table
+     * @param {object}              options
      * @return {jQuery}
      */
     render: function render(table, options) {

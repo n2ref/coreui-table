@@ -39,6 +39,7 @@
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td {
   font-weight: 600;
+  color: var(--bs-secondary-color);
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td {
   font-size: 14px;
@@ -91,7 +92,6 @@
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:first-child > td {
   border-top: none;
   background-color: #FFF;
-  color: #626262;
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr:first-child,
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr:first-child > td {

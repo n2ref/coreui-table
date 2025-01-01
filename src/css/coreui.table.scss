@@ -53,6 +53,7 @@
         }
         table > thead > tr > td {
             font-weight: $coreui-table-font-weight;
+            color: var(--bs-secondary-color);
         }
         table > tbody > tr > td {
             font-size: $coreui-table-font-size;
@@ -109,7 +110,6 @@
         table > thead > tr:first-child > td {
             border-top: none;
             background-color: $coreui-table-thead-bg;
-            color: $coreui-table-thead-color;
         }
         table > tbody > tr:first-child,
         table > tbody > tr:first-child > td {
