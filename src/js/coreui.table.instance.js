@@ -1532,6 +1532,8 @@ let coreuiTableInstance = {
         let searchData = this.getSearchData();
         let filterData = this.getFilterData();
 
+        this._page = 1;
+
         if (this._isRecordsRequest) {
             if (typeof this._options.recordsRequest === 'function') {
                 this.loadByFunction(this._options.recordsRequest);
@@ -1748,6 +1750,8 @@ let coreuiTableInstance = {
             }
         });
 
+
+        this._page = 1;
 
         if (this._sort.length >= 0) {
             if (this._isRecordsRequest) {
