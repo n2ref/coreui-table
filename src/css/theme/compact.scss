@@ -41,7 +41,7 @@ $coreui-compact-table-border-color: #e0e0e0 !default;
         bottom: 0;
         right: 0;
         display: inline-block;
-        box-shadow: 0 0 0 1px $coreui-table-border-color;
+        box-shadow: 0 0 0 1px var(--coreui-compact-table-border-color);
         z-index: -1;
       }
     }
@@ -113,8 +113,4 @@ $coreui-compact-table-border-color: #e0e0e0 !default;
       border-color: var(--coreui-compact-table-border-color);
     }
   }
-}
-
-[data-bs-theme="dark"] {
-  --coreui-compact-table-border-color: #3d3d3d;
 }
