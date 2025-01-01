@@ -1,7 +1,7 @@
 
-$coreui-table-thead-bg: #FFF !default;
-$coreui-table-tbody-bg: #FFF !default;
-$coreui-table-tfoot-bg: #FFF !default;
+$coreui-table-thead-bg: var(--bs-body-bg) !default;
+$coreui-table-tbody-bg: var(--bs-body-bg) !default;
+$coreui-table-tfoot-bg: var(--bs-body-bg) !default;
 
 $coreui-table-tbody-color: #212529 !default;
 $coreui-table-tfoot-color: #212529 !default;

@@ -1,11 +1,25 @@
+:root {
+  --coreui-table-thead-bg: var(--bs-body-bg);
+  --coreui-table-tbody-bg: var(--bs-body-bg);
+  --coreui-table-tfoot-bg: var(--bs-body-bg);
+  --coreui-table-border-color: #c4c8cb;
+}
+
+[data-bs-theme=dark] {
+  --coreui-table-border-color: #3d3d3d;
+  --coreui-table-thead-bg: var(--bs-body-bg);
+  --coreui-table-tbody-bg: var(--bs-body-bg);
+  --coreui-table-tfoot-bg: var(--bs-body-bg);
+}
+
 .coreui-table > .coreui-table__container {
-  background-color: #FFF;
-  border: var(--bs-border-width) solid #c4c8cb;
+  background-color: var(--coreui-table-tbody-bg);
+  border: var(--bs-border-width) solid var(--coreui-table-border-color);
   border-radius: 0.25rem;
 }
 .coreui-table > .coreui-table__container > .coreui-table__header {
-  background-color: #FFF;
-  border-bottom: var(--bs-border-width) solid #c4c8cb;
+  background-color: var(--coreui-table-thead-bg);
+  border-bottom: var(--bs-border-width) solid var(--coreui-table-border-color);
   border-top-right-radius: 0.25rem;
   border-top-left-radius: 0.25rem;
 }
@@ -23,13 +37,13 @@
 }
 .coreui-table > .coreui-table__container .coreui-table__search,
 .coreui-table > .coreui-table__container .coreui-table__columns {
-  border-bottom: 1px solid #c4c8cb;
+  border-bottom: 1px solid var(--coreui-table-border-color);
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table {
   min-height: 55px;
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody {
-  border-color: #c4c8cb;
+  border-color: var(--coreui-table-border-color);
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table.empty-tfoot > tbody > tr:last-child > td {
   border-bottom: 0;
@@ -44,7 +58,7 @@
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td {
   font-size: 14px;
-  border-color: #c4c8cb;
+  border-color: var(--coreui-table-border-color);
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td,
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > .coreui-table__header {
@@ -76,15 +90,15 @@
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td::before {
   top: 0;
-  box-shadow: 0 -1px 0 #c4c8cb, 0 0 0 #c4c8cb;
+  box-shadow: 0 -1px 0 var(--coreui-table-border-color), 0 0 0 var(--coreui-table-border-color);
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td::after {
   bottom: 0;
-  box-shadow: 0 1px 0 #c4c8cb, 0 0 0 #c4c8cb;
+  box-shadow: 0 1px 0 var(--coreui-table-border-color), 0 0 0 var(--coreui-table-border-color);
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table.table-bordered > thead > tr > td {
-  border: 1px solid #c4c8cb;
-  background-color: #FFF;
+  border: 1px solid var(--coreui-table-border-color);
+  background-color: var(--coreui-table-thead-bg);
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table.table-bordered > thead > tr > td .coreui-table__column-description {
   cursor: help;
@@ -92,7 +106,7 @@
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:first-child,
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:first-child > td {
   border-top: none;
-  background-color: #FFF;
+  background-color: var(--coreui-table-thead-bg);
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr:first-child,
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr:first-child > td {
@@ -100,7 +114,7 @@
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot > tr > td::before {
   top: 0;
-  box-shadow: 0 -1px 0 #c4c8cb;
+  box-shadow: 0 -1px 0 var(--coreui-table-border-color);
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot > tr > td::after {
   top: 0;
@@ -111,7 +125,7 @@
   z-index: 1;
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table.table-bordered > tfoot > tr > td {
-  border: 1px solid #c4c8cb;
+  border: 1px solid var(--coreui-table-border-color);
   border-bottom: 0;
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot tr:last-child,
@@ -139,7 +153,7 @@
   z-index: 2;
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td.coreui-table__fixed_left {
-  box-shadow: 1px 0 0 #c4c8cb, 0 1px 0 #c4c8cb;
+  box-shadow: 1px 0 0 var(--coreui-table-border-color), 0 1px 0 var(--coreui-table-border-color);
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td.coreui-table__sortable:hover {
   text-decoration: underline;
@@ -171,7 +185,7 @@
   top: 0;
   height: 100%;
   width: 1px;
-  box-shadow: 1px 0 0 #c4c8cb, 0 1px 0 #c4c8cb;
+  box-shadow: 1px 0 0 var(--coreui-table-border-color), 0 1px 0 var(--coreui-table-border-color);
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td.coreui-table__fixed_right::before {
   content: "";
@@ -180,7 +194,7 @@
   top: 0;
   height: 100%;
   width: 1px;
-  box-shadow: -1px 0 0 #c4c8cb, 0 1px 0 #c4c8cb;
+  box-shadow: -1px 0 0 var(--coreui-table-border-color), 0 1px 0 var(--coreui-table-border-color);
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table:not(.table-bordered) > tbody > tr > td.coreui-table__fixed_right::before {
   content: "";
@@ -189,7 +203,7 @@
   top: 0;
   height: 100%;
   width: 1px;
-  box-shadow: 1px 0 0 #c4c8cb, 0 1px 0 #c4c8cb;
+  box-shadow: 1px 0 0 var(--coreui-table-border-color), 0 1px 0 var(--coreui-table-border-color);
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td.coreui_table__no-wrap {
   max-width: 0;
@@ -239,7 +253,7 @@
   margin-left: 0;
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot > tr > td {
-  background-color: #FFF;
+  background-color: var(--coreui-table-tfoot-bg);
 }
 .coreui-table .coreui-table__control .coreui-table__page_jump_container input {
   width: 65px;
@@ -259,6 +273,14 @@
 }
 .coreui-table .coreui-table__cursor_help {
   cursor: help;
+}
+
+:root {
+  --coreui-compact-table-border-color: #e0e0e0;
+}
+
+[data-bs-theme=dark] {
+  --coreui-compact-table-border-color: #3d3d3d;
 }
 
 .coreui-table.coreui-theme-compact .coreui-table__container {
@@ -341,7 +363,11 @@
   border-color: transparent;
 }
 .coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td {
-  border-color: #e0e0e0;
+  border-color: var(--coreui-compact-table-border-color);
+}
+
+[data-bs-theme=dark] {
+  --coreui-compact-table-border-color: #3d3d3d;
 }
 
 .coreui-table.coreui-theme-no-border .coreui-table__container {

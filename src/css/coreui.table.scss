@@ -1,8 +1,25 @@
 
+:root {
+    --coreui-table-thead-bg: #{$coreui-table-thead-bg};
+    --coreui-table-tbody-bg: #{$coreui-table-tbody-bg};
+    --coreui-table-tfoot-bg: #{$coreui-table-tfoot-bg};
+
+    --coreui-table-border-color: #{$coreui-table-border-color};
+}
+
+[data-bs-theme="dark"] {
+    --coreui-table-border-color: #3d3d3d;
+
+    --coreui-table-thead-bg: var(--bs-body-bg);
+    --coreui-table-tbody-bg: var(--bs-body-bg);
+    --coreui-table-tfoot-bg: var(--bs-body-bg);
+}
+
 .coreui-table {
+
     > .coreui-table__container {
-        background-color: $coreui-table-tbody-bg;
-        border: var(--bs-border-width) solid $coreui-table-border-color;
+        background-color: var(--coreui-table-tbody-bg);
+        border: var(--bs-border-width) solid var(--coreui-table-border-color);
         border-radius: $coreui-table-border-radius;
     }
     > .coreui-table__container.fixed-columns {
@@ -10,8 +27,8 @@
     }
 
     > .coreui-table__container > .coreui-table__header {
-        background-color: $coreui-table-thead-bg;
-        border-bottom: var(--bs-border-width) solid $coreui-table-border-color;
+        background-color: var(--coreui-table-thead-bg);
+        border-bottom: var(--bs-border-width) solid var(--coreui-table-border-color);
         border-top-right-radius: $coreui-table-border-radius;
         border-top-left-radius: $coreui-table-border-radius;
     }
@@ -35,7 +52,7 @@
         }
         .coreui-table__search,
         .coreui-table__columns {
-            border-bottom: 1px solid $coreui-table-border-color;
+            border-bottom: 1px solid var(--coreui-table-border-color);
         }
     }
     > .coreui-table__container > .coreui-table__wrapper > {
@@ -43,7 +60,7 @@
             min-height: 55px;
         }
         table > tbody {
-            border-color: $coreui-table-border-color;
+            border-color: var(--coreui-table-border-color);
         }
         table.empty-tfoot > tbody > tr:last-child > td {
             border-bottom: 0;
@@ -58,7 +75,7 @@
         }
         table > tbody > tr > td {
             font-size: $coreui-table-font-size;
-            border-color: $coreui-table-border-color;
+            border-color: var(--coreui-table-border-color);
         }
         table > thead > tr > td,
         .coreui-table__header {
@@ -93,15 +110,15 @@
 
         table > thead > tr > td::before {
             top: 0;
-            box-shadow: 0 -1px 0 $coreui-table-border-color, 0 0 0 $coreui-table-border-color;
+            box-shadow: 0 -1px 0 var(--coreui-table-border-color), 0 0 0 var(--coreui-table-border-color);
         }
         table > thead > tr > td::after {
             bottom: 0;
-            box-shadow: 0 1px 0 $coreui-table-border-color, 0 0 0 $coreui-table-border-color;
+            box-shadow: 0 1px 0 var(--coreui-table-border-color), 0 0 0 var(--coreui-table-border-color);
         }
         table.table-bordered > thead > tr > td {
-            border: 1px solid $coreui-table-border-color;
-            background-color: $coreui-table-thead-bg;
+            border: 1px solid var(--coreui-table-border-color);
+            background-color: var(--coreui-table-thead-bg);
 
             .coreui-table__column-description {
                 cursor: help;
@@ -110,7 +127,7 @@
         table > thead > tr:first-child,
         table > thead > tr:first-child > td {
             border-top: none;
-            background-color: $coreui-table-thead-bg;
+            background-color: var(--coreui-table-thead-bg);
         }
         table > tbody > tr:first-child,
         table > tbody > tr:first-child > td {
@@ -120,7 +137,7 @@
 
         table > tfoot > tr > td::before {
             top: 0;
-            box-shadow: 0 -1px 0 $coreui-table-border-color;
+            box-shadow: 0 -1px 0 var(--coreui-table-border-color);
         }
         table > tfoot > tr > td::after {
             top: 0;
@@ -131,7 +148,7 @@
             z-index: 1;
         }
         table.table-bordered > tfoot > tr > td {
-            border: 1px solid $coreui-table-border-color;
+            border: 1px solid var(--coreui-table-border-color);
             border-bottom: 0;
         }
         table > tfoot tr:last-child,
@@ -160,7 +177,7 @@
             z-index: 2;
         }
         table > thead > tr > td.coreui-table__fixed_left {
-            box-shadow: 1px 0 0 $coreui-table-border-color, 0 1px 0 $coreui-table-border-color;
+            box-shadow: 1px 0 0 var(--coreui-table-border-color), 0 1px 0 var(--coreui-table-border-color);
         }
         table > thead > tr > td.coreui-table__sortable:hover {
             text-decoration: underline;
@@ -195,7 +212,7 @@
             top: 0;
             height: 100%;
             width: 1px;
-            box-shadow: 1px 0 0 $coreui-table-border-color, 0 1px 0 $coreui-table-border-color;
+            box-shadow: 1px 0 0 var(--coreui-table-border-color), 0 1px 0 var(--coreui-table-border-color);
         }
         table > tbody > tr > td.coreui-table__fixed_right::before {
             content: "";
@@ -204,7 +221,7 @@
             top: 0;
             height: 100%;
             width: 1px;
-            box-shadow: -1px 0 0 $coreui-table-border-color, 0 1px 0 $coreui-table-border-color;
+            box-shadow: -1px 0 0 var(--coreui-table-border-color), 0 1px 0 var(--coreui-table-border-color);
         }
         table:not(.table-bordered) > tbody > tr > td.coreui-table__fixed_right::before {
             content: "";
@@ -213,7 +230,7 @@
             top: 0;
             height: 100%;
             width: 1px;
-            box-shadow: 1px 0 0 $coreui-table-border-color, 0 1px 0 $coreui-table-border-color;
+            box-shadow: 1px 0 0 var(--coreui-table-border-color), 0 1px 0 var(--coreui-table-border-color);
         }
         table > tbody > tr > td.coreui_table__no-wrap {
             max-width: 0;
@@ -275,7 +292,7 @@
         }
         table > tfoot {
             > tr > td {
-                background-color: $coreui-table-tfoot-bg;
+                background-color: var(--coreui-table-tfoot-bg);
             }
         }
     }
@@ -308,6 +325,3 @@
         cursor: help;
     }
 }
-
-
-
