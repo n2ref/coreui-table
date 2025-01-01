@@ -7,8 +7,8 @@ let controlPages = {
 
     /**
      * Формирование контрола
-     * @param table
-     * @param options
+     * @param {coreuiTableInstance} table
+     * @param {object}              options
      * @return {jQuery}
      */
     render: function (table, options) {

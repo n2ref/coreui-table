@@ -8,9 +8,9 @@ let coreuiTablePrivate = {
 
     /**
      * Инициализация колонок
-     * @param {object} tableWrapper
-     * @param {object} table
-     * @param {Array} columns
+     * @param {coreuiTable}         tableWrapper
+     * @param {coreuiTableInstance} table
+     * @param {Array}               columns
      * @private
      */
     initColumns(tableWrapper, table, columns) {
@@ -20,7 +20,7 @@ let coreuiTablePrivate = {
             ? coreuiTablePrivate.getStorageField(table.getId(), 'columns')
             : null;
 
-        $.each(columns, function (key, column) {
+        columns.map(function (column) {
             if (typeof column.type === 'undefined' ||
                 ! tableWrapper.columns.hasOwnProperty(column.type)
             ) {
@@ -121,7 +121,7 @@ let coreuiTablePrivate = {
 
         let that = this;
 
-        $.each(rows, function (key, row) {
+        rows.map(function (row) {
 
             let type           = 'in';
             let controlsLeft   = [];
@@ -135,7 +135,7 @@ let coreuiTablePrivate = {
             }
 
             if (row.hasOwnProperty('left') && Array.isArray(row.left)) {
-                $.each(row.left, function (key, control) {
+                row.left.map(function (control) {
                     let instance = that.initControl(tableWrapper, table, control);
 
                     if (coreuiTableUtils.isObject(instance)) {
@@ -145,7 +145,7 @@ let coreuiTablePrivate = {
             }
 
             if (row.hasOwnProperty('center') && Array.isArray(row.center)) {
-                $.each(row.center, function (key, control) {
+                row.center.map(function (control) {
                     let instance = that.initControl(tableWrapper, table, control);
 
                     if (coreuiTableUtils.isObject(instance)) {
@@ -155,7 +155,7 @@ let coreuiTablePrivate = {
             }
 
             if (row.hasOwnProperty('right') && Array.isArray(row.right)) {
-                $.each(row.right, function (key, control) {
+                row.right.map(function (control) {
                     let instance = that.initControl(tableWrapper, table, control);
 
                     if (coreuiTableUtils.isObject(instance)) {

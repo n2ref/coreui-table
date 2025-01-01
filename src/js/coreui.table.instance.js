@@ -105,7 +105,11 @@ let coreuiTableInstance = {
         if (this._options.page > 0) {
             this._page = this._options.page;
         }
-        if (this._options.recordsPerPage > 0) {
+
+        if (this._options.saveState && this._options.id) {
+            this._recordsPerPage = coreuiTablePrivate.getStorageField(this._id, 'page_size')
+
+        } else if (this._options.recordsPerPage > 0) {
             this._recordsPerPage = this._options.recordsPerPage;
         }
 
@@ -205,22 +209,22 @@ let coreuiTableInstance = {
      */
     initEvents: function () {
 
-        let that = this;
+        let table = this;
 
         // Показ строк
         this.on('records_show', function () {
 
             // Переход по ссылке
-            if (typeof that._options.onClickUrl === 'string' && that._options.onClickUrl) {
-                coreuiTableElements.getTrRecords(that.getId()).click(function () {
+            if (typeof table._options.onClickUrl === 'string' && table._options.onClickUrl) {
+                coreuiTableElements.getTrRecords(table.getId()).click(function () {
                     let recordKey = $(this).data('record-index');
-                    let record    = that.getRecordByIndex(recordKey);
+                    let record    = table.getRecordByIndex(recordKey);
 
                     if ( ! record) {
                         return;
                     }
 
-                    let url = that._options.onClickUrl;
+                    let url = table._options.onClickUrl;
 
                     $.each(record.data, function (field, value) {
                         let fieldQuote = field.replace(/([^\w\d])/g, '\\$1');
@@ -237,21 +241,21 @@ let coreuiTableInstance = {
             }
 
             // Событие нажатия на строку
-            if (['function', 'string'].indexOf(typeof that._options.onClick)) {
+            if (['function', 'string'].indexOf(typeof table._options.onClick)) {
 
-                coreuiTableElements.getTrRecords(that.getId()).click(function (event) {
+                coreuiTableElements.getTrRecords(table.getId()).click(function (event) {
                     let recordKey = $(this).data('record-index');
-                    let record    = that.getRecordByIndex(recordKey);
+                    let record    = table.getRecordByIndex(recordKey);
 
                     if ( ! record) {
                         return;
                     }
 
-                    if (typeof that._options.onClick === 'function') {
-                        that._options.onClick(event, record);
+                    if (typeof table._options.onClick === 'function') {
+                        table._options.onClick(event, record);
 
-                    } else if (typeof that._options.onClick === 'string') {
-                        let func = new Function('event', 'record', that._options.onClick);
+                    } else if (typeof table._options.onClick === 'string') {
+                        let func = new Function('event', 'record', table._options.onClick);
 
                         func(event, record);
                     }
@@ -259,7 +263,7 @@ let coreuiTableInstance = {
             }
 
             // Раскрытие строки
-            coreuiTableElements.getNoWrapToggles(that.getId()).click(function (event) {
+            coreuiTableElements.getNoWrapToggles(table.getId()).click(function (event) {
 
                 event.cancelBubble = true;
                 event.preventDefault();
@@ -278,15 +282,15 @@ let coreuiTableInstance = {
             });
 
             // Фиксация колонок
-            coreuiTableElements.fixedColsLeft(that.getId())
-            coreuiTableElements.fixedColsRight(that.getId())
+            coreuiTableElements.fixedColsLeft(table.getId())
+            coreuiTableElements.fixedColsRight(table.getId())
         });
 
 
         // Показ таблицы
         this.on('table_show', function () {
 
-            let sortableColumns = coreuiTableElements.getTableSortable(that.getId());
+            let sortableColumns = coreuiTableElements.getTableSortable(table.getId());
             if (sortableColumns[0]) {
                 sortableColumns.click(function (event) {
                     let field = $(this).data('field');
@@ -295,7 +299,7 @@ let coreuiTableInstance = {
                         let sorting      = [];
                         let currentOrder = null;
 
-                        $.each(that._sort, function (key, sortField) {
+                        $.each(table._sort, function (key, sortField) {
 
                             if (field === sortField.field) {
                                 currentOrder = sortField.order;
@@ -319,10 +323,10 @@ let coreuiTableInstance = {
 
 
                         if (sorting.length === 0) {
-                            that.sortDefault();
+                            table.sortDefault();
 
                         } else {
-                            that.sortFields(sorting);
+                            table.sortFields(sorting);
                         }
                     }
                 });
@@ -330,7 +334,7 @@ let coreuiTableInstance = {
 
 
             if (window.hasOwnProperty('bootstrap') && bootstrap.hasOwnProperty('Tooltip')) {
-                $('.coreui-table__column-description', coreuiTableElements.getTableThead(that.getId())).each(function () {
+                $('.coreui-table__column-description', coreuiTableElements.getTableThead(table.getId())).each(function () {
                     new bootstrap.Tooltip(this);
                 });
             }
@@ -340,21 +344,25 @@ let coreuiTableInstance = {
         // События смены состояния
         if (this._options.saveState && this._options.id) {
             this.on('records_sort', function () {
-                coreuiTablePrivate.setStorageField(that.getId(), 'sort', that._sort);
+                coreuiTablePrivate.setStorageField(table.getId(), 'sort', table._sort);
             });
 
             this.on('search_change', function () {
-                coreuiTablePrivate.setStorageField(that.getId(), 'search', that.getSearchData());
+                coreuiTablePrivate.setStorageField(table.getId(), 'search', table.getSearchData());
             });
 
             this.on('filters_change', function () {
-                coreuiTablePrivate.setStorageField(that.getId(), 'filters', that.getFilterData());
+                coreuiTablePrivate.setStorageField(table.getId(), 'filters', table.getFilterData());
+            });
+
+            this.on('page_size_update', function () {
+                coreuiTablePrivate.setStorageField(table.getId(), 'page_size', table._recordsPerPage);
             });
 
             this.on('columns_change', function () {
                 let columns = [];
 
-                that._columns.map(function (column) {
+                table._columns.map(function (column) {
                     let columnOptions = column.getOptions();
 
                     columns.push({
@@ -363,7 +371,7 @@ let coreuiTableInstance = {
                     })
                 });
 
-                coreuiTablePrivate.setStorageField(that.getId(), 'columns', columns);
+                coreuiTablePrivate.setStorageField(table.getId(), 'columns', columns);
             });
         }
 

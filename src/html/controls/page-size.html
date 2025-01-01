@@ -1,6 +1,6 @@
 
 <select <%- attr %>>
-    <% $.each(recordsPerPageList, function(key, count) { %>
+    <% recordsPerPageList.map(function(count) { %>
     <option value="<%= count %>"<% if (recordsPerPage == count) { %>selected<% } %>>
     <% if (count == '0') { %><%= lang.all %><% } else { %><%= count %><% } %>
     </option>
