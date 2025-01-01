@@ -40,6 +40,7 @@
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td {
   font-weight: 600;
   color: var(--bs-secondary-color);
+  vertical-align: middle;
 }
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td {
   font-size: 14px;

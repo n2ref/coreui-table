@@ -54,6 +54,7 @@
         table > thead > tr > td {
             font-weight: $coreui-table-font-weight;
             color: var(--bs-secondary-color);
+            vertical-align: middle;
         }
         table > tbody > tr > td {
             font-size: $coreui-table-font-size;
