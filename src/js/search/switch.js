@@ -72,13 +72,9 @@ class SearchSwitch extends Search {
         if (this._control) {
             let value = $('input:checked', this._control).val();
 
-            if (typeof value === 'undefined') {
-                return null;
-            }
-
-            if (typeof value === 'string' && value !== '') {
-                return value;
-            }
+            return typeof value !== 'string' || value === ''
+                ? null
+                : value;
         }
 
         return this._value;

@@ -117,8 +117,9 @@ class SearchNumber extends Search {
                         end: valueEnd !== '' && ! isNaN(Number(valueEnd)) ? Number(valueEnd) : null,
                     }
                 }
-
             }
+
+            return null;
         }
 
         return this._value;

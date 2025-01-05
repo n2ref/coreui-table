@@ -1745,7 +1745,7 @@
           fields.push(fieldContent);
         }
       });
-      if (typeof options.onClickUrl === 'string' && options.onClickUrl) {
+      if (typeof options.onClickUrl === 'string' && options.onClickUrl || options.onClick) {
         recordAttr["class"] += ' coreui-table_pointer';
       }
       if (record.meta) {
@@ -6051,9 +6051,7 @@
       value: function getValue() {
         if (this._control) {
           var value = $('input', this._control).val();
-          if (typeof value === 'string' && value !== '') {
-            return value;
-          }
+          return typeof value !== 'string' || value === '' ? null : value;
         }
         return this._value;
       }
@@ -6411,10 +6409,7 @@
       value: function getValue() {
         if (this._control) {
           var value = $('input', this._control).val();
-          if (typeof value === 'string' && value !== '') {
-            return value;
-          }
-          return null;
+          return typeof value !== 'string' || value === '' ? null : value;
         }
         return this._value;
       }
@@ -6544,10 +6539,7 @@
       value: function getValue() {
         if (this._control) {
           var value = $('input', this._control).val();
-          if (typeof value === 'string' && value !== '') {
-            return value;
-          }
-          return null;
+          return typeof value !== 'string' || value === '' ? null : value;
         }
         return this._value;
       }
@@ -6677,10 +6669,7 @@
       value: function getValue() {
         if (this._control) {
           var value = $('input', this._control).val();
-          if (typeof value === 'string' && value !== '') {
-            return value;
-          }
-          return null;
+          return typeof value !== 'string' || value === '' ? null : value;
         }
         return this._value;
       }
@@ -7753,12 +7742,7 @@
       value: function getValue() {
         if (this._control) {
           var value = $('input:checked', this._control).val();
-          if (typeof value === 'undefined') {
-            return null;
-          }
-          if (typeof value === 'string' && value !== '') {
-            return value;
-          }
+          return typeof value !== 'string' || value === '' ? null : value;
         }
         return this._value;
       }
@@ -7950,9 +7934,7 @@
       value: function getValue() {
         if (this._control) {
           var value = this._control.val();
-          if (typeof value === 'string' && value !== '') {
-            return value;
-          }
+          return typeof value !== 'string' || value === '' ? null : value;
         }
         return this._value;
       }
@@ -8105,6 +8087,7 @@
               };
             }
           }
+          return null;
         }
         return this._value;
       }
@@ -8265,9 +8248,7 @@
       value: function getValue() {
         if (this._control) {
           var value = this._control.val();
-          if (typeof value === 'string' && value !== '') {
-            return value;
-          }
+          return typeof value !== 'string' || value === '' ? null : value;
         }
         return this._value;
       }
@@ -8398,10 +8379,7 @@
       value: function getValue() {
         if (this._control) {
           var value = this._control.val();
-          if (typeof value === 'string' && value !== '') {
-            return value;
-          }
-          return null;
+          return typeof value !== 'string' || value === '' ? null : value;
         }
         return this._value;
       }
@@ -8532,9 +8510,7 @@
       value: function getValue() {
         if (this._control) {
           var value = this._control.val();
-          if (typeof value === 'string' && value !== '') {
-            return value;
-          }
+          return typeof value !== 'string' || value === '' ? null : value;
         }
         return this._value;
       }
@@ -8702,6 +8678,7 @@
               };
             }
           }
+          return null;
         }
         return this._value;
       }
@@ -8895,6 +8872,7 @@
               };
             }
           }
+          return null;
         }
         return this._value;
       }
@@ -9877,12 +9855,7 @@
       value: function getValue() {
         if (this._control) {
           var value = $('input:checked', this._control).val();
-          if (typeof value === 'undefined') {
-            return null;
-          }
-          if (typeof value === 'string' && value !== '') {
-            return value;
-          }
+          return typeof value !== 'string' || value === '' ? null : value;
         }
         return this._value;
       }

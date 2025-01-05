@@ -120,6 +120,8 @@ class SearchDatetimeRange extends Search {
                     }
                 }
             }
+
+            return null;
         }
 
         return this._value;

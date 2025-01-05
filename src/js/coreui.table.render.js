@@ -516,7 +516,9 @@ let coreuiTableRender = {
             }
         });
 
-        if (typeof options.onClickUrl === 'string' && options.onClickUrl) {
+        if ((typeof options.onClickUrl === 'string' && options.onClickUrl) ||
+            options.onClick
+        ) {
             recordAttr.class += ' coreui-table_pointer';
         }
 

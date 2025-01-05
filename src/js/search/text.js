@@ -68,9 +68,9 @@ class SearchText extends Search {
         if (this._control) {
             let value = this._control.val();
 
-            if (typeof value === 'string' && value !== '') {
-                return value;
-            }
+            return typeof value !== 'string' || value === ''
+                ? null
+                : value;
         }
 
         return this._value;
