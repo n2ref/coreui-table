@@ -252,12 +252,12 @@ let coreuiTableInstance = {
                     }
 
                     if (typeof table._options.onClick === 'function') {
-                        table._options.onClick(event, record);
+                        table._options.onClick(record, table, event);
 
                     } else if (typeof table._options.onClick === 'string') {
-                        let func = new Function('event', 'record', table._options.onClick);
+                        let func = new Function('record', 'table', 'event', table._options.onClick);
 
-                        func(event, record);
+                        func(record, table, event);
                     }
                 });
             }
