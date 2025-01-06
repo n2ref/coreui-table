@@ -287,6 +287,10 @@
   border: none;
   background-color: transparent;
 }
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__search,
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__columns {
+  border-bottom: none;
+}
 .coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper {
   padding-top: 11px;
 }

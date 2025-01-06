@@ -1195,6 +1195,7 @@ let coreuiTableInstance = {
      * Получение записи по id
      * @param id
      * @return {object|null}
+     * @deprecated
      */
     getRecord: function (id) {
 
@@ -1226,8 +1227,19 @@ let coreuiTableInstance = {
     /**
      * Получение данных из существующих записей
      * @return {Array}
+     * @deprecated getRecordsData
      */
     getData: function () {
+
+        return this.getRecordsData();
+    },
+
+
+    /**
+     * Получение данных из существующих записей
+     * @return {Array}
+     */
+    getRecordsData: function () {
 
         let data = []
 
@@ -1623,7 +1635,7 @@ let coreuiTableInstance = {
 
 
     /**
-     * Получение записи по полю
+     * Получение записи по полю и его значению
      * @param {string}        field
      * @param {string|number} value
      * @return {object|null}
@@ -1934,7 +1946,7 @@ let coreuiTableInstance = {
 
 
     /**
-     * Показ указанных записей в таблице
+     * Установка записей для таблицы
      * @param {Array}  records
      * @param {number} total
      */

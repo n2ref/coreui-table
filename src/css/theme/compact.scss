@@ -17,6 +17,11 @@ $coreui-compact-table-border-color: #e0e0e0 !default;
     background-color: transparent;
   }
 
+  > .coreui-table__container > .coreui-table__search,
+  > .coreui-table__container > .coreui-table__columns {
+        border-bottom: none;
+  }
+
   > .coreui-table__container > .coreui-table__wrapper {
         padding-top: 11px;
   }
