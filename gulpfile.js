@@ -14,6 +14,7 @@ var conf = {
             'node_modules/jquery/dist/jquery.min.js',
             'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
             'src/js/highlight.pack.js',
+            'src/js/page.js',
         ]
     },
     css: {

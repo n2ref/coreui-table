@@ -1,15 +1,15 @@
-/*
-
-github.com style (c) Vasily Polovnyov <vast@whiteants.net>
-
-*/
+:root {
+  --hl-color: #333;
+  --hl-tag-color: #000080;
+  --hl-string-color: #d14;
+  --hl-key-color: #333;
+}
 
 .hljs {
   display: block;
   overflow-x: auto;
   padding: 0;
-  color: #333;
-  /*background: #f8f8f8;*/
+  color: var(--hl-color);
 }
 
 .hljs-comment,
@@ -21,7 +21,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 .hljs-keyword,
 .hljs-selector-tag,
 .hljs-subst {
-  color: #333;
+  color: var(--hl-key-color);
   font-weight: bold;
 }
 
@@ -35,7 +35,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
 .hljs-string,
 .hljs-doctag {
-  color: #d14;
+  color: var(--hl-string-color);
 }
 
 .hljs-title,
@@ -58,7 +58,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 .hljs-tag,
 .hljs-name,
 .hljs-attribute {
-  color: #000080;
+  color: var(--hl-tag-color);
   font-weight: normal;
 }
 
@@ -96,4 +96,12 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
 .hljs-strong {
   font-weight: bold;
+}
+
+
+[data-bs-theme='dark'] {
+  --hl-color: #90a4ae;
+  --hl-tag-color: #9b9b9b;
+  --hl-string-color: #a21638;
+  --hl-key-color: #bdbdbd;
 }

@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     // Simple
-    // Table 1
-    let tableSimple = {
+    CoreUI.table.create({
         columns: [
             { field: 'fname', label: 'First Name', width: '15%' },
             { field: 'lname', label: 'Last Name',  width: '15%' },
@@ -14,14 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { id: "2", fname: 'Stuart', lname: 'Motzart', email: 'frank@gmail.com', sdate: '2023-04-03' },
             { id: "3", fname: 'Jin',    lname: 'Franson', email: 'peter@gmail.com', sdate: '2023-02-03' }
         ]
-    };
-
-    CoreUI.table.create(tableSimple).render('table-simple1');
-
-    // Table 2
-    tableSimple.showHeaders = false;
-
-    CoreUI.table.create(tableSimple).render('table-simple2');
+    }).render('table-simple');
 
 
     // Empty
@@ -313,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function () {
         maxHeight: 400,
 
         columns: [
-            { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
+            { type: 'numbers', width: 10, attr: { class: "bg-body-tertiary border-end text-end" } },
             { field: 'athlete',  label: 'Name', width: '25%' },
             { field: 'country',  label: 'Country', width: '25%' },
             { field: 'sport',  label: 'Sport', width: '25%' },
@@ -358,7 +350,7 @@ document.addEventListener('DOMContentLoaded', function () {
     CoreUI.table.create({
         id: 'expand',
         columns: [
-            { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
+            { type: 'numbers', width: 10, attr: { class: "bbg-body-tertiary border-end text-end" } },
             { field: 'btn_static', label: 'static content', type: 'html', width: 110,
                 render: function (record, table) {
                     let btn = $(`<button class="btn btn-sm btn-outline-secondary">
@@ -408,15 +400,15 @@ document.addEventListener('DOMContentLoaded', function () {
             { type: 'numbers', width: 10, attr: { class: "border-end text-end" } },
             { type: 'select' },
             { field: 'name',   label: 'Name' },
-            { field: 'email',  label: 'Email',        width: 150 },
-            { type:  'date',   field: 'sdate',        label: 'Start Date', width: 100,  format: 'DD.MM.YYYY' },
-            { type:  'switch', field: 'is_active_sw', label: 'On', valueY: 1, valueN: 0, disabled: false,
+            { field: 'email',  label: 'Email',     width: 150 },
+            { type:  'date',   field: 'sdate',     label: 'Start Date', width: 100,  format: 'DD.MM.YYYY' },
+            { type:  'switch', field: 'is_active', label: 'On', valueY: 1, valueN: 0, disabled: false,
                 onChange: function (record, value) {
                     alert("Switch record to " + value + ": " + JSON.stringify(record));
                 }
             }
         ],
-        onClick: function (event, record) {
+        onClick: function (record, table, event) {
             alert('Click record: ' + JSON.stringify(record))
         },
         records: [
@@ -473,16 +465,16 @@ document.addEventListener('DOMContentLoaded', function () {
         id: 'types_standard',
         columns: [
             { type: 'select' },
-            { type: 'switch',    field: 'is_active_sw', label: 'Switch', valueY: 1, valueN: 0, width: 80 },
-            { type: 'image',     field: 'image',        label: 'Image',             width: 100, imgStyle: 'circle', imgWidth: 30, imgHeight: 30, imgBorder: true },
-            { type: 'badge',     field: 'badge',        label: 'Badge'},
-            { type: 'dateHuman', field: 'datetime',     label: 'Date Human'},
-            { type: 'link',      field: 'link',         label: 'Link',              width: 200 },
-            { type: 'button',    field: 'button',       label: 'Button',            width: 100 },
+            { type: 'switch',    field: 'is_active', label: 'Switch', valueY: 1, valueN: 0, width: 80 },
+            { type: 'image',     field: 'image',     label: 'Image',  width: 100, imgStyle: 'circle', imgWidth: 30, imgHeight: 30, imgBorder: true },
+            { type: 'badge',     field: 'badge',     label: 'Badge'},
+            { type: 'dateHuman', field: 'datetime',  label: 'Date Human'},
+            { type: 'link',      field: 'link',      label: 'Link',   width: 200 },
+            { type: 'button',    field: 'button',    label: 'Button', width: 100 },
         ],
         records: [
             {
-                is_active_sw: "N",
+                is_active: 0,
                 image: 'data/img/thumb1.png',
                 badge: { type: 'secondary', text: 'Secondary' },
                 datetime: '2024-12-21 19:04:10',
@@ -498,7 +490,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             },
             {
-                is_active_sw: "N",
+                is_active: 0,
                 image: 'data/img/thumb2.png',
                 badge: { type: 'primary',   text: 'Primary' },
                 datetime: '2024-10-24 07:04:10',
@@ -510,7 +502,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             },
             {
-                is_active_sw: "Y",
+                is_active: 1,
                 image: 'data/img/thumb3.png',
                 badge: { type: 'success',   text: 'Success' },
                 datetime: '2023-12-03 12:04:10',
@@ -526,7 +518,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             },
             {
-                is_active_sw: "Y",
+                is_active: 1,
                 image: 'data/img/thumb4.png',
                 button: {
                     content: "Button",
@@ -689,7 +681,7 @@ document.addEventListener('DOMContentLoaded', function () {
             },
         ],
         columns: [
-            { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
+            { type: 'numbers', width: 10, attr: { class: "bg-body-tertiary border-end text-end" } },
             { field: 'fname',  label: 'First Name'},
             { field: 'lname',  label: 'Last Name', show: false},
             { field: 'sdate',  label: 'Start Date', type: 'date' }
@@ -746,6 +738,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { cell1: 'column value', cell2: 'column value', cell3: 'column value', cell4: 'column value', cell5: 'column value', cell6: 'column value', cell7: 'column value', cell8: 'column value', cell9: 'column value', cell10: 'column value', cell11: 'column value', cell12: 'column value', cell13: 'column value', cell14: 'column value', cell15: 'column value' }
         ]
     }).render('table-columns-fixed');
+
 
     // Columns menu
     CoreUI.table.create({
@@ -809,7 +802,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }).render('table-columns-menu');
 
 
-    // Header column groups
+    // Headers
     CoreUI.table.create({
         class: 'table-bordered',
         maxHeight: 400,
@@ -831,7 +824,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { type: 'text',    field: 'email', label: 'Email' },
             { type: 'date',    field: 'sdate', label: 'Start Date', width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
             { type: 'date',    field: 'edate', label: 'End Date',   width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
-            { type: 'switch', field: 'is_active_sw', label: 'On', valueY: 1, valueN: 0,
+            { type: 'switch', field: 'is_active', label: 'On', valueY: 1, valueN: 0,
                 onChange: function (record, value) {
                     console.log(record);
                     console.log(value);
@@ -839,29 +832,29 @@ document.addEventListener('DOMContentLoaded', function () {
             },
         ],
         records: [
-            { id: 1,  fname: 'Jane',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-12-03', is_active_sw: "N" },
-            { id: 2,  fname: 'Stuart',  lname: 'Motzart',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-11-03', is_active_sw: "N" },
-            { id: 3,  fname: 'Jin',     lname: 'Franson',     email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "Y" },
-            { id: 4,  fname: 'Susan',   lname: 'Ottie',       email: 'frank@gmail.com',    sdate: '2023-09-03', edate: '2023-10-03', is_active_sw: "Y" },
-            { id: 5,  fname: 'Kelly',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-06-24', is_active_sw: "Y" },
-            { id: 6,  fname: 'Francis', lname: 'Gatos',       email: 'jdoe@gmail.com',     sdate: '2023-02-03', edate: '2023-06-03', is_active_sw: "N" },
-            { id: 7,  fname: 'Mark',    lname: 'Welldo',      email: 'susan@gmail.com',    sdate: '2023-04-03', edate: '2023-06-23', is_active_sw: "N" },
-            { id: 8,  fname: 'Thomas',  lname: 'Bahh',        email: 'david@gmail.com',    sdate: '2023-04-03', edate: '2023-09-16', is_active_sw: "N" },
-            { id: 9,  fname: 'Sergei',  lname: 'Rachmaninov', email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
-            { id: 10, fname: 'Jill',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
-            { id: 11, fname: 'Frank',   lname: 'Motzart',     email: 'peterson@gmail.com', sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
-            { id: 12, fname: 'Peter',   lname: 'Franson',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-03', is_active_sw: "N" },
-            { id: 13, fname: 'Andrew',  lname: 'Ottie',       email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-06-19', is_active_sw: "N" },
-            { id: 14, fname: 'Manny',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-05', is_active_sw: "N" },
-            { id: 15, fname: 'Ben',     lname: 'Gatos',       email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-09-03', is_active_sw: "N" },
-            { id: 16, fname: 'Doer',    lname: 'Welldo',      email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-07', is_active_sw: "N" },
-            { id: 17, fname: 'Shashi',  lname: 'Bahh',        email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
-            { id: 18, fname: 'Av',      lname: 'Rachmaninov', email: 'joe@gmail.com',      sdate: '2023-09-03', edate: '2023-12-06', is_active_sw: "N" },
+            { id: 1,  fname: 'Jane',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-12-03', is_active: 0 },
+            { id: 2,  fname: 'Stuart',  lname: 'Motzart',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-11-03', is_active: 0 },
+            { id: 3,  fname: 'Jin',     lname: 'Franson',     email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-04-03', is_active: 1 },
+            { id: 4,  fname: 'Susan',   lname: 'Ottie',       email: 'frank@gmail.com',    sdate: '2023-09-03', edate: '2023-10-03', is_active: 1 },
+            { id: 5,  fname: 'Kelly',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-06-24', is_active: 1 },
+            { id: 6,  fname: 'Francis', lname: 'Gatos',       email: 'jdoe@gmail.com',     sdate: '2023-02-03', edate: '2023-06-03', is_active: 0 },
+            { id: 7,  fname: 'Mark',    lname: 'Welldo',      email: 'susan@gmail.com',    sdate: '2023-04-03', edate: '2023-06-23', is_active: 0 },
+            { id: 8,  fname: 'Thomas',  lname: 'Bahh',        email: 'david@gmail.com',    sdate: '2023-04-03', edate: '2023-09-16', is_active: 0 },
+            { id: 9,  fname: 'Sergei',  lname: 'Rachmaninov', email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active: 0 },
+            { id: 10, fname: 'Jill',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active: 0 },
+            { id: 11, fname: 'Frank',   lname: 'Motzart',     email: 'peterson@gmail.com', sdate: '2023-04-03', edate: '2023-04-03', is_active: 0 },
+            { id: 12, fname: 'Peter',   lname: 'Franson',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-03', is_active: 0 },
+            { id: 13, fname: 'Andrew',  lname: 'Ottie',       email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-06-19', is_active: 0 },
+            { id: 14, fname: 'Manny',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-05', is_active: 0 },
+            { id: 15, fname: 'Ben',     lname: 'Gatos',       email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-09-03', is_active: 0 },
+            { id: 16, fname: 'Doer',    lname: 'Welldo',      email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-07', is_active: 0 },
+            { id: 17, fname: 'Shashi',  lname: 'Bahh',        email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active: 0 },
+            { id: 18, fname: 'Av',      lname: 'Rachmaninov', email: 'joe@gmail.com',      sdate: '2023-09-03', edate: '2023-12-06', is_active: 0 },
         ]
     }).render('table-headers');
 
 
-    // Footer column groups
+    // Footers
     CoreUI.table.create({
         class: 'table-bordered',
         maxHeight: 400,
@@ -880,12 +873,12 @@ document.addEventListener('DOMContentLoaded', function () {
         columns: [
             { type: 'numbers'},
             { type: 'select'},
-            { type: 'text',    field: 'fname', label: 'First Name', width: '15%'},
-            { type: 'text',    field: 'lname', label: 'Last Name',  width: '15%'},
-            { type: 'text',    field: 'email', label: 'Email' },
-            { type: 'date',    field: 'sdate', label: 'Start Date', width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
-            { type: 'date',    field: 'edate', label: 'End Date',   width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
-            { type: 'switch', field: 'is_active_sw', label: 'On', valueY: 1, valueN: 0,
+            { type: 'text',   field: 'fname', label: 'First Name', width: '15%'},
+            { type: 'text',   field: 'lname', label: 'Last Name',  width: '15%'},
+            { type: 'text',   field: 'email', label: 'Email' },
+            { type: 'date',   field: 'sdate', label: 'Start Date', width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
+            { type: 'date',   field: 'edate', label: 'End Date',   width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
+            { type: 'switch', field: 'is_active', label: 'On', valueY: 1, valueN: 0,
                 onChange: function (record, value) {
                     console.log(record);
                     console.log(value);
@@ -893,24 +886,24 @@ document.addEventListener('DOMContentLoaded', function () {
             },
         ],
         records: [
-            { id: 1,  fname: 'Jane',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-12-03', is_active_sw: "N" },
-            { id: 2,  fname: 'Stuart',  lname: 'Motzart',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-11-03', is_active_sw: "N" },
-            { id: 3,  fname: 'Jin',     lname: 'Franson',     email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "Y" },
-            { id: 4,  fname: 'Susan',   lname: 'Ottie',       email: 'frank@gmail.com',    sdate: '2023-09-03', edate: '2023-10-03', is_active_sw: "Y" },
-            { id: 5,  fname: 'Kelly',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-06-24', is_active_sw: "Y" },
-            { id: 6,  fname: 'Francis', lname: 'Gatos',       email: 'jdoe@gmail.com',     sdate: '2023-02-03', edate: '2023-06-03', is_active_sw: "N" },
-            { id: 7,  fname: 'Mark',    lname: 'Welldo',      email: 'susan@gmail.com',    sdate: '2023-04-03', edate: '2023-06-23', is_active_sw: "N" },
-            { id: 8,  fname: 'Thomas',  lname: 'Bahh',        email: 'david@gmail.com',    sdate: '2023-04-03', edate: '2023-09-16', is_active_sw: "N" },
-            { id: 9,  fname: 'Sergei',  lname: 'Rachmaninov', email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
-            { id: 10, fname: 'Jill',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
-            { id: 11, fname: 'Frank',   lname: 'Motzart',     email: 'peterson@gmail.com', sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
-            { id: 12, fname: 'Peter',   lname: 'Franson',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-03', is_active_sw: "N" },
-            { id: 13, fname: 'Andrew',  lname: 'Ottie',       email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-06-19', is_active_sw: "N" },
-            { id: 14, fname: 'Manny',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-05', is_active_sw: "N" },
-            { id: 15, fname: 'Ben',     lname: 'Gatos',       email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-09-03', is_active_sw: "N" },
-            { id: 16, fname: 'Doer',    lname: 'Welldo',      email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-07', is_active_sw: "N" },
-            { id: 17, fname: 'Shashi',  lname: 'Bahh',        email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
-            { id: 18, fname: 'Av',      lname: 'Rachmaninov', email: 'joe@gmail.com',      sdate: '2023-09-03', edate: '2023-12-06', is_active_sw: "N" },
+            { id: 1,  fname: 'Jane',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-12-03', is_active: 0 },
+            { id: 2,  fname: 'Stuart',  lname: 'Motzart',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-11-03', is_active: 0 },
+            { id: 3,  fname: 'Jin',     lname: 'Franson',     email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-04-03', is_active: 1 },
+            { id: 4,  fname: 'Susan',   lname: 'Ottie',       email: 'frank@gmail.com',    sdate: '2023-09-03', edate: '2023-10-03', is_active: 1 },
+            { id: 5,  fname: 'Kelly',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-06-24', is_active: 1 },
+            { id: 6,  fname: 'Francis', lname: 'Gatos',       email: 'jdoe@gmail.com',     sdate: '2023-02-03', edate: '2023-06-03', is_active: 0 },
+            { id: 7,  fname: 'Mark',    lname: 'Welldo',      email: 'susan@gmail.com',    sdate: '2023-04-03', edate: '2023-06-23', is_active: 0 },
+            { id: 8,  fname: 'Thomas',  lname: 'Bahh',        email: 'david@gmail.com',    sdate: '2023-04-03', edate: '2023-09-16', is_active: 0 },
+            { id: 9,  fname: 'Sergei',  lname: 'Rachmaninov', email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active: 0 },
+            { id: 10, fname: 'Jill',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active: 0 },
+            { id: 11, fname: 'Frank',   lname: 'Motzart',     email: 'peterson@gmail.com', sdate: '2023-04-03', edate: '2023-04-03', is_active: 0 },
+            { id: 12, fname: 'Peter',   lname: 'Franson',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-03', is_active: 0 },
+            { id: 13, fname: 'Andrew',  lname: 'Ottie',       email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-06-19', is_active: 0 },
+            { id: 14, fname: 'Manny',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-05', is_active: 0 },
+            { id: 15, fname: 'Ben',     lname: 'Gatos',       email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-09-03', is_active: 0 },
+            { id: 16, fname: 'Doer',    lname: 'Welldo',      email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-07', is_active: 0 },
+            { id: 17, fname: 'Shashi',  lname: 'Bahh',        email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active: 0 },
+            { id: 18, fname: 'Av',      lname: 'Rachmaninov', email: 'joe@gmail.com',      sdate: '2023-09-03', edate: '2023-12-06', is_active: 0 },
         ]
     }).render('table-footers');
 
@@ -1005,7 +998,7 @@ document.addEventListener('DOMContentLoaded', function () {
             },
         },
         columns: [
-            { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
+            { type: 'numbers', width: 10, attr: { class: "bg-body-tertiary border-end text-end" } },
             { field: 'fname',  label: 'First Name'},
             { field: 'lname',  label: 'Last Name'},
             { field: 'sdate',  label: 'Start Date', type: 'date' }
@@ -1038,30 +1031,79 @@ document.addEventListener('DOMContentLoaded', function () {
             { type: 'text',    field: 'email', label: 'Email' },
             { type: 'date',    field: 'sdate', label: 'Start Date', width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
             { type: 'date',    field: 'edate', label: 'End Date',   width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
-            { type: 'switch', field: 'is_active_sw', label: 'On', valueY: 1, valueN: 0 },
+            { type: 'switch', field: 'is_active', label: 'On', valueY: 1, valueN: 0 },
         ],
         records: [
-            { id: 1,  fname: 'Jane',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-12-03', is_active_sw: "N" },
-            { id: 2,  fname: 'Stuart',  lname: 'Motzart',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-11-03', is_active_sw: "N" },
-            { id: 3,  fname: 'Jin',     lname: 'Franson',     email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "Y" },
-            { id: 4,  fname: 'Susan',   lname: 'Ottie',       email: 'frank@gmail.com',    sdate: '2023-09-03', edate: '2023-10-03', is_active_sw: "Y" },
-            { id: 5,  fname: 'Kelly',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-06-24', is_active_sw: "Y" },
-            { id: 6,  fname: 'Francis', lname: 'Gatos',       email: 'jdoe@gmail.com',     sdate: '2023-02-03', edate: '2023-06-03', is_active_sw: "N" },
-            { id: 7,  fname: 'Mark',    lname: 'Welldo',      email: 'susan@gmail.com',    sdate: '2023-04-03', edate: '2023-06-23', is_active_sw: "N" },
-            { id: 8,  fname: 'Thomas',  lname: 'Bahh',        email: 'david@gmail.com',    sdate: '2023-04-03', edate: '2023-09-16', is_active_sw: "N" },
-            { id: 9,  fname: 'Sergei',  lname: 'Rachmaninov', email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
-            { id: 10, fname: 'Jill',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
-            { id: 11, fname: 'Frank',   lname: 'Motzart',     email: 'peterson@gmail.com', sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
-            { id: 12, fname: 'Peter',   lname: 'Franson',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-03', is_active_sw: "N" },
-            { id: 13, fname: 'Andrew',  lname: 'Ottie',       email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-06-19', is_active_sw: "N" },
-            { id: 14, fname: 'Manny',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-05', is_active_sw: "N" },
-            { id: 15, fname: 'Ben',     lname: 'Gatos',       email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-09-03', is_active_sw: "N" },
-            { id: 16, fname: 'Doer',    lname: 'Welldo',      email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-07', is_active_sw: "N" },
-            { id: 17, fname: 'Shashi',  lname: 'Bahh',        email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active_sw: "N" },
-            { id: 18, fname: 'Av',      lname: 'Rachmaninov', email: 'joe@gmail.com',      sdate: '2023-09-03', edate: '2023-12-06', is_active_sw: "N" },
-            { id: 19, fname: 'John',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-09-03', edate: '2023-12-06', is_active_sw: "N" }
+            { id: 1,  fname: 'Jane',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-12-03', is_active: 0 },
+            { id: 2,  fname: 'Stuart',  lname: 'Motzart',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-11-03', is_active: 0 },
+            { id: 3,  fname: 'Jin',     lname: 'Franson',     email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-04-03', is_active: 1 },
+            { id: 4,  fname: 'Susan',   lname: 'Ottie',       email: 'frank@gmail.com',    sdate: '2023-09-03', edate: '2023-10-03', is_active: 1 },
+            { id: 5,  fname: 'Kelly',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-06-24', is_active: 1 },
+            { id: 6,  fname: 'Francis', lname: 'Gatos',       email: 'jdoe@gmail.com',     sdate: '2023-02-03', edate: '2023-06-03', is_active: 0 },
+            { id: 7,  fname: 'Mark',    lname: 'Welldo',      email: 'susan@gmail.com',    sdate: '2023-04-03', edate: '2023-06-23', is_active: 0 },
+            { id: 8,  fname: 'Thomas',  lname: 'Bahh',        email: 'david@gmail.com',    sdate: '2023-04-03', edate: '2023-09-16', is_active: 0 },
+            { id: 9,  fname: 'Sergei',  lname: 'Rachmaninov', email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active: 0 },
+            { id: 10, fname: 'Jill',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active: 0 },
+            { id: 11, fname: 'Frank',   lname: 'Motzart',     email: 'peterson@gmail.com', sdate: '2023-04-03', edate: '2023-04-03', is_active: 0 },
+            { id: 12, fname: 'Peter',   lname: 'Franson',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-03', is_active: 0 },
+            { id: 13, fname: 'Andrew',  lname: 'Ottie',       email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-06-19', is_active: 0 },
+            { id: 14, fname: 'Manny',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-05', is_active: 0 },
+            { id: 15, fname: 'Ben',     lname: 'Gatos',       email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-09-03', is_active: 0 },
+            { id: 16, fname: 'Doer',    lname: 'Welldo',      email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-07', is_active: 0 },
+            { id: 17, fname: 'Shashi',  lname: 'Bahh',        email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active: 0 },
+            { id: 18, fname: 'Av',      lname: 'Rachmaninov', email: 'joe@gmail.com',      sdate: '2023-09-03', edate: '2023-12-06', is_active: 0 },
+            { id: 19, fname: 'John',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-09-03', edate: '2023-12-06', is_active: 0 }
         ]
     }).render('table-sizing-decoration');
+
+
+    // Theme
+    let optionsTheme = {
+        class: 'table-sm table-hover',
+        width: '100%',
+        minWidth: '100%',
+        maxWidth: '100%',
+        height: 250,
+        minHeight: 250,
+        maxHeight: 250,
+        columns: [
+            { type: 'numbers'},
+            { type: 'select'},
+            { type: 'text',    field: 'fname', label: 'First Name', width: '15%'},
+            { type: 'text',    field: 'lname', label: 'Last Name',  width: '15%'},
+            { type: 'text',    field: 'email', label: 'Email' },
+            { type: 'date',    field: 'sdate', label: 'Start Date', width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
+            { type: 'date',    field: 'edate', label: 'End Date',   width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
+            { type: 'switch', field: 'is_active', label: 'On', valueY: 1, valueN: 0 },
+        ],
+        records: [
+            { id: 1,  fname: 'Jane',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-12-03', is_active: 0 },
+            { id: 2,  fname: 'Stuart',  lname: 'Motzart',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-11-03', is_active: 0 },
+            { id: 3,  fname: 'Jin',     lname: 'Franson',     email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-04-03', is_active: 1 },
+            { id: 4,  fname: 'Susan',   lname: 'Ottie',       email: 'frank@gmail.com',    sdate: '2023-09-03', edate: '2023-10-03', is_active: 1 },
+            { id: 5,  fname: 'Kelly',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-06-24', is_active: 1 },
+            { id: 6,  fname: 'Francis', lname: 'Gatos',       email: 'jdoe@gmail.com',     sdate: '2023-02-03', edate: '2023-06-03', is_active: 0 },
+            { id: 7,  fname: 'Mark',    lname: 'Welldo',      email: 'susan@gmail.com',    sdate: '2023-04-03', edate: '2023-06-23', is_active: 0 },
+            { id: 8,  fname: 'Thomas',  lname: 'Bahh',        email: 'david@gmail.com',    sdate: '2023-04-03', edate: '2023-09-16', is_active: 0 },
+            { id: 9,  fname: 'Sergei',  lname: 'Rachmaninov', email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active: 0 },
+            { id: 10, fname: 'Jill',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active: 0 },
+            { id: 11, fname: 'Frank',   lname: 'Motzart',     email: 'peterson@gmail.com', sdate: '2023-04-03', edate: '2023-04-03', is_active: 0 },
+            { id: 12, fname: 'Peter',   lname: 'Franson',     email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-03', is_active: 0 },
+            { id: 13, fname: 'Andrew',  lname: 'Ottie',       email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-06-19', is_active: 0 },
+            { id: 14, fname: 'Manny',   lname: 'Silver',      email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-08-05', is_active: 0 },
+            { id: 15, fname: 'Ben',     lname: 'Gatos',       email: 'peter@gmail.com',    sdate: '2023-04-03', edate: '2023-09-03', is_active: 0 },
+            { id: 16, fname: 'Doer',    lname: 'Welldo',      email: 'magi@gmail.com',     sdate: '2023-04-03', edate: '2023-04-07', is_active: 0 },
+            { id: 17, fname: 'Shashi',  lname: 'Bahh',        email: 'jdoe@gmail.com',     sdate: '2023-04-03', edate: '2023-04-03', is_active: 0 },
+            { id: 18, fname: 'Av',      lname: 'Rachmaninov', email: 'joe@gmail.com',      sdate: '2023-09-03', edate: '2023-12-06', is_active: 0 },
+            { id: 19, fname: 'John',    lname: 'Doe',         email: 'jdoe@gmail.com',     sdate: '2023-09-03', edate: '2023-12-06', is_active: 0 }
+        ]
+    };
+
+    optionsTheme.theme = 'compact';
+    CoreUI.table.create(optionsTheme).render('table-themes-compact');
+
+    optionsTheme.theme = 'no-border';
+    CoreUI.table.create(optionsTheme).render('table-themes-no-border');
 
 
     // Sorting
@@ -1071,7 +1113,7 @@ document.addEventListener('DOMContentLoaded', function () {
         sort: [ { field: 'fname', order: 'asc' } ],
         maxHeight: 400,
         columns: [
-            { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
+            { type: 'numbers', width: 10, attr: { class: "bg-body-tertiary border-end text-end" } },
             { field: 'fname',  label: 'First Name', sortable: true, width: '25%' },
             { field: 'lname',  label: 'Last Name', sortable: true, width: '25%' },
             { field: 'sdate',  label: 'Start Date', sortable: true }
@@ -1199,34 +1241,36 @@ document.addEventListener('DOMContentLoaded', function () {
             ]
         },
         columns: [
-            { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
+            { type: 'numbers', width: 10, attr: { class: "bg-body-tertiary border-end text-end" } },
             { field: 'name',   label: 'Name' },
             { field: 'number', label: 'Number',     type: 'number', width: 80 },
             { field: 'active', label: 'Active',     type: 'switch', width: 80 },
             { field: 'sdate',  label: 'Start Date', type: 'date', width: 140 }
         ],
         records: [
-            { "id": "0",  "name": "Armstrong Cole",    "number": 28, "active": "0", "sdate": "2018-09-18" },
-            { "id": "1",  "name": "Dionne Mccray",     "number": 38, "active": "0", "sdate": "2015-03-06" },
-            { "id": "2",  "name": "Bridgett Melendez", "number": 33, "active": "0", "sdate": "2020-02-13" },
-            { "id": "3",  "name": "Finley Meyer",      "number": 35, "active": "1", "sdate": "2014-11-17" },
-            { "id": "4",  "name": "Sheila Briggs",     "number": 38, "active": "0", "sdate": "2023-07-04" },
-            { "id": "5",  "name": "Vasquez Shepard",   "number": 23, "active": "1", "sdate": "2015-10-30" },
-            { "id": "6",  "name": "Meredith Garrison", "number": 27, "active": "0", "sdate": "2021-04-07" },
-            { "id": "7",  "name": "Isabella Poole",    "number": 39, "active": "1", "sdate": "2023-02-24" },
-            { "id": "8",  "name": "Roach Fischer",     "number": 30, "active": "0", "sdate": "2021-03-12" },
-            { "id": "9",  "name": "Melva Macdonald",   "number": 38, "active": "1", "sdate": "2015-05-18" },
-            { "id": "10", "name": "Goodwin Foster",    "number": 21, "active": "0", "sdate": "2018-11-18" },
-            { "id": "11", "name": "Jacqueline Gibson", "number": 30, "active": "0", "sdate": "2017-09-30" },
-            { "id": "12", "name": "Amalia Shannon",    "number": 23, "active": "1", "sdate": "2023-05-24" },
-            { "id": "13", "name": "Dena Floyd",        "number": 37, "active": "0", "sdate": "2024-01-15" },
-            { "id": "14", "name": "Merrill Russo",     "number": 22, "active": "1", "sdate": "2023-04-09" }
+            { "id": "0",  "name": "Armstrong Cole",    "number": 28, "active": 0, "sdate": "2018-09-18" },
+            { "id": "1",  "name": "Dionne Mccray",     "number": 38, "active": 0, "sdate": "2015-03-06" },
+            { "id": "2",  "name": "Bridgett Melendez", "number": 33, "active": 0, "sdate": "2020-02-13" },
+            { "id": "3",  "name": "Finley Meyer",      "number": 35, "active": 1, "sdate": "2014-11-17" },
+            { "id": "4",  "name": "Sheila Briggs",     "number": 38, "active": 0, "sdate": "2023-07-04" },
+            { "id": "5",  "name": "Vasquez Shepard",   "number": 23, "active": 1, "sdate": "2015-10-30" },
+            { "id": "6",  "name": "Meredith Garrison", "number": 27, "active": 0, "sdate": "2021-04-07" },
+            { "id": "7",  "name": "Isabella Poole",    "number": 39, "active": 1, "sdate": "2023-02-24" },
+            { "id": "8",  "name": "Roach Fischer",     "number": 30, "active": 0, "sdate": "2021-03-12" },
+            { "id": "9",  "name": "Melva Macdonald",   "number": 38, "active": 1, "sdate": "2015-05-18" },
+            { "id": "10", "name": "Goodwin Foster",    "number": 21, "active": 0, "sdate": "2018-11-18" },
+            { "id": "11", "name": "Jacqueline Gibson", "number": 30, "active": 0, "sdate": "2017-09-30" },
+            { "id": "12", "name": "Amalia Shannon",    "number": 23, "active": 1, "sdate": "2023-05-24" },
+            { "id": "13", "name": "Dena Floyd",        "number": 37, "active": 0, "sdate": "2024-01-15" },
+            { "id": "14", "name": "Merrill Russo",     "number": 22, "active": 1, "sdate": "2023-04-09" }
         ]
     }).render('table-search');
 
 
     // Filters
     CoreUI.table.create({
+        id: 'filters',
+        saveState: true,
         header: [
             {
                 type: 'out',
@@ -1271,7 +1315,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             '5': "Vasquez Shepard",
                         }
                     },
-                    { type: 'filter:switch', field: 'active', label: 'Active', valueY: '1'},
+                    { type: 'filter:switch', field: 'active', label: 'Active', valueY: 1},
                     { type: 'filterClear',  content: '<i class="bi bi-backspace"></i> Clear', attr: { class: "btn btn-secondary" } },
                 ]
             }
@@ -1283,35 +1327,28 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         ],
         columns: [
-            { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
+            { type: 'numbers', width: 10, attr: { class: "bg-body-tertiary border-end text-end" } },
             { field: 'name',   label: 'Name' },
             { field: 'number', label: 'Number',     type: 'number', width: 80 },
             { field: 'active', label: 'Active',     type: 'switch', width: 80 },
             { field: 'sdate',  label: 'Start Date', type: 'date', width: 140 }
         ],
         records: [
-            { "id": '0',  "name": "Armstrong Cole",    "number": 28, "active": "0", "sdate": "2018-09-18" },
-            { "id": '1',  "name": "Dionne Mccray",     "number": 38, "active": "0", "sdate": "2015-03-06" },
-            { "id": '2',  "name": "Bridgett Melendez", "number": 33, "active": "0", "sdate": "2020-02-13" },
-            { "id": '3',  "name": "Finley Meyer",      "number": 35, "active": "1", "sdate": "2014-11-17" },
-            { "id": '4',  "name": "Sheila Briggs",     "number": 38, "active": "0", "sdate": "2023-07-04" },
-            { "id": '5',  "name": "Vasquez Shepard",   "number": 23, "active": "1", "sdate": "2015-10-30" },
-            { "id": '6',  "name": "Meredith Garrison", "number": 27, "active": "0", "sdate": "2021-04-07" },
-            { "id": '7',  "name": "Isabella Poole",    "number": 39, "active": "1", "sdate": "2023-02-24" },
-            { "id": '8',  "name": "Roach Fischer",     "number": 30, "active": "0", "sdate": "2021-03-12" },
-            { "id": '9',  "name": "Melva Macdonald",   "number": 38, "active": "1", "sdate": "2015-05-18" },
-            { "id": '10', "name": "Goodwin Foster",    "number": 21, "active": "0", "sdate": "2018-11-18" },
-            { "id": '11', "name": "Jacqueline Gibson", "number": 30, "active": "0", "sdate": "2017-09-30" },
-            { "id": '12', "name": "Amalia Shannon",    "number": 23, "active": "1", "sdate": "2023-05-24" },
-            { "id": '13', "name": "Dena Floyd",        "number": 37, "active": "0", "sdate": "2024-01-15" },
-            { "id": '14', "name": "Merrill Russo",     "number": 22, "active": "1", "sdate": "2023-04-09" }
+            { "id": '0',  "name": "Armstrong Cole",    "number": 28, "active": 0, "sdate": "2018-09-18" },
+            { "id": '1',  "name": "Dionne Mccray",     "number": 38, "active": 0, "sdate": "2015-03-06" },
+            { "id": '2',  "name": "Bridgett Melendez", "number": 33, "active": 0, "sdate": "2020-02-13" },
+            { "id": '3',  "name": "Finley Meyer",      "number": 35, "active": 1, "sdate": "2014-11-17" },
+            { "id": '4',  "name": "Sheila Briggs",     "number": 38, "active": 0, "sdate": "2023-07-04" },
+            { "id": '5',  "name": "Vasquez Shepard",   "number": 23, "active": 1, "sdate": "2015-10-30" },
+            { "id": '6',  "name": "Meredith Garrison", "number": 27, "active": 0, "sdate": "2021-04-07" },
+            { "id": '7',  "name": "Isabella Poole",    "number": 39, "active": 1, "sdate": "2023-02-24" },
+            { "id": '8',  "name": "Roach Fischer",     "number": 30, "active": 0, "sdate": "2021-03-12" },
+            { "id": '9',  "name": "Melva Macdonald",   "number": 38, "active": 1, "sdate": "2015-05-18" },
+            { "id": '10', "name": "Goodwin Foster",    "number": 21, "active": 0, "sdate": "2018-11-18" },
+            { "id": '11', "name": "Jacqueline Gibson", "number": 30, "active": 0, "sdate": "2017-09-30" },
+            { "id": '12', "name": "Amalia Shannon",    "number": 23, "active": 1, "sdate": "2023-05-24" },
+            { "id": '13', "name": "Dena Floyd",        "number": 37, "active": 0, "sdate": "2024-01-15" },
+            { "id": '14', "name": "Merrill Russo",     "number": 22, "active": 1, "sdate": "2023-04-09" }
         ]
     }).render('table-filters');
-
-
-
-    // Code highlight
-    $('pre code').each(function(i, block) {
-        hljs.highlightBlock(block);
-    });
 });
