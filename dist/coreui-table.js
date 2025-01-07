@@ -3604,6 +3604,7 @@
      * Получение записи по id
      * @param id
      * @return {object|null}
+     * @deprecated
      */
     getRecord: function getRecord(id) {
       var record = this.getRecordById(id);
@@ -3625,8 +3626,16 @@
     /**
      * Получение данных из существующих записей
      * @return {Array}
+     * @deprecated getRecordsData
      */
     getData: function getData() {
+      return this.getRecordsData();
+    },
+    /**
+     * Получение данных из существующих записей
+     * @return {Array}
+     */
+    getRecordsData: function getRecordsData() {
       var data = [];
       $.each(this._records, function (key, record) {
         data.push($.extend(true, {}, record.data));
@@ -3906,7 +3915,7 @@
       return this.getRecordByField(this._options.primaryKey, id);
     },
     /**
-     * Получение записи по полю
+     * Получение записи по полю и его значению
      * @param {string}        field
      * @param {string|number} value
      * @return {object|null}
@@ -4112,7 +4121,7 @@
       }
     },
     /**
-     * Показ указанных записей в таблице
+     * Установка записей для таблицы
      * @param {Array}  records
      * @param {number} total
      */

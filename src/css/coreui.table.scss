@@ -308,6 +308,9 @@
     .coreui-table-lock {
         z-index: 2;
 
+        .coreui-table-block {
+            border-radius: $coreui-table-border-radius;
+        }
         .coreui-table-message {
             width: 200px;
         }
