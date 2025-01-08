@@ -121,9 +121,9 @@
   tpl['controls/button_group.html'] = '<div class="btn-group" role="group"></div>';
   tpl['controls/button_group/button.html'] = '<button type="button" <%- attr %>><%= content %></button>';
   tpl['controls/button_group/dropdown.html'] = '<div class="btn-group" role="group"> <button type="button" data-bs-toggle="dropdown"<%- attr %>><%- content %></button> <ul class="dropdown-menu dropdown-menu-<%= position %>"></ul> </div>';
-  tpl['controls/button_group/dropdown/button.html'] = '<li> <button type="button" class="dropdown-item"><%= content %></button> </li>';
+  tpl['controls/button_group/dropdown/button.html'] = '<li> <button type="button" class="dropdown-item"><%- content %></button> </li>';
   tpl['controls/button_group/dropdown/divider.html'] = '<li><hr class="dropdown-divider"></li>';
-  tpl['controls/button_group/dropdown/link.html'] = '<li><a class="dropdown-item" href="<%= url %>"><%= content %></a></li>';
+  tpl['controls/button_group/dropdown/link.html'] = '<li><a class="dropdown-item" href="<%= url %>"><%- content %></a></li>';
   tpl['controls/button_group/link.html'] = '<a href="<%= url %>"<%- attr %>><%= content %></a>';
   tpl['controls/button.html'] = '<button type="button"<%- attr %>><%- content %></button>';
   tpl['controls/caption.html'] = '<div class="d-flex flex-column me-3"> <small class="text-body-secondary fw-medium"> <%= title %> <% if (description) { %> <i class="bi bi-question-circle coreui-table__cursor_help" title="<%= description %>"></i> <% } %> </small> <b class="text-nowrap"><%= value %></b> </div>';
@@ -131,9 +131,9 @@
   tpl['controls/columns/list.html'] = ' <div class="coreui-table__columns px-3 pt-3 pb-4"> <div class="mb-3"> <div class="form-check coreui-table__check_all"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" <% if (showAll === true) { %>checked<% } %>> <%= lang.all %> </label> </div> <% columns.map(function(column) { %> <div class="form-check coreui-table_check-column"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="<%= column.field %>" <% if (column.show === true) { %>checked<% } %>> <%= column.label %> </label> </div> <% }); %> </div> <button type="button" <%- btnCompleteAttr %>> <%- btnCompleteContent %> </button> </div>';
   tpl['controls/divider.html'] = '<div <%- attr %>><%= text %></div>';
   tpl['controls/dropdown.html'] = ' <div class="btn-group" role="group"> <button type="button" data-bs-toggle="dropdown"<%- attr %>><%- content %></button> <ul class="dropdown-menu dropdown-menu-<%= position %>"></ul> </div>';
-  tpl['controls/dropdown/button.html'] = '<li> <button type="button" class="dropdown-item"><%= content %></button> </li>';
+  tpl['controls/dropdown/button.html'] = '<li> <button type="button" class="dropdown-item"><%- content %></button> </li>';
   tpl['controls/dropdown/divider.html'] = '<li><hr class="dropdown-divider"></li>';
-  tpl['controls/dropdown/link.html'] = '<li><a class="dropdown-item" href="<%= url %>"><%= content %></a></li>';
+  tpl['controls/dropdown/link.html'] = '<li><a class="dropdown-item" href="<%= url %>"><%- content %></a></li>';
   tpl['controls/filter_clear.html'] = '<button type="button" <%- attr %>><%- content %></button>';
   tpl['controls/link.html'] = '<a href="<%- url %>"<%- attr %>><%- content %></a>';
   tpl['controls/page-jump.html'] = ' <div class="coreui-table__page_jump_container"> <div <%- attr %>> <input type="number" class="form-control border-secondary-subtle" min="1"> <button class="btn btn-outline-secondary border-secondary-subtle" type="button"> <i class="bi bi-chevron-compact-right"></i> </button> </div> </div>';
@@ -4701,30 +4701,30 @@
         if (Array.isArray(options.buttons)) {
           /**
            * Создание ссылки
-           * @param {Object} button
+           * @param {Object} link
            */
-          var makeLink = function makeLink(button) {
+          var makeLink = function makeLink(link) {
             var result = null;
-            if (button.hasOwnProperty('link') && button.hasOwnProperty('content') && typeof button.link === 'string' && typeof button.content === 'string') {
+            if (link.hasOwnProperty('url') && link.hasOwnProperty('content') && typeof link.url === 'string' && typeof link.content === 'string') {
               var attributes = [];
-              if (!coreuiTableUtils.isObject(button.attr)) {
-                button.attr = {};
+              if (!coreuiTableUtils.isObject(link.attr)) {
+                link.attr = {};
               }
-              if (button.attr.hasOwnProperty('href')) {
-                delete button.attr.href;
+              if (link.attr.hasOwnProperty('href')) {
+                delete link.attr.href;
               }
-              if (!button.attr.hasOwnProperty('class')) {
-                button.attr["class"] = that._link.attr["class"];
+              if (!link.attr.hasOwnProperty('class')) {
+                link.attr["class"] = that._link.attr["class"];
               }
-              $.each(button.attr, function (name, value) {
+              $.each(link.attr, function (name, value) {
                 if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
                   attributes.push(name + '="' + value + '"');
                 }
               });
               result = coreuiTableUtils.render(tpl['controls/button_group/link.html'], {
-                url: button.url,
+                url: link.url,
                 attr: attributes,
-                content: button.content
+                content: link.content
               });
             }
             return result;
@@ -4780,7 +4780,7 @@
               button.items.map(function (item) {
                 if (coreuiTableUtils.isObject(item) && typeof item.type === 'string') {
                   if (item.type === 'link') {
-                    if (item.hasOwnProperty('link') && item.hasOwnProperty('content') && typeof item.url === 'string' && typeof item.content === 'string' && item.url) {
+                    if (item.hasOwnProperty('url') && item.hasOwnProperty('content') && typeof item.url === 'string' && typeof item.content === 'string' && item.url) {
                       items.push(coreuiTableUtils.render(tpl['controls/button_group/dropdown/link.html'], {
                         url: item.url,
                         content: item.content

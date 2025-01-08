@@ -50,41 +50,41 @@ class ControlButtonGroup extends Control {
 
             /**
              * Создание ссылки
-             * @param {Object} button
+             * @param {Object} link
              */
-            function makeLink(button) {
+            function makeLink(link) {
 
                 let result = null;
 
-                if (button.hasOwnProperty('link') &&
-                    button.hasOwnProperty('content') &&
-                    typeof button.link === 'string' &&
-                    typeof button.content === 'string'
+                if (link.hasOwnProperty('url') &&
+                    link.hasOwnProperty('content') &&
+                    typeof link.url === 'string' &&
+                    typeof link.content === 'string'
                 ) {
                     let attributes = [];
 
-                    if ( ! coreuiTableUtils.isObject(button.attr)) {
-                        button.attr = {};
+                    if ( ! coreuiTableUtils.isObject(link.attr)) {
+                        link.attr = {};
                     }
 
-                    if (button.attr.hasOwnProperty('href')) {
-                        delete button.attr.href;
+                    if (link.attr.hasOwnProperty('href')) {
+                        delete link.attr.href;
                     }
 
-                    if ( ! button.attr.hasOwnProperty('class')) {
-                        button.attr.class = that._link.attr.class;
+                    if ( ! link.attr.hasOwnProperty('class')) {
+                        link.attr.class = that._link.attr.class;
                     }
 
-                    $.each(button.attr, function (name, value) {
+                    $.each(link.attr, function (name, value) {
                         if (['string', 'number'].indexOf(typeof value) >= 0) {
                             attributes.push(name + '="' + value + '"');
                         }
                     });
 
                     result = coreuiTableUtils.render(coreuiTableTpl['controls/button_group/link.html'], {
-                        url: button.url,
+                        url: link.url,
                         attr: attributes,
-                        content: button.content
+                        content: link.content
                     });
                 }
 
@@ -170,7 +170,7 @@ class ControlButtonGroup extends Control {
                         if (coreuiTableUtils.isObject(item) && typeof item.type === 'string') {
 
                             if (item.type === 'link') {
-                                if (item.hasOwnProperty('link') &&
+                                if (item.hasOwnProperty('url') &&
                                     item.hasOwnProperty('content') &&
                                     typeof item.url === 'string' &&
                                     typeof item.content === 'string' &&
