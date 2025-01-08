@@ -19,7 +19,7 @@ class ControlDropdown extends Control {
             content: null,
             items: null,
             attr: {
-                class: 'btn btn-primary',
+                class: 'btn btn-secondary',
             }
         }, options);
 
@@ -45,7 +45,7 @@ class ControlDropdown extends Control {
                 if (CoreuiTableUtils.isObject(item) && typeof item.type === 'string') {
 
                     if (item.type === 'link') {
-                        if (item.hasOwnProperty('link') &&
+                        if (item.hasOwnProperty('url') &&
                             item.hasOwnProperty('content') &&
                             typeof item.url === 'string' &&
                             typeof item.content === 'string'

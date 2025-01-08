@@ -4555,7 +4555,7 @@
         content: null,
         items: null,
         attr: {
-          "class": 'btn btn-primary'
+          "class": 'btn btn-secondary'
         }
       }, options);
       return _callSuper$Q(this, ControlDropdown, [table, options]);
@@ -4578,7 +4578,7 @@
           options.items.map(function (item) {
             if (coreuiTableUtils.isObject(item) && typeof item.type === 'string') {
               if (item.type === 'link') {
-                if (item.hasOwnProperty('link') && item.hasOwnProperty('content') && typeof item.url === 'string' && typeof item.content === 'string') {
+                if (item.hasOwnProperty('url') && item.hasOwnProperty('content') && typeof item.url === 'string' && typeof item.content === 'string') {
                   var link = coreuiTableUtils.render(tpl['controls/dropdown/link.html'], {
                     url: item.url,
                     content: item.content
