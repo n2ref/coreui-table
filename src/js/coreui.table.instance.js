@@ -1743,9 +1743,7 @@ let coreuiTableInstance = {
                 ) {
                     columnSortable = true;
 
-                    if (column.hasOwnProperty('convertToString') &&
-                        typeof column.convertToString === 'function'
-                    ) {
+                    if (typeof column.convertToString === 'function') {
                         columnsConverters[options.field] = column.convertToString;
                     }
 
