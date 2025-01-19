@@ -117,5 +117,11 @@ $coreui-compact-table-border-color: #e0e0e0 !default;
     > tbody > tr > td {
       border-color: var(--coreui-compact-table-border-color);
     }
+    > tbody > tr:first-child > td:first-child {
+      border-top-left-radius: $coreui-table-border-radius;
+    }
+    > tbody > tr:first-child > td:last-child {
+      border-top-right-radius: $coreui-table-border-radius;
+    }
   }
 }

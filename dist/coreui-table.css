@@ -372,6 +372,12 @@
 .coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr > td {
   border-color: var(--coreui-compact-table-border-color);
 }
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr:first-child > td:first-child {
+  border-top-left-radius: 0.25rem;
+}
+.coreui-table.coreui-theme-compact > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr:first-child > td:last-child {
+  border-top-right-radius: 0.25rem;
+}
 
 .coreui-table.coreui-theme-no-border .coreui-table__container {
   border: none;
