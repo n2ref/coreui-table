@@ -1,7 +1,8 @@
 
 import Column from "../abstract/Column";
-import 'moment';
-import 'moment/locale/ru'
+import moment from 'moment/src/moment';
+import 'moment/src/locale/ru'
+
 
 
 class ColumnsDateHuman extends Column {
