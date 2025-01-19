@@ -462,6 +462,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Column types standard
     CoreUI.table.create({
+        lang: 'ru',
         id: 'types_standard',
         columns: [
             { type: 'select' },
