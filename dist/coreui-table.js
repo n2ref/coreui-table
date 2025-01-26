@@ -119,12 +119,12 @@
   tpl['columns/switch.html'] = '<div class="form-switch"> <input class="form-check-input coreui-table__switch" type="checkbox" data-field="<%= field %>" value="<%= index %>"<% if (checked) { %> checked<% } %><% if (disabled) { %> disabled<% } %>> </div>';
   tpl['container.html'] = ' <div id="coreui-table-<%= id %>" class="coreui-table<%= classes %>"<% if (widthSizes) { %> style="<%= widthSizes.join(\';\') %>"<% } %>> <div class="coreui-table__container position-relative"> <div class="coreui-table__wrapper<%= classesWrapper %>" <% if (heightSizes) { %>style="<%= heightSizes.join(\';\') %>"<% } %>></div> </div> </div>';
   tpl['controls/button_group.html'] = '<div class="btn-group" role="group"></div>';
-  tpl['controls/button_group/button.html'] = '<button type="button" <%- attr %>><%= content %></button>';
+  tpl['controls/button_group/button.html'] = '<button type="button" <%- attr %>><%- content %></button>';
   tpl['controls/button_group/dropdown.html'] = '<div class="btn-group" role="group"> <button type="button" data-bs-toggle="dropdown"<%- attr %>><%- content %></button> <ul class="dropdown-menu dropdown-menu-<%= position %>"></ul> </div>';
   tpl['controls/button_group/dropdown/button.html'] = '<li> <button type="button" class="dropdown-item"><%- content %></button> </li>';
   tpl['controls/button_group/dropdown/divider.html'] = '<li><hr class="dropdown-divider"></li>';
   tpl['controls/button_group/dropdown/link.html'] = '<li><a class="dropdown-item" href="<%= url %>"><%- content %></a></li>';
-  tpl['controls/button_group/link.html'] = '<a href="<%= url %>"<%- attr %>><%= content %></a>';
+  tpl['controls/button_group/link.html'] = '<a href="<%= url %>"<%- attr %>><%- content %></a>';
   tpl['controls/button.html'] = '<button type="button"<%- attr %>><%- content %></button>';
   tpl['controls/caption.html'] = '<div class="d-flex flex-column me-3"> <small class="text-body-secondary fw-medium"> <%= title %> <% if (description) { %> <i class="bi bi-question-circle coreui-table__cursor_help" title="<%= description %>"></i> <% } %> </small> <b class="text-nowrap"><%= value %></b> </div>';
   tpl['controls/columns.html'] = '<button type="button"<%- btnAttr %>><%-btnContent%></button>';
@@ -4555,7 +4555,7 @@
         content: null,
         items: null,
         attr: {
-          "class": 'btn btn-secondary'
+          "class": 'btn btn-secondary dropdown-toggle'
         }
       }, options);
       return _callSuper$Q(this, ControlDropdown, [table, options]);
@@ -4608,9 +4608,6 @@
           });
         }
         if (coreuiTableUtils.isObject(options.attr)) {
-          if (options.attr.hasOwnProperty('class') && ['string', 'number'].indexOf(_typeof(options.attr["class"])) >= 0) {
-            options.attr["class"] += ' dropdown-toggle';
-          }
           if (options.attr.hasOwnProperty('type')) {
             delete options.attr.type;
           }
@@ -4681,7 +4678,7 @@
       });
       _defineProperty(_this2, "_dropdown", {
         attr: {
-          "class": 'btn btn-secondary'
+          "class": 'btn btn-secondary dropdown-toggle'
         }
       });
       return _this2;
@@ -4815,15 +4812,12 @@
               if (!button.attr.hasOwnProperty('class')) {
                 button.attr["class"] = that._dropdown.attr["class"];
               }
-              if (button.attr.hasOwnProperty('class') && ['string', 'number'].indexOf(_typeof(button.attr["class"])) >= 0) {
-                button.attr["class"] += ' dropdown-toggle';
-              }
               $.each(button.attr, function (name, value) {
                 if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
                   attributes.push(name + '="' + value + '"');
                 }
               });
-              result = $(coreuiTableUtils.render(tpl['controls/button_group/link.html'], {
+              result = $(coreuiTableUtils.render(tpl['controls/button_group/dropdown.html'], {
                 attr: attributes,
                 position: button.hasOwnProperty('position') && typeof button.position === 'string' ? button.position : 'end',
                 content: button.content
@@ -4837,7 +4831,7 @@
             }
             return result;
           };
-          options.buttons.map(function (key, button) {
+          options.buttons.map(function (button) {
             if (coreuiTableUtils.isObject(button) && typeof button.type === 'string') {
               if (button.type === 'link') {
                 var linkElement = makeLink(button);

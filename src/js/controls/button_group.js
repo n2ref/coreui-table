@@ -14,7 +14,7 @@ class ControlButtonGroup extends Control {
     }
 
     _dropdown = {
-        attr: { class: 'btn btn-secondary' }
+        attr: { class: 'btn btn-secondary dropdown-toggle' }
     }
 
 
@@ -225,12 +225,6 @@ class ControlButtonGroup extends Control {
                         button.attr.class = that._dropdown.attr.class;
                     }
 
-                    if (button.attr.hasOwnProperty('class') &&
-                        ['string', 'number'].indexOf(typeof button.attr.class) >= 0
-                    ) {
-                        button.attr.class += ' dropdown-toggle';
-                    }
-
 
                     $.each(button.attr, function (name, value) {
                         if (['string', 'number'].indexOf(typeof value) >= 0) {
@@ -238,7 +232,7 @@ class ControlButtonGroup extends Control {
                         }
                     });
 
-                    result = $(coreuiTableUtils.render(coreuiTableTpl['controls/button_group/link.html'], {
+                    result = $(coreuiTableUtils.render(coreuiTableTpl['controls/button_group/dropdown.html'], {
                         attr: attributes,
                         position: button.hasOwnProperty('position') && typeof button.position === 'string' ? button.position : 'end',
                         content: button.content,
@@ -257,9 +251,9 @@ class ControlButtonGroup extends Control {
             }
 
 
-
-            options.buttons.map(function (key, button) {
+            options.buttons.map(function (button) {
                 if (coreuiTableUtils.isObject(button) && typeof button.type === 'string') {
+
 
                     if (button.type === 'link') {
                         let linkElement = makeLink(button);
