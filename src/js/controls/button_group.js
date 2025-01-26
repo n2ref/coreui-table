@@ -101,9 +101,7 @@ class ControlButtonGroup extends Control {
                 let result = null;
 
                 if (button.hasOwnProperty('content') &&
-                    button.hasOwnProperty('onClick') &&
-                    typeof button.content === 'string' &&
-                    ['string', 'function'].indexOf(typeof button.onClick) >= 0
+                    typeof button.content === 'string'
                 ) {
                     let attributes = [];
 
@@ -132,10 +130,8 @@ class ControlButtonGroup extends Control {
                     }));
 
 
-                    if (button.hasOwnProperty('content') &&
-                        button.hasOwnProperty('onClick') &&
-                        ['string', 'function'].indexOf(typeof button.onClick) >= 0 &&
-                        typeof button.content === 'string'
+                    if (button.hasOwnProperty('onClick') &&
+                        ['string', 'function'].indexOf(typeof button.onClick) >= 0
                     ) {
 
                         result.click(function (event) {
@@ -184,23 +180,25 @@ class ControlButtonGroup extends Control {
 
                             } else if (item.type === 'button') {
                                 if (item.hasOwnProperty('content') &&
-                                    item.hasOwnProperty('onClick') &&
-                                    typeof item.content === 'string' &&
-                                    ['string', 'function'].indexOf(typeof item.onClick) >= 0
+                                    typeof item.content === 'string'
                                 ) {
                                     let btn = $(coreuiTableUtils.render(coreuiTableTpl['controls/button_group/dropdown/button.html'], {
                                         content: item.content,
                                     }));
 
-                                    btn.click(function (event) {
-                                        if (typeof item.onClick === 'function') {
-                                            item.onClick(event, that._table, that);
+                                    if (item.hasOwnProperty('onClick') &&
+                                        ['string', 'function'].indexOf(typeof item.onClick) >= 0
+                                    ) {
+                                        btn.click(function (event) {
+                                            if (typeof item.onClick === 'function') {
+                                                item.onClick(event, that._table, that);
 
-                                        } else if (typeof item.onClick === 'string') {
-                                            let func = new Function('event', 'table', 'control', item.onClick);
-                                            func(event, that._table, that);
-                                        }
-                                    });
+                                            } else if (typeof item.onClick === 'string') {
+                                                let func = new Function('event', 'table', 'control', item.onClick);
+                                                func(event, that._table, that);
+                                            }
+                                        });
+                                    }
 
                                     items.push(btn);
                                 }

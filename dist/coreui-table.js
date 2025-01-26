@@ -4586,19 +4586,21 @@
                   items.push(link);
                 }
               } else if (item.type === 'button') {
-                if (item.hasOwnProperty('content') && item.hasOwnProperty('onClick') && typeof item.content === 'string' && ['string', 'function'].indexOf(_typeof(item.onClick)) >= 0) {
+                if (item.hasOwnProperty('content') && typeof item.content === 'string') {
                   var button = $(coreuiTableUtils.render(tpl['controls/dropdown/button.html'], {
                     url: item.url,
                     content: item.content
                   }));
-                  button.click(function (event) {
-                    if (typeof item.onClick === 'function') {
-                      item.onClick(event, table, that);
-                    } else if (typeof item.onClick === 'string') {
-                      var func = new Function('event', 'table', 'control', item.onClick);
-                      func(event, table, that);
-                    }
-                  });
+                  if (item.hasOwnProperty('onClick') && ['string', 'function'].indexOf(_typeof(item.onClick)) >= 0) {
+                    button.click(function (event) {
+                      if (typeof item.onClick === 'function') {
+                        item.onClick(event, table, that);
+                      } else if (typeof item.onClick === 'string') {
+                        var func = new Function('event', 'table', 'control', item.onClick);
+                        func(event, table, that);
+                      }
+                    });
+                  }
                   items.push(button);
                 }
               } else if (item.type === 'divider') {
@@ -4732,7 +4734,7 @@
            */
           var makeButton = function makeButton(button) {
             var result = null;
-            if (button.hasOwnProperty('content') && button.hasOwnProperty('onClick') && typeof button.content === 'string' && ['string', 'function'].indexOf(_typeof(button.onClick)) >= 0) {
+            if (button.hasOwnProperty('content') && typeof button.content === 'string') {
               var attributes = [];
               if (!coreuiTableUtils.isObject(button.attr)) {
                 button.attr = {};
@@ -4752,7 +4754,7 @@
                 content: button.content,
                 attr: attributes
               }));
-              if (button.hasOwnProperty('content') && button.hasOwnProperty('onClick') && ['string', 'function'].indexOf(_typeof(button.onClick)) >= 0 && typeof button.content === 'string') {
+              if (button.hasOwnProperty('onClick') && ['string', 'function'].indexOf(_typeof(button.onClick)) >= 0) {
                 result.click(function (event) {
                   if (typeof button.onClick === 'function') {
                     button.onClick(event, that._table, that);
@@ -4784,18 +4786,20 @@
                       }));
                     }
                   } else if (item.type === 'button') {
-                    if (item.hasOwnProperty('content') && item.hasOwnProperty('onClick') && typeof item.content === 'string' && ['string', 'function'].indexOf(_typeof(item.onClick)) >= 0) {
+                    if (item.hasOwnProperty('content') && typeof item.content === 'string') {
                       var btn = $(coreuiTableUtils.render(tpl['controls/button_group/dropdown/button.html'], {
                         content: item.content
                       }));
-                      btn.click(function (event) {
-                        if (typeof item.onClick === 'function') {
-                          item.onClick(event, that._table, that);
-                        } else if (typeof item.onClick === 'string') {
-                          var func = new Function('event', 'table', 'control', item.onClick);
-                          func(event, that._table, that);
-                        }
-                      });
+                      if (item.hasOwnProperty('onClick') && ['string', 'function'].indexOf(_typeof(item.onClick)) >= 0) {
+                        btn.click(function (event) {
+                          if (typeof item.onClick === 'function') {
+                            item.onClick(event, that._table, that);
+                          } else if (typeof item.onClick === 'string') {
+                            var func = new Function('event', 'table', 'control', item.onClick);
+                            func(event, that._table, that);
+                          }
+                        });
+                      }
                       items.push(btn);
                     }
                   } else if (item.type === 'divider') {

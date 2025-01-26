@@ -60,24 +60,26 @@ class ControlDropdown extends Control {
 
                     } else if (item.type === 'button') {
                         if (item.hasOwnProperty('content') &&
-                            item.hasOwnProperty('onClick') &&
-                            typeof item.content === 'string' &&
-                            ['string', 'function'].indexOf(typeof item.onClick) >= 0
+                            typeof item.content === 'string'
                         ) {
                             let button = $(coreuiTableUtils.render(coreuiTableTpl['controls/dropdown/button.html'], {
                                 url: item.url,
                                 content: item.content,
                             }));
 
-                            button.click(function (event) {
-                                if (typeof item.onClick === 'function') {
-                                    item.onClick(event, table, that);
+                            if (item.hasOwnProperty('onClick') &&
+                                ['string', 'function'].indexOf(typeof item.onClick) >= 0
+                            ) {
+                                button.click(function (event) {
+                                    if (typeof item.onClick === 'function') {
+                                        item.onClick(event, table, that);
 
-                                } else if (typeof item.onClick === 'string') {
-                                    let func = new Function('event', 'table', 'control', item.onClick);
-                                    func(event, table, that);
-                                }
-                            });
+                                    } else if (typeof item.onClick === 'string') {
+                                        let func = new Function('event', 'table', 'control', item.onClick);
+                                        func(event, table, that);
+                                    }
+                                });
+                            }
 
                             items.push(button);
                         }
