@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 ],
                 right: [
-                    { type: "dropdown", content: "Dropdown", attr: { class: 'btn btn-primary' }, position: 'end',
+                    { type: "dropdown", content: "Dropdown", attr: { class: 'btn btn-primary dropdown-toggle' }, position: 'end',
                         items: [
                             { type: 'link',   content: 'Link', url: "#" },
                             { type: 'button', content: 'Button 1', onClick: function (event, table) { console.log(1) } },
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         buttons: [
                             { type: "link",     content: "Link",     attr: { class: 'btn btn-outline-secondary' }, url: "#" },
                             { type: "button",   content: "Button",   attr: { class: 'btn btn-outline-secondary' }, onClick: function (event, table) { console.log(1) } },
-                            { type: "dropdown", content: "Dropdown", attr: { class: 'btn btn-outline-primary' }, position: 'end',
+                            { type: "dropdown", content: "Dropdown", attr: { class: 'btn btn-outline-primary dropdown-toggle' }, position: 'end',
                                 items: [
                                     { type: 'link',   content: 'Link', url: "#" },
                                     { type: 'button', content: 'Button 1', onClick: function (event, table) { console.log(2) } },
