@@ -4722,7 +4722,7 @@
               });
               result = coreuiTableUtils.render(tpl['controls/button_group/link.html'], {
                 url: link.url,
-                attr: attributes,
+                attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
                 content: link.content
               });
             }
@@ -4752,7 +4752,7 @@
               });
               result = $(coreuiTableUtils.render(tpl['controls/button_group/button.html'], {
                 content: button.content,
-                attr: attributes
+                attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
               }));
               if (button.hasOwnProperty('onClick') && ['string', 'function'].indexOf(_typeof(button.onClick)) >= 0) {
                 result.click(function (event) {
@@ -4822,7 +4822,7 @@
                 }
               });
               result = $(coreuiTableUtils.render(tpl['controls/button_group/dropdown.html'], {
-                attr: attributes,
+                attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
                 position: button.hasOwnProperty('position') && typeof button.position === 'string' ? button.position : 'end',
                 content: button.content
               }));
