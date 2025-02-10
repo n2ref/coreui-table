@@ -1,14 +1,14 @@
 
-import coreuiTableTpl      from "../coreui.table.templates";
-import coreuiTableUtils    from "../coreui.table.utils";
-import coreuiTableElements from "../coreui.table.elements";
+import TableTpl      from "../table.tpl";
+import TableUtils    from "../table.utils";
+import TableElements from "../table.elements";
 import Search              from "../abstract/Search";
 
 class SearchDateMonth extends Search {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -109,12 +109,12 @@ class SearchDateMonth extends Search {
      */
     render() {
 
-        if ( ! coreuiTableUtils.isObject(this._options.attr)) {
+        if ( ! TableUtils.isObject(this._options.attr)) {
             this._options.attr = {};
         }
 
         if (this._options.hasOwnProperty('width') &&
-            coreuiTableUtils.isNumeric(this._options.width)
+            TableUtils.isNumeric(this._options.width)
         ) {
             if (this._options.attr.hasOwnProperty('style')) {
                 this._options.attr['style'] += ';width:' + this._options.width + 'px';
@@ -138,7 +138,7 @@ class SearchDateMonth extends Search {
             attributes.push(name + '="' + value + '"');
         });
 
-        this._control = $(coreuiTableUtils.render(coreuiTableTpl['search/date_month.html'], {
+        this._control = $(TableUtils.render(TableTpl['search/date_month.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         }));
 
@@ -146,7 +146,7 @@ class SearchDateMonth extends Search {
             if (e.key === 'Enter' || e.keyCode === 13) {
                 table.searchRecords();
 
-                let container = coreuiTableElements.getSearchContainer(table.getId());
+                let container = TableElements.getSearchContainer(table.getId());
                 container.fadeOut('fast');
             }
         });

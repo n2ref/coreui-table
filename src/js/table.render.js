@@ -1,14 +1,14 @@
 
-import coreuiTableTpl   from './coreui.table.templates';
-import coreuiTableUtils from "./coreui.table.utils";
+import TableTpl   from './table.tpl';
+import TableUtils from "./table.utils";
 
 
-let coreuiTableRender = {
+let TableRender = {
 
 
     /**
      * Сборка таблицы
-     * @param {object} table
+     * @param {TableInstance} table
      * @private
      */
     renderTable: function (table) {
@@ -18,7 +18,7 @@ let coreuiTableRender = {
         let columnsHeader   = '';
         let columnsFooter   = '';
         let colGroups       = [];
-        let columnElements  = $(coreuiTableTpl['table/columns/tr.html']);
+        let columnElements  = $(TableTpl['table/columns/tr.html']);
 
 
         // Колонки
@@ -36,24 +36,24 @@ let coreuiTableRender = {
                 let menuPosition   = 'end';
 
                 if (columnOptions.hasOwnProperty('field') && typeof columnOptions.field === 'string') {
-                    columnOptions.attrHeader = coreuiTableUtils.mergeAttr(columnOptions.attrHeader, {
+                    columnOptions.attrHeader = TableUtils.mergeAttr(columnOptions.attrHeader, {
                         "data-field": columnOptions.field
                     });
                 }
 
                 if (columnOptions.hasOwnProperty('fixed') && typeof columnOptions.fixed === 'string') {
-                    columnOptions.attrHeader = coreuiTableUtils.mergeAttr(columnOptions.attrHeader, {
+                    columnOptions.attrHeader = TableUtils.mergeAttr(columnOptions.attrHeader, {
                         class: 'coreui-table__fixed_' + columnOptions.fixed
                     });
 
-                    columnOptions.attr = coreuiTableUtils.mergeAttr(columnOptions.attr, {
+                    columnOptions.attr = TableUtils.mergeAttr(columnOptions.attr, {
                         class: 'coreui-table__fixed_' + columnOptions.fixed
                     });
                 }
 
                 if (columnOptions.type !== 'numbers') {
                     if (columnOptions.hasOwnProperty('sortable') && columnOptions.sortable) {
-                        columnOptions.attrHeader = coreuiTableUtils.mergeAttr(columnOptions.attrHeader, {
+                        columnOptions.attrHeader = TableUtils.mergeAttr(columnOptions.attrHeader, {
                             class: 'coreui-table__sortable'
                         });
                     }
@@ -81,7 +81,7 @@ let coreuiTableRender = {
 
                 if (options.showHeaders &&
                     columnOptions.hasOwnProperty('menu') &&
-                    coreuiTableUtils.isObject(columnOptions.menu) &&
+                    TableUtils.isObject(columnOptions.menu) &&
                     columnOptions.menu.hasOwnProperty('items') &&
                     Array.isArray(columnOptions.menu.items)
                 ) {
@@ -96,7 +96,7 @@ let coreuiTableRender = {
 
                     columnOptions.menu.items.map(function (item) {
 
-                        if (coreuiTableUtils.isObject(item) &&
+                        if (TableUtils.isObject(item) &&
                             item.hasOwnProperty('type') &&
                             typeof item.type === 'string' &&
                             item.type
@@ -115,15 +115,15 @@ let coreuiTableRender = {
                                             class: 'dropdown-item',
                                         };
 
-                                        if (item.hasOwnProperty('attr') && coreuiTableUtils.isObject(item.attr)) {
-                                            attr = coreuiTableUtils.mergeAttr(attr, item.attr);
+                                        if (item.hasOwnProperty('attr') && TableUtils.isObject(item.attr)) {
+                                            attr = TableUtils.mergeAttr(attr, item.attr);
                                         }
 
                                         $.each(attr, function (name, value) {
                                             attrItem.push(name + '="' + value + '"');
                                         });
 
-                                        let menuElement = $(coreuiTableUtils.render(coreuiTableTpl['table/columns/menu/button.html'], {
+                                        let menuElement = $(TableUtils.render(TableTpl['table/columns/menu/button.html'], {
                                             text: item.text,
                                             attr: attrItem.join(' '),
                                         }));
@@ -155,15 +155,15 @@ let coreuiTableRender = {
                                             class: 'dropdown-item',
                                         };
 
-                                        if (item.hasOwnProperty('attr') && coreuiTableUtils.isObject(item.attr)) {
-                                            attr = coreuiTableUtils.mergeAttr(attr, item.attr);
+                                        if (item.hasOwnProperty('attr') && TableUtils.isObject(item.attr)) {
+                                            attr = TableUtils.mergeAttr(attr, item.attr);
                                         }
 
                                         $.each(attr, function (name, value) {
                                             attrItem.push(name + '="' + value + '"');
                                         });
 
-                                        menuElements.push($(coreuiTableUtils.render(coreuiTableTpl['table/columns/menu/link.html'], {
+                                        menuElements.push($(TableUtils.render(TableTpl['table/columns/menu/link.html'], {
                                             text: item.text,
                                             attr: attrItem.join(' '),
                                         })));
@@ -171,11 +171,11 @@ let coreuiTableRender = {
                                     break;
 
                                 case 'divider':
-                                    menuElements.push($(coreuiTableTpl['table/columns/menu/divider.html']));
+                                    menuElements.push($(TableTpl['table/columns/menu/divider.html']));
                                     break;
 
                                 case 'header':
-                                    menuElements.push($(coreuiTableUtils.render(coreuiTableTpl['table/columns/menu/header.html'], {
+                                    menuElements.push($(TableUtils.render(TableTpl['table/columns/menu/header.html'], {
                                         text: item.text
                                     })));
                                     break;
@@ -184,7 +184,7 @@ let coreuiTableRender = {
                     });
                 }
 
-                if (columnOptions.attrHeader && coreuiTableUtils.isObject(columnOptions.attrHeader)) {
+                if (columnOptions.attrHeader && TableUtils.isObject(columnOptions.attrHeader)) {
                     $.each(columnOptions.attrHeader, function (name, value) {
                         attributes.push(name + '="' + value + '"');
                     });
@@ -235,7 +235,7 @@ let coreuiTableRender = {
                         description = columnOptions.description;
                     }
 
-                    let columnElement = $(coreuiTableUtils.render(coreuiTableTpl['table/columns/td.html'], {
+                    let columnElement = $(TableUtils.render(TableTpl['table/columns/td.html'], {
                         attr          : attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
                         label         : label,
                         description   : description,
@@ -271,9 +271,9 @@ let coreuiTableRender = {
                 ? 1
                 : ((table._page - 1) * table._recordsPerPage) + 1;
 
-            recordsElements = coreuiTableRender.renderRecords(table, table._records);
+            recordsElements = TableRender.renderRecords(table, table._records);
         } else {
-            recordsElements = coreuiTableRender.renderRecords(table, []);
+            recordsElements = TableRender.renderRecords(table, []);
         }
 
 
@@ -289,10 +289,10 @@ let coreuiTableRender = {
                     let cells = [];
 
                     headerRow.map(function (headerColumn) {
-                        if (coreuiTableUtils.isObject(headerColumn)) {
+                        if (TableUtils.isObject(headerColumn)) {
                             let attributes = [];
 
-                            if (headerColumn.hasOwnProperty('attr') && coreuiTableUtils.isObject(headerColumn.attr)) {
+                            if (headerColumn.hasOwnProperty('attr') && TableUtils.isObject(headerColumn.attr)) {
                                 $.each(headerColumn.attr, function (name, value) {
                                     attributes.push(name + '="' + value + '"');
                                 });
@@ -306,7 +306,7 @@ let coreuiTableRender = {
                         }
                     });
 
-                    rows.push(coreuiTableUtils.render(coreuiTableTpl['table/columns/header.html'], {
+                    rows.push(TableUtils.render(TableTpl['table/columns/header.html'], {
                         columns: cells,
                     }));
                 }
@@ -326,10 +326,10 @@ let coreuiTableRender = {
                     let cells = [];
 
                     $.each(footerRow, function (key, footerColumn) {
-                        if (coreuiTableUtils.isObject(footerColumn)) {
+                        if (TableUtils.isObject(footerColumn)) {
                             let attributes = [];
 
-                            if (footerColumn.hasOwnProperty('attr') && coreuiTableUtils.isObject(footerColumn.attr)) {
+                            if (footerColumn.hasOwnProperty('attr') && TableUtils.isObject(footerColumn.attr)) {
                                 $.each(footerColumn.attr, function (name, value) {
                                     attributes.push(name + '="' + value + '"');
                                 });
@@ -344,7 +344,7 @@ let coreuiTableRender = {
                     });
 
                     rows.push(
-                        coreuiTableUtils.render(coreuiTableTpl['table/columns/footer.html'], {
+                        TableUtils.render(TableTpl['table/columns/footer.html'], {
                             columns: cells,
                         })
                     );
@@ -371,11 +371,11 @@ let coreuiTableRender = {
         if (options.hasOwnProperty('theadTop') &&
             ['string', 'number'].indexOf(typeof options.theadTop) >= 0
         ) {
-            let unit = coreuiTableUtils.isNumeric(options.theadTop) ? 'px' : '';
+            let unit = TableUtils.isNumeric(options.theadTop) ? 'px' : '';
             theadAttr.push('style="top:' + options.theadTop + unit + '"');
         }
 
-        let tableElement = $(coreuiTableUtils.render(coreuiTableTpl['table.html'], {
+        let tableElement = $(TableUtils.render(TableTpl['table.html'], {
             classes: classes.join(' '),
             theadAttr: theadAttr.length > 0 ? theadAttr.join(' ') : '',
             showHeaders: options.showHeaders,
@@ -414,7 +414,7 @@ let coreuiTableRender = {
             let that    = this;
             let options = table.getOptions();
             let group   = options.hasOwnProperty('group') &&
-                          coreuiTableUtils.isObject(options.group) &&
+                          TableUtils.isObject(options.group) &&
                           options.group.hasOwnProperty('field') &&
                           typeof options.group.field === 'string' &&
                           options.group.field
@@ -477,7 +477,7 @@ let coreuiTableRender = {
 
         if (renderRecords.length === 0) {
             renderRecords = [
-                $(coreuiTableUtils.render(coreuiTableTpl['table/record/empty.html'], {
+                $(TableUtils.render(TableTpl['table/record/empty.html'], {
                     columnsCount: table._countColumnsShow,
                     lang: table.getLang(),
                 }))
@@ -523,7 +523,7 @@ let coreuiTableRender = {
         }
 
         if (record.meta) {
-            recordAttr = coreuiTableUtils.mergeAttr(recordAttr, record.meta.attr);
+            recordAttr = TableUtils.mergeAttr(recordAttr, record.meta.attr);
         }
 
         let attributes = [];
@@ -532,7 +532,7 @@ let coreuiTableRender = {
             attributes.push(name + '="' + value + '"');
         });
 
-        let recordElement = $(coreuiTableUtils.render(coreuiTableTpl['table/record.html'], {
+        let recordElement = $(TableUtils.render(TableTpl['table/record.html'], {
             attr  : attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             index : record.index,
             fields: fields
@@ -548,7 +548,7 @@ let coreuiTableRender = {
 
     /**
      * Сборка ячейки таблицы
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Column}              column
      * @param {object}              record
      * @returns {{ attr: (string), content: (string) }}
@@ -562,22 +562,22 @@ let coreuiTableRender = {
         let fieldProps    = record.meta && record.meta.hasOwnProperty('fields') && record.meta.fields.hasOwnProperty(columnField)
             ? record.meta.fields[columnField]
             : null;
-        let fieldAttr = columnOptions.hasOwnProperty('attr') && coreuiTableUtils.isObject(columnOptions.attr)
+        let fieldAttr = columnOptions.hasOwnProperty('attr') && TableUtils.isObject(columnOptions.attr)
             ? columnOptions.attr
             : {};
 
-        if (fieldProps && coreuiTableUtils.isObject(fieldProps)) {
+        if (fieldProps && TableUtils.isObject(fieldProps)) {
             if (fieldProps && fieldProps.hasOwnProperty('show') && ! fieldProps.show) {
                 return null;
             }
 
-            if (coreuiTableUtils.isObject(fieldProps.attr)) {
-                fieldAttr = coreuiTableUtils.mergeAttr(fieldAttr, fieldProps.attr);
+            if (TableUtils.isObject(fieldProps.attr)) {
+                fieldAttr = TableUtils.mergeAttr(fieldAttr, fieldProps.attr);
             }
         }
 
         if (columnOptions.hasOwnProperty('fixed') && typeof columnOptions.fixed === 'string') {
-            fieldAttr = coreuiTableUtils.mergeAttr(fieldAttr, {
+            fieldAttr = TableUtils.mergeAttr(fieldAttr, {
                 class: 'coreui-table__fixed_' + columnOptions.fixed
             });
         }
@@ -600,7 +600,7 @@ let coreuiTableRender = {
         if (typeof column.getActions === 'function') {
             let actions = column.getActions(content, columnField, record);
 
-            if (coreuiTableUtils.isObject(actions)) {
+            if (TableUtils.isObject(actions)) {
                 record.fields[columnField] = actions;
             }
         }
@@ -620,7 +620,7 @@ let coreuiTableRender = {
 
     /**
      * Сборка записи-группы
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {object}              group
      * @param {object}              record
      * @param {Array}               renderRecords
@@ -629,7 +629,7 @@ let coreuiTableRender = {
      */
     renderGroup: function (table, group, record, renderRecords) {
 
-        let attr = group.hasOwnProperty('attr') && coreuiTableUtils.isObject(group.attr)
+        let attr = group.hasOwnProperty('attr') && TableUtils.isObject(group.attr)
             ? group.attr
             : {};
 
@@ -649,7 +649,7 @@ let coreuiTableRender = {
 
         let isCollapsing = group.hasOwnProperty('isCollapsing') ? !! group.isCollapsing : false;
 
-        let groupElement = $(coreuiTableUtils.render(coreuiTableTpl['table/record/group.html'], {
+        let groupElement = $(TableUtils.render(TableTpl['table/record/group.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             colspan: table._countColumnsShow,
             isCollapsing: isCollapsing
@@ -714,11 +714,11 @@ let coreuiTableRender = {
     renderExpand: function (table, content) {
 
         if (typeof content === 'object') {
-            content = coreuiTableRender.renderComponents(table, content, 'record_expand_show');
+            content = TableRender.renderComponents(table, content, 'record_expand_show');
         }
 
 
-        let expandRecord = $(coreuiTableUtils.render(coreuiTableTpl['table/record/expand.html'], {
+        let expandRecord = $(TableUtils.render(TableTpl['table/record/expand.html'], {
             colspan: table._countColumnsShow,
         }));
 
@@ -749,8 +749,8 @@ let coreuiTableRender = {
      */
     renderControl: function (table, control) {
 
-        if (coreuiTableUtils.isObject(control)) {
-            let controlElement = $(coreuiTableUtils.render(coreuiTableTpl['table/control.html'], {
+        if (TableUtils.isObject(control)) {
+            let controlElement = $(TableUtils.render(TableTpl['table/control.html'], {
                 id: control.getId()
             }));
 
@@ -781,14 +781,24 @@ let coreuiTableRender = {
                 if (typeof components[i] === 'string') {
                     result.push(components[i]);
 
-                } else if ( ! Array.isArray(components[i]) &&
+                } else if (components[i] instanceof Object &&
+                    typeof components[i].render === 'function' &&
+                    typeof components[i].initEvents === 'function'
+                ) {
+                    result.push(components[i].render());
+
+                    if (eventName) {
+                        table.on(eventName, components[i].initEvents, components[i], true);
+                    }
+
+                } else if (TableUtils.isObject(components[i]) &&
                     components[i].hasOwnProperty('component') &&
                     components[i].component.substring(0, 6) === 'coreui'
                 ) {
                     let name = components[i].component.split('.')[1];
 
                     if (CoreUI.hasOwnProperty(name) &&
-                        coreuiTableUtils.isObject(CoreUI[name])
+                        TableUtils.isObject(CoreUI[name])
                     ) {
                         let instance = CoreUI[name].create(components[i]);
                         result.push(instance.render());
@@ -806,4 +816,4 @@ let coreuiTableRender = {
     }
 }
 
-export default coreuiTableRender;
+export default TableRender;

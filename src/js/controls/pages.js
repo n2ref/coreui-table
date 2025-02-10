@@ -1,5 +1,5 @@
 
-import coreuiTableUtils from '../coreui.table.utils';
+import TableUtils from '../table.utils';
 import Control          from "../abstract/Control";
 import controlPages     from "./pages/control";
 
@@ -10,7 +10,7 @@ class ControlPages extends Control {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -26,8 +26,8 @@ class ControlPages extends Control {
             }
         };
 
-        if (options.hasOwnProperty('attr') && coreuiTableUtils.isObject(options.attr)) {
-            options.attr = coreuiTableUtils.mergeAttr(optionsOriginal.attr, options.attr);
+        if (options.hasOwnProperty('attr') && TableUtils.isObject(options.attr)) {
+            options.attr = TableUtils.mergeAttr(optionsOriginal.attr, options.attr);
         }
 
         options = $.extend(true, optionsOriginal, options);

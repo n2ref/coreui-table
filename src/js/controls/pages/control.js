@@ -1,5 +1,5 @@
-import coreuiTableUtils from "../../coreui.table.utils";
-import coreuiTableTpl   from "../../coreui.table.templates";
+import TableUtils from "../../table.utils";
+import TableTpl   from "../../table.tpl";
 
 
 let controlPages = {
@@ -7,7 +7,7 @@ let controlPages = {
 
     /**
      * Формирование контрола
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {object}              options
      * @return {jQuery}
      */
@@ -26,7 +26,7 @@ let controlPages = {
             : 1;
 
 
-        if (coreuiTableUtils.isObject(options.attr)) {
+        if (TableUtils.isObject(options.attr)) {
             $.each(options.attr, function (name, value) {
                 if (['string', 'number'].indexOf(typeof value) >= 0) {
                     attributes.push(name + '="' + value + '"');
@@ -36,7 +36,7 @@ let controlPages = {
 
         if (table._recordsTotal > 0 &&
             options.count > 0 &&
-            coreuiTableUtils.isNumeric(options.count)
+            TableUtils.isNumeric(options.count)
         ) {
             let count     = Math.min(options.count, pagesTotal);
             let countHalf = Math.max(0, Math.floor(count / 2));
@@ -80,7 +80,7 @@ let controlPages = {
             }
         }
 
-        let control = $(coreuiTableUtils.render(coreuiTableTpl['controls/pages.html'], {
+        let control = $(TableUtils.render(TableTpl['controls/pages.html'], {
             currentPage: table._page,
             isActivePrev: table._page > 1,
             isActiveNext: table._page < pagesTotal,

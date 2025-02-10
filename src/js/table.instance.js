@@ -1,14 +1,14 @@
 
-import coreuiTableTpl      from './coreui.table.templates';
-import coreuiTableUtils    from "./coreui.table.utils";
-import coreuiTableRender   from "./coreui.table.render";
-import coreuiTableElements from "./coreui.table.elements";
-import coreuiTablePrivate  from "./coreui.table.private";
+import TableTpl      from './table.tpl';
+import TableUtils    from "./table.utils";
+import TableRender   from "./table.render";
+import TableElements from "./table.elements";
+import TablePrivate  from "./table.private";
 
 
-let coreuiTableInstance = {
+class TableInstance {
 
-    _options: {
+    _options = {
         id: null,
         class: '',
         primaryKey: 'id',
@@ -63,29 +63,29 @@ let coreuiTableInstance = {
         columns: [],
         columnsFooter: [],
         records: []
-    },
+    };
 
-    _id: '',
-    _page: 1,
-    _recordsIndex: 1,
-    _recordsPerPage: 25,
-    _recordsTotal: 0,
-    _recordsNumber: 1,
-    _seq: 1,
-    _isRecordsRequest: false,
-    _countColumnsShow: 0,
+    _id = '';
+    _page = 1;
+    _recordsIndex = 1;
+    _recordsPerPage = 25;
+    _recordsTotal = 0;
+    _recordsNumber = 1;
+    _seq = 1;
+    _isRecordsRequest = false;
+    _countColumnsShow = 0;
 
-    _records: [],
-    _sort: [],
-    _columns: [],
-    _search: [],
-    _filters: [],
-    _controls: [],
-    _controlsPositions: {
+    _records = [];
+    _sort = [];
+    _columns = [];
+    _search = [];
+    _filters = [];
+    _controls = [];
+    _controlsPositions = {
         header: [],
         footer: [],
-    },
-    _events: {},
+    }
+    _events = {}
 
 
     /**
@@ -94,20 +94,20 @@ let coreuiTableInstance = {
      * @param {object} options
      * @private
      */
-    _init: function (tableWrapper, options) {
+    constructor(tableWrapper, options) {
 
         this._options = $.extend(true, {}, this._options, options);
         this._events  = {};
         this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
             ? this._options.id
-            : coreuiTableUtils.hashCode();
+            : TableUtils.hashCode();
 
         if (this._options.page > 0) {
             this._page = this._options.page;
         }
 
         if (this._options.saveState && this._options.id) {
-            this._recordsPerPage = coreuiTablePrivate.getStorageField(this._id, 'page_size')
+            this._recordsPerPage = TablePrivate.getStorageField(this._id, 'page_size')
 
         } else if (this._options.recordsPerPage > 0) {
             this._recordsPerPage = this._options.recordsPerPage;
@@ -117,7 +117,7 @@ let coreuiTableInstance = {
             this._options.hasOwnProperty('recordsRequest') &&
             (
                 typeof this._options.recordsRequest === 'function' ||
-                (coreuiTableUtils.isObject(this._options.recordsRequest) &&
+                (TableUtils.isObject(this._options.recordsRequest) &&
                 this._options.recordsRequest.hasOwnProperty('url') &&
                 typeof this._options.recordsRequest.url === 'string' &&
                 this._options.recordsRequest.url !== '' &&
@@ -134,7 +134,7 @@ let coreuiTableInstance = {
             }
 
         } else if (Array.isArray(this._options.records)) {
-            coreuiTablePrivate.setRecords(this, this._options.records);
+            TablePrivate.setRecords(this, this._options.records);
         }
 
         // Очистка записей после инициализации
@@ -145,17 +145,17 @@ let coreuiTableInstance = {
             Array.isArray(this._options.columns) &&
             this._options.columns.length > 0
         ) {
-            coreuiTablePrivate.initColumns(tableWrapper, this, this._options.columns);
+            TablePrivate.initColumns(tableWrapper, this, this._options.columns);
         }
 
 
         // Инициализация поисковых полей
-        if (coreuiTableUtils.isObject(this._options.search) &&
+        if (TableUtils.isObject(this._options.search) &&
             typeof this._options.search.controls === 'object' &&
             Array.isArray(this._options.search.controls) &&
             this._options.search.controls.length > 0
         ) {
-            coreuiTablePrivate.initSearch(tableWrapper, this, this._options.search.controls);
+            TablePrivate.initSearch(tableWrapper, this, this._options.search.controls);
         }
 
 
@@ -164,14 +164,14 @@ let coreuiTableInstance = {
             Array.isArray(this._options.header) &&
             this._options.header.length > 0
         ) {
-            coreuiTablePrivate.initControls(tableWrapper, this, this._options.header, 'header');
+            TablePrivate.initControls(tableWrapper, this, this._options.header, 'header');
         }
 
         if (this._options.hasOwnProperty('footer') &&
             Array.isArray(this._options.footer) &&
             this._options.footer.length > 0
         ) {
-            coreuiTablePrivate.initControls(tableWrapper, this, this._options.footer, 'footer');
+            TablePrivate.initControls(tableWrapper, this, this._options.footer, 'footer');
         }
 
 
@@ -179,17 +179,17 @@ let coreuiTableInstance = {
 
             // Поиск по сохраненным поисковым данным
             if ( ! this._isRecordsRequest) {
-                coreuiTablePrivate.searchLocalRecords(this);
+                TablePrivate.searchLocalRecords(this);
             }
 
             // Сортировка
-            let sort = coreuiTablePrivate.getStorageField(this.getId(), 'sort');
+            let sort = TablePrivate.getStorageField(this.getId(), 'sort');
 
             if (Array.isArray(sort) && sort.length > 0) {
-                coreuiTablePrivate.initSort(this, sort);
+                TablePrivate.initSort(this, sort);
 
                 if ( ! this._isRecordsRequest && this._records.length > 0) {
-                    this._records = coreuiTablePrivate.sortRecordsByFields(this._records, this._sort);
+                    this._records = TablePrivate.sortRecordsByFields(this._records, this._sort);
                 }
             }
 
@@ -198,16 +198,16 @@ let coreuiTableInstance = {
                 Array.isArray(this._options.sort) &&
                 this._options.sort.length > 0
             ) {
-                coreuiTablePrivate.initSort(this, this._options.sort);
+                TablePrivate.initSort(this, this._options.sort);
             }
         }
-    },
+    }
 
 
     /**
      * Инициализация событий таблицы
      */
-    initEvents: function () {
+    initEvents() {
 
         let table = this;
 
@@ -216,7 +216,7 @@ let coreuiTableInstance = {
 
             // Переход по ссылке
             if (typeof table._options.onClickUrl === 'string' && table._options.onClickUrl) {
-                coreuiTableElements.getTrRecords(table.getId()).click(function () {
+                TableElements.getTrRecords(table.getId()).click(function () {
                     let recordKey = $(this).data('record-index');
                     let record    = table.getRecordByIndex(recordKey);
 
@@ -243,7 +243,7 @@ let coreuiTableInstance = {
             // Событие нажатия на строку
             if (['function', 'string'].indexOf(typeof table._options.onClick)) {
 
-                coreuiTableElements.getTrRecords(table.getId()).click(function (event) {
+                TableElements.getTrRecords(table.getId()).click(function (event) {
                     let recordKey = $(this).data('record-index');
                     let record    = table.getRecordByIndex(recordKey);
 
@@ -263,7 +263,7 @@ let coreuiTableInstance = {
             }
 
             // Раскрытие строки
-            coreuiTableElements.getNoWrapToggles(table.getId()).click(function (event) {
+            TableElements.getNoWrapToggles(table.getId()).click(function (event) {
 
                 event.cancelBubble = true;
                 event.preventDefault();
@@ -282,15 +282,15 @@ let coreuiTableInstance = {
             });
 
             // Фиксация колонок
-            coreuiTableElements.fixedColsLeft(table.getId())
-            coreuiTableElements.fixedColsRight(table.getId())
+            TableElements.fixedColsLeft(table.getId())
+            TableElements.fixedColsRight(table.getId())
         });
 
 
         // Показ таблицы
         this.on('table_show', function () {
 
-            let sortableColumns = coreuiTableElements.getTableSortable(table.getId());
+            let sortableColumns = TableElements.getTableSortable(table.getId());
             if (sortableColumns[0]) {
                 sortableColumns.click(function (event) {
                     let field = $(this).data('field');
@@ -334,7 +334,7 @@ let coreuiTableInstance = {
 
 
             if (window.hasOwnProperty('bootstrap') && bootstrap.hasOwnProperty('Tooltip')) {
-                $('.coreui-table__column-description', coreuiTableElements.getTableThead(table.getId())).each(function () {
+                $('.coreui-table__column-description', TableElements.getTableThead(table.getId())).each(function () {
                     new bootstrap.Tooltip(this);
                 });
             }
@@ -344,19 +344,19 @@ let coreuiTableInstance = {
         // События смены состояния
         if (this._options.saveState && this._options.id) {
             this.on('records_sort', function () {
-                coreuiTablePrivate.setStorageField(table.getId(), 'sort', table._sort);
+                TablePrivate.setStorageField(table.getId(), 'sort', table._sort);
             });
 
             this.on('search_change', function () {
-                coreuiTablePrivate.setStorageField(table.getId(), 'search', table.getSearchData());
+                TablePrivate.setStorageField(table.getId(), 'search', table.getSearchData());
             });
 
             this.on('filters_change', function () {
-                coreuiTablePrivate.setStorageField(table.getId(), 'filters', table.getFilterData());
+                TablePrivate.setStorageField(table.getId(), 'filters', table.getFilterData());
             });
 
             this.on('page_size_update', function () {
-                coreuiTablePrivate.setStorageField(table.getId(), 'page_size', table._recordsPerPage);
+                TablePrivate.setStorageField(table.getId(), 'page_size', table._recordsPerPage);
             });
 
             this.on('columns_change', function () {
@@ -371,38 +371,38 @@ let coreuiTableInstance = {
                     })
                 });
 
-                coreuiTablePrivate.setStorageField(table.getId(), 'columns', columns);
+                TablePrivate.setStorageField(table.getId(), 'columns', columns);
             });
         }
 
 
-        coreuiTablePrivate._trigger(this, 'table_show', [ this ]);
-        coreuiTablePrivate._trigger(this, 'container_show');
+        TablePrivate._trigger(this, 'table_show', [ this ]);
+        TablePrivate._trigger(this, 'container_show');
 
         // Вызов события показа строк
         if ( ! this._isRecordsRequest) {
-            coreuiTablePrivate._trigger(this, 'records_show', [ this ]);
+            TablePrivate._trigger(this, 'records_show', [ this ]);
         }
-    },
+    }
 
 
     /**
      * Получение идентификатора таблицы
      * @returns {string}
      */
-    getId: function () {
+    getId() {
         return this._id;
-    },
+    }
 
 
     /**
      * Получение опций таблицы
      * @returns {*}
      */
-    getOptions: function () {
+    getOptions() {
 
         return $.extend(true, {}, this._options);
-    },
+    }
 
 
     /**
@@ -410,7 +410,7 @@ let coreuiTableInstance = {
      * @param element
      * @returns {*}
      */
-    render: function(element) {
+    render(element) {
 
         let that        = this;
         let widthSizes  = [];
@@ -474,7 +474,7 @@ let coreuiTableInstance = {
 
                 if (Array.isArray(header.left) && header.left.length > 0) {
                     header.left.map(function (control) {
-                        let controlRender = coreuiTableRender.renderControl(that, control);
+                        let controlRender = TableRender.renderControl(that, control);
 
                         if (controlRender) {
                             controlsLeft.push(controlRender);
@@ -484,7 +484,7 @@ let coreuiTableInstance = {
 
                 if (Array.isArray(header.center) && header.center.length > 0) {
                     header.center.map(function (control) {
-                        let controlRender = coreuiTableRender.renderControl(that, control);
+                        let controlRender = TableRender.renderControl(that, control);
 
                         if (controlRender) {
                             controlsCenter.push(controlRender);
@@ -494,7 +494,7 @@ let coreuiTableInstance = {
 
                 if (Array.isArray(header.right) && header.right.length > 0) {
                     header.right.map(function (control) {
-                        let controlRender = coreuiTableRender.renderControl(that, control);
+                        let controlRender = TableRender.renderControl(that, control);
 
                         if (controlRender) {
                             controlsRight.push(controlRender);
@@ -505,7 +505,7 @@ let coreuiTableInstance = {
                 if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
                     if (header.type === 'in') {
                         let headerControls = $(
-                            coreuiTableUtils.render(coreuiTableTpl['table/controls/header.html'], {
+                            TableUtils.render(TableTpl['table/controls/header.html'], {
                                 controlsLeft: controlsLeft,
                                 controlsCenter: controlsCenter,
                                 controlsRight: controlsRight,
@@ -534,7 +534,7 @@ let coreuiTableInstance = {
 
                     } else {
                         let headerControls = $(
-                            coreuiTableUtils.render(coreuiTableTpl['table/controls/header-out.html'], {
+                            TableUtils.render(TableTpl['table/controls/header-out.html'], {
                                 controlsLeft: controlsLeft,
                                 controlsCenter: controlsCenter,
                                 controlsRight: controlsRight,
@@ -576,7 +576,7 @@ let coreuiTableInstance = {
 
                 if (Array.isArray(footer.left) && footer.left.length > 0) {
                     $.each(footer.left, function (key, control) {
-                        let controlRender = coreuiTableRender.renderControl(that, control);
+                        let controlRender = TableRender.renderControl(that, control);
 
                         if (controlRender) {
                             controlsLeft.push(controlRender);
@@ -586,7 +586,7 @@ let coreuiTableInstance = {
 
                 if (Array.isArray(footer.center) && footer.center.length > 0) {
                     $.each(footer.center, function (key, control) {
-                        let controlRender = coreuiTableRender.renderControl(that, control);
+                        let controlRender = TableRender.renderControl(that, control);
 
                         if (controlRender) {
                             controlsCenter.push(controlRender);
@@ -596,7 +596,7 @@ let coreuiTableInstance = {
 
                 if (Array.isArray(footer.right) && footer.right.length > 0) {
                     $.each(footer.right, function (key, control) {
-                        let controlRender = coreuiTableRender.renderControl(that, control);
+                        let controlRender = TableRender.renderControl(that, control);
 
                         if (controlRender) {
                             controlsRight.push(controlRender);
@@ -607,7 +607,7 @@ let coreuiTableInstance = {
                 if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
                     if (footer.type === 'in') {
                         let footerControls = $(
-                            coreuiTableUtils.render(coreuiTableTpl['table/controls/footer.html'], {
+                            TableUtils.render(TableTpl['table/controls/footer.html'], {
                                 controlsLeft: controlsLeft,
                                 controlsCenter: controlsCenter,
                                 controlsRight: controlsRight,
@@ -636,7 +636,7 @@ let coreuiTableInstance = {
                         render.footersIn.push(footerControls);
                     } else {
                         let footerControls = $(
-                            coreuiTableUtils.render(coreuiTableTpl['table/controls/footer-out.html'], {
+                            TableUtils.render(TableTpl['table/controls/footer-out.html'], {
                                 controlsLeft: controlsLeft,
                                 controlsCenter: controlsCenter,
                                 controlsRight: controlsRight,
@@ -707,8 +707,8 @@ let coreuiTableInstance = {
         }
 
 
-        let tableElement     = coreuiTableRender.renderTable(this);
-        let containerElement = $(coreuiTableUtils.render(coreuiTableTpl['container.html'], {
+        let tableElement     = TableRender.renderTable(this);
+        let containerElement = $(TableUtils.render(TableTpl['container.html'], {
             id: this._id,
             classes: classes.length > 0 ? ' ' + classes.join(' ') : '',
             classesWrapper: classesWrapper.length > 0 ? ' ' + classesWrapper.join(' ') : '',
@@ -751,35 +751,35 @@ let coreuiTableInstance = {
             $(domElement).html(containerElement);
             this.initEvents();
         }
-    },
+    }
 
 
     /**
      * Блокировка таблицы
      */
-    lock: function () {
+    lock() {
 
-        let container = coreuiTableElements.getContainer(this.getId());
+        let container = TableElements.getContainer(this.getId());
 
         if (container[0] && ! container.find('.coreui-table-lock')[0]) {
-            let html =  coreuiTableUtils.render(coreuiTableTpl['table/loader.html'], {
+            let html =  TableUtils.render(TableTpl['table/loader.html'], {
                 lang: this.getLang()
             });
 
             container.prepend(html);
         }
-    },
+    }
 
 
     /**
      * Разблокировка таблицы
      */
-    unlock: function () {
+    unlock () {
 
-        coreuiTableElements.getLock(this.getId()).hide(50, function () {
+        TableElements.getLock(this.getId()).hide(50, function () {
             $(this).remove()
         });
-    },
+    }
 
 
     /**
@@ -787,7 +787,7 @@ let coreuiTableInstance = {
      * @param {string} url
      * @param {string} method
      */
-    load: function (url, method) {
+    load (url, method) {
 
         this.lock();
 
@@ -797,7 +797,7 @@ let coreuiTableInstance = {
         if (url.match(/\[page\]/)) {
             url = url.replace(/\[page\]/g, this._page);
         } else {
-            let paramPage = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('page')
+            let paramPage = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('page')
                 ? this._options.requestParams.page
                 : 'page';
             params[paramPage] = this._page;
@@ -806,7 +806,7 @@ let coreuiTableInstance = {
         if (url.match(/\[count\]/)) {
             url = url.replace(/\[count\]/g, this._recordsPerPage);
         } else {
-            let paramCount = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('count')
+            let paramCount = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('count')
                 ? this._options.requestParams.count
                 : 'count';
             params[paramCount] = this._recordsPerPage;
@@ -815,7 +815,7 @@ let coreuiTableInstance = {
         if (url.match(/\[start\]/)) {
             url = url.replace(/\[start\]/g, ((this._page - 1) * this._recordsPerPage) + 1);
         } else {
-            let paramStart = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('start')
+            let paramStart = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('start')
                 ? this._options.requestParams.start
                 : 'start';
             params[paramStart] = ((this._page - 1) * this._recordsPerPage) + 1;
@@ -824,7 +824,7 @@ let coreuiTableInstance = {
         if (url.match(/\[end\]/)) {
             url = url.replace(/\[end\]/g, ((this._page - 1) * this._recordsPerPage) + Number(this._recordsPerPage));
         } else {
-            let paramEnd = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('end')
+            let paramEnd = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('end')
                 ? this._options.requestParams.end
                 : 'end';
             params[paramEnd] = ((this._page - 1) * this._recordsPerPage) + Number(this._recordsPerPage);
@@ -841,7 +841,7 @@ let coreuiTableInstance = {
         }
 
         if (searchData.length > 0) {
-            let paramSearch = coreuiTableUtils.isObject(this._options.requestParams) &&
+            let paramSearch = TableUtils.isObject(this._options.requestParams) &&
                               this._options.requestParams.hasOwnProperty('search') &&
                               typeof this._options.requestParams.search === 'string'
                 ? this._options.requestParams.search
@@ -855,7 +855,7 @@ let coreuiTableInstance = {
         }
 
         if (this._sort.length > 0) {
-            let paramSort = coreuiTableUtils.isObject(this._options.requestParams) &&
+            let paramSort = TableUtils.isObject(this._options.requestParams) &&
                             this._options.requestParams.hasOwnProperty('sort') &&
                             typeof this._options.requestParams.sort === 'string'
                 ? this._options.requestParams.sort
@@ -871,7 +871,7 @@ let coreuiTableInstance = {
             dataType: "json",
             data: params,
             beforeSend: function(xhr) {
-                coreuiTablePrivate._trigger(that, 'records_load_start', [ that, xhr ]);
+                TablePrivate._trigger(that, 'records_load_start', [ that, xhr ]);
             },
             success: function (result) {
 
@@ -879,7 +879,7 @@ let coreuiTableInstance = {
                     typeof result.records === 'object' &&
                     Array.isArray(result.records)
                 ) {
-                    let total = result.hasOwnProperty('total') && coreuiTableUtils.isNumeric(result.total)
+                    let total = result.hasOwnProperty('total') && TableUtils.isNumeric(result.total)
                         ? result.total
                         : null;
                     that.setRecords(result.records, total);
@@ -890,38 +890,38 @@ let coreuiTableInstance = {
             },
             error: function(xhr, textStatus, errorThrown) {
                 that.setRecords([]);
-                coreuiTablePrivate._trigger(that, 'records_load_error', [ that, xhr, textStatus, errorThrown ]);
+                TablePrivate._trigger(that, 'records_load_error', [ that, xhr, textStatus, errorThrown ]);
             },
             complete: function(xhr, textStatus) {
                 that.unlock();
-                coreuiTablePrivate._trigger(that, 'records_load_end', [ that, xhr, textStatus ]);
+                TablePrivate._trigger(that, 'records_load_end', [ that, xhr, textStatus ]);
             },
         });
-    },
+    }
 
 
     /**
      * Загрузка строк
      * @param {function} callback
      */
-    loadByFunction: function (callback) {
+    loadByFunction(callback) {
 
         let that   = this;
         let params = {};
 
-        let paramPage = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('page')
+        let paramPage = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('page')
             ? this._options.requestParams.page
             : 'page';
 
-        let paramCount = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('count')
+        let paramCount = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('count')
             ? this._options.requestParams.count
             : 'count';
 
-        let paramStart = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('start')
+        let paramStart = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('start')
             ? this._options.requestParams.start
             : 'start';
 
-        let paramEnd = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('end')
+        let paramEnd = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('end')
             ? this._options.requestParams.end
             : 'end';
 
@@ -942,7 +942,7 @@ let coreuiTableInstance = {
         }
 
         if (searchData.length > 0) {
-            let paramSearch = coreuiTableUtils.isObject(this._options.requestParams) &&
+            let paramSearch = TableUtils.isObject(this._options.requestParams) &&
                               this._options.requestParams.hasOwnProperty('search') &&
                               typeof this._options.requestParams.search === 'string'
                 ? this._options.requestParams.search
@@ -956,7 +956,7 @@ let coreuiTableInstance = {
         }
 
         if (this._sort.length > 0) {
-            let paramSort = coreuiTableUtils.isObject(this._options.requestParams) &&
+            let paramSort = TableUtils.isObject(this._options.requestParams) &&
                             this._options.requestParams.hasOwnProperty('sort') &&
                             typeof this._options.requestParams.sort === 'string'
                 ? this._options.requestParams.sort
@@ -978,7 +978,7 @@ let coreuiTableInstance = {
                 typeof data.records === 'object' &&
                 Array.isArray(data.records)
             ) {
-                let total = data.hasOwnProperty('total') && coreuiTableUtils.isNumeric(data.total)
+                let total = data.hasOwnProperty('total') && TableUtils.isNumeric(data.total)
                     ? data.total
                     : null;
                 that.setRecords(data.records, total);
@@ -1006,13 +1006,13 @@ let coreuiTableInstance = {
         } else if (typeof result === 'object') {
             setRecords(result);
         }
-    },
+    }
 
 
     /**
      * Перезагрузка записей в таблице
      */
-    reload: function () {
+    reload() {
 
         if (this._isRecordsRequest) {
             if (typeof this._options.recordsRequest === 'function') {
@@ -1021,62 +1021,62 @@ let coreuiTableInstance = {
                 this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
             }
         }
-    },
+    }
 
 
     /**
      * Пересоздание тела таблицы
      */
-    refresh: function () {
+    refresh() {
 
-        let table = coreuiTableRender.renderTable(this);
+        let table = TableRender.renderTable(this);
 
-        coreuiTableElements.getTable(this.getId()).replaceWith(table);
+        TableElements.getTable(this.getId()).replaceWith(table);
 
-        coreuiTablePrivate._trigger(this, 'table_show', [ this ]);
-        coreuiTablePrivate._trigger(this, 'records_show', [ this ]);
-    },
+        TablePrivate._trigger(this, 'table_show', [ this ]);
+        TablePrivate._trigger(this, 'records_show', [ this ]);
+    }
 
 
     /**
      * Установка общего количества записей на странице
      * @param recordsPerPage
      */
-    setPageSize: function (recordsPerPage) {
+    setPageSize(recordsPerPage) {
 
         this._recordsPerPage = recordsPerPage;
 
-        coreuiTablePrivate._trigger(this, 'page_size_update');
-    },
+        TablePrivate._trigger(this, 'page_size_update');
+    }
 
 
     /**
      * Выбор всех записей в таблице
      */
-    selectAll: function () {
+    selectAll() {
 
-        coreuiTableElements.selectTrAll(this.getId())
+        TableElements.selectTrAll(this.getId())
 
-        coreuiTablePrivate._trigger(this, 'record_select_all');
-    },
+        TablePrivate._trigger(this, 'record_select_all');
+    }
 
 
     /**
      * Отмена выбор всех записей в таблице
      */
-    unselectAll: function () {
+    unselectAll() {
 
-        coreuiTableElements.unselectTrAll(this.getId())
+        TableElements.unselectTrAll(this.getId())
 
-        coreuiTablePrivate._trigger(this, 'record_unselect_all');
-    },
+        TablePrivate._trigger(this, 'record_unselect_all');
+    }
 
 
     /**
      * Выбор записи в таблице
      * @param {string} id
      */
-    selectRecord: function (id) {
+    selectRecord(id) {
 
         let record = this.getRecordById(id);
 
@@ -1084,23 +1084,23 @@ let coreuiTableInstance = {
             return;
         }
 
-        let tr = coreuiTableElements.getTrByIndex(this.getId(), record.index);
+        let tr = TableElements.getTrByIndex(this.getId(), record.index);
 
         if (tr.length === 0) {
             return;
         }
 
-        coreuiTableElements.selectTr(tr)
+        TableElements.selectTr(tr)
 
-        coreuiTablePrivate._trigger(this, 'record_select', [ record ]);
-    },
+        TablePrivate._trigger(this, 'record_select', [ record ]);
+    }
 
 
     /**
      * Выбор записи в таблице по индексу
      * @param {int} index
      */
-    selectRecordByIndex: function (index) {
+    selectRecordByIndex(index) {
 
         let record = this.getRecordByIndex(index);
 
@@ -1108,23 +1108,23 @@ let coreuiTableInstance = {
             return;
         }
 
-        let tr = coreuiTableElements.getTrByIndex(this.getId(), record.index);
+        let tr = TableElements.getTrByIndex(this.getId(), record.index);
 
         if (tr.length === 0) {
             return;
         }
 
-        coreuiTableElements.selectTr(tr)
+        TableElements.selectTr(tr)
 
-        coreuiTablePrivate._trigger(this, 'record_select', [ record ]);
-    },
+        TablePrivate._trigger(this, 'record_select', [ record ]);
+    }
 
 
     /**
      * Отмена выбора записи в таблице
      * @param {string} id
      */
-    unselectRecord: function (id) {
+    unselectRecord(id) {
 
         let record = this.getRecordById(id);
 
@@ -1132,29 +1132,29 @@ let coreuiTableInstance = {
             return;
         }
 
-        let tr = coreuiTableElements.getTrByIndex(this.getId(), record.index);
+        let tr = TableElements.getTrByIndex(this.getId(), record.index);
 
         if ( ! tr) {
             return;
         }
 
-        coreuiTableElements.unselectTr(tr)
+        TableElements.unselectTr(tr)
 
-        coreuiTablePrivate._trigger(this, 'record_unselect', [ record.data ]);
-    },
+        TablePrivate._trigger(this, 'record_unselect', [ record.data ]);
+    }
 
 
     /**
      * Получение выбранных id
      * @return {array}
      */
-    getSelectedRecordsId: function () {
+    getSelectedRecordsId() {
 
         let records = [];
         let that    = this;
         let field   = this._options.primaryKey;
 
-        $.each(coreuiTableElements.getSelectedIndexes(this.getId()), function (key, index) {
+        $.each(TableElements.getSelectedIndexes(this.getId()), function (key, index) {
             let record = that.getRecordByIndex(index);
 
             if ( ! record || ! record.data.hasOwnProperty(field)) {
@@ -1165,19 +1165,19 @@ let coreuiTableInstance = {
         });
 
         return records;
-    },
+    }
 
 
     /**
      * Получение выбранных записей
      * @return {array}
      */
-    getSelectedRecords: function () {
+    getSelectedRecords() {
 
         let records = [];
         let that    = this;
 
-        $.each(coreuiTableElements.getSelectedIndexes(this.getId()), function (key, index) {
+        $.each(TableElements.getSelectedIndexes(this.getId()), function (key, index) {
             let record = that.getRecordByIndex(index);
 
             if ( ! record) {
@@ -1188,7 +1188,7 @@ let coreuiTableInstance = {
         });
 
         return records;
-    },
+    }
 
 
     /**
@@ -1197,7 +1197,7 @@ let coreuiTableInstance = {
      * @return {object|null}
      * @deprecated
      */
-    getRecord: function (id) {
+    getRecord(id) {
 
         let record = this.getRecordById(id);
 
@@ -1206,13 +1206,13 @@ let coreuiTableInstance = {
         }
 
         return record.data;
-    },
+    }
 
 
     /**
      * Получение записей
      */
-    getRecords: function () {
+    getRecords() {
 
         let records = []
 
@@ -1221,7 +1221,7 @@ let coreuiTableInstance = {
         });
 
         return records;
-    },
+    }
 
 
     /**
@@ -1229,17 +1229,17 @@ let coreuiTableInstance = {
      * @return {Array}
      * @deprecated getRecordsData
      */
-    getData: function () {
+    getData() {
 
         return this.getRecordsData();
-    },
+    }
 
 
     /**
      * Получение данных из существующих записей
      * @return {Array}
      */
-    getRecordsData: function () {
+    getRecordsData() {
 
         let data = []
 
@@ -1248,26 +1248,26 @@ let coreuiTableInstance = {
         });
 
         return data;
-    },
+    }
 
 
     /**
      * Переход к предыдущей странице
      */
-    prevPage: function () {
+    prevPage() {
 
         if (this._page > 1) {
             this._page--;
             this.reload();
         }
-    },
+    }
 
 
     /**
      * Переход к следующей странице
      * @return {array}
      */
-    nextPage: function () {
+    nextPage() {
 
         let totalPages = this._recordsTotal > 0 && this._recordsPerPage > 0
             ? Math.ceil(this._recordsTotal / this._recordsPerPage)
@@ -1277,19 +1277,19 @@ let coreuiTableInstance = {
             this._page++;
             this.reload();
         }
-    },
+    }
 
 
     /**
      * Переход к указанной странице
      */
-    goPage: function (page) {
+    goPage(page) {
 
         if (page >= 1) {
             this._page = page;
             this.reload();
         }
-    },
+    }
 
 
     /**
@@ -1299,7 +1299,7 @@ let coreuiTableInstance = {
      * @param {*}            context
      * @param {boolean}      singleExec
      */
-    on: function(eventName, callback, context, singleExec) {
+    on(eventName, callback, context, singleExec) {
 
         let eventNames = [];
 
@@ -1331,24 +1331,24 @@ let coreuiTableInstance = {
                 singleExec: !! singleExec,
             });
         });
-    },
+    }
 
 
     /**
      * Получение переводов текущего языка
      * @return {object}
      */
-    getLang: function () {
+    getLang() {
 
         return $.extend(true, {}, this._options.langItems);
-    },
+    }
 
 
     /**
      * Установка видимых колонок, не указанные колонки будут скрыты
      * @param {Array} columns
      */
-    setColumnsShow: function (columns) {
+    setColumnsShow(columns) {
 
         if ( ! Array.isArray(columns)) {
             return;
@@ -1380,17 +1380,17 @@ let coreuiTableInstance = {
 
 
         if (isChange) {
-            coreuiTablePrivate._trigger(this, 'columns_change');
+            TablePrivate._trigger(this, 'columns_change');
             this.refresh();
         }
-    },
+    }
 
 
     /**
      * Показ колонок
      * @param {Array} columns
      */
-    showColumns: function (columns) {
+    showColumns(columns) {
 
         if ( ! Array.isArray(columns)) {
             return;
@@ -1421,17 +1421,17 @@ let coreuiTableInstance = {
 
 
         if (isChange) {
-            coreuiTablePrivate._trigger(this, 'columns_change');
+            TablePrivate._trigger(this, 'columns_change');
             this.refresh();
         }
-    },
+    }
 
 
     /**
      * Скрытие колонок
      * @param {Array} columns
      */
-    hideColumns: function (columns) {
+    hideColumns(columns) {
 
         if ( ! Array.isArray(columns)) {
             return;
@@ -1461,10 +1461,10 @@ let coreuiTableInstance = {
         });
 
         if (isChange) {
-            coreuiTablePrivate._trigger(this, 'columns_change');
+            TablePrivate._trigger(this, 'columns_change');
             this.refresh();
         }
-    },
+    }
 
 
     /**
@@ -1472,7 +1472,7 @@ let coreuiTableInstance = {
      * @property {boolean} extOptions
      * @return {*[]}
      */
-    getSearchData: function (extOptions) {
+    getSearchData(extOptions) {
 
         let searchData = [];
 
@@ -1499,7 +1499,7 @@ let coreuiTableInstance = {
         });
 
         return searchData;
-    },
+    }
 
 
     /**
@@ -1507,7 +1507,7 @@ let coreuiTableInstance = {
      * @property {boolean} extOptions
      * @return {*[]}
      */
-    getFilterData: function (extOptions) {
+    getFilterData(extOptions) {
 
         let filterData = [];
 
@@ -1533,13 +1533,13 @@ let coreuiTableInstance = {
         });
 
         return filterData;
-    },
+    }
 
 
     /**
      * Поиск по таблице с использованием данных из поиска и фильтров
      */
-    searchRecords: function () {
+    searchRecords() {
 
         let searchData = this.getSearchData();
         let filterData = this.getFilterData();
@@ -1553,40 +1553,40 @@ let coreuiTableInstance = {
                 this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
             }
         } else {
-            coreuiTablePrivate.searchLocalRecords(this);
+            TablePrivate.searchLocalRecords(this);
             this.refresh();
         }
 
 
-        coreuiTablePrivate._trigger(this, 'filters_change', [ filterData ]);
-        coreuiTablePrivate._trigger(this, 'search_change', [ searchData ]);
-    },
+        TablePrivate._trigger(this, 'filters_change', [ filterData ]);
+        TablePrivate._trigger(this, 'search_change', [ searchData ]);
+    }
 
 
     /**
      * Очистка поисковых данных
      */
-    clearSearch: function () {
+    clearSearch() {
 
         $.each(this._search, function (key, search) {
             search.setValue(null);
         });
 
         this.searchRecords();
-    },
+    }
 
 
     /**
      * Очистка поисковых данных в фильтрах
      */
-    clearFilters: function () {
+    clearFilters() {
 
         $.each(this._filters, function (key, filter) {
             filter.setValue(null);
         });
 
         this.searchRecords();
-    },
+    }
 
 
     /**
@@ -1594,7 +1594,7 @@ let coreuiTableInstance = {
      * @param {string|number} index
      * @return {object|null}
      */
-    getRecordByIndex: function (index) {
+    getRecordByIndex(index) {
 
         if (['string', 'number'].indexOf(typeof index) < 0 || index === '') {
             return null;
@@ -1620,7 +1620,7 @@ let coreuiTableInstance = {
         });
 
         return record;
-    },
+    }
 
 
     /**
@@ -1628,10 +1628,10 @@ let coreuiTableInstance = {
      * @param {string} id
      * @return {object|null}
      */
-    getRecordById: function (id) {
+    getRecordById(id) {
 
         return this.getRecordByField(this._options.primaryKey, id);
-    },
+    }
 
 
     /**
@@ -1640,7 +1640,7 @@ let coreuiTableInstance = {
      * @param {string|number} value
      * @return {object|null}
      */
-    getRecordByField: function (field, value) {
+    getRecordByField(field, value) {
 
         let record = null;
 
@@ -1653,7 +1653,7 @@ let coreuiTableInstance = {
         });
 
         return record;
-    },
+    }
 
 
     /**
@@ -1661,7 +1661,7 @@ let coreuiTableInstance = {
      * @param {string} id
      * @return {object}
      */
-    getControlById: function (id) {
+    getControlById(id) {
 
         let result = null;
 
@@ -1676,7 +1676,7 @@ let coreuiTableInstance = {
         });
 
         return result;
-    },
+    }
 
 
     /**
@@ -1684,7 +1684,7 @@ let coreuiTableInstance = {
      * @param {string} id
      * @return {object}
      */
-    getSearchControlById: function (id) {
+    getSearchControlById(id) {
 
         let result = null;
 
@@ -1699,14 +1699,14 @@ let coreuiTableInstance = {
         });
 
         return result;
-    },
+    }
 
 
     /**
      * Сортировка по полям
      * @param {Array} sorting
      */
-    sortFields: function (sorting) {
+    sortFields(sorting) {
 
         if ( ! Array.isArray(sorting)) {
             return;
@@ -1718,7 +1718,7 @@ let coreuiTableInstance = {
         this._sort = [];
 
         $.each(sorting, function (key, sort) {
-            if ( ! coreuiTableUtils.isObject(sort) ||
+            if ( ! TableUtils.isObject(sort) ||
                  ! sort.hasOwnProperty('field') ||
                  ! sort.hasOwnProperty('order') ||
                 typeof sort.field !== 'string' ||
@@ -1770,22 +1770,22 @@ let coreuiTableInstance = {
                 } else {
                     this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
                 }
-                coreuiTablePrivate.setColumnsSort(this, this._sort);
+                TablePrivate.setColumnsSort(this, this._sort);
 
             } else {
-                this._records = coreuiTablePrivate.sortRecordsByFields(this._records, this._sort, columnsConverters);
+                this._records = TablePrivate.sortRecordsByFields(this._records, this._sort, columnsConverters);
                 this.refresh();
             }
         }
 
-        coreuiTablePrivate._trigger(this, 'records_sort', [ this ]);
-    },
+        TablePrivate._trigger(this, 'records_sort', [ this ]);
+    }
 
 
     /**
      * Сортировка по умолчанию
      */
-    sortDefault: function () {
+    sortDefault() {
 
         this._sort = [];
 
@@ -1795,22 +1795,22 @@ let coreuiTableInstance = {
             } else {
                 this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
             }
-            coreuiTablePrivate.setColumnsSort(this);
+            TablePrivate.setColumnsSort(this);
 
         } else {
-            this._records = coreuiTablePrivate.sortRecordsBySeq(this._records);
+            this._records = TablePrivate.sortRecordsBySeq(this._records);
             this.refresh();
         }
 
-        coreuiTablePrivate._trigger(this, 'records_sort', [ this ]);
-    },
+        TablePrivate._trigger(this, 'records_sort', [ this ]);
+    }
 
 
     /**
      * Удаление строки из таблицы по индексу
      * @param index
      */
-    removeRecordByIndex: function (index) {
+    removeRecordByIndex(index) {
 
         let recordKey = null;
 
@@ -1825,17 +1825,17 @@ let coreuiTableInstance = {
             this._records.splice(recordKey, 1);
 
             let that = this;
-            let tr   = coreuiTableElements.getTrByIndex(this.getId(), index);
+            let tr   = TableElements.getTrByIndex(this.getId(), index);
 
             if (tr.length >= 0) {
                 tr.fadeOut('fast', function () {
                     tr.remove();
 
                     if (that._records.length === 0) {
-                        let tbody = coreuiTableElements.getTableTbody(that.getId());
+                        let tbody = TableElements.getTableTbody(that.getId());
 
                         tbody.append(
-                            coreuiTableUtils.render(coreuiTableTpl['table/record/empty.html'], {
+                            TableUtils.render(TableTpl['table/record/empty.html'], {
                                 columnsCount: that._countColumnsShow,
                                 lang: that.getLang(),
                             })
@@ -1846,7 +1846,7 @@ let coreuiTableInstance = {
 
             this._recordsNumber--;
         }
-    },
+    }
 
 
     /**
@@ -1854,23 +1854,23 @@ let coreuiTableInstance = {
      * @param {object} recordData
      * @param {number} index
      */
-    addRecordAfterIndex: function (recordData, index) {
+    addRecordAfterIndex(recordData, index) {
 
-        let tr = coreuiTableElements.getTrByIndex(this.getId(), index);
+        let tr = TableElements.getTrByIndex(this.getId(), index);
 
         if (tr.length >= 0) {
-            let record = coreuiTablePrivate.addRecord(this, recordData, index);
+            let record = TablePrivate.addRecord(this, recordData, index);
 
             if (record) {
-                coreuiTableElements.getTrEmpty(this.getId()).remove();
+                TableElements.getTrEmpty(this.getId()).remove();
 
                 tr.after(
-                    coreuiTableRender.renderRecord(this, record)
+                    TableRender.renderRecord(this, record)
                 );
                 this._recordsNumber++;
             }
         }
-    },
+    }
 
 
     /**
@@ -1878,69 +1878,69 @@ let coreuiTableInstance = {
      * @param {object} recordData
      * @param {number} index
      */
-    addRecordBeforeIndex: function (recordData, index) {
+    addRecordBeforeIndex(recordData, index) {
 
-        let tr = coreuiTableElements.getTrByIndex(this.getId(), index);
+        let tr = TableElements.getTrByIndex(this.getId(), index);
 
         if (tr.length >= 0) {
-            let record = coreuiTablePrivate.addRecordBefore(this, recordData, index);
+            let record = TablePrivate.addRecordBefore(this, recordData, index);
 
             if (record) {
-                coreuiTableElements.getTrEmpty(this.getId()).remove();
+                TableElements.getTrEmpty(this.getId()).remove();
 
                 tr.before(
-                    coreuiTableRender.renderRecord(this, record)
+                    TableRender.renderRecord(this, record)
                 );
                 this._recordsNumber++;
             }
         }
-    },
+    }
 
 
     /**
      * Добавление строки в начало таблицы
      * @param {object} recordData
      */
-    addRecordFirst: function (recordData) {
+    addRecordFirst(recordData) {
 
-        let tbody = coreuiTableElements.getTableTbody(this.getId());
+        let tbody = TableElements.getTableTbody(this.getId());
 
         if (tbody.length >= 0) {
-            let record = coreuiTablePrivate.addRecord(this, recordData, 0);
+            let record = TablePrivate.addRecord(this, recordData, 0);
 
             if (record) {
-                coreuiTableElements.getTrEmpty(this.getId()).remove();
+                TableElements.getTrEmpty(this.getId()).remove();
 
                 tbody.prepend(
-                    coreuiTableRender.renderRecord(this, record)
+                    TableRender.renderRecord(this, record)
                 );
                 this._recordsNumber++;
             }
         }
-    },
+    }
 
 
     /**
      * Добавление строки в конец таблицы
      * @param {object} recordData
      */
-    addRecordLast: function (recordData) {
+    addRecordLast(recordData) {
 
-        let tbody = coreuiTableElements.getTableTbody(this.getId());
+        let tbody = TableElements.getTableTbody(this.getId());
 
         if (tbody.length >= 0) {
-            let record = coreuiTablePrivate.addRecord(this, recordData);
+            let record = TablePrivate.addRecord(this, recordData);
 
             if (record) {
-                coreuiTableElements.getTrEmpty(this.getId()).remove();
+                TableElements.getTrEmpty(this.getId()).remove();
 
                 tbody.append(
-                    coreuiTableRender.renderRecord(this, record)
+                    TableRender.renderRecord(this, record)
                 );
                 this._recordsNumber++;
             }
         }
-    },
+    }
 
 
     /**
@@ -1948,15 +1948,15 @@ let coreuiTableInstance = {
      * @param {Array}  records
      * @param {number} total
      */
-    setRecords: function (records, total) {
+    setRecords(records, total) {
 
         if ( ! Array.isArray(records)) {
             return;
         }
 
-        this._recordsTotal = coreuiTableUtils.isNumeric(total) ? parseInt(total) : records.length;
+        this._recordsTotal = TableUtils.isNumeric(total) ? parseInt(total) : records.length;
 
-        coreuiTablePrivate.setRecords(this, records);
+        TablePrivate.setRecords(this, records);
 
         if (records.length > 0) {
             this._recordsNumber = this._page === 1
@@ -1964,8 +1964,8 @@ let coreuiTableInstance = {
                 : ((this._page - 1) * this._recordsPerPage) + 1;
         }
 
-        let recordsElements = coreuiTableRender.renderRecords(this, this._records);
-        let tableBody       = coreuiTableElements.getTableTbody(this.getId());
+        let recordsElements = TableRender.renderRecords(this, this._records);
+        let tableBody       = TableElements.getTableTbody(this.getId());
 
         tableBody.html('');
 
@@ -1974,15 +1974,15 @@ let coreuiTableInstance = {
         });
 
 
-        coreuiTablePrivate._trigger(this, 'records_show', [ this ]);
-    },
+        TablePrivate._trigger(this, 'records_show', [ this ]);
+    }
 
 
     /**
      * Получение количества строк
      * @return {number}
      */
-    getRecordsCount: function () {
+    getRecordsCount() {
 
         let count = 0;
 
@@ -1999,7 +1999,7 @@ let coreuiTableInstance = {
         }
 
         return count;
-    },
+    }
 
 
     /**
@@ -2008,29 +2008,29 @@ let coreuiTableInstance = {
      * @param {HTMLElement|jQuery|string|Array|function} content
      * @param {boolean}                                  isRebuild - true default
      */
-    expandRecordContent: function (recordIndex, content, isRebuild) {
+    expandRecordContent(recordIndex, content, isRebuild) {
 
-        let recordElement  = coreuiTableElements.getTrByIndex(this.getId(), recordIndex);
-        let recordExpanded = coreuiTableElements.getExpandRow(recordElement);
+        let recordElement  = TableElements.getTrByIndex(this.getId(), recordIndex);
+        let recordExpanded = TableElements.getExpandRow(recordElement);
 
         if (recordElement.hasClass('record-expanded')) {
 
             if (recordExpanded) {
                 if (isRebuild === undefined || isRebuild) {
-                    coreuiTableElements.removeExpandRow(recordExpanded);
+                    TableElements.removeExpandRow(recordExpanded);
                 } else {
-                    coreuiTableElements.hideExpandRow(recordExpanded);
+                    TableElements.hideExpandRow(recordExpanded);
                 }
             }
 
             recordElement.removeClass('record-expanded');
-            coreuiTablePrivate._trigger(this, 'record_expand_hide', [recordIndex]);
+            TablePrivate._trigger(this, 'record_expand_hide', [recordIndex]);
 
         } else {
             if (recordExpanded) {
-                coreuiTableElements.showExpandRow(recordExpanded);
+                TableElements.showExpandRow(recordExpanded);
                 recordElement.addClass('record-expanded');
-                coreuiTablePrivate._trigger(this, 'record_expand_show', [recordIndex]);
+                TablePrivate._trigger(this, 'record_expand_show', [recordIndex]);
 
             } else {
                 let recordIndex = recordElement.data('record-index');
@@ -2043,26 +2043,26 @@ let coreuiTableInstance = {
 
                         callbackResult
                             .then(function (result) {
-                                coreuiTableElements.addExpandRow(that, recordElement, result);
-                                coreuiTablePrivate._trigger(that, 'record_expand_show', [recordIndex]);
+                                TableElements.addExpandRow(that, recordElement, result);
+                                TablePrivate._trigger(that, 'record_expand_show', [recordIndex]);
 
                             }).catch(function () {
-                                coreuiTableElements.addExpandRow(that, recordElement, '');
-                                coreuiTablePrivate._trigger(that, 'record_expand_show', [recordIndex]);
+                                TableElements.addExpandRow(that, recordElement, '');
+                                TablePrivate._trigger(that, 'record_expand_show', [recordIndex]);
                             });
 
                     } else{
-                        coreuiTableElements.addExpandRow(this, recordElement, callbackResult);
-                        coreuiTablePrivate._trigger(this, 'record_expand_show', [recordIndex]);
+                        TableElements.addExpandRow(this, recordElement, callbackResult);
+                        TablePrivate._trigger(this, 'record_expand_show', [recordIndex]);
                     }
 
                 } else {
-                    coreuiTableElements.addExpandRow(this, recordElement, content);
-                    coreuiTablePrivate._trigger(this, 'record_expand_show', [recordIndex]);
+                    TableElements.addExpandRow(this, recordElement, content);
+                    TablePrivate._trigger(this, 'record_expand_show', [recordIndex]);
                 }
             }
         }
-    },
+    }
 
 
     /**
@@ -2071,7 +2071,7 @@ let coreuiTableInstance = {
      * @param {string}  url
      * @param {boolean} isRebuild
      */
-    expandRecordUrl: function (recordIndex, url, isRebuild) {
+    expandRecordUrl(recordIndex, url, isRebuild) {
 
         let that = this;
 
@@ -2113,4 +2113,4 @@ let coreuiTableInstance = {
 }
 
 
-export default coreuiTableInstance;
+export default TableInstance;

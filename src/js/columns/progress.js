@@ -1,5 +1,5 @@
-import coreuiTableUtils from "../coreui.table.utils";
-import coreuiTableTpl   from "../coreui.table.templates";
+import TableUtils from "../table.utils";
+import TableTpl   from "../table.tpl";
 import Column           from "../abstract/Column";
 
 
@@ -7,7 +7,7 @@ class ColumnsProgress extends Column {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -63,11 +63,11 @@ class ColumnsProgress extends Column {
     render(content, record) {
 
         if (
-            ( ! coreuiTableUtils.isNumeric(content)) &&
+            ( ! TableUtils.isNumeric(content)) &&
             (
-                ! coreuiTableUtils.isObject(content) ||
+                ! TableUtils.isObject(content) ||
                 ! content.hasOwnProperty('percent') ||
-                ! coreuiTableUtils.isNumeric(content.percent)
+                ! TableUtils.isNumeric(content.percent)
             )
         ) {
             return '';
@@ -79,24 +79,24 @@ class ColumnsProgress extends Column {
         let color       = typeof this._options.barColor === 'string' ? this._options.barColor : 'primary';
         let attr        = this._options.attr;
 
-        attr = coreuiTableUtils.mergeAttr(attr, { class: 'progress me-1' });
+        attr = TableUtils.mergeAttr(attr, { class: 'progress me-1' });
 
         if (this._options.barWidth) {
-            let barWidth = coreuiTableUtils.isNumeric(this._options.barWidth)
+            let barWidth = TableUtils.isNumeric(this._options.barWidth)
                 ? (this._options.barWidth + 'px')
                 : this._options.barWidth;
-            attr = coreuiTableUtils.mergeAttr(attr, { style: 'width:' + barWidth });
+            attr = TableUtils.mergeAttr(attr, { style: 'width:' + barWidth });
         }
 
         if (this._options.barHeight) {
-            let barHeight = coreuiTableUtils.isNumeric(this._options.barHeight)
+            let barHeight = TableUtils.isNumeric(this._options.barHeight)
                 ? (this._options.barHeight + 'px')
                 : this._options.barHeight;
-            attr = coreuiTableUtils.mergeAttr(attr, { style: 'height:' + barHeight });
+            attr = TableUtils.mergeAttr(attr, { style: 'height:' + barHeight });
         }
 
 
-        if (coreuiTableUtils.isNumeric(content)) {
+        if (TableUtils.isNumeric(content)) {
             if (content < 0 ) {
                 percent = 0;
 
@@ -145,7 +145,7 @@ class ColumnsProgress extends Column {
         });
 
 
-        return coreuiTableUtils.render(coreuiTableTpl['columns/progress.html'], {
+        return TableUtils.render(TableTpl['columns/progress.html'], {
             description: description,
             percent: percent,
             percentText: percentText,

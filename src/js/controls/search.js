@@ -1,16 +1,15 @@
 
-import coreuiTableUtils    from '../coreui.table.utils';
-import coreuiTableTpl      from "../coreui.table.templates";
-import CoreuiTableUtils    from "../coreui.table.utils";
-import coreuiTableElements from "../coreui.table.elements";
-import Control from "../abstract/Control";
+import TableUtils    from '../table.utils';
+import TableTpl      from "../table.tpl";
+import TableElements from "../table.elements";
+import Control       from "../abstract/Control";
 
 
 class ControlSearch extends Control {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -33,7 +32,7 @@ class ControlSearch extends Control {
         super(table, options);
 
 
-        if ( ! CoreuiTableUtils.isObject(this._options.btn)) {
+        if ( ! TableUtils.isObject(this._options.btn)) {
             this._options.btn = {};
         }
 
@@ -44,7 +43,7 @@ class ControlSearch extends Control {
         }
 
 
-        if ( ! CoreuiTableUtils.isObject(this._options.btnClear)) {
+        if ( ! TableUtils.isObject(this._options.btnClear)) {
             this._options.btnClear = {};
         }
 
@@ -55,7 +54,7 @@ class ControlSearch extends Control {
         }
 
 
-        if ( ! CoreuiTableUtils.isObject(this._options.btnComplete)) {
+        if ( ! TableUtils.isObject(this._options.btnComplete)) {
             this._options.btnComplete = {};
         }
 
@@ -80,10 +79,10 @@ class ControlSearch extends Control {
         let table      = this._table;
 
 
-        if ( ! coreuiTableUtils.isObject(this._options.btn)) {
+        if ( ! TableUtils.isObject(this._options.btn)) {
             this._options.btn = {};
         }
-        if ( ! coreuiTableUtils.isObject(this._options.btn.attr)) {
+        if ( ! TableUtils.isObject(this._options.btn.attr)) {
             this._options.btn.attr = {};
         }
 
@@ -110,7 +109,7 @@ class ControlSearch extends Control {
         }
 
 
-        let control = $(coreuiTableUtils.render(coreuiTableTpl['controls/search.html'], {
+        let control = $(TableUtils.render(TableTpl['controls/search.html'], {
             btnContent: btnContent,
             btnAttr: btnAttr.length > 0 ? (' ' + btnAttr.join(' ')) : '',
             btnClear: btnClear
@@ -120,8 +119,8 @@ class ControlSearch extends Control {
         let buttonClear  = control.find('.btn-clear');
 
         buttonToggle.click(function () {
-            let container        = coreuiTableElements.getSearchContainer(table.getId());
-            let columnsContainer = coreuiTableElements.getColumnsContainer(table.getId());
+            let container        = TableElements.getSearchContainer(table.getId());
+            let columnsContainer = TableElements.getColumnsContainer(table.getId());
 
             if (columnsContainer[0]) {
                 columnsContainer.hide();
@@ -150,7 +149,7 @@ class ControlSearch extends Control {
                             ? options.descriptionLabel
                             : null;
 
-                        let controlContainer = $(coreuiTableUtils.render(coreuiTableTpl['controls/search/control.html'], {
+                        let controlContainer = $(TableUtils.render(TableTpl['controls/search/control.html'], {
                             labelWidth:       labelWidth + (typeof labelWidth === 'number' ? 'px' : ''),
                             descriptionLabel: descriptionLabel,
                             label:            options.hasOwnProperty('label') && typeof options.label === 'string' ? options.label : '',
@@ -166,11 +165,11 @@ class ControlSearch extends Control {
 
 
 
-                if ( ! coreuiTableUtils.isObject(that._options.btnComplete)) {
+                if ( ! TableUtils.isObject(that._options.btnComplete)) {
                     that._options.btnComplete = {};
                 }
 
-                if ( ! coreuiTableUtils.isObject(that._options.btnComplete.attr)) {
+                if ( ! TableUtils.isObject(that._options.btnComplete.attr)) {
                     that._options.btnComplete.attr = {};
                 }
 
@@ -186,7 +185,7 @@ class ControlSearch extends Control {
                     that._options.btnComplete.attr.class += ' btn-complete';
                 }
 
-                if (coreuiTableUtils.isObject(that._options.btnComplete.attr)) {
+                if (TableUtils.isObject(that._options.btnComplete.attr)) {
                     $.each(that._options.btnComplete.attr, function (name, value) {
                         if (['string', 'number'].indexOf(typeof value) >= 0) {
                             btnCompleteAttr.push(name + '="' + value + '"');
@@ -197,7 +196,7 @@ class ControlSearch extends Control {
                     btnCompleteContent = that._options.btnComplete.content;
                 }
 
-                let searchContainer = $(coreuiTableUtils.render(coreuiTableTpl['controls/search/container.html'], {
+                let searchContainer = $(TableUtils.render(TableTpl['controls/search/container.html'], {
                     labelWidth: labelWidth + (typeof labelWidth === 'number' ? 'px' : ''),
                     btnCompleteAttr:    btnCompleteAttr.length > 0 ? (' ' + btnCompleteAttr.join(' ')) : '',
                     btnCompleteContent: btnCompleteContent,
@@ -206,7 +205,7 @@ class ControlSearch extends Control {
                 $('.btn-complete', searchContainer).click(function () {
                     table.searchRecords();
 
-                    let container = coreuiTableElements.getSearchContainer(table.getId());
+                    let container = TableElements.getSearchContainer(table.getId());
 
                     if (container[0]) {
                         container.fadeOut(200);
@@ -221,7 +220,7 @@ class ControlSearch extends Control {
                     })
                 }
 
-                let wrapper = coreuiTableElements.getWrapper(table.getId());
+                let wrapper = TableElements.getWrapper(table.getId());
                 wrapper.before(searchContainer);
             }
         });
@@ -230,7 +229,7 @@ class ControlSearch extends Control {
         buttonClear.click(function () {
             table.clearSearch();
 
-            let container = coreuiTableElements.getSearchContainer(table.getId());
+            let container = TableElements.getSearchContainer(table.getId());
 
             if (container[0]) {
                 container.fadeOut('fast');
@@ -249,7 +248,7 @@ class ControlSearch extends Control {
                     btnClear.click(function () {
                         table.clearSearch();
 
-                        let container = coreuiTableElements.getSearchContainer(table.getId());
+                        let container = TableElements.getSearchContainer(table.getId());
 
                         if (container[0]) {
                             container.fadeOut('fast');
@@ -263,7 +262,7 @@ class ControlSearch extends Control {
             } else {
                 buttonClear.remove();
 
-                let container = coreuiTableElements.getSearchContainer(table.getId());
+                let container = TableElements.getSearchContainer(table.getId());
 
                 if (container[0]) {
                     container.fadeOut('fast');
@@ -285,10 +284,10 @@ class ControlSearch extends Control {
         let attributes = [];
         let content    = '';
 
-        if ( ! coreuiTableUtils.isObject(this._options.btnClear)) {
+        if ( ! TableUtils.isObject(this._options.btnClear)) {
             this._options.btnClear = {};
         }
-        if ( ! coreuiTableUtils.isObject(this._options.btnClear.attr)) {
+        if ( ! TableUtils.isObject(this._options.btnClear.attr)) {
             this._options.btnClear.attr = {};
         }
 
@@ -309,7 +308,7 @@ class ControlSearch extends Control {
         }
 
 
-        return coreuiTableUtils.render(coreuiTableTpl['controls/search/clear.html'], {
+        return TableUtils.render(TableTpl['controls/search/clear.html'], {
             content: content,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });

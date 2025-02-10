@@ -1,13 +1,13 @@
 
-import coreuiTableTpl   from '../coreui.table.templates';
-import coreuiTableUtils from '../coreui.table.utils';
+import TableTpl   from '../table.tpl';
+import TableUtils from '../table.utils';
 import Control          from "../abstract/Control";
 
 class ControlButton extends Control {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -34,7 +34,7 @@ class ControlButton extends Control {
 
         let attributes = [];
 
-        if (coreuiTableUtils.isObject(this._options.attr)) {
+        if (TableUtils.isObject(this._options.attr)) {
             $.each(this._options.attr, function (name, value) {
                 if (['string', 'number'].indexOf(typeof value) >= 0) {
                     attributes.push(name + '="' + value + '"');
@@ -42,7 +42,7 @@ class ControlButton extends Control {
             });
         }
 
-        let btn = $(coreuiTableUtils.render(coreuiTableTpl['controls/button.html'], {
+        let btn = $(TableUtils.render(TableTpl['controls/button.html'], {
             content: this._options.content,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         }));

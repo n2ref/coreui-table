@@ -11,7 +11,7 @@ class ColumnsDateHuman extends Column {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -41,7 +41,7 @@ class ColumnsDateHuman extends Column {
      */
     render(content, record) {
 
-        if (['string', 'number'].indexOf(typeof content) < 0 || ! content instanceof Date) {
+        if (['string', 'number'].indexOf(typeof content) < 0 || ! (content instanceof Date)) {
             return '';
         }
 

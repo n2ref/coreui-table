@@ -1,8 +1,8 @@
 
-import coreuiTableInstance from './coreui.table.instance';
-import coreuiTableUtils    from "./coreui.table.utils";
+import TableInstance from './table.instance';
+import TableUtils    from "./table.utils";
 
-let coreuiTable = {
+let Table = {
 
     columns: {},
     controls: {},
@@ -26,13 +26,12 @@ let coreuiTable = {
         }
 
         let langItems     = this.lang.hasOwnProperty(options.lang) ? this.lang[options.lang] : {};
-        options.langItems = options.hasOwnProperty('langItems') && coreuiTableUtils.isObject(options.langItems)
+        options.langItems = options.hasOwnProperty('langItems') && TableUtils.isObject(options.langItems)
             ? $.extend(true, {}, langItems, options.langItems)
             : langItems;
 
 
-        let instance = $.extend(true, {}, coreuiTableInstance);
-        instance._init(this, options instanceof Object ? options : {});
+        let instance = new TableInstance(this, options instanceof Object ? options : {});
 
         let tableId = instance.getId();
         this._instances[tableId] = instance;
@@ -86,4 +85,4 @@ let coreuiTable = {
     }
 }
 
-export default coreuiTable;
+export default Table;

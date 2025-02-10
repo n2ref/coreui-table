@@ -21,13 +21,13 @@ var conf = {
     js: {
         fileMin: 'coreui-table.min.js',
         file: 'coreui-table.js',
-        main: 'src/js/main.js',
+        main: 'src/main.js',
         src: 'src/js/**/*.js'
     },
     css: {
         fileMin: 'coreui-table.min.css',
         file: 'coreui-table.css',
-        main: 'src/css/main.scss',
+        main: 'src/main.scss',
         src: [
             'src/css/**/*.scss',
         ]
@@ -37,7 +37,7 @@ var conf = {
         main: 'src/css/coreui.table.bootstrap.scss',
     },
     tpl: {
-        file: 'coreui.table.templates.js',
+        file: 'table.tpl.js',
         dist: './src/js',
         src: [
             'src/html/**/*.html',

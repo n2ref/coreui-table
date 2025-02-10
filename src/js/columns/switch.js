@@ -1,14 +1,14 @@
 
-import coreuiTableElements from "../coreui.table.elements";
-import coreuiTableTpl      from "../coreui.table.templates";
-import coreuiTableUtils    from "../coreui.table.utils";
+import TableElements from "../table.elements";
+import TableTpl      from "../table.tpl";
+import TableUtils    from "../table.utils";
 import Column              from "../abstract/Column";
 
 class ColumnsSwitch extends Column {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -33,7 +33,7 @@ class ColumnsSwitch extends Column {
         // Показ строк
         table.on('records_show', function () {
 
-            let containers = coreuiTableElements.getRowsSwitches(table.getId());
+            let containers = TableElements.getRowsSwitches(table.getId());
 
             // Отмена обработки нажатия в switch колонках
             containers.click(function (event) {
@@ -86,7 +86,7 @@ class ColumnsSwitch extends Column {
 
         let isChecked = content === this._options.valueY;
 
-        let formSwitch = $(coreuiTableUtils.render(coreuiTableTpl['columns/switch.html'], {
+        let formSwitch = $(TableUtils.render(TableTpl['columns/switch.html'], {
             index: record.index,
             field: this._options.field,
             disabled: this._options.disabled,

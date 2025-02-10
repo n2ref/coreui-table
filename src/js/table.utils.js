@@ -1,7 +1,7 @@
 
 import 'ejs/ejs.min';
 
-let coreuiTableUtils = {
+let TableUtils = {
 
     _templates: {},
 
@@ -133,4 +133,4 @@ let coreuiTableUtils = {
 }
 
 
-export default coreuiTableUtils;
+export default TableUtils;

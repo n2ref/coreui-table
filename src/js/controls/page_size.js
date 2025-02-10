@@ -1,6 +1,6 @@
 
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTableUtils from '../coreui.table.utils';
+import TableTpl   from "../table.tpl";
+import TableUtils from '../table.utils';
 import Control          from "../abstract/Control";
 
 
@@ -8,7 +8,7 @@ class ControlPageSize extends Control {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -22,8 +22,8 @@ class ControlPageSize extends Control {
             list: [ 25, 50, 100, 1000 ]
         };
 
-        if (options.hasOwnProperty('attr') && coreuiTableUtils.isObject(options.attr)) {
-            options.attr = coreuiTableUtils.mergeAttr(optionsOriginal.attr, options.attr);
+        if (options.hasOwnProperty('attr') && TableUtils.isObject(options.attr)) {
+            options.attr = TableUtils.mergeAttr(optionsOriginal.attr, options.attr);
         }
 
         options = $.extend(true, optionsOriginal, options);
@@ -50,7 +50,7 @@ class ControlPageSize extends Control {
         let attributes = [];
         let table      = this._table;
 
-        if (coreuiTableUtils.isObject(this._options.attr)) {
+        if (TableUtils.isObject(this._options.attr)) {
             $.each(this._options.attr, function (name, value) {
                 if (['string', 'number'].indexOf(typeof value) >= 0) {
                     attributes.push(name + '="' + value + '"');
@@ -58,7 +58,7 @@ class ControlPageSize extends Control {
             });
         }
 
-        let control = $(coreuiTableUtils.render(coreuiTableTpl['controls/page-size.html'], {
+        let control = $(TableUtils.render(TableTpl['controls/page-size.html'], {
             recordsPerPageList: this._options.list,
             recordsPerPage: table._recordsPerPage,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',

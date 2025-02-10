@@ -1,23 +1,23 @@
 
-import coreuiTableUtils    from "./coreui.table.utils";
-import coreuiTableElements from "./coreui.table.elements";
-import coreuiTable from "./coreui.table";
+import TableUtils    from "./table.utils";
+import TableElements from "./table.elements";
+import Table         from "./table";
 
 
-let coreuiTablePrivate = {
+let TablePrivate = {
 
     /**
      * Инициализация колонок
-     * @param {coreuiTable}         tableWrapper
-     * @param {coreuiTableInstance} table
-     * @param {Array}               columns
+     * @param {Table}         tableWrapper
+     * @param {TableInstance} table
+     * @param {Array}         columns
      * @private
      */
     initColumns(tableWrapper, table, columns) {
 
         let options        = table.getOptions();
         let columnsStorage = options.saveState && options.id
-            ? coreuiTablePrivate.getStorageField(table.getId(), 'columns')
+            ? TablePrivate.getStorageField(table.getId(), 'columns')
             : null;
 
         columns.map(function (column) {
@@ -49,7 +49,7 @@ let coreuiTablePrivate = {
                 table._options.overflow = true;
             }
 
-            let columnInstance = new coreuiTable.columns[column.type](table, column);
+            let columnInstance = new Table.columns[column.type](table, column);
             table._columns.push(columnInstance);
 
             if (columnInstance.isShow()) {
@@ -70,11 +70,11 @@ let coreuiTablePrivate = {
 
         let options      = table.getOptions();
         let searchValues = options.saveState && options.id
-            ? coreuiTablePrivate.getStorageField(table.getId(), 'search')
+            ? TablePrivate.getStorageField(table.getId(), 'search')
             : null;
 
         $.each(searchControls, function (key, control) {
-            if ( ! coreuiTableUtils.isObject(control)) {
+            if ( ! TableUtils.isObject(control)) {
                 control = {};
             }
 
@@ -90,7 +90,7 @@ let coreuiTablePrivate = {
 
                 if (Array.isArray(searchValues) && control.hasOwnProperty('field')) {
                     $.each(searchValues, function (key, search) {
-                        if (coreuiTableUtils.isObject(search) &&
+                        if (TableUtils.isObject(search) &&
                             search.hasOwnProperty('field') &&
                             search.hasOwnProperty('value') &&
                             search.field &&
@@ -103,7 +103,7 @@ let coreuiTablePrivate = {
                 }
             }
 
-            let controlInstance = new coreuiTable.search[control.type](table, control);
+            let controlInstance = new Table.search[control.type](table, control);
             table._search.push(controlInstance);
         });
     },
@@ -138,7 +138,7 @@ let coreuiTablePrivate = {
                 row.left.map(function (control) {
                     let instance = that.initControl(tableWrapper, table, control);
 
-                    if (coreuiTableUtils.isObject(instance)) {
+                    if (TableUtils.isObject(instance)) {
                         controlsLeft.push(instance);
                     }
                 });
@@ -148,7 +148,7 @@ let coreuiTablePrivate = {
                 row.center.map(function (control) {
                     let instance = that.initControl(tableWrapper, table, control);
 
-                    if (coreuiTableUtils.isObject(instance)) {
+                    if (TableUtils.isObject(instance)) {
                         controlsCenter.push(instance);
                     }
                 });
@@ -158,7 +158,7 @@ let coreuiTablePrivate = {
                 row.right.map(function (control) {
                     let instance = that.initControl(tableWrapper, table, control);
 
-                    if (coreuiTableUtils.isObject(instance)) {
+                    if (TableUtils.isObject(instance)) {
                         controlsRight.push(instance);
                     }
                 });
@@ -187,10 +187,10 @@ let coreuiTablePrivate = {
 
         let instance = null;
 
-        if (coreuiTableUtils.isObject(control) && typeof control.type === 'string') {
+        if (TableUtils.isObject(control) && typeof control.type === 'string') {
 
             if (tableWrapper.controls.hasOwnProperty(control.type)) {
-                instance = new coreuiTable.controls[control.type](table, control);
+                instance = new Table.controls[control.type](table, control);
                 table._controls.push(instance);
 
             } else if (control.type.indexOf('filter:') === 0) {
@@ -203,14 +203,14 @@ let coreuiTablePrivate = {
 
                         if (options.saveState && options.id) {
                             let filterValues = options.saveState && options.id
-                                ? coreuiTablePrivate.getStorageField(table.getId(), 'filters')
+                                ? TablePrivate.getStorageField(table.getId(), 'filters')
                                 : null;
 
                             control.value = null;
 
                             if (Array.isArray(filterValues)) {
                                 $.each(filterValues, function (key, filter) {
-                                    if (coreuiTableUtils.isObject(filter) &&
+                                    if (TableUtils.isObject(filter) &&
                                         filter.hasOwnProperty('field') &&
                                         filter.hasOwnProperty('value') &&
                                         filter.field &&
@@ -224,7 +224,7 @@ let coreuiTablePrivate = {
                         }
                     }
 
-                    instance = new coreuiTable.filters[filterName](table, control);
+                    instance = new Table.filters[filterName](table, control);
                     table._filters.push(instance);
                 }
             }
@@ -245,7 +245,7 @@ let coreuiTablePrivate = {
         if (Array.isArray(sort) && sort.length > 0) {
             $.each(sort, function (key, sortField) {
 
-                if (coreuiTableUtils.isObject(sortField) &&
+                if (TableUtils.isObject(sortField) &&
                     sortField.hasOwnProperty('field') &&
                     sortField.hasOwnProperty('order') &&
                     typeof sortField.field === 'string' &&
@@ -291,11 +291,11 @@ let coreuiTablePrivate = {
             let isShow = true;
 
             if (searchData.length > 0) {
-                isShow = coreuiTablePrivate.isFilteredRecord(searchData, record.data, columnsOptions);
+                isShow = TablePrivate.isFilteredRecord(searchData, record.data, columnsOptions);
             }
 
             if (isShow && filterData.length > 0) {
-                isShow = coreuiTablePrivate.isFilteredRecord(filterData, record.data, columnsOptions);
+                isShow = TablePrivate.isFilteredRecord(filterData, record.data, columnsOptions);
             }
 
             record.show = isShow;
@@ -333,10 +333,10 @@ let coreuiTablePrivate = {
      */
     addRecord: function (table, data, afterIndex) {
 
-        if (coreuiTableUtils.isObject(data)) {
+        if (TableUtils.isObject(data)) {
             data = $.extend(true, {}, data);
 
-            let meta = data.hasOwnProperty('_meta') && coreuiTableUtils.isObject(data._meta)
+            let meta = data.hasOwnProperty('_meta') && TableUtils.isObject(data._meta)
                 ? data._meta
                 : null;
 
@@ -396,10 +396,10 @@ let coreuiTablePrivate = {
      */
     addRecordBefore: function (table, data, index) {
 
-        if (coreuiTableUtils.isObject(data) && typeof index === 'number') {
+        if (TableUtils.isObject(data) && typeof index === 'number') {
             data = $.extend(true, {}, data);
 
-            let meta = data.hasOwnProperty('_meta') && coreuiTableUtils.isObject(data._meta)
+            let meta = data.hasOwnProperty('_meta') && TableUtils.isObject(data._meta)
                 ? data._meta
                 : null;
 
@@ -608,7 +608,7 @@ let coreuiTablePrivate = {
      */
     setColumnsSort: function (table, sort) {
 
-        let thead = coreuiTableElements.getTableThead(table.getId());
+        let thead = TableElements.getTableThead(table.getId());
 
         $.each(table._columns, function (key, column) {
             let options = column.getOptions();
@@ -623,7 +623,7 @@ let coreuiTablePrivate = {
 
                 if (Array.isArray(sort)) {
                     $.each(sort, function (key, sortItem) {
-                        if (coreuiTableUtils.isObject(sortItem) &&
+                        if (TableUtils.isObject(sortItem) &&
                             sortItem.hasOwnProperty('field') &&
                             sortItem.hasOwnProperty('order') &&
                             typeof sortItem.field === 'string' &&
@@ -666,7 +666,7 @@ let coreuiTablePrivate = {
             if (typeof storage === 'string' && storage) {
                 storage = JSON.parse(storage);
 
-                if (coreuiTableUtils.isObject(storage)) {
+                if (TableUtils.isObject(storage)) {
                     return tableId && typeof tableId === 'string'
                         ? (storage.hasOwnProperty(tableId) ? storage[tableId] : null)
                         : storage;
@@ -694,7 +694,7 @@ let coreuiTablePrivate = {
 
         let storageAll = this.getStorage();
 
-        if (coreuiTableUtils.isObject(storageAll)) {
+        if (TableUtils.isObject(storageAll)) {
             if (storageAll.hasOwnProperty(tableId)) {
                 if (storage) {
                     storageAll[tableId] = storage;
@@ -750,4 +750,4 @@ let coreuiTablePrivate = {
     }
 }
 
-export default coreuiTablePrivate;
+export default TablePrivate;

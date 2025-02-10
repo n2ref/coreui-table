@@ -1,13 +1,13 @@
 
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTableUtils from "../coreui.table.utils";
+import TableTpl   from "../table.tpl";
+import TableUtils from "../table.utils";
 import Filter           from "../abstract/Filter";
 
 class FilterNumber extends Filter {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -44,7 +44,7 @@ class FilterNumber extends Filter {
     setValue(value) {
 
         if (value) {
-            if ( ! coreuiTableUtils.isObject(value)) {
+            if ( ! TableUtils.isObject(value)) {
                 return;
             }
 
@@ -90,7 +90,7 @@ class FilterNumber extends Filter {
                 inputStart.val('');
                 inputEnd.val('');
 
-            } else if (coreuiTableUtils.isObject(this._value)) {
+            } else if (TableUtils.isObject(this._value)) {
                 inputStart.val(typeof this._value.start !== null ? this._value.start : '');
                 inputEnd.val(typeof this._value.end !== null ? this._value.end : '');
             }
@@ -140,7 +140,7 @@ class FilterNumber extends Filter {
     filter(fieldValue, searchValue) {
 
         if (['string', 'number'].indexOf(typeof fieldValue) < 0 ||
-            ! coreuiTableUtils.isObject(searchValue) ||
+            ! TableUtils.isObject(searchValue) ||
             (
                 ['string', 'number'].indexOf(typeof searchValue.start) < 0 &&
                 ['string', 'number'].indexOf(typeof searchValue.end) < 0
@@ -176,12 +176,12 @@ class FilterNumber extends Filter {
             ? options.label
             : '';
 
-        if ( ! coreuiTableUtils.isObject(options.attr)) {
+        if ( ! TableUtils.isObject(options.attr)) {
             options.attr = {};
         }
 
         if (options.hasOwnProperty('width') &&
-            coreuiTableUtils.isNumeric(options.width)
+            TableUtils.isNumeric(options.width)
         ) {
             if (options.attr.hasOwnProperty('style')) {
                 options.attr['style'] += ';width:' + options.width + 'px';
@@ -238,10 +238,10 @@ class FilterNumber extends Filter {
 
 
 
-        if ( ! coreuiTableUtils.isObject(options.btn)) {
+        if ( ! TableUtils.isObject(options.btn)) {
             options.btn = {};
         }
-        if ( ! coreuiTableUtils.isObject(options.btn.attr)) {
+        if ( ! TableUtils.isObject(options.btn.attr)) {
             options.btn.attr = {};
         }
 
@@ -254,7 +254,7 @@ class FilterNumber extends Filter {
             attrBtn.push(name + '="' + value + '"');
         });
 
-        this._control = $(coreuiTableUtils.render(coreuiTableTpl['filters/number.html'], {
+        this._control = $(TableUtils.render(TableTpl['filters/number.html'], {
             attrStart: startAttr.length > 0 ? (' ' + startAttr.join(' ')) : '',
             attrEnd: endAttr.length > 0 ? (' ' + endAttr.join(' ')) : '',
             label: label,

@@ -1,13 +1,13 @@
 
-import coreuiTableTpl   from '../coreui.table.templates';
-import coreuiTableUtils from '../coreui.table.utils';
+import TableTpl   from '../table.tpl';
+import TableUtils from '../table.utils';
 import Control          from "../abstract/Control";
 
 class ControlCaption extends Control {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -30,7 +30,7 @@ class ControlCaption extends Control {
      */
     render() {
 
-        return coreuiTableUtils.render(coreuiTableTpl['controls/caption.html'], {
+        return TableUtils.render(TableTpl['controls/caption.html'], {
             title: this._options.title,
             description: this._options.description,
             value: this._options.value,

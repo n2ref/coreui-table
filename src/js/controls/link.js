@@ -1,13 +1,13 @@
 
-import coreuiTableTpl   from '../coreui.table.templates';
-import coreuiTableUtils from '../coreui.table.utils';
+import TableTpl   from '../table.tpl';
+import TableUtils from '../table.utils';
 import Control          from "../abstract/Control";
 
 class ControlLink extends Control {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -42,7 +42,7 @@ class ControlLink extends Control {
             });
         }
 
-        let link = $(coreuiTableUtils.render(coreuiTableTpl['controls/link.html'], {
+        let link = $(TableUtils.render(TableTpl['controls/link.html'], {
             url: this._options.url,
             content: this._options.content,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',

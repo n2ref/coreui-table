@@ -1,15 +1,14 @@
 
-import coreuiTableUtils from "../coreui.table.utils";
-import coreuiTableTpl   from "../coreui.table.templates";
-import CoreuiTableUtils from "../coreui.table.utils";
-import Column           from "../abstract/Column";
+import TableUtils from "../table.utils";
+import TableTpl   from "../table.tpl";
+import Column     from "../abstract/Column";
 
 
 class ColumnsMenu extends Column {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -36,7 +35,7 @@ class ColumnsMenu extends Column {
      */
     render(content, record) {
 
-        if ( ! coreuiTableUtils.isObject(content) ||
+        if ( ! TableUtils.isObject(content) ||
              ! content.hasOwnProperty('items') ||
              ! Array.isArray(content.items) ||
             content.items.length === 0
@@ -49,7 +48,7 @@ class ColumnsMenu extends Column {
 
         if (Array.isArray(content.items)) {
             $.each(content.items, function (key, item) {
-                if (CoreuiTableUtils.isObject(item) && typeof item.type === 'string') {
+                if (TableUtils.isObject(item) && typeof item.type === 'string') {
 
                     if (item.type === 'link') {
                         if (item.hasOwnProperty('url') &&
@@ -60,7 +59,7 @@ class ColumnsMenu extends Column {
                             let linkAttr = {};
 
                             if (item.hasOwnProperty('attr') ||
-                                coreuiTableUtils.isObject(item.attr)
+                                TableUtils.isObject(item.attr)
                             ) {
                                 linkAttr = item.attr;
                             }
@@ -101,7 +100,7 @@ class ColumnsMenu extends Column {
                             let btnAttr = {};
 
                             if (item.hasOwnProperty('attr') ||
-                                coreuiTableUtils.isObject(item.attr)
+                                TableUtils.isObject(item.attr)
                             ) {
                                 btnAttr = item.attr;
                             }
@@ -131,7 +130,7 @@ class ColumnsMenu extends Column {
 
                             items.push({
                                 type: 'button',
-                                id: coreuiTableUtils.hashCode(),
+                                id: TableUtils.hashCode(),
                                 content: item.content,
                                 onClick: item.onClick,
                                 attr: btnAttributes.length > 0 ? (' ' + btnAttributes.join(' ')) : '',
@@ -158,7 +157,7 @@ class ColumnsMenu extends Column {
         }
 
         if (content.hasOwnProperty('attr') &&
-            coreuiTableUtils.isObject(content.attr)
+            TableUtils.isObject(content.attr)
         ) {
             attr = content.attr;
         }
@@ -200,7 +199,7 @@ class ColumnsMenu extends Column {
             : 'end';
 
 
-        let menu = $(coreuiTableUtils.render(coreuiTableTpl['columns/menu.html'], {
+        let menu = $(TableUtils.render(TableTpl['columns/menu.html'], {
             content: menuContent,
             position: position,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
@@ -239,7 +238,7 @@ class ColumnsMenu extends Column {
             let that = this;
 
             $.each(items, function (key, item) {
-                if (CoreuiTableUtils.isObject(item) && typeof item.type === 'string') {
+                if (TableUtils.isObject(item) && typeof item.type === 'string') {
 
                     if (item.type === 'button') {
                         if (item.hasOwnProperty('content') &&

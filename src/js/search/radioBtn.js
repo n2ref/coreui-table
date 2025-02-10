@@ -1,13 +1,13 @@
 
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTableUtils from "../coreui.table.utils";
+import TableTpl   from "../table.tpl";
+import TableUtils from "../table.utils";
 import Search           from "../abstract/Search";
 
 class SearchRadioBtn extends Search {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -127,11 +127,11 @@ class SearchRadioBtn extends Search {
                     value:   key,
                     checked: checked,
                     optionsClass: that._options.optionsClass,
-                    hash: coreuiTableUtils.hashCode(),
+                    hash: TableUtils.hashCode(),
                 });
 
             } else {
-                if ( ! coreuiTableUtils.isObject(option) ||
+                if ( ! TableUtils.isObject(option) ||
                     ! option.hasOwnProperty('value') ||
                     ['string', 'numeric'].indexOf(typeof option.value) === -1
                 ) {
@@ -152,17 +152,17 @@ class SearchRadioBtn extends Search {
                     value:   option.value,
                     checked: checked,
                     optionsClass: that._options.optionsClass,
-                    hash: coreuiTableUtils.hashCode(),
+                    hash: TableUtils.hashCode(),
                 });
             }
         });
 
-        this._control = $(coreuiTableUtils.render(coreuiTableTpl['search/radio-btn.html'], {
+        this._control = $(TableUtils.render(TableTpl['search/radio-btn.html'], {
             options: options,
             checkedAll: checkedAll,
-            optionAllHash: coreuiTableUtils.hashCode(),
+            optionAllHash: TableUtils.hashCode(),
             optionOptionsClass: that._options.optionsClass,
-            field: coreuiTableUtils.hashCode(),
+            field: TableUtils.hashCode(),
             lang: this._table.getLang()
         }));
 

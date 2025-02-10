@@ -1,13 +1,13 @@
 
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTableUtils from "../coreui.table.utils";
-import Search           from "../abstract/Search";
+import TableTpl   from "../table.tpl";
+import TableUtils from "../table.utils";
+import Search     from "../abstract/Search";
 
 class SearchCheckbox extends Search {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -140,7 +140,7 @@ class SearchCheckbox extends Search {
                 });
 
             } else {
-                if ( ! coreuiTableUtils.isObject(option) ||
+                if ( ! TableUtils.isObject(option) ||
                     ! option.hasOwnProperty('value') ||
                     ['string', 'numeric'].indexOf(typeof option.value) === -1
                 ) {
@@ -160,7 +160,7 @@ class SearchCheckbox extends Search {
             }
         });
 
-        this._control = $(coreuiTableUtils.render(coreuiTableTpl['search/checkbox.html'], {
+        this._control = $(TableUtils.render(TableTpl['search/checkbox.html'], {
             options: options,
         }));
 

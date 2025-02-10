@@ -1,13 +1,13 @@
 
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTableUtils from '../coreui.table.utils';
+import TableTpl   from "../table.tpl";
+import TableUtils from '../table.utils';
 import Control          from "../abstract/Control";
 
 class ControlDivider extends Control {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -34,7 +34,7 @@ class ControlDivider extends Control {
 
         let attributes = [];
 
-        this._options.attr = coreuiTableUtils.mergeAttr(this._options.attr, { style: 'width:' + this._options.width + 'px' });
+        this._options.attr = TableUtils.mergeAttr(this._options.attr, { style: 'width:' + this._options.width + 'px' });
 
         $.each(this._options.attr, function (name, value) {
             if (['string', 'number'].indexOf(typeof value) >= 0) {
@@ -42,7 +42,7 @@ class ControlDivider extends Control {
             }
         });
 
-        return coreuiTableUtils.render(coreuiTableTpl['controls/divider.html'], {
+        return TableUtils.render(TableTpl['controls/divider.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             text: typeof this._options.text === 'string' && this._options.text !== '' ? this._options.text : '',
         });

@@ -1,13 +1,13 @@
 
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTableUtils from "../coreui.table.utils";
+import TableTpl   from "../table.tpl";
+import TableUtils from "../table.utils";
 import Search           from "../abstract/Search";
 
 class SearchSwitch extends Search {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -110,7 +110,7 @@ class SearchSwitch extends Search {
             ? options.valueY
             : ''
 
-        this._control = $(coreuiTableUtils.render(coreuiTableTpl['search/switch.html'], {
+        this._control = $(TableUtils.render(TableTpl['search/switch.html'], {
             id: this._id,
             valueY: valueY,
             field: typeof options.field === 'string' ? options.field : '',

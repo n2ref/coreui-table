@@ -1,6 +1,6 @@
 
-import coreuiTableUtils from "../coreui.table.utils";
-import coreuiTableTpl   from "../coreui.table.templates";
+import TableUtils from "../table.utils";
+import TableTpl   from "../table.tpl";
 import Column           from "../abstract/Column";
 
 
@@ -8,7 +8,7 @@ class ColumnsButton extends Column {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -35,12 +35,12 @@ class ColumnsButton extends Column {
      */
     render(content, record) {
 
-        if ( ! coreuiTableUtils.isObject(content)) {
+        if ( ! TableUtils.isObject(content)) {
             return '';
         }
 
 
-        if ( ! coreuiTableUtils.isObject(content.attr)) {
+        if ( ! TableUtils.isObject(content.attr)) {
             content.attr = {}
         }
 
@@ -62,7 +62,7 @@ class ColumnsButton extends Column {
         });
 
         let btn = $(
-            coreuiTableUtils.render(coreuiTableTpl['columns/button.html'], {
+            TableUtils.render(TableTpl['columns/button.html'], {
                 content: content.content,
                 attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             })

@@ -1,7 +1,7 @@
 
-import coreuiTableTpl      from "../coreui.table.templates";
-import coreuiTableUtils    from "../coreui.table.utils";
-import coreuiTableElements from "../coreui.table.elements";
+import TableTpl      from "../table.tpl";
+import TableUtils    from "../table.utils";
+import TableElements from "../table.elements";
 import Filter              from "../abstract/Filter";
 
 class FilterCheckbox extends Filter {
@@ -10,7 +10,7 @@ class FilterCheckbox extends Filter {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -139,7 +139,7 @@ class FilterCheckbox extends Filter {
             : '';
 
         $.each(options.options, function (key, option) {
-            if ( ! coreuiTableUtils.isObject(option) ||
+            if ( ! TableUtils.isObject(option) ||
                 ! option.hasOwnProperty('value') ||
                 ['string', 'numeric'].indexOf(typeof option.value) === -1
             ) {
@@ -159,7 +159,7 @@ class FilterCheckbox extends Filter {
             });
         });
 
-        this._control = $(coreuiTableUtils.render(coreuiTableTpl['filters/checkbox.html'], {
+        this._control = $(TableUtils.render(TableTpl['filters/checkbox.html'], {
             label: label,
             items: items,
             field: field + this.getId(),

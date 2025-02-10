@@ -1293,7 +1293,7 @@
     }, {}, [1])(1);
   });
 
-  var coreuiTableUtils = {
+  var TableUtils = {
     _templates: {},
     /**
      * Объединение атрибутов
@@ -1390,10 +1390,10 @@
     }
   };
 
-  var coreuiTableRender = {
+  var TableRender = {
     /**
      * Сборка таблицы
-     * @param {object} table
+     * @param {TableInstance} table
      * @private
      */
     renderTable: function renderTable(table) {
@@ -1417,21 +1417,21 @@
           var menuShowAlways = '';
           var menuPosition = 'end';
           if (columnOptions.hasOwnProperty('field') && typeof columnOptions.field === 'string') {
-            columnOptions.attrHeader = coreuiTableUtils.mergeAttr(columnOptions.attrHeader, {
+            columnOptions.attrHeader = TableUtils.mergeAttr(columnOptions.attrHeader, {
               "data-field": columnOptions.field
             });
           }
           if (columnOptions.hasOwnProperty('fixed') && typeof columnOptions.fixed === 'string') {
-            columnOptions.attrHeader = coreuiTableUtils.mergeAttr(columnOptions.attrHeader, {
+            columnOptions.attrHeader = TableUtils.mergeAttr(columnOptions.attrHeader, {
               "class": 'coreui-table__fixed_' + columnOptions.fixed
             });
-            columnOptions.attr = coreuiTableUtils.mergeAttr(columnOptions.attr, {
+            columnOptions.attr = TableUtils.mergeAttr(columnOptions.attr, {
               "class": 'coreui-table__fixed_' + columnOptions.fixed
             });
           }
           if (columnOptions.type !== 'numbers') {
             if (columnOptions.hasOwnProperty('sortable') && columnOptions.sortable) {
-              columnOptions.attrHeader = coreuiTableUtils.mergeAttr(columnOptions.attrHeader, {
+              columnOptions.attrHeader = TableUtils.mergeAttr(columnOptions.attrHeader, {
                 "class": 'coreui-table__sortable'
               });
             }
@@ -1448,7 +1448,7 @@
               });
             }
           }
-          if (options.showHeaders && columnOptions.hasOwnProperty('menu') && coreuiTableUtils.isObject(columnOptions.menu) && columnOptions.menu.hasOwnProperty('items') && Array.isArray(columnOptions.menu.items)) {
+          if (options.showHeaders && columnOptions.hasOwnProperty('menu') && TableUtils.isObject(columnOptions.menu) && columnOptions.menu.hasOwnProperty('items') && Array.isArray(columnOptions.menu.items)) {
             if (columnOptions.menu.hasOwnProperty('showAlways') && columnOptions.menu.showAlways) {
               menuShowAlways = 'coreui-table__column-menu-always';
             }
@@ -1456,7 +1456,7 @@
               menuPosition = columnOptions.menu.position;
             }
             columnOptions.menu.items.map(function (item) {
-              if (coreuiTableUtils.isObject(item) && item.hasOwnProperty('type') && typeof item.type === 'string' && item.type) {
+              if (TableUtils.isObject(item) && item.hasOwnProperty('type') && typeof item.type === 'string' && item.type) {
                 switch (item.type.toLowerCase()) {
                   case 'button':
                     if (item.hasOwnProperty('text') && typeof item.text === 'string' && item.hasOwnProperty('onClick') && ['string', 'function'].indexOf(_typeof(item.onClick)) >= 0 && item.text.length > 0) {
@@ -1465,13 +1465,13 @@
                         type: 'button',
                         "class": 'dropdown-item'
                       };
-                      if (item.hasOwnProperty('attr') && coreuiTableUtils.isObject(item.attr)) {
-                        attr = coreuiTableUtils.mergeAttr(attr, item.attr);
+                      if (item.hasOwnProperty('attr') && TableUtils.isObject(item.attr)) {
+                        attr = TableUtils.mergeAttr(attr, item.attr);
                       }
                       $.each(attr, function (name, value) {
                         attrItem.push(name + '="' + value + '"');
                       });
-                      var menuElement = $(coreuiTableUtils.render(tpl['table/columns/menu/button.html'], {
+                      var menuElement = $(TableUtils.render(tpl['table/columns/menu/button.html'], {
                         text: item.text,
                         attr: attrItem.join(' ')
                       }));
@@ -1492,13 +1492,13 @@
                         href: item.url,
                         "class": 'dropdown-item'
                       };
-                      if (item.hasOwnProperty('attr') && coreuiTableUtils.isObject(item.attr)) {
-                        _attr = coreuiTableUtils.mergeAttr(_attr, item.attr);
+                      if (item.hasOwnProperty('attr') && TableUtils.isObject(item.attr)) {
+                        _attr = TableUtils.mergeAttr(_attr, item.attr);
                       }
                       $.each(_attr, function (name, value) {
                         _attrItem.push(name + '="' + value + '"');
                       });
-                      menuElements.push($(coreuiTableUtils.render(tpl['table/columns/menu/link.html'], {
+                      menuElements.push($(TableUtils.render(tpl['table/columns/menu/link.html'], {
                         text: item.text,
                         attr: _attrItem.join(' ')
                       })));
@@ -1508,7 +1508,7 @@
                     menuElements.push($(tpl['table/columns/menu/divider.html']));
                     break;
                   case 'header':
-                    menuElements.push($(coreuiTableUtils.render(tpl['table/columns/menu/header.html'], {
+                    menuElements.push($(TableUtils.render(tpl['table/columns/menu/header.html'], {
                       text: item.text
                     })));
                     break;
@@ -1516,7 +1516,7 @@
               }
             });
           }
-          if (columnOptions.attrHeader && coreuiTableUtils.isObject(columnOptions.attrHeader)) {
+          if (columnOptions.attrHeader && TableUtils.isObject(columnOptions.attrHeader)) {
             $.each(columnOptions.attrHeader, function (name, value) {
               attributes.push(name + '="' + value + '"');
             });
@@ -1546,7 +1546,7 @@
             if (columnOptions.hasOwnProperty('description') && typeof columnOptions.label === 'string') {
               description = columnOptions.description;
             }
-            var columnElement = $(coreuiTableUtils.render(tpl['table/columns/td.html'], {
+            var columnElement = $(TableUtils.render(tpl['table/columns/td.html'], {
               attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
               label: label,
               description: description,
@@ -1574,9 +1574,9 @@
       if (table._records.length > 0) {
         table._recordsTotal = table.getRecordsCount();
         table._recordsNumber = table._page === 1 ? 1 : (table._page - 1) * table._recordsPerPage + 1;
-        recordsElements = coreuiTableRender.renderRecords(table, table._records);
+        recordsElements = TableRender.renderRecords(table, table._records);
       } else {
-        recordsElements = coreuiTableRender.renderRecords(table, []);
+        recordsElements = TableRender.renderRecords(table, []);
       }
       if (options.showHeaders && options.hasOwnProperty('columnsHeader') && Array.isArray(options.columnsHeader) && options.columnsHeader.length > 0) {
         var rows = [];
@@ -1584,9 +1584,9 @@
           if (Array.isArray(headerRow)) {
             var cells = [];
             headerRow.map(function (headerColumn) {
-              if (coreuiTableUtils.isObject(headerColumn)) {
+              if (TableUtils.isObject(headerColumn)) {
                 var attributes = [];
-                if (headerColumn.hasOwnProperty('attr') && coreuiTableUtils.isObject(headerColumn.attr)) {
+                if (headerColumn.hasOwnProperty('attr') && TableUtils.isObject(headerColumn.attr)) {
                   $.each(headerColumn.attr, function (name, value) {
                     attributes.push(name + '="' + value + '"');
                   });
@@ -1598,7 +1598,7 @@
                 });
               }
             });
-            rows.push(coreuiTableUtils.render(tpl['table/columns/header.html'], {
+            rows.push(TableUtils.render(tpl['table/columns/header.html'], {
               columns: cells
             }));
           }
@@ -1611,9 +1611,9 @@
           if (Array.isArray(footerRow)) {
             var cells = [];
             $.each(footerRow, function (key, footerColumn) {
-              if (coreuiTableUtils.isObject(footerColumn)) {
+              if (TableUtils.isObject(footerColumn)) {
                 var attributes = [];
-                if (footerColumn.hasOwnProperty('attr') && coreuiTableUtils.isObject(footerColumn.attr)) {
+                if (footerColumn.hasOwnProperty('attr') && TableUtils.isObject(footerColumn.attr)) {
                   $.each(footerColumn.attr, function (name, value) {
                     attributes.push(name + '="' + value + '"');
                   });
@@ -1625,7 +1625,7 @@
                 });
               }
             });
-            _rows.push(coreuiTableUtils.render(tpl['table/columns/footer.html'], {
+            _rows.push(TableUtils.render(tpl['table/columns/footer.html'], {
               columns: cells
             }));
           }
@@ -1641,10 +1641,10 @@
       }
       var theadAttr = [];
       if (options.hasOwnProperty('theadTop') && ['string', 'number'].indexOf(_typeof(options.theadTop)) >= 0) {
-        var unit = coreuiTableUtils.isNumeric(options.theadTop) ? 'px' : '';
+        var unit = TableUtils.isNumeric(options.theadTop) ? 'px' : '';
         theadAttr.push('style="top:' + options.theadTop + unit + '"');
       }
-      var tableElement = $(coreuiTableUtils.render(tpl['table.html'], {
+      var tableElement = $(TableUtils.render(tpl['table.html'], {
         classes: classes.join(' '),
         theadAttr: theadAttr.length > 0 ? theadAttr.join(' ') : '',
         showHeaders: options.showHeaders,
@@ -1672,7 +1672,7 @@
       if (records.length > 0) {
         var that = this;
         var options = table.getOptions();
-        var group = options.hasOwnProperty('group') && coreuiTableUtils.isObject(options.group) && options.group.hasOwnProperty('field') && typeof options.group.field === 'string' && options.group.field ? options.group : null;
+        var group = options.hasOwnProperty('group') && TableUtils.isObject(options.group) && options.group.hasOwnProperty('field') && typeof options.group.field === 'string' && options.group.field ? options.group : null;
         if (group) {
           var groupValue = null;
           var groupIndex = 0;
@@ -1715,7 +1715,7 @@
         }
       }
       if (renderRecords.length === 0) {
-        renderRecords = [$(coreuiTableUtils.render(tpl['table/record/empty.html'], {
+        renderRecords = [$(TableUtils.render(tpl['table/record/empty.html'], {
           columnsCount: table._countColumnsShow,
           lang: table.getLang()
         }))];
@@ -1749,13 +1749,13 @@
         recordAttr["class"] += ' coreui-table_pointer';
       }
       if (record.meta) {
-        recordAttr = coreuiTableUtils.mergeAttr(recordAttr, record.meta.attr);
+        recordAttr = TableUtils.mergeAttr(recordAttr, record.meta.attr);
       }
       var attributes = [];
       $.each(recordAttr, function (name, value) {
         attributes.push(name + '="' + value + '"');
       });
-      var recordElement = $(coreuiTableUtils.render(tpl['table/record.html'], {
+      var recordElement = $(TableUtils.render(tpl['table/record.html'], {
         attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
         index: record.index,
         fields: fields
@@ -1767,7 +1767,7 @@
     },
     /**
      * Сборка ячейки таблицы
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Column}              column
      * @param {object}              record
      * @returns {{ attr: (string), content: (string) }}
@@ -1778,17 +1778,17 @@
       var columnField = column.getField();
       var content = null;
       var fieldProps = record.meta && record.meta.hasOwnProperty('fields') && record.meta.fields.hasOwnProperty(columnField) ? record.meta.fields[columnField] : null;
-      var fieldAttr = columnOptions.hasOwnProperty('attr') && coreuiTableUtils.isObject(columnOptions.attr) ? columnOptions.attr : {};
-      if (fieldProps && coreuiTableUtils.isObject(fieldProps)) {
+      var fieldAttr = columnOptions.hasOwnProperty('attr') && TableUtils.isObject(columnOptions.attr) ? columnOptions.attr : {};
+      if (fieldProps && TableUtils.isObject(fieldProps)) {
         if (fieldProps && fieldProps.hasOwnProperty('show') && !fieldProps.show) {
           return null;
         }
-        if (coreuiTableUtils.isObject(fieldProps.attr)) {
-          fieldAttr = coreuiTableUtils.mergeAttr(fieldAttr, fieldProps.attr);
+        if (TableUtils.isObject(fieldProps.attr)) {
+          fieldAttr = TableUtils.mergeAttr(fieldAttr, fieldProps.attr);
         }
       }
       if (columnOptions.hasOwnProperty('fixed') && typeof columnOptions.fixed === 'string') {
-        fieldAttr = coreuiTableUtils.mergeAttr(fieldAttr, {
+        fieldAttr = TableUtils.mergeAttr(fieldAttr, {
           "class": 'coreui-table__fixed_' + columnOptions.fixed
         });
       }
@@ -1804,7 +1804,7 @@
       content = column.render(content, record);
       if (typeof column.getActions === 'function') {
         var actions = column.getActions(content, columnField, record);
-        if (coreuiTableUtils.isObject(actions)) {
+        if (TableUtils.isObject(actions)) {
           record.fields[columnField] = actions;
         }
       }
@@ -1819,7 +1819,7 @@
     },
     /**
      * Сборка записи-группы
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {object}              group
      * @param {object}              record
      * @param {Array}               renderRecords
@@ -1827,7 +1827,7 @@
      * @private
      */
     renderGroup: function renderGroup(table, group, record, renderRecords) {
-      var attr = group.hasOwnProperty('attr') && coreuiTableUtils.isObject(group.attr) ? group.attr : {};
+      var attr = group.hasOwnProperty('attr') && TableUtils.isObject(group.attr) ? group.attr : {};
       if (attr.hasOwnProperty('class') && typeof attr["class"] === 'string') {
         attr["class"] += ' coreui-table__record-group';
       } else {
@@ -1840,7 +1840,7 @@
         }
       });
       var isCollapsing = group.hasOwnProperty('isCollapsing') ? !!group.isCollapsing : false;
-      var groupElement = $(coreuiTableUtils.render(tpl['table/record/group.html'], {
+      var groupElement = $(TableUtils.render(tpl['table/record/group.html'], {
         attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
         colspan: table._countColumnsShow,
         isCollapsing: isCollapsing
@@ -1885,9 +1885,9 @@
      */
     renderExpand: function renderExpand(table, content) {
       if (_typeof(content) === 'object') {
-        content = coreuiTableRender.renderComponents(table, content, 'record_expand_show');
+        content = TableRender.renderComponents(table, content, 'record_expand_show');
       }
-      var expandRecord = $(coreuiTableUtils.render(tpl['table/record/expand.html'], {
+      var expandRecord = $(TableUtils.render(tpl['table/record/expand.html'], {
         colspan: table._countColumnsShow
       }));
       if (['string', 'number'].indexOf(_typeof(content)) >= 0) {
@@ -1909,8 +1909,8 @@
      * @returns {HTMLElement|jQuery}
      */
     renderControl: function renderControl(table, control) {
-      if (coreuiTableUtils.isObject(control)) {
-        var controlElement = $(coreuiTableUtils.render(tpl['table/control.html'], {
+      if (TableUtils.isObject(control)) {
+        var controlElement = $(TableUtils.render(tpl['table/control.html'], {
           id: control.getId()
         }));
         controlElement.append(control.render());
@@ -1933,9 +1933,14 @@
         for (var i = 0; i < components.length; i++) {
           if (typeof components[i] === 'string') {
             result.push(components[i]);
-          } else if (!Array.isArray(components[i]) && components[i].hasOwnProperty('component') && components[i].component.substring(0, 6) === 'coreui') {
+          } else if (components[i] instanceof Object && typeof components[i].render === 'function' && typeof components[i].initEvents === 'function') {
+            result.push(components[i].render());
+            if (eventName) {
+              table.on(eventName, components[i].initEvents, components[i], true);
+            }
+          } else if (TableUtils.isObject(components[i]) && components[i].hasOwnProperty('component') && components[i].component.substring(0, 6) === 'coreui') {
             var name = components[i].component.split('.')[1];
-            if (CoreUI.hasOwnProperty(name) && coreuiTableUtils.isObject(CoreUI[name])) {
+            if (CoreUI.hasOwnProperty(name) && TableUtils.isObject(CoreUI[name])) {
               var instance = CoreUI[name].create(components[i]);
               result.push(instance.render());
               if (eventName) {
@@ -1949,7 +1954,7 @@
     }
   };
 
-  var coreuiTableElements = {
+  var TableElements = {
     /**
      * Получение контейнера таблицы
      * @param {string} tableId
@@ -2081,7 +2086,7 @@
      * @return {jQuery}
      */
     addExpandRow: function addExpandRow(table, recordElement, content) {
-      var expandRecord = coreuiTableRender.renderExpand(table, content, 'record_expand_show');
+      var expandRecord = TableRender.renderExpand(table, content, 'record_expand_show');
       recordElement.after(expandRecord);
       recordElement.next().show('fast');
       recordElement.addClass('record-expanded');
@@ -2238,17 +2243,17 @@
     }
   };
 
-  var coreuiTablePrivate = {
+  var TablePrivate = {
     /**
      * Инициализация колонок
-     * @param {coreuiTable}         tableWrapper
-     * @param {coreuiTableInstance} table
-     * @param {Array}               columns
+     * @param {Table}         tableWrapper
+     * @param {TableInstance} table
+     * @param {Array}         columns
      * @private
      */
     initColumns: function initColumns(tableWrapper, table, columns) {
       var options = table.getOptions();
-      var columnsStorage = options.saveState && options.id ? coreuiTablePrivate.getStorageField(table.getId(), 'columns') : null;
+      var columnsStorage = options.saveState && options.id ? TablePrivate.getStorageField(table.getId(), 'columns') : null;
       columns.map(function (column) {
         if (typeof column.type === 'undefined' || !tableWrapper.columns.hasOwnProperty(column.type)) {
           column.type = 'text';
@@ -2267,7 +2272,7 @@
         if (column.hasOwnProperty('fixed') && typeof column.fixed === 'string') {
           table._options.overflow = true;
         }
-        var columnInstance = new coreuiTable.columns[column.type](table, column);
+        var columnInstance = new Table.columns[column.type](table, column);
         table._columns.push(columnInstance);
         if (columnInstance.isShow()) {
           table._countColumnsShow++;
@@ -2283,9 +2288,9 @@
      */
     initSearch: function initSearch(tableWrapper, table, searchControls) {
       var options = table.getOptions();
-      var searchValues = options.saveState && options.id ? coreuiTablePrivate.getStorageField(table.getId(), 'search') : null;
+      var searchValues = options.saveState && options.id ? TablePrivate.getStorageField(table.getId(), 'search') : null;
       $.each(searchControls, function (key, control) {
-        if (!coreuiTableUtils.isObject(control)) {
+        if (!TableUtils.isObject(control)) {
           control = {};
         }
         if (!control.hasOwnProperty('type') || typeof control.type !== 'string' || !tableWrapper.search.hasOwnProperty(control.type)) {
@@ -2295,14 +2300,14 @@
           control.value = null;
           if (Array.isArray(searchValues) && control.hasOwnProperty('field')) {
             $.each(searchValues, function (key, search) {
-              if (coreuiTableUtils.isObject(search) && search.hasOwnProperty('field') && search.hasOwnProperty('value') && search.field && search.field === control.field) {
+              if (TableUtils.isObject(search) && search.hasOwnProperty('field') && search.hasOwnProperty('value') && search.field && search.field === control.field) {
                 control.value = search.value;
                 return false;
               }
             });
           }
         }
-        var controlInstance = new coreuiTable.search[control.type](table, control);
+        var controlInstance = new Table.search[control.type](table, control);
         table._search.push(controlInstance);
       });
     },
@@ -2327,7 +2332,7 @@
         if (row.hasOwnProperty('left') && Array.isArray(row.left)) {
           row.left.map(function (control) {
             var instance = that.initControl(tableWrapper, table, control);
-            if (coreuiTableUtils.isObject(instance)) {
+            if (TableUtils.isObject(instance)) {
               controlsLeft.push(instance);
             }
           });
@@ -2335,7 +2340,7 @@
         if (row.hasOwnProperty('center') && Array.isArray(row.center)) {
           row.center.map(function (control) {
             var instance = that.initControl(tableWrapper, table, control);
-            if (coreuiTableUtils.isObject(instance)) {
+            if (TableUtils.isObject(instance)) {
               controlsCenter.push(instance);
             }
           });
@@ -2343,7 +2348,7 @@
         if (row.hasOwnProperty('right') && Array.isArray(row.right)) {
           row.right.map(function (control) {
             var instance = that.initControl(tableWrapper, table, control);
-            if (coreuiTableUtils.isObject(instance)) {
+            if (TableUtils.isObject(instance)) {
               controlsRight.push(instance);
             }
           });
@@ -2367,9 +2372,9 @@
      */
     initControl: function initControl(tableWrapper, table, control) {
       var instance = null;
-      if (coreuiTableUtils.isObject(control) && typeof control.type === 'string') {
+      if (TableUtils.isObject(control) && typeof control.type === 'string') {
         if (tableWrapper.controls.hasOwnProperty(control.type)) {
-          instance = new coreuiTable.controls[control.type](table, control);
+          instance = new Table.controls[control.type](table, control);
           table._controls.push(instance);
         } else if (control.type.indexOf('filter:') === 0) {
           var filterName = control.type.substring(7);
@@ -2377,11 +2382,11 @@
             if (control.hasOwnProperty('field')) {
               var options = table.getOptions();
               if (options.saveState && options.id) {
-                var filterValues = options.saveState && options.id ? coreuiTablePrivate.getStorageField(table.getId(), 'filters') : null;
+                var filterValues = options.saveState && options.id ? TablePrivate.getStorageField(table.getId(), 'filters') : null;
                 control.value = null;
                 if (Array.isArray(filterValues)) {
                   $.each(filterValues, function (key, filter) {
-                    if (coreuiTableUtils.isObject(filter) && filter.hasOwnProperty('field') && filter.hasOwnProperty('value') && filter.field && filter.field === control.field) {
+                    if (TableUtils.isObject(filter) && filter.hasOwnProperty('field') && filter.hasOwnProperty('value') && filter.field && filter.field === control.field) {
                       control.value = filter.value;
                       return false;
                     }
@@ -2389,7 +2394,7 @@
                 }
               }
             }
-            instance = new coreuiTable.filters[filterName](table, control);
+            instance = new Table.filters[filterName](table, control);
             table._filters.push(instance);
           }
         }
@@ -2405,7 +2410,7 @@
     initSort: function initSort(table, sort) {
       if (Array.isArray(sort) && sort.length > 0) {
         $.each(sort, function (key, sortField) {
-          if (coreuiTableUtils.isObject(sortField) && sortField.hasOwnProperty('field') && sortField.hasOwnProperty('order') && typeof sortField.field === 'string' && typeof sortField.order === 'string' && sortField.field && sortField.order && ['asc', 'desc'].indexOf(sortField.order) >= 0) {
+          if (TableUtils.isObject(sortField) && sortField.hasOwnProperty('field') && sortField.hasOwnProperty('order') && typeof sortField.field === 'string' && typeof sortField.order === 'string' && sortField.field && sortField.order && ['asc', 'desc'].indexOf(sortField.order) >= 0) {
             table._sort.push({
               field: sortField.field,
               order: sortField.order
@@ -2434,10 +2439,10 @@
       table._records.map(function (record) {
         var isShow = true;
         if (searchData.length > 0) {
-          isShow = coreuiTablePrivate.isFilteredRecord(searchData, record.data, columnsOptions);
+          isShow = TablePrivate.isFilteredRecord(searchData, record.data, columnsOptions);
         }
         if (isShow && filterData.length > 0) {
-          isShow = coreuiTablePrivate.isFilteredRecord(filterData, record.data, columnsOptions);
+          isShow = TablePrivate.isFilteredRecord(filterData, record.data, columnsOptions);
         }
         record.show = isShow;
       });
@@ -2465,9 +2470,9 @@
      * @private
      */
     addRecord: function addRecord(table, data, afterIndex) {
-      if (coreuiTableUtils.isObject(data)) {
+      if (TableUtils.isObject(data)) {
         data = $.extend(true, {}, data);
-        var meta = data.hasOwnProperty('_meta') && coreuiTableUtils.isObject(data._meta) ? data._meta : null;
+        var meta = data.hasOwnProperty('_meta') && TableUtils.isObject(data._meta) ? data._meta : null;
         if (meta) {
           delete data._meta;
         }
@@ -2512,9 +2517,9 @@
      * @private
      */
     addRecordBefore: function addRecordBefore(table, data, index) {
-      if (coreuiTableUtils.isObject(data) && typeof index === 'number') {
+      if (TableUtils.isObject(data) && typeof index === 'number') {
         data = $.extend(true, {}, data);
-        var meta = data.hasOwnProperty('_meta') && coreuiTableUtils.isObject(data._meta) ? data._meta : null;
+        var meta = data.hasOwnProperty('_meta') && TableUtils.isObject(data._meta) ? data._meta : null;
         if (meta) {
           delete data._meta;
         }
@@ -2665,14 +2670,14 @@
      * @param {Array}  sort
      */
     setColumnsSort: function setColumnsSort(table, sort) {
-      var thead = coreuiTableElements.getTableThead(table.getId());
+      var thead = TableElements.getTableThead(table.getId());
       $.each(table._columns, function (key, column) {
         var options = column.getOptions();
         if (options.hasOwnProperty('field') && options.hasOwnProperty('sortable') && typeof options.field === 'string' && options.sortable) {
           var sortColumn = null;
           if (Array.isArray(sort)) {
             $.each(sort, function (key, sortItem) {
-              if (coreuiTableUtils.isObject(sortItem) && sortItem.hasOwnProperty('field') && sortItem.hasOwnProperty('order') && typeof sortItem.field === 'string' && typeof sortItem.order === 'string' && options.field === sortItem.field) {
+              if (TableUtils.isObject(sortItem) && sortItem.hasOwnProperty('field') && sortItem.hasOwnProperty('order') && typeof sortItem.field === 'string' && typeof sortItem.order === 'string' && options.field === sortItem.field) {
                 sortColumn = {
                   field: sortItem.field,
                   order: sortItem.order
@@ -2702,7 +2707,7 @@
       try {
         if (typeof storage === 'string' && storage) {
           storage = JSON.parse(storage);
-          if (coreuiTableUtils.isObject(storage)) {
+          if (TableUtils.isObject(storage)) {
             return tableId && typeof tableId === 'string' ? storage.hasOwnProperty(tableId) ? storage[tableId] : null : storage;
           }
         }
@@ -2721,7 +2726,7 @@
         return;
       }
       var storageAll = this.getStorage();
-      if (coreuiTableUtils.isObject(storageAll)) {
+      if (TableUtils.isObject(storageAll)) {
         if (storageAll.hasOwnProperty(tableId)) {
           if (storage) {
             storageAll[tableId] = storage;
@@ -2763,104 +2768,105 @@
     }
   };
 
-  var coreuiTableInstance = {
-    _options: {
-      id: null,
-      "class": '',
-      primaryKey: 'id',
-      lang: 'en',
-      langItems: {},
-      width: null,
-      minWidth: null,
-      maxWidth: null,
-      height: null,
-      minHeight: null,
-      naxHeight: null,
-      overflow: false,
-      page: 1,
-      recordsPerPage: 25,
-      theadTop: 0,
-      saveState: false,
-      noWrap: false,
-      noWrapToggle: false,
-      showHeaders: true,
-      showScrollShadow: false,
-      recordsRequest: {
-        method: 'GET',
-        url: null // '/mod/index/orders/?page=[page]'
-      },
-      requestParams: {
-        page: 'page',
-        count: 'count',
-        start: 'start',
-        end: 'end',
-        sort: 'sort',
-        search: 'search'
-      },
-      group: {
-        field: null,
-        attr: {},
-        render: null
-      },
-      onClick: null,
-      onClickUrl: null,
-      sort: [],
-      header: [],
-      footer: [],
-      columnsHeader: [],
-      search: {
-        labelWidth: 200,
-        controls: []
-      },
-      columns: [],
-      columnsFooter: [],
-      records: []
-    },
-    _id: '',
-    _page: 1,
-    _recordsIndex: 1,
-    _recordsPerPage: 25,
-    _recordsTotal: 0,
-    _recordsNumber: 1,
-    _seq: 1,
-    _isRecordsRequest: false,
-    _countColumnsShow: 0,
-    _records: [],
-    _sort: [],
-    _columns: [],
-    _search: [],
-    _filters: [],
-    _controls: [],
-    _controlsPositions: {
-      header: [],
-      footer: []
-    },
-    _events: {},
+  var TableInstance = /*#__PURE__*/function () {
     /**
      * Инициализация
      * @param {object} tableWrapper
      * @param {object} options
      * @private
      */
-    _init: function _init(tableWrapper, options) {
+    function TableInstance(tableWrapper, options) {
+      _classCallCheck(this, TableInstance);
+      _defineProperty(this, "_options", {
+        id: null,
+        "class": '',
+        primaryKey: 'id',
+        lang: 'en',
+        langItems: {},
+        width: null,
+        minWidth: null,
+        maxWidth: null,
+        height: null,
+        minHeight: null,
+        naxHeight: null,
+        overflow: false,
+        page: 1,
+        recordsPerPage: 25,
+        theadTop: 0,
+        saveState: false,
+        noWrap: false,
+        noWrapToggle: false,
+        showHeaders: true,
+        showScrollShadow: false,
+        recordsRequest: {
+          method: 'GET',
+          url: null // '/mod/index/orders/?page=[page]'
+        },
+        requestParams: {
+          page: 'page',
+          count: 'count',
+          start: 'start',
+          end: 'end',
+          sort: 'sort',
+          search: 'search'
+        },
+        group: {
+          field: null,
+          attr: {},
+          render: null
+        },
+        onClick: null,
+        onClickUrl: null,
+        sort: [],
+        header: [],
+        footer: [],
+        columnsHeader: [],
+        search: {
+          labelWidth: 200,
+          controls: []
+        },
+        columns: [],
+        columnsFooter: [],
+        records: []
+      });
+      _defineProperty(this, "_id", '');
+      _defineProperty(this, "_page", 1);
+      _defineProperty(this, "_recordsIndex", 1);
+      _defineProperty(this, "_recordsPerPage", 25);
+      _defineProperty(this, "_recordsTotal", 0);
+      _defineProperty(this, "_recordsNumber", 1);
+      _defineProperty(this, "_seq", 1);
+      _defineProperty(this, "_isRecordsRequest", false);
+      _defineProperty(this, "_countColumnsShow", 0);
+      _defineProperty(this, "_records", []);
+      _defineProperty(this, "_sort", []);
+      _defineProperty(this, "_columns", []);
+      _defineProperty(this, "_search", []);
+      _defineProperty(this, "_filters", []);
+      _defineProperty(this, "_controls", []);
+      _defineProperty(this, "_controlsPositions", {
+        header: [],
+        footer: []
+      });
+      _defineProperty(this, "_events", {});
       this._options = $.extend(true, {}, this._options, options);
       this._events = {};
-      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : coreuiTableUtils.hashCode();
+      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : TableUtils.hashCode();
       if (this._options.page > 0) {
         this._page = this._options.page;
       }
       if (this._options.saveState && this._options.id) {
-        this._recordsPerPage = coreuiTablePrivate.getStorageField(this._id, 'page_size');
+        this._recordsPerPage = TablePrivate.getStorageField(this._id, 'page_size');
       } else if (this._options.recordsPerPage > 0) {
         this._recordsPerPage = this._options.recordsPerPage;
       }
-      this._isRecordsRequest = this._options.hasOwnProperty('recordsRequest') && (typeof this._options.recordsRequest === 'function' || coreuiTableUtils.isObject(this._options.recordsRequest) && this._options.recordsRequest.hasOwnProperty('url') && typeof this._options.recordsRequest.url === 'string' && this._options.recordsRequest.url !== '' && this._options.recordsRequest.url !== '#');
+      this._isRecordsRequest = this._options.hasOwnProperty('recordsRequest') && (typeof this._options.recordsRequest === 'function' || TableUtils.isObject(this._options.recordsRequest) && this._options.recordsRequest.hasOwnProperty('url') && typeof this._options.recordsRequest.url === 'string' && this._options.recordsRequest.url !== '' && this._options.recordsRequest.url !== '#');
       if (this._isRecordsRequest) {
         if (_typeof(this._options.recordsRequest) === 'object' && (!this._options.recordsRequest.hasOwnProperty('method') || typeof this._options.recordsRequest.method !== 'string')) {
           this._options.recordsRequest.method = 'GET';
         }
       } else if (Array.isArray(this._options.records)) {
-        coreuiTablePrivate.setRecords(this, this._options.records);
+        TablePrivate.setRecords(this, this._options.records);
       }
 
       // Очистка записей после инициализации
@@ -2868,1385 +2874,1539 @@
 
       // Инициализация колонок
       if (_typeof(this._options.columns) === 'object' && Array.isArray(this._options.columns) && this._options.columns.length > 0) {
-        coreuiTablePrivate.initColumns(tableWrapper, this, this._options.columns);
+        TablePrivate.initColumns(tableWrapper, this, this._options.columns);
       }
 
       // Инициализация поисковых полей
-      if (coreuiTableUtils.isObject(this._options.search) && _typeof(this._options.search.controls) === 'object' && Array.isArray(this._options.search.controls) && this._options.search.controls.length > 0) {
-        coreuiTablePrivate.initSearch(tableWrapper, this, this._options.search.controls);
+      if (TableUtils.isObject(this._options.search) && _typeof(this._options.search.controls) === 'object' && Array.isArray(this._options.search.controls) && this._options.search.controls.length > 0) {
+        TablePrivate.initSearch(tableWrapper, this, this._options.search.controls);
       }
 
       // Инициализация контролов и фильтров
       if (this._options.hasOwnProperty('header') && Array.isArray(this._options.header) && this._options.header.length > 0) {
-        coreuiTablePrivate.initControls(tableWrapper, this, this._options.header, 'header');
+        TablePrivate.initControls(tableWrapper, this, this._options.header, 'header');
       }
       if (this._options.hasOwnProperty('footer') && Array.isArray(this._options.footer) && this._options.footer.length > 0) {
-        coreuiTablePrivate.initControls(tableWrapper, this, this._options.footer, 'footer');
+        TablePrivate.initControls(tableWrapper, this, this._options.footer, 'footer');
       }
       if (this._options.saveState && this._options.id) {
         // Поиск по сохраненным поисковым данным
         if (!this._isRecordsRequest) {
-          coreuiTablePrivate.searchLocalRecords(this);
+          TablePrivate.searchLocalRecords(this);
         }
 
         // Сортировка
-        var sort = coreuiTablePrivate.getStorageField(this.getId(), 'sort');
+        var sort = TablePrivate.getStorageField(this.getId(), 'sort');
         if (Array.isArray(sort) && sort.length > 0) {
-          coreuiTablePrivate.initSort(this, sort);
+          TablePrivate.initSort(this, sort);
           if (!this._isRecordsRequest && this._records.length > 0) {
-            this._records = coreuiTablePrivate.sortRecordsByFields(this._records, this._sort);
+            this._records = TablePrivate.sortRecordsByFields(this._records, this._sort);
           }
         }
       } else {
         if (this._options.hasOwnProperty('sort') && Array.isArray(this._options.sort) && this._options.sort.length > 0) {
-          coreuiTablePrivate.initSort(this, this._options.sort);
+          TablePrivate.initSort(this, this._options.sort);
         }
       }
-    },
+    }
+
     /**
      * Инициализация событий таблицы
      */
-    initEvents: function initEvents() {
-      var table = this;
+    return _createClass(TableInstance, [{
+      key: "initEvents",
+      value: function initEvents() {
+        var table = this;
 
-      // Показ строк
-      this.on('records_show', function () {
-        // Переход по ссылке
-        if (typeof table._options.onClickUrl === 'string' && table._options.onClickUrl) {
-          coreuiTableElements.getTrRecords(table.getId()).click(function () {
-            var recordKey = $(this).data('record-index');
-            var record = table.getRecordByIndex(recordKey);
-            if (!record) {
-              return;
-            }
-            var url = table._options.onClickUrl;
-            $.each(record.data, function (field, value) {
-              var fieldQuote = field.replace(/([^\w\d])/g, '\\$1');
-              url = url.replace(new RegExp('\\[' + fieldQuote + '\\]', 'g'), value);
+        // Показ строк
+        this.on('records_show', function () {
+          // Переход по ссылке
+          if (typeof table._options.onClickUrl === 'string' && table._options.onClickUrl) {
+            TableElements.getTrRecords(table.getId()).click(function () {
+              var recordKey = $(this).data('record-index');
+              var record = table.getRecordByIndex(recordKey);
+              if (!record) {
+                return;
+              }
+              var url = table._options.onClickUrl;
+              $.each(record.data, function (field, value) {
+                var fieldQuote = field.replace(/([^\w\d])/g, '\\$1');
+                url = url.replace(new RegExp('\\[' + fieldQuote + '\\]', 'g'), value);
+              });
+              if (url && url !== '#') {
+                location.href = url;
+              }
             });
-            if (url && url !== '#') {
-              location.href = url;
+          }
+
+          // Событие нажатия на строку
+          if (['function', 'string'].indexOf(_typeof(table._options.onClick))) {
+            TableElements.getTrRecords(table.getId()).click(function (event) {
+              var recordKey = $(this).data('record-index');
+              var record = table.getRecordByIndex(recordKey);
+              if (!record) {
+                return;
+              }
+              if (typeof table._options.onClick === 'function') {
+                table._options.onClick(record, table, event);
+              } else if (typeof table._options.onClick === 'string') {
+                var func = new Function('record', 'table', 'event', table._options.onClick);
+                func(record, table, event);
+              }
+            });
+          }
+
+          // Раскрытие строки
+          TableElements.getNoWrapToggles(table.getId()).click(function (event) {
+            event.cancelBubble = true;
+            event.preventDefault();
+            var parent = $(this).parent();
+            if (parent.hasClass('shown')) {
+              $(this).removeClass('bi-caret-up-fill');
+              $(this).addClass('bi-caret-down-fill');
+              parent.removeClass('shown');
+            } else {
+              $(this).removeClass('bi-caret-down-fill');
+              $(this).addClass('bi-caret-up-fill');
+              parent.addClass('shown');
             }
           });
-        }
 
-        // Событие нажатия на строку
-        if (['function', 'string'].indexOf(_typeof(table._options.onClick))) {
-          coreuiTableElements.getTrRecords(table.getId()).click(function (event) {
-            var recordKey = $(this).data('record-index');
-            var record = table.getRecordByIndex(recordKey);
-            if (!record) {
-              return;
-            }
-            if (typeof table._options.onClick === 'function') {
-              table._options.onClick(record, table, event);
-            } else if (typeof table._options.onClick === 'string') {
-              var func = new Function('record', 'table', 'event', table._options.onClick);
-              func(record, table, event);
-            }
-          });
-        }
+          // Фиксация колонок
+          TableElements.fixedColsLeft(table.getId());
+          TableElements.fixedColsRight(table.getId());
+        });
 
-        // Раскрытие строки
-        coreuiTableElements.getNoWrapToggles(table.getId()).click(function (event) {
-          event.cancelBubble = true;
-          event.preventDefault();
-          var parent = $(this).parent();
-          if (parent.hasClass('shown')) {
-            $(this).removeClass('bi-caret-up-fill');
-            $(this).addClass('bi-caret-down-fill');
-            parent.removeClass('shown');
-          } else {
-            $(this).removeClass('bi-caret-down-fill');
-            $(this).addClass('bi-caret-up-fill');
-            parent.addClass('shown');
+        // Показ таблицы
+        this.on('table_show', function () {
+          var sortableColumns = TableElements.getTableSortable(table.getId());
+          if (sortableColumns[0]) {
+            sortableColumns.click(function (event) {
+              var field = $(this).data('field');
+              if (field) {
+                var sorting = [];
+                var currentOrder = null;
+                $.each(table._sort, function (key, sortField) {
+                  if (field === sortField.field) {
+                    currentOrder = sortField.order;
+                    return false;
+                  }
+                });
+                if (currentOrder === null) {
+                  sorting.push({
+                    field: field,
+                    order: 'asc'
+                  });
+                } else if (currentOrder === 'asc') {
+                  sorting.push({
+                    field: field,
+                    order: 'desc'
+                  });
+                }
+                if (sorting.length === 0) {
+                  table.sortDefault();
+                } else {
+                  table.sortFields(sorting);
+                }
+              }
+            });
+          }
+          if (window.hasOwnProperty('bootstrap') && bootstrap.hasOwnProperty('Tooltip')) {
+            $('.coreui-table__column-description', TableElements.getTableThead(table.getId())).each(function () {
+              new bootstrap.Tooltip(this);
+            });
           }
         });
 
-        // Фиксация колонок
-        coreuiTableElements.fixedColsLeft(table.getId());
-        coreuiTableElements.fixedColsRight(table.getId());
-      });
+        // События смены состояния
+        if (this._options.saveState && this._options.id) {
+          this.on('records_sort', function () {
+            TablePrivate.setStorageField(table.getId(), 'sort', table._sort);
+          });
+          this.on('search_change', function () {
+            TablePrivate.setStorageField(table.getId(), 'search', table.getSearchData());
+          });
+          this.on('filters_change', function () {
+            TablePrivate.setStorageField(table.getId(), 'filters', table.getFilterData());
+          });
+          this.on('page_size_update', function () {
+            TablePrivate.setStorageField(table.getId(), 'page_size', table._recordsPerPage);
+          });
+          this.on('columns_change', function () {
+            var columns = [];
+            table._columns.map(function (column) {
+              var columnOptions = column.getOptions();
+              columns.push({
+                field: columnOptions.field,
+                isShow: column.isShow()
+              });
+            });
+            TablePrivate.setStorageField(table.getId(), 'columns', columns);
+          });
+        }
+        TablePrivate._trigger(this, 'table_show', [this]);
+        TablePrivate._trigger(this, 'container_show');
 
-      // Показ таблицы
-      this.on('table_show', function () {
-        var sortableColumns = coreuiTableElements.getTableSortable(table.getId());
-        if (sortableColumns[0]) {
-          sortableColumns.click(function (event) {
-            var field = $(this).data('field');
-            if (field) {
-              var sorting = [];
-              var currentOrder = null;
-              $.each(table._sort, function (key, sortField) {
-                if (field === sortField.field) {
-                  currentOrder = sortField.order;
-                  return false;
+        // Вызов события показа строк
+        if (!this._isRecordsRequest) {
+          TablePrivate._trigger(this, 'records_show', [this]);
+        }
+      }
+
+      /**
+       * Получение идентификатора таблицы
+       * @returns {string}
+       */
+    }, {
+      key: "getId",
+      value: function getId() {
+        return this._id;
+      }
+
+      /**
+       * Получение опций таблицы
+       * @returns {*}
+       */
+    }, {
+      key: "getOptions",
+      value: function getOptions() {
+        return $.extend(true, {}, this._options);
+      }
+
+      /**
+       *
+       * @param element
+       * @returns {*}
+       */
+    }, {
+      key: "render",
+      value: function render(element) {
+        var that = this;
+        var widthSizes = [];
+        var heightSizes = [];
+        var options = this.getOptions();
+        var render = {
+          headersOut: [],
+          headersIn: [],
+          footersIn: [],
+          footersOut: []
+        };
+        this._recordsTotal = this._records.length;
+        if (options.width > 0) {
+          var unit = typeof options.width === 'number' ? 'px' : '';
+          widthSizes.push('width:' + options.width + unit);
+        }
+        if (options.minWidth > 0) {
+          var _unit = typeof options.minWidth === 'number' ? 'px' : '';
+          widthSizes.push('min-width:' + options.minWidth + _unit);
+        }
+        if (options.maxWidth > 0) {
+          var _unit2 = typeof options.maxWidth === 'number' ? 'px' : '';
+          widthSizes.push('max-width:' + options.maxWidth + _unit2);
+          options.overflow = true;
+        }
+        if (options.height > 0) {
+          var _unit3 = typeof options.height === 'number' ? 'px' : '';
+          heightSizes.push('height:' + options.height + _unit3);
+        }
+        if (options.minHeight > 0) {
+          var _unit4 = typeof options.minHeight === 'number' ? 'px' : '';
+          heightSizes.push('min-height:' + options.minHeight + _unit4);
+        }
+        if (options.maxHeight > 0) {
+          var _unit5 = typeof options.maxHeight === 'number' ? 'px' : '';
+          heightSizes.push('max-height:' + options.maxHeight + _unit5);
+          options.overflow = true;
+        }
+
+        // Верхние элементы управления
+        if (Array.isArray(this._controlsPositions.header) && this._controlsPositions.header.length > 0) {
+          this._controlsPositions.header.map(function (header) {
+            var controlsLeft = [];
+            var controlsCenter = [];
+            var controlsRight = [];
+            if (Array.isArray(header.left) && header.left.length > 0) {
+              header.left.map(function (control) {
+                var controlRender = TableRender.renderControl(that, control);
+                if (controlRender) {
+                  controlsLeft.push(controlRender);
                 }
               });
-              if (currentOrder === null) {
-                sorting.push({
-                  field: field,
-                  order: 'asc'
-                });
-              } else if (currentOrder === 'asc') {
-                sorting.push({
-                  field: field,
-                  order: 'desc'
-                });
-              }
-              if (sorting.length === 0) {
-                table.sortDefault();
+            }
+            if (Array.isArray(header.center) && header.center.length > 0) {
+              header.center.map(function (control) {
+                var controlRender = TableRender.renderControl(that, control);
+                if (controlRender) {
+                  controlsCenter.push(controlRender);
+                }
+              });
+            }
+            if (Array.isArray(header.right) && header.right.length > 0) {
+              header.right.map(function (control) {
+                var controlRender = TableRender.renderControl(that, control);
+                if (controlRender) {
+                  controlsRight.push(controlRender);
+                }
+              });
+            }
+            if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
+              if (header.type === 'in') {
+                var headerControls = $(TableUtils.render(tpl['table/controls/header.html'], {
+                  controlsLeft: controlsLeft,
+                  controlsCenter: controlsCenter,
+                  controlsRight: controlsRight
+                }));
+                if (controlsLeft.length > 0) {
+                  $.each(controlsLeft, function (key, control) {
+                    headerControls.find('.coreui-table__controls_left').append(control);
+                  });
+                }
+                if (controlsCenter.length > 0) {
+                  $.each(controlsCenter, function (key, control) {
+                    headerControls.find('.coreui-table__controls_center').append(control);
+                  });
+                }
+                if (controlsRight.length > 0) {
+                  $.each(controlsRight, function (key, control) {
+                    headerControls.find('.coreui-table__controls_right').append(control);
+                  });
+                }
+                render.headersIn.push(headerControls);
               } else {
-                table.sortFields(sorting);
+                var _headerControls = $(TableUtils.render(tpl['table/controls/header-out.html'], {
+                  controlsLeft: controlsLeft,
+                  controlsCenter: controlsCenter,
+                  controlsRight: controlsRight
+                }));
+                if (controlsLeft.length > 0) {
+                  $.each(controlsLeft, function (key, control) {
+                    _headerControls.find('.coreui-table__controls_left').append(control);
+                  });
+                }
+                if (controlsCenter.length > 0) {
+                  $.each(controlsCenter, function (key, control) {
+                    _headerControls.find('.coreui-table__controls_center').append(control);
+                  });
+                }
+                if (controlsRight.length > 0) {
+                  $.each(controlsRight, function (key, control) {
+                    _headerControls.find('.coreui-table__controls_right').append(control);
+                  });
+                }
+                render.headersOut.push(_headerControls);
               }
             }
           });
         }
-        if (window.hasOwnProperty('bootstrap') && bootstrap.hasOwnProperty('Tooltip')) {
-          $('.coreui-table__column-description', coreuiTableElements.getTableThead(table.getId())).each(function () {
-            new bootstrap.Tooltip(this);
+
+        // Нижние элементы управления
+        if (Array.isArray(this._controlsPositions.footer) && this._controlsPositions.footer.length > 0) {
+          this._controlsPositions.footer.map(function (footer) {
+            var controlsLeft = [];
+            var controlsCenter = [];
+            var controlsRight = [];
+            if (Array.isArray(footer.left) && footer.left.length > 0) {
+              $.each(footer.left, function (key, control) {
+                var controlRender = TableRender.renderControl(that, control);
+                if (controlRender) {
+                  controlsLeft.push(controlRender);
+                }
+              });
+            }
+            if (Array.isArray(footer.center) && footer.center.length > 0) {
+              $.each(footer.center, function (key, control) {
+                var controlRender = TableRender.renderControl(that, control);
+                if (controlRender) {
+                  controlsCenter.push(controlRender);
+                }
+              });
+            }
+            if (Array.isArray(footer.right) && footer.right.length > 0) {
+              $.each(footer.right, function (key, control) {
+                var controlRender = TableRender.renderControl(that, control);
+                if (controlRender) {
+                  controlsRight.push(controlRender);
+                }
+              });
+            }
+            if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
+              if (footer.type === 'in') {
+                var footerControls = $(TableUtils.render(tpl['table/controls/footer.html'], {
+                  controlsLeft: controlsLeft,
+                  controlsCenter: controlsCenter,
+                  controlsRight: controlsRight
+                }));
+                if (controlsLeft.length > 0) {
+                  $.each(controlsLeft, function (key, control) {
+                    footerControls.find('.coreui-table__controls_left').append(control);
+                  });
+                }
+                if (controlsCenter.length > 0) {
+                  $.each(controlsCenter, function (key, control) {
+                    footerControls.find('.coreui-table__controls_center').append(control);
+                  });
+                }
+                if (controlsRight.length > 0) {
+                  $.each(controlsRight, function (key, control) {
+                    footerControls.find('.coreui-table__controls_right').append(control);
+                  });
+                }
+                render.footersIn.push(footerControls);
+              } else {
+                var _footerControls = $(TableUtils.render(tpl['table/controls/footer-out.html'], {
+                  controlsLeft: controlsLeft,
+                  controlsCenter: controlsCenter,
+                  controlsRight: controlsRight
+                }));
+                if (controlsLeft.length > 0) {
+                  $.each(controlsLeft, function (key, control) {
+                    _footerControls.find('.coreui-table__controls_left').append(control);
+                  });
+                }
+                if (controlsCenter.length > 0) {
+                  $.each(controlsCenter, function (key, control) {
+                    _footerControls.find('.coreui-table__controls_center').append(control);
+                  });
+                }
+                if (controlsRight.length > 0) {
+                  $.each(controlsRight, function (key, control) {
+                    _footerControls.find('.coreui-table__controls_right').append(control);
+                  });
+                }
+                render.footersOut.push(_footerControls);
+              }
+            }
           });
         }
-      });
 
-      // События смены состояния
-      if (this._options.saveState && this._options.id) {
-        this.on('records_sort', function () {
-          coreuiTablePrivate.setStorageField(table.getId(), 'sort', table._sort);
-        });
-        this.on('search_change', function () {
-          coreuiTablePrivate.setStorageField(table.getId(), 'search', table.getSearchData());
-        });
-        this.on('filters_change', function () {
-          coreuiTablePrivate.setStorageField(table.getId(), 'filters', table.getFilterData());
-        });
-        this.on('page_size_update', function () {
-          coreuiTablePrivate.setStorageField(table.getId(), 'page_size', table._recordsPerPage);
-        });
-        this.on('columns_change', function () {
-          var columns = [];
-          table._columns.map(function (column) {
-            var columnOptions = column.getOptions();
-            columns.push({
-              field: columnOptions.field,
-              isShow: column.isShow()
-            });
+        // Загрузка записей
+        if (this._isRecordsRequest) {
+          this.on('container_show', function () {
+            if (typeof options.recordsRequest === 'function') {
+              that.loadByFunction(options.recordsRequest);
+            } else {
+              that.load(options.recordsRequest.url, options.recordsRequest.method);
+            }
           });
-          coreuiTablePrivate.setStorageField(table.getId(), 'columns', columns);
+        }
+        var classes = [];
+        var classesWrapper = [];
+        if (options.hasOwnProperty('theme') && typeof options.theme === 'string' && options.theme) {
+          classes.push('coreui-theme-' + options.theme);
+        }
+        if (options.hasOwnProperty('showScrollShadow') && typeof options.showScrollShadow === 'boolean' && options.showScrollShadow) {
+          classesWrapper.push('table-scroll-shadow');
+        }
+        if (options.hasOwnProperty('overflow') && typeof options.overflow === 'boolean' && options.overflow) {
+          classesWrapper.push('overflow-x-auto');
+        }
+        var tableElement = TableRender.renderTable(this);
+        var containerElement = $(TableUtils.render(tpl['container.html'], {
+          id: this._id,
+          classes: classes.length > 0 ? ' ' + classes.join(' ') : '',
+          classesWrapper: classesWrapper.length > 0 ? ' ' + classesWrapper.join(' ') : '',
+          classesRoot: classesWrapper.length > 0 ? ' ' + classesWrapper.join(' ') : '',
+          widthSizes: widthSizes,
+          heightSizes: heightSizes
+        }));
+        if (render.headersOut.length > 0) {
+          containerElement.prepend(render.headersOut);
+        }
+        if (render.headersIn.length > 0) {
+          containerElement.find('.coreui-table__container').prepend(render.headersIn);
+        }
+        if (render.footersIn.length > 0) {
+          containerElement.find('.coreui-table__container').append(render.footersIn);
+        }
+        if (render.footersOut.length > 0) {
+          containerElement.append(render.footersOut);
+        }
+        containerElement.find('.coreui-table__wrapper').html(tableElement);
+        if (element === undefined) {
+          return containerElement;
+        }
+
+        // Dom element
+        var domElement = null;
+        if (typeof element === 'string') {
+          domElement = document.getElementById(element);
+        } else if (element instanceof HTMLElement) {
+          domElement = element;
+        }
+        if (domElement) {
+          $(domElement).html(containerElement);
+          this.initEvents();
+        }
+      }
+
+      /**
+       * Блокировка таблицы
+       */
+    }, {
+      key: "lock",
+      value: function lock() {
+        var container = TableElements.getContainer(this.getId());
+        if (container[0] && !container.find('.coreui-table-lock')[0]) {
+          var html = TableUtils.render(tpl['table/loader.html'], {
+            lang: this.getLang()
+          });
+          container.prepend(html);
+        }
+      }
+
+      /**
+       * Разблокировка таблицы
+       */
+    }, {
+      key: "unlock",
+      value: function unlock() {
+        TableElements.getLock(this.getId()).hide(50, function () {
+          $(this).remove();
         });
       }
-      coreuiTablePrivate._trigger(this, 'table_show', [this]);
-      coreuiTablePrivate._trigger(this, 'container_show');
 
-      // Вызов события показа строк
-      if (!this._isRecordsRequest) {
-        coreuiTablePrivate._trigger(this, 'records_show', [this]);
-      }
-    },
-    /**
-     * Получение идентификатора таблицы
-     * @returns {string}
-     */
-    getId: function getId() {
-      return this._id;
-    },
-    /**
-     * Получение опций таблицы
-     * @returns {*}
-     */
-    getOptions: function getOptions() {
-      return $.extend(true, {}, this._options);
-    },
-    /**
-     *
-     * @param element
-     * @returns {*}
-     */
-    render: function render(element) {
-      var that = this;
-      var widthSizes = [];
-      var heightSizes = [];
-      var options = this.getOptions();
-      var render = {
-        headersOut: [],
-        headersIn: [],
-        footersIn: [],
-        footersOut: []
-      };
-      this._recordsTotal = this._records.length;
-      if (options.width > 0) {
-        var unit = typeof options.width === 'number' ? 'px' : '';
-        widthSizes.push('width:' + options.width + unit);
-      }
-      if (options.minWidth > 0) {
-        var _unit = typeof options.minWidth === 'number' ? 'px' : '';
-        widthSizes.push('min-width:' + options.minWidth + _unit);
-      }
-      if (options.maxWidth > 0) {
-        var _unit2 = typeof options.maxWidth === 'number' ? 'px' : '';
-        widthSizes.push('max-width:' + options.maxWidth + _unit2);
-        options.overflow = true;
-      }
-      if (options.height > 0) {
-        var _unit3 = typeof options.height === 'number' ? 'px' : '';
-        heightSizes.push('height:' + options.height + _unit3);
-      }
-      if (options.minHeight > 0) {
-        var _unit4 = typeof options.minHeight === 'number' ? 'px' : '';
-        heightSizes.push('min-height:' + options.minHeight + _unit4);
-      }
-      if (options.maxHeight > 0) {
-        var _unit5 = typeof options.maxHeight === 'number' ? 'px' : '';
-        heightSizes.push('max-height:' + options.maxHeight + _unit5);
-        options.overflow = true;
-      }
-
-      // Верхние элементы управления
-      if (Array.isArray(this._controlsPositions.header) && this._controlsPositions.header.length > 0) {
-        this._controlsPositions.header.map(function (header) {
-          var controlsLeft = [];
-          var controlsCenter = [];
-          var controlsRight = [];
-          if (Array.isArray(header.left) && header.left.length > 0) {
-            header.left.map(function (control) {
-              var controlRender = coreuiTableRender.renderControl(that, control);
-              if (controlRender) {
-                controlsLeft.push(controlRender);
-              }
-            });
-          }
-          if (Array.isArray(header.center) && header.center.length > 0) {
-            header.center.map(function (control) {
-              var controlRender = coreuiTableRender.renderControl(that, control);
-              if (controlRender) {
-                controlsCenter.push(controlRender);
-              }
-            });
-          }
-          if (Array.isArray(header.right) && header.right.length > 0) {
-            header.right.map(function (control) {
-              var controlRender = coreuiTableRender.renderControl(that, control);
-              if (controlRender) {
-                controlsRight.push(controlRender);
-              }
-            });
-          }
-          if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
-            if (header.type === 'in') {
-              var headerControls = $(coreuiTableUtils.render(tpl['table/controls/header.html'], {
-                controlsLeft: controlsLeft,
-                controlsCenter: controlsCenter,
-                controlsRight: controlsRight
-              }));
-              if (controlsLeft.length > 0) {
-                $.each(controlsLeft, function (key, control) {
-                  headerControls.find('.coreui-table__controls_left').append(control);
-                });
-              }
-              if (controlsCenter.length > 0) {
-                $.each(controlsCenter, function (key, control) {
-                  headerControls.find('.coreui-table__controls_center').append(control);
-                });
-              }
-              if (controlsRight.length > 0) {
-                $.each(controlsRight, function (key, control) {
-                  headerControls.find('.coreui-table__controls_right').append(control);
-                });
-              }
-              render.headersIn.push(headerControls);
+      /**
+       * Загрузка строк
+       * @param {string} url
+       * @param {string} method
+       */
+    }, {
+      key: "load",
+      value: function load(url, method) {
+        this.lock();
+        var that = this;
+        var params = {};
+        if (url.match(/\[page\]/)) {
+          url = url.replace(/\[page\]/g, this._page);
+        } else {
+          var paramPage = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('page') ? this._options.requestParams.page : 'page';
+          params[paramPage] = this._page;
+        }
+        if (url.match(/\[count\]/)) {
+          url = url.replace(/\[count\]/g, this._recordsPerPage);
+        } else {
+          var paramCount = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('count') ? this._options.requestParams.count : 'count';
+          params[paramCount] = this._recordsPerPage;
+        }
+        if (url.match(/\[start\]/)) {
+          url = url.replace(/\[start\]/g, (this._page - 1) * this._recordsPerPage + 1);
+        } else {
+          var paramStart = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('start') ? this._options.requestParams.start : 'start';
+          params[paramStart] = (this._page - 1) * this._recordsPerPage + 1;
+        }
+        if (url.match(/\[end\]/)) {
+          url = url.replace(/\[end\]/g, (this._page - 1) * this._recordsPerPage + Number(this._recordsPerPage));
+        } else {
+          var paramEnd = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('end') ? this._options.requestParams.end : 'end';
+          params[paramEnd] = (this._page - 1) * this._recordsPerPage + Number(this._recordsPerPage);
+        }
+        var searchData = this.getSearchData();
+        var filterData = this.getFilterData();
+        if (filterData.length > 0) {
+          filterData.map(function (filter) {
+            searchData.push(filter);
+          });
+        }
+        if (searchData.length > 0) {
+          var paramSearch = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('search') && typeof this._options.requestParams.search === 'string' ? this._options.requestParams.search : 'search';
+          params[paramSearch] = {};
+          searchData.map(function (searchItem) {
+            params[paramSearch][searchItem.field] = searchItem.value;
+          });
+        }
+        if (this._sort.length > 0) {
+          var paramSort = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('sort') && typeof this._options.requestParams.sort === 'string' ? this._options.requestParams.sort : 'sort';
+          params[paramSort] = this._sort;
+        }
+        $.ajax({
+          url: url,
+          method: method || 'GET',
+          dataType: "json",
+          data: params,
+          beforeSend: function beforeSend(xhr) {
+            TablePrivate._trigger(that, 'records_load_start', [that, xhr]);
+          },
+          success: function success(result) {
+            if (result.hasOwnProperty('records') && _typeof(result.records) === 'object' && Array.isArray(result.records)) {
+              var total = result.hasOwnProperty('total') && TableUtils.isNumeric(result.total) ? result.total : null;
+              that.setRecords(result.records, total);
             } else {
-              var _headerControls = $(coreuiTableUtils.render(tpl['table/controls/header-out.html'], {
-                controlsLeft: controlsLeft,
-                controlsCenter: controlsCenter,
-                controlsRight: controlsRight
-              }));
-              if (controlsLeft.length > 0) {
-                $.each(controlsLeft, function (key, control) {
-                  _headerControls.find('.coreui-table__controls_left').append(control);
-                });
-              }
-              if (controlsCenter.length > 0) {
-                $.each(controlsCenter, function (key, control) {
-                  _headerControls.find('.coreui-table__controls_center').append(control);
-                });
-              }
-              if (controlsRight.length > 0) {
-                $.each(controlsRight, function (key, control) {
-                  _headerControls.find('.coreui-table__controls_right').append(control);
-                });
-              }
-              render.headersOut.push(_headerControls);
+              that.setRecords([]);
             }
+          },
+          error: function error(xhr, textStatus, errorThrown) {
+            that.setRecords([]);
+            TablePrivate._trigger(that, 'records_load_error', [that, xhr, textStatus, errorThrown]);
+          },
+          complete: function complete(xhr, textStatus) {
+            that.unlock();
+            TablePrivate._trigger(that, 'records_load_end', [that, xhr, textStatus]);
           }
         });
       }
 
-      // Нижние элементы управления
-      if (Array.isArray(this._controlsPositions.footer) && this._controlsPositions.footer.length > 0) {
-        this._controlsPositions.footer.map(function (footer) {
-          var controlsLeft = [];
-          var controlsCenter = [];
-          var controlsRight = [];
-          if (Array.isArray(footer.left) && footer.left.length > 0) {
-            $.each(footer.left, function (key, control) {
-              var controlRender = coreuiTableRender.renderControl(that, control);
-              if (controlRender) {
-                controlsLeft.push(controlRender);
-              }
-            });
-          }
-          if (Array.isArray(footer.center) && footer.center.length > 0) {
-            $.each(footer.center, function (key, control) {
-              var controlRender = coreuiTableRender.renderControl(that, control);
-              if (controlRender) {
-                controlsCenter.push(controlRender);
-              }
-            });
-          }
-          if (Array.isArray(footer.right) && footer.right.length > 0) {
-            $.each(footer.right, function (key, control) {
-              var controlRender = coreuiTableRender.renderControl(that, control);
-              if (controlRender) {
-                controlsRight.push(controlRender);
-              }
-            });
-          }
-          if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
-            if (footer.type === 'in') {
-              var footerControls = $(coreuiTableUtils.render(tpl['table/controls/footer.html'], {
-                controlsLeft: controlsLeft,
-                controlsCenter: controlsCenter,
-                controlsRight: controlsRight
-              }));
-              if (controlsLeft.length > 0) {
-                $.each(controlsLeft, function (key, control) {
-                  footerControls.find('.coreui-table__controls_left').append(control);
-                });
-              }
-              if (controlsCenter.length > 0) {
-                $.each(controlsCenter, function (key, control) {
-                  footerControls.find('.coreui-table__controls_center').append(control);
-                });
-              }
-              if (controlsRight.length > 0) {
-                $.each(controlsRight, function (key, control) {
-                  footerControls.find('.coreui-table__controls_right').append(control);
-                });
-              }
-              render.footersIn.push(footerControls);
-            } else {
-              var _footerControls = $(coreuiTableUtils.render(tpl['table/controls/footer-out.html'], {
-                controlsLeft: controlsLeft,
-                controlsCenter: controlsCenter,
-                controlsRight: controlsRight
-              }));
-              if (controlsLeft.length > 0) {
-                $.each(controlsLeft, function (key, control) {
-                  _footerControls.find('.coreui-table__controls_left').append(control);
-                });
-              }
-              if (controlsCenter.length > 0) {
-                $.each(controlsCenter, function (key, control) {
-                  _footerControls.find('.coreui-table__controls_center').append(control);
-                });
-              }
-              if (controlsRight.length > 0) {
-                $.each(controlsRight, function (key, control) {
-                  _footerControls.find('.coreui-table__controls_right').append(control);
-                });
-              }
-              render.footersOut.push(_footerControls);
-            }
-          }
-        });
-      }
-
-      // Загрузка записей
-      if (this._isRecordsRequest) {
-        this.on('container_show', function () {
-          if (typeof options.recordsRequest === 'function') {
-            that.loadByFunction(options.recordsRequest);
-          } else {
-            that.load(options.recordsRequest.url, options.recordsRequest.method);
-          }
-        });
-      }
-      var classes = [];
-      var classesWrapper = [];
-      if (options.hasOwnProperty('theme') && typeof options.theme === 'string' && options.theme) {
-        classes.push('coreui-theme-' + options.theme);
-      }
-      if (options.hasOwnProperty('showScrollShadow') && typeof options.showScrollShadow === 'boolean' && options.showScrollShadow) {
-        classesWrapper.push('table-scroll-shadow');
-      }
-      if (options.hasOwnProperty('overflow') && typeof options.overflow === 'boolean' && options.overflow) {
-        classesWrapper.push('overflow-x-auto');
-      }
-      var tableElement = coreuiTableRender.renderTable(this);
-      var containerElement = $(coreuiTableUtils.render(tpl['container.html'], {
-        id: this._id,
-        classes: classes.length > 0 ? ' ' + classes.join(' ') : '',
-        classesWrapper: classesWrapper.length > 0 ? ' ' + classesWrapper.join(' ') : '',
-        classesRoot: classesWrapper.length > 0 ? ' ' + classesWrapper.join(' ') : '',
-        widthSizes: widthSizes,
-        heightSizes: heightSizes
-      }));
-      if (render.headersOut.length > 0) {
-        containerElement.prepend(render.headersOut);
-      }
-      if (render.headersIn.length > 0) {
-        containerElement.find('.coreui-table__container').prepend(render.headersIn);
-      }
-      if (render.footersIn.length > 0) {
-        containerElement.find('.coreui-table__container').append(render.footersIn);
-      }
-      if (render.footersOut.length > 0) {
-        containerElement.append(render.footersOut);
-      }
-      containerElement.find('.coreui-table__wrapper').html(tableElement);
-      if (element === undefined) {
-        return containerElement;
-      }
-
-      // Dom element
-      var domElement = null;
-      if (typeof element === 'string') {
-        domElement = document.getElementById(element);
-      } else if (element instanceof HTMLElement) {
-        domElement = element;
-      }
-      if (domElement) {
-        $(domElement).html(containerElement);
-        this.initEvents();
-      }
-    },
-    /**
-     * Блокировка таблицы
-     */
-    lock: function lock() {
-      var container = coreuiTableElements.getContainer(this.getId());
-      if (container[0] && !container.find('.coreui-table-lock')[0]) {
-        var html = coreuiTableUtils.render(tpl['table/loader.html'], {
-          lang: this.getLang()
-        });
-        container.prepend(html);
-      }
-    },
-    /**
-     * Разблокировка таблицы
-     */
-    unlock: function unlock() {
-      coreuiTableElements.getLock(this.getId()).hide(50, function () {
-        $(this).remove();
-      });
-    },
-    /**
-     * Загрузка строк
-     * @param {string} url
-     * @param {string} method
-     */
-    load: function load(url, method) {
-      this.lock();
-      var that = this;
-      var params = {};
-      if (url.match(/\[page\]/)) {
-        url = url.replace(/\[page\]/g, this._page);
-      } else {
-        var paramPage = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('page') ? this._options.requestParams.page : 'page';
-        params[paramPage] = this._page;
-      }
-      if (url.match(/\[count\]/)) {
-        url = url.replace(/\[count\]/g, this._recordsPerPage);
-      } else {
-        var paramCount = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('count') ? this._options.requestParams.count : 'count';
+      /**
+       * Загрузка строк
+       * @param {function} callback
+       */
+    }, {
+      key: "loadByFunction",
+      value: function loadByFunction(callback) {
+        var that = this;
+        var params = {};
+        var paramPage = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('page') ? this._options.requestParams.page : 'page';
+        var paramCount = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('count') ? this._options.requestParams.count : 'count';
+        var paramStart = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('start') ? this._options.requestParams.start : 'start';
+        var paramEnd = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('end') ? this._options.requestParams.end : 'end';
         params[paramCount] = this._recordsPerPage;
-      }
-      if (url.match(/\[start\]/)) {
-        url = url.replace(/\[start\]/g, (this._page - 1) * this._recordsPerPage + 1);
-      } else {
-        var paramStart = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('start') ? this._options.requestParams.start : 'start';
+        params[paramPage] = this._page;
         params[paramStart] = (this._page - 1) * this._recordsPerPage + 1;
-      }
-      if (url.match(/\[end\]/)) {
-        url = url.replace(/\[end\]/g, (this._page - 1) * this._recordsPerPage + Number(this._recordsPerPage));
-      } else {
-        var paramEnd = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('end') ? this._options.requestParams.end : 'end';
         params[paramEnd] = (this._page - 1) * this._recordsPerPage + Number(this._recordsPerPage);
-      }
-      var searchData = this.getSearchData();
-      var filterData = this.getFilterData();
-      if (filterData.length > 0) {
-        filterData.map(function (filter) {
-          searchData.push(filter);
-        });
-      }
-      if (searchData.length > 0) {
-        var paramSearch = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('search') && typeof this._options.requestParams.search === 'string' ? this._options.requestParams.search : 'search';
-        params[paramSearch] = {};
-        searchData.map(function (searchItem) {
-          params[paramSearch][searchItem.field] = searchItem.value;
-        });
-      }
-      if (this._sort.length > 0) {
-        var paramSort = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('sort') && typeof this._options.requestParams.sort === 'string' ? this._options.requestParams.sort : 'sort';
-        params[paramSort] = this._sort;
-      }
-      $.ajax({
-        url: url,
-        method: method || 'GET',
-        dataType: "json",
-        data: params,
-        beforeSend: function beforeSend(xhr) {
-          coreuiTablePrivate._trigger(that, 'records_load_start', [that, xhr]);
-        },
-        success: function success(result) {
-          if (result.hasOwnProperty('records') && _typeof(result.records) === 'object' && Array.isArray(result.records)) {
-            var total = result.hasOwnProperty('total') && coreuiTableUtils.isNumeric(result.total) ? result.total : null;
-            that.setRecords(result.records, total);
+        var searchData = this.getSearchData();
+        var filterData = this.getFilterData();
+        if (filterData.length > 0) {
+          $.each(filterData, function (key, filter) {
+            searchData.push(filter);
+          });
+        }
+        if (searchData.length > 0) {
+          var paramSearch = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('search') && typeof this._options.requestParams.search === 'string' ? this._options.requestParams.search : 'search';
+          params[paramSearch] = {};
+          searchData.map(function (searchItem) {
+            params[paramSearch][searchItem.field] = searchItem.value;
+          });
+        }
+        if (this._sort.length > 0) {
+          var paramSort = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('sort') && typeof this._options.requestParams.sort === 'string' ? this._options.requestParams.sort : 'sort';
+          params[paramSort] = this._sort;
+        }
+        var result = callback(params, this);
+
+        /**
+         * Установка записей
+         * @param {Object} data
+         */
+        function setRecords(data) {
+          if (data.hasOwnProperty('records') && _typeof(data.records) === 'object' && Array.isArray(data.records)) {
+            var total = data.hasOwnProperty('total') && TableUtils.isNumeric(data.total) ? data.total : null;
+            that.setRecords(data.records, total);
           } else {
             that.setRecords([]);
           }
-        },
-        error: function error(xhr, textStatus, errorThrown) {
-          that.setRecords([]);
-          coreuiTablePrivate._trigger(that, 'records_load_error', [that, xhr, textStatus, errorThrown]);
-        },
-        complete: function complete(xhr, textStatus) {
-          that.unlock();
-          coreuiTablePrivate._trigger(that, 'records_load_end', [that, xhr, textStatus]);
         }
-      });
-    },
-    /**
-     * Загрузка строк
-     * @param {function} callback
-     */
-    loadByFunction: function loadByFunction(callback) {
-      var that = this;
-      var params = {};
-      var paramPage = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('page') ? this._options.requestParams.page : 'page';
-      var paramCount = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('count') ? this._options.requestParams.count : 'count';
-      var paramStart = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('start') ? this._options.requestParams.start : 'start';
-      var paramEnd = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('end') ? this._options.requestParams.end : 'end';
-      params[paramCount] = this._recordsPerPage;
-      params[paramPage] = this._page;
-      params[paramStart] = (this._page - 1) * this._recordsPerPage + 1;
-      params[paramEnd] = (this._page - 1) * this._recordsPerPage + Number(this._recordsPerPage);
-      var searchData = this.getSearchData();
-      var filterData = this.getFilterData();
-      if (filterData.length > 0) {
-        $.each(filterData, function (key, filter) {
-          searchData.push(filter);
-        });
+        if (result instanceof Promise) {
+          this.lock();
+          result.then(function (data) {
+            that.unlock();
+            setRecords(data);
+          })["catch"](function () {
+            that.unlock();
+          });
+        } else if (_typeof(result) === 'object') {
+          setRecords(result);
+        }
       }
-      if (searchData.length > 0) {
-        var paramSearch = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('search') && typeof this._options.requestParams.search === 'string' ? this._options.requestParams.search : 'search';
-        params[paramSearch] = {};
-        searchData.map(function (searchItem) {
-          params[paramSearch][searchItem.field] = searchItem.value;
-        });
-      }
-      if (this._sort.length > 0) {
-        var paramSort = coreuiTableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('sort') && typeof this._options.requestParams.sort === 'string' ? this._options.requestParams.sort : 'sort';
-        params[paramSort] = this._sort;
-      }
-      var result = callback(params, this);
 
       /**
-       * Установка записей
-       * @param {Object} data
+       * Перезагрузка записей в таблице
        */
-      function setRecords(data) {
-        if (data.hasOwnProperty('records') && _typeof(data.records) === 'object' && Array.isArray(data.records)) {
-          var total = data.hasOwnProperty('total') && coreuiTableUtils.isNumeric(data.total) ? data.total : null;
-          that.setRecords(data.records, total);
-        } else {
-          that.setRecords([]);
-        }
-      }
-      if (result instanceof Promise) {
-        this.lock();
-        result.then(function (data) {
-          that.unlock();
-          setRecords(data);
-        })["catch"](function () {
-          that.unlock();
-        });
-      } else if (_typeof(result) === 'object') {
-        setRecords(result);
-      }
-    },
-    /**
-     * Перезагрузка записей в таблице
-     */
-    reload: function reload() {
-      if (this._isRecordsRequest) {
-        if (typeof this._options.recordsRequest === 'function') {
-          this.loadByFunction(this._options.recordsRequest);
-        } else {
-          this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
-        }
-      }
-    },
-    /**
-     * Пересоздание тела таблицы
-     */
-    refresh: function refresh() {
-      var table = coreuiTableRender.renderTable(this);
-      coreuiTableElements.getTable(this.getId()).replaceWith(table);
-      coreuiTablePrivate._trigger(this, 'table_show', [this]);
-      coreuiTablePrivate._trigger(this, 'records_show', [this]);
-    },
-    /**
-     * Установка общего количества записей на странице
-     * @param recordsPerPage
-     */
-    setPageSize: function setPageSize(recordsPerPage) {
-      this._recordsPerPage = recordsPerPage;
-      coreuiTablePrivate._trigger(this, 'page_size_update');
-    },
-    /**
-     * Выбор всех записей в таблице
-     */
-    selectAll: function selectAll() {
-      coreuiTableElements.selectTrAll(this.getId());
-      coreuiTablePrivate._trigger(this, 'record_select_all');
-    },
-    /**
-     * Отмена выбор всех записей в таблице
-     */
-    unselectAll: function unselectAll() {
-      coreuiTableElements.unselectTrAll(this.getId());
-      coreuiTablePrivate._trigger(this, 'record_unselect_all');
-    },
-    /**
-     * Выбор записи в таблице
-     * @param {string} id
-     */
-    selectRecord: function selectRecord(id) {
-      var record = this.getRecordById(id);
-      if (!record) {
-        return;
-      }
-      var tr = coreuiTableElements.getTrByIndex(this.getId(), record.index);
-      if (tr.length === 0) {
-        return;
-      }
-      coreuiTableElements.selectTr(tr);
-      coreuiTablePrivate._trigger(this, 'record_select', [record]);
-    },
-    /**
-     * Выбор записи в таблице по индексу
-     * @param {int} index
-     */
-    selectRecordByIndex: function selectRecordByIndex(index) {
-      var record = this.getRecordByIndex(index);
-      if (!record) {
-        return;
-      }
-      var tr = coreuiTableElements.getTrByIndex(this.getId(), record.index);
-      if (tr.length === 0) {
-        return;
-      }
-      coreuiTableElements.selectTr(tr);
-      coreuiTablePrivate._trigger(this, 'record_select', [record]);
-    },
-    /**
-     * Отмена выбора записи в таблице
-     * @param {string} id
-     */
-    unselectRecord: function unselectRecord(id) {
-      var record = this.getRecordById(id);
-      if (!record) {
-        return;
-      }
-      var tr = coreuiTableElements.getTrByIndex(this.getId(), record.index);
-      if (!tr) {
-        return;
-      }
-      coreuiTableElements.unselectTr(tr);
-      coreuiTablePrivate._trigger(this, 'record_unselect', [record.data]);
-    },
-    /**
-     * Получение выбранных id
-     * @return {array}
-     */
-    getSelectedRecordsId: function getSelectedRecordsId() {
-      var records = [];
-      var that = this;
-      var field = this._options.primaryKey;
-      $.each(coreuiTableElements.getSelectedIndexes(this.getId()), function (key, index) {
-        var record = that.getRecordByIndex(index);
-        if (!record || !record.data.hasOwnProperty(field)) {
-          return;
-        }
-        records.push(record.data[field]);
-      });
-      return records;
-    },
-    /**
-     * Получение выбранных записей
-     * @return {array}
-     */
-    getSelectedRecords: function getSelectedRecords() {
-      var records = [];
-      var that = this;
-      $.each(coreuiTableElements.getSelectedIndexes(this.getId()), function (key, index) {
-        var record = that.getRecordByIndex(index);
-        if (!record) {
-          return;
-        }
-        records.push(record);
-      });
-      return records;
-    },
-    /**
-     * Получение записи по id
-     * @param id
-     * @return {object|null}
-     * @deprecated
-     */
-    getRecord: function getRecord(id) {
-      var record = this.getRecordById(id);
-      if (!record) {
-        return null;
-      }
-      return record.data;
-    },
-    /**
-     * Получение записей
-     */
-    getRecords: function getRecords() {
-      var records = [];
-      $.each(this._records, function (key, record) {
-        records.push($.extend(true, {}, record));
-      });
-      return records;
-    },
-    /**
-     * Получение данных из существующих записей
-     * @return {Array}
-     * @deprecated getRecordsData
-     */
-    getData: function getData() {
-      return this.getRecordsData();
-    },
-    /**
-     * Получение данных из существующих записей
-     * @return {Array}
-     */
-    getRecordsData: function getRecordsData() {
-      var data = [];
-      $.each(this._records, function (key, record) {
-        data.push($.extend(true, {}, record.data));
-      });
-      return data;
-    },
-    /**
-     * Переход к предыдущей странице
-     */
-    prevPage: function prevPage() {
-      if (this._page > 1) {
-        this._page--;
-        this.reload();
-      }
-    },
-    /**
-     * Переход к следующей странице
-     * @return {array}
-     */
-    nextPage: function nextPage() {
-      var totalPages = this._recordsTotal > 0 && this._recordsPerPage > 0 ? Math.ceil(this._recordsTotal / this._recordsPerPage) : 1;
-      if (this._page < totalPages) {
-        this._page++;
-        this.reload();
-      }
-    },
-    /**
-     * Переход к указанной странице
-     */
-    goPage: function goPage(page) {
-      if (page >= 1) {
-        this._page = page;
-        this.reload();
-      }
-    },
-    /**
-     * Регистрация функции на событие
-     * @param {Array|string} eventName
-     * @param {function}     callback
-     * @param {*}            context
-     * @param {boolean}      singleExec
-     */
-    on: function on(eventName, callback, context, singleExec) {
-      var eventNames = [];
-      if (Array.isArray(eventName)) {
-        $.each(eventName, function (key, name) {
-          if (typeof name === 'string' && name) {
-            eventNames.push(name);
-          }
-        });
-      } else if (typeof eventName === 'string' && eventName) {
-        eventNames.push(eventName);
-      } else {
-        return;
-      }
-      var that = this;
-      $.each(eventNames, function (key, name) {
-        if (!Array.isArray(that._events[name])) {
-          that._events[name] = [];
-        }
-        that._events[name].push({
-          context: context ? context : that,
-          callback: callback,
-          singleExec: !!singleExec
-        });
-      });
-    },
-    /**
-     * Получение переводов текущего языка
-     * @return {object}
-     */
-    getLang: function getLang() {
-      return $.extend(true, {}, this._options.langItems);
-    },
-    /**
-     * Установка видимых колонок, не указанные колонки будут скрыты
-     * @param {Array} columns
-     */
-    setColumnsShow: function setColumnsShow(columns) {
-      if (!Array.isArray(columns)) {
-        return;
-      }
-      var isChange = false;
-      var table = this;
-      this._countColumnsShow = 0;
-      this._columns.map(function (column) {
-        var options = column.getOptions();
-        if (options.hasOwnProperty('field') && typeof options.field === 'string') {
-          var isShow = columns.indexOf(options.field) >= 0;
-          if (column.isShow() !== isShow) {
-            column.setShow(isShow);
-            isChange = true;
-          }
-        }
-        if (column.isShow()) {
-          table._countColumnsShow++;
-        }
-      });
-      if (isChange) {
-        coreuiTablePrivate._trigger(this, 'columns_change');
-        this.refresh();
-      }
-    },
-    /**
-     * Показ колонок
-     * @param {Array} columns
-     */
-    showColumns: function showColumns(columns) {
-      if (!Array.isArray(columns)) {
-        return;
-      }
-      var isChange = false;
-      var table = this;
-      this._countColumnsShow = 0;
-      this._columns.map(function (column) {
-        var options = column.getOptions();
-        if (options.hasOwnProperty('field') && typeof options.field === 'string' && columns.indexOf(options.field) >= 0 && !column.isShow()) {
-          column.setShow(true);
-          isChange = true;
-        }
-        if (column.isShow()) {
-          table._countColumnsShow++;
-        }
-      });
-      if (isChange) {
-        coreuiTablePrivate._trigger(this, 'columns_change');
-        this.refresh();
-      }
-    },
-    /**
-     * Скрытие колонок
-     * @param {Array} columns
-     */
-    hideColumns: function hideColumns(columns) {
-      if (!Array.isArray(columns)) {
-        return;
-      }
-      var isChange = false;
-      var table = this;
-      this._countColumnsShow = 0;
-      this._columns.map(function (column) {
-        var options = column.getOptions();
-        if (options.hasOwnProperty('field') && typeof options.field === 'string' && columns.indexOf(options.field) >= 0 && column.isShow()) {
-          column.setShow(false);
-          isChange = true;
-        }
-        if (column.isShow()) {
-          table._countColumnsShow++;
-        }
-      });
-      if (isChange) {
-        coreuiTablePrivate._trigger(this, 'columns_change');
-        this.refresh();
-      }
-    },
-    /**
-     * Получение поисковых данных
-     * @property {boolean} extOptions
-     * @return {*[]}
-     */
-    getSearchData: function getSearchData(extOptions) {
-      var searchData = [];
-      this._search.map(function (control) {
-        var field = control.getField();
-        if (field) {
-          var value = control.getValue();
-          if (value !== null) {
-            var search = {
-              field: field,
-              value: value
-            };
-            if (extOptions) {
-              search.filter = typeof control.filter === 'function' ? control.filter : null;
-              search.type = control._options.type;
-            }
-            searchData.push(search);
-          }
-        }
-      });
-      return searchData;
-    },
-    /**
-     * Получение данных из фильтров
-     * @property {boolean} extOptions
-     * @return {*[]}
-     */
-    getFilterData: function getFilterData(extOptions) {
-      var filterData = [];
-      this._filters.map(function (control) {
-        var field = control.getField();
-        if (field) {
-          var value = control.getValue();
-          if (value !== null) {
-            var filter = {
-              field: field,
-              value: value
-            };
-            if (extOptions) {
-              filter.filter = typeof control.filter === 'function' ? control.filter : null;
-            }
-            filterData.push(filter);
-          }
-        }
-      });
-      return filterData;
-    },
-    /**
-     * Поиск по таблице с использованием данных из поиска и фильтров
-     */
-    searchRecords: function searchRecords() {
-      var searchData = this.getSearchData();
-      var filterData = this.getFilterData();
-      this._page = 1;
-      if (this._isRecordsRequest) {
-        if (typeof this._options.recordsRequest === 'function') {
-          this.loadByFunction(this._options.recordsRequest);
-        } else {
-          this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
-        }
-      } else {
-        coreuiTablePrivate.searchLocalRecords(this);
-        this.refresh();
-      }
-      coreuiTablePrivate._trigger(this, 'filters_change', [filterData]);
-      coreuiTablePrivate._trigger(this, 'search_change', [searchData]);
-    },
-    /**
-     * Очистка поисковых данных
-     */
-    clearSearch: function clearSearch() {
-      $.each(this._search, function (key, search) {
-        search.setValue(null);
-      });
-      this.searchRecords();
-    },
-    /**
-     * Очистка поисковых данных в фильтрах
-     */
-    clearFilters: function clearFilters() {
-      $.each(this._filters, function (key, filter) {
-        filter.setValue(null);
-      });
-      this.searchRecords();
-    },
-    /**
-     * Получение записи по индексу
-     * @param {string|number} index
-     * @return {object|null}
-     */
-    getRecordByIndex: function getRecordByIndex(index) {
-      if (['string', 'number'].indexOf(_typeof(index)) < 0 || index === '') {
-        return null;
-      }
-      index = Number(index);
-      if (index <= 0) {
-        return null;
-      }
-      var record = null;
-      $.each(this._records, function (key, recordItem) {
-        if (recordItem.index === index) {
-          record = {
-            index: recordItem.index,
-            data: $.extend(true, {}, recordItem.data),
-            meta: recordItem.meta ? $.extend(true, {}, recordItem.meta) : null
-          };
-          return false;
-        }
-      });
-      return record;
-    },
-    /**
-     * Получение записи по id
-     * @param {string} id
-     * @return {object|null}
-     */
-    getRecordById: function getRecordById(id) {
-      return this.getRecordByField(this._options.primaryKey, id);
-    },
-    /**
-     * Получение записи по полю и его значению
-     * @param {string}        field
-     * @param {string|number} value
-     * @return {object|null}
-     */
-    getRecordByField: function getRecordByField(field, value) {
-      var record = null;
-      $.each(this._records, function (key, recordItem) {
-        if (recordItem.data.hasOwnProperty(field) && recordItem.data[field] === value) {
-          record = $.extend(true, {}, recordItem);
-          return false;
-        }
-      });
-      return record;
-    },
-    /**
-     * Получение контрола по его id
-     * @param {string} id
-     * @return {object}
-     */
-    getControlById: function getControlById(id) {
-      var result = null;
-      $.each(this._controls, function (key, control) {
-        if (control.hasOwnProperty('getId') && typeof control.getId === 'function' && control.getId() === id) {
-          result = control;
-          return false;
-        }
-      });
-      return result;
-    },
-    /**
-     * Получение контрола поиска по его id
-     * @param {string} id
-     * @return {object}
-     */
-    getSearchControlById: function getSearchControlById(id) {
-      var result = null;
-      $.each(this._search, function (key, search) {
-        if (search.hasOwnProperty('getId') && typeof search.getId === 'function' && search.getId() === id) {
-          result = search;
-          return false;
-        }
-      });
-      return result;
-    },
-    /**
-     * Сортировка по полям
-     * @param {Array} sorting
-     */
-    sortFields: function sortFields(sorting) {
-      if (!Array.isArray(sorting)) {
-        return;
-      }
-      var that = this;
-      var columnsConverters = {};
-      this._sort = [];
-      $.each(sorting, function (key, sort) {
-        if (!coreuiTableUtils.isObject(sort) || !sort.hasOwnProperty('field') || !sort.hasOwnProperty('order') || typeof sort.field !== 'string' || typeof sort.order !== 'string' || !sort.field || !sort.order) {
-          return;
-        }
-        var columnSortable = false;
-        $.each(that._columns, function (key, column) {
-          var options = column.getOptions();
-          if (options.hasOwnProperty('field') && options.hasOwnProperty('sortable') && typeof options.field === 'string' && options.field === sort.field && options.sortable) {
-            columnSortable = true;
-            if (typeof column.convertToString === 'function') {
-              columnsConverters[options.field] = column.convertToString;
-            }
-            return false;
-          }
-        });
-        if (columnSortable) {
-          that._sort.push({
-            field: sort.field,
-            order: sort.order
-          });
-        }
-      });
-      this._page = 1;
-      if (this._sort.length >= 0) {
+    }, {
+      key: "reload",
+      value: function reload() {
         if (this._isRecordsRequest) {
           if (typeof this._options.recordsRequest === 'function') {
             this.loadByFunction(this._options.recordsRequest);
           } else {
             this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
           }
-          coreuiTablePrivate.setColumnsSort(this, this._sort);
+        }
+      }
+
+      /**
+       * Пересоздание тела таблицы
+       */
+    }, {
+      key: "refresh",
+      value: function refresh() {
+        var table = TableRender.renderTable(this);
+        TableElements.getTable(this.getId()).replaceWith(table);
+        TablePrivate._trigger(this, 'table_show', [this]);
+        TablePrivate._trigger(this, 'records_show', [this]);
+      }
+
+      /**
+       * Установка общего количества записей на странице
+       * @param recordsPerPage
+       */
+    }, {
+      key: "setPageSize",
+      value: function setPageSize(recordsPerPage) {
+        this._recordsPerPage = recordsPerPage;
+        TablePrivate._trigger(this, 'page_size_update');
+      }
+
+      /**
+       * Выбор всех записей в таблице
+       */
+    }, {
+      key: "selectAll",
+      value: function selectAll() {
+        TableElements.selectTrAll(this.getId());
+        TablePrivate._trigger(this, 'record_select_all');
+      }
+
+      /**
+       * Отмена выбор всех записей в таблице
+       */
+    }, {
+      key: "unselectAll",
+      value: function unselectAll() {
+        TableElements.unselectTrAll(this.getId());
+        TablePrivate._trigger(this, 'record_unselect_all');
+      }
+
+      /**
+       * Выбор записи в таблице
+       * @param {string} id
+       */
+    }, {
+      key: "selectRecord",
+      value: function selectRecord(id) {
+        var record = this.getRecordById(id);
+        if (!record) {
+          return;
+        }
+        var tr = TableElements.getTrByIndex(this.getId(), record.index);
+        if (tr.length === 0) {
+          return;
+        }
+        TableElements.selectTr(tr);
+        TablePrivate._trigger(this, 'record_select', [record]);
+      }
+
+      /**
+       * Выбор записи в таблице по индексу
+       * @param {int} index
+       */
+    }, {
+      key: "selectRecordByIndex",
+      value: function selectRecordByIndex(index) {
+        var record = this.getRecordByIndex(index);
+        if (!record) {
+          return;
+        }
+        var tr = TableElements.getTrByIndex(this.getId(), record.index);
+        if (tr.length === 0) {
+          return;
+        }
+        TableElements.selectTr(tr);
+        TablePrivate._trigger(this, 'record_select', [record]);
+      }
+
+      /**
+       * Отмена выбора записи в таблице
+       * @param {string} id
+       */
+    }, {
+      key: "unselectRecord",
+      value: function unselectRecord(id) {
+        var record = this.getRecordById(id);
+        if (!record) {
+          return;
+        }
+        var tr = TableElements.getTrByIndex(this.getId(), record.index);
+        if (!tr) {
+          return;
+        }
+        TableElements.unselectTr(tr);
+        TablePrivate._trigger(this, 'record_unselect', [record.data]);
+      }
+
+      /**
+       * Получение выбранных id
+       * @return {array}
+       */
+    }, {
+      key: "getSelectedRecordsId",
+      value: function getSelectedRecordsId() {
+        var records = [];
+        var that = this;
+        var field = this._options.primaryKey;
+        $.each(TableElements.getSelectedIndexes(this.getId()), function (key, index) {
+          var record = that.getRecordByIndex(index);
+          if (!record || !record.data.hasOwnProperty(field)) {
+            return;
+          }
+          records.push(record.data[field]);
+        });
+        return records;
+      }
+
+      /**
+       * Получение выбранных записей
+       * @return {array}
+       */
+    }, {
+      key: "getSelectedRecords",
+      value: function getSelectedRecords() {
+        var records = [];
+        var that = this;
+        $.each(TableElements.getSelectedIndexes(this.getId()), function (key, index) {
+          var record = that.getRecordByIndex(index);
+          if (!record) {
+            return;
+          }
+          records.push(record);
+        });
+        return records;
+      }
+
+      /**
+       * Получение записи по id
+       * @param id
+       * @return {object|null}
+       * @deprecated
+       */
+    }, {
+      key: "getRecord",
+      value: function getRecord(id) {
+        var record = this.getRecordById(id);
+        if (!record) {
+          return null;
+        }
+        return record.data;
+      }
+
+      /**
+       * Получение записей
+       */
+    }, {
+      key: "getRecords",
+      value: function getRecords() {
+        var records = [];
+        $.each(this._records, function (key, record) {
+          records.push($.extend(true, {}, record));
+        });
+        return records;
+      }
+
+      /**
+       * Получение данных из существующих записей
+       * @return {Array}
+       * @deprecated getRecordsData
+       */
+    }, {
+      key: "getData",
+      value: function getData() {
+        return this.getRecordsData();
+      }
+
+      /**
+       * Получение данных из существующих записей
+       * @return {Array}
+       */
+    }, {
+      key: "getRecordsData",
+      value: function getRecordsData() {
+        var data = [];
+        $.each(this._records, function (key, record) {
+          data.push($.extend(true, {}, record.data));
+        });
+        return data;
+      }
+
+      /**
+       * Переход к предыдущей странице
+       */
+    }, {
+      key: "prevPage",
+      value: function prevPage() {
+        if (this._page > 1) {
+          this._page--;
+          this.reload();
+        }
+      }
+
+      /**
+       * Переход к следующей странице
+       * @return {array}
+       */
+    }, {
+      key: "nextPage",
+      value: function nextPage() {
+        var totalPages = this._recordsTotal > 0 && this._recordsPerPage > 0 ? Math.ceil(this._recordsTotal / this._recordsPerPage) : 1;
+        if (this._page < totalPages) {
+          this._page++;
+          this.reload();
+        }
+      }
+
+      /**
+       * Переход к указанной странице
+       */
+    }, {
+      key: "goPage",
+      value: function goPage(page) {
+        if (page >= 1) {
+          this._page = page;
+          this.reload();
+        }
+      }
+
+      /**
+       * Регистрация функции на событие
+       * @param {Array|string} eventName
+       * @param {function}     callback
+       * @param {*}            context
+       * @param {boolean}      singleExec
+       */
+    }, {
+      key: "on",
+      value: function on(eventName, callback, context, singleExec) {
+        var eventNames = [];
+        if (Array.isArray(eventName)) {
+          $.each(eventName, function (key, name) {
+            if (typeof name === 'string' && name) {
+              eventNames.push(name);
+            }
+          });
+        } else if (typeof eventName === 'string' && eventName) {
+          eventNames.push(eventName);
         } else {
-          this._records = coreuiTablePrivate.sortRecordsByFields(this._records, this._sort, columnsConverters);
+          return;
+        }
+        var that = this;
+        $.each(eventNames, function (key, name) {
+          if (!Array.isArray(that._events[name])) {
+            that._events[name] = [];
+          }
+          that._events[name].push({
+            context: context ? context : that,
+            callback: callback,
+            singleExec: !!singleExec
+          });
+        });
+      }
+
+      /**
+       * Получение переводов текущего языка
+       * @return {object}
+       */
+    }, {
+      key: "getLang",
+      value: function getLang() {
+        return $.extend(true, {}, this._options.langItems);
+      }
+
+      /**
+       * Установка видимых колонок, не указанные колонки будут скрыты
+       * @param {Array} columns
+       */
+    }, {
+      key: "setColumnsShow",
+      value: function setColumnsShow(columns) {
+        if (!Array.isArray(columns)) {
+          return;
+        }
+        var isChange = false;
+        var table = this;
+        this._countColumnsShow = 0;
+        this._columns.map(function (column) {
+          var options = column.getOptions();
+          if (options.hasOwnProperty('field') && typeof options.field === 'string') {
+            var isShow = columns.indexOf(options.field) >= 0;
+            if (column.isShow() !== isShow) {
+              column.setShow(isShow);
+              isChange = true;
+            }
+          }
+          if (column.isShow()) {
+            table._countColumnsShow++;
+          }
+        });
+        if (isChange) {
+          TablePrivate._trigger(this, 'columns_change');
           this.refresh();
         }
       }
-      coreuiTablePrivate._trigger(this, 'records_sort', [this]);
-    },
-    /**
-     * Сортировка по умолчанию
-     */
-    sortDefault: function sortDefault() {
-      this._sort = [];
-      if (this._isRecordsRequest) {
-        if (typeof this._options.recordsRequest === 'function') {
-          this.loadByFunction(this._options.recordsRequest);
-        } else {
-          this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+
+      /**
+       * Показ колонок
+       * @param {Array} columns
+       */
+    }, {
+      key: "showColumns",
+      value: function showColumns(columns) {
+        if (!Array.isArray(columns)) {
+          return;
         }
-        coreuiTablePrivate.setColumnsSort(this);
-      } else {
-        this._records = coreuiTablePrivate.sortRecordsBySeq(this._records);
-        this.refresh();
+        var isChange = false;
+        var table = this;
+        this._countColumnsShow = 0;
+        this._columns.map(function (column) {
+          var options = column.getOptions();
+          if (options.hasOwnProperty('field') && typeof options.field === 'string' && columns.indexOf(options.field) >= 0 && !column.isShow()) {
+            column.setShow(true);
+            isChange = true;
+          }
+          if (column.isShow()) {
+            table._countColumnsShow++;
+          }
+        });
+        if (isChange) {
+          TablePrivate._trigger(this, 'columns_change');
+          this.refresh();
+        }
       }
-      coreuiTablePrivate._trigger(this, 'records_sort', [this]);
-    },
-    /**
-     * Удаление строки из таблицы по индексу
-     * @param index
-     */
-    removeRecordByIndex: function removeRecordByIndex(index) {
-      var recordKey = null;
-      $.each(this._records, function (key, recordItem) {
-        if (recordItem.index === index) {
-          recordKey = key;
-          return false;
+
+      /**
+       * Скрытие колонок
+       * @param {Array} columns
+       */
+    }, {
+      key: "hideColumns",
+      value: function hideColumns(columns) {
+        if (!Array.isArray(columns)) {
+          return;
         }
-      });
-      if (recordKey !== null && recordKey >= 0) {
-        this._records.splice(recordKey, 1);
+        var isChange = false;
+        var table = this;
+        this._countColumnsShow = 0;
+        this._columns.map(function (column) {
+          var options = column.getOptions();
+          if (options.hasOwnProperty('field') && typeof options.field === 'string' && columns.indexOf(options.field) >= 0 && column.isShow()) {
+            column.setShow(false);
+            isChange = true;
+          }
+          if (column.isShow()) {
+            table._countColumnsShow++;
+          }
+        });
+        if (isChange) {
+          TablePrivate._trigger(this, 'columns_change');
+          this.refresh();
+        }
+      }
+
+      /**
+       * Получение поисковых данных
+       * @property {boolean} extOptions
+       * @return {*[]}
+       */
+    }, {
+      key: "getSearchData",
+      value: function getSearchData(extOptions) {
+        var searchData = [];
+        this._search.map(function (control) {
+          var field = control.getField();
+          if (field) {
+            var value = control.getValue();
+            if (value !== null) {
+              var search = {
+                field: field,
+                value: value
+              };
+              if (extOptions) {
+                search.filter = typeof control.filter === 'function' ? control.filter : null;
+                search.type = control._options.type;
+              }
+              searchData.push(search);
+            }
+          }
+        });
+        return searchData;
+      }
+
+      /**
+       * Получение данных из фильтров
+       * @property {boolean} extOptions
+       * @return {*[]}
+       */
+    }, {
+      key: "getFilterData",
+      value: function getFilterData(extOptions) {
+        var filterData = [];
+        this._filters.map(function (control) {
+          var field = control.getField();
+          if (field) {
+            var value = control.getValue();
+            if (value !== null) {
+              var filter = {
+                field: field,
+                value: value
+              };
+              if (extOptions) {
+                filter.filter = typeof control.filter === 'function' ? control.filter : null;
+              }
+              filterData.push(filter);
+            }
+          }
+        });
+        return filterData;
+      }
+
+      /**
+       * Поиск по таблице с использованием данных из поиска и фильтров
+       */
+    }, {
+      key: "searchRecords",
+      value: function searchRecords() {
+        var searchData = this.getSearchData();
+        var filterData = this.getFilterData();
+        this._page = 1;
+        if (this._isRecordsRequest) {
+          if (typeof this._options.recordsRequest === 'function') {
+            this.loadByFunction(this._options.recordsRequest);
+          } else {
+            this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+          }
+        } else {
+          TablePrivate.searchLocalRecords(this);
+          this.refresh();
+        }
+        TablePrivate._trigger(this, 'filters_change', [filterData]);
+        TablePrivate._trigger(this, 'search_change', [searchData]);
+      }
+
+      /**
+       * Очистка поисковых данных
+       */
+    }, {
+      key: "clearSearch",
+      value: function clearSearch() {
+        $.each(this._search, function (key, search) {
+          search.setValue(null);
+        });
+        this.searchRecords();
+      }
+
+      /**
+       * Очистка поисковых данных в фильтрах
+       */
+    }, {
+      key: "clearFilters",
+      value: function clearFilters() {
+        $.each(this._filters, function (key, filter) {
+          filter.setValue(null);
+        });
+        this.searchRecords();
+      }
+
+      /**
+       * Получение записи по индексу
+       * @param {string|number} index
+       * @return {object|null}
+       */
+    }, {
+      key: "getRecordByIndex",
+      value: function getRecordByIndex(index) {
+        if (['string', 'number'].indexOf(_typeof(index)) < 0 || index === '') {
+          return null;
+        }
+        index = Number(index);
+        if (index <= 0) {
+          return null;
+        }
+        var record = null;
+        $.each(this._records, function (key, recordItem) {
+          if (recordItem.index === index) {
+            record = {
+              index: recordItem.index,
+              data: $.extend(true, {}, recordItem.data),
+              meta: recordItem.meta ? $.extend(true, {}, recordItem.meta) : null
+            };
+            return false;
+          }
+        });
+        return record;
+      }
+
+      /**
+       * Получение записи по id
+       * @param {string} id
+       * @return {object|null}
+       */
+    }, {
+      key: "getRecordById",
+      value: function getRecordById(id) {
+        return this.getRecordByField(this._options.primaryKey, id);
+      }
+
+      /**
+       * Получение записи по полю и его значению
+       * @param {string}        field
+       * @param {string|number} value
+       * @return {object|null}
+       */
+    }, {
+      key: "getRecordByField",
+      value: function getRecordByField(field, value) {
+        var record = null;
+        $.each(this._records, function (key, recordItem) {
+          if (recordItem.data.hasOwnProperty(field) && recordItem.data[field] === value) {
+            record = $.extend(true, {}, recordItem);
+            return false;
+          }
+        });
+        return record;
+      }
+
+      /**
+       * Получение контрола по его id
+       * @param {string} id
+       * @return {object}
+       */
+    }, {
+      key: "getControlById",
+      value: function getControlById(id) {
+        var result = null;
+        $.each(this._controls, function (key, control) {
+          if (control.hasOwnProperty('getId') && typeof control.getId === 'function' && control.getId() === id) {
+            result = control;
+            return false;
+          }
+        });
+        return result;
+      }
+
+      /**
+       * Получение контрола поиска по его id
+       * @param {string} id
+       * @return {object}
+       */
+    }, {
+      key: "getSearchControlById",
+      value: function getSearchControlById(id) {
+        var result = null;
+        $.each(this._search, function (key, search) {
+          if (search.hasOwnProperty('getId') && typeof search.getId === 'function' && search.getId() === id) {
+            result = search;
+            return false;
+          }
+        });
+        return result;
+      }
+
+      /**
+       * Сортировка по полям
+       * @param {Array} sorting
+       */
+    }, {
+      key: "sortFields",
+      value: function sortFields(sorting) {
+        if (!Array.isArray(sorting)) {
+          return;
+        }
         var that = this;
-        var tr = coreuiTableElements.getTrByIndex(this.getId(), index);
+        var columnsConverters = {};
+        this._sort = [];
+        $.each(sorting, function (key, sort) {
+          if (!TableUtils.isObject(sort) || !sort.hasOwnProperty('field') || !sort.hasOwnProperty('order') || typeof sort.field !== 'string' || typeof sort.order !== 'string' || !sort.field || !sort.order) {
+            return;
+          }
+          var columnSortable = false;
+          $.each(that._columns, function (key, column) {
+            var options = column.getOptions();
+            if (options.hasOwnProperty('field') && options.hasOwnProperty('sortable') && typeof options.field === 'string' && options.field === sort.field && options.sortable) {
+              columnSortable = true;
+              if (typeof column.convertToString === 'function') {
+                columnsConverters[options.field] = column.convertToString;
+              }
+              return false;
+            }
+          });
+          if (columnSortable) {
+            that._sort.push({
+              field: sort.field,
+              order: sort.order
+            });
+          }
+        });
+        this._page = 1;
+        if (this._sort.length >= 0) {
+          if (this._isRecordsRequest) {
+            if (typeof this._options.recordsRequest === 'function') {
+              this.loadByFunction(this._options.recordsRequest);
+            } else {
+              this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+            }
+            TablePrivate.setColumnsSort(this, this._sort);
+          } else {
+            this._records = TablePrivate.sortRecordsByFields(this._records, this._sort, columnsConverters);
+            this.refresh();
+          }
+        }
+        TablePrivate._trigger(this, 'records_sort', [this]);
+      }
+
+      /**
+       * Сортировка по умолчанию
+       */
+    }, {
+      key: "sortDefault",
+      value: function sortDefault() {
+        this._sort = [];
+        if (this._isRecordsRequest) {
+          if (typeof this._options.recordsRequest === 'function') {
+            this.loadByFunction(this._options.recordsRequest);
+          } else {
+            this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
+          }
+          TablePrivate.setColumnsSort(this);
+        } else {
+          this._records = TablePrivate.sortRecordsBySeq(this._records);
+          this.refresh();
+        }
+        TablePrivate._trigger(this, 'records_sort', [this]);
+      }
+
+      /**
+       * Удаление строки из таблицы по индексу
+       * @param index
+       */
+    }, {
+      key: "removeRecordByIndex",
+      value: function removeRecordByIndex(index) {
+        var recordKey = null;
+        $.each(this._records, function (key, recordItem) {
+          if (recordItem.index === index) {
+            recordKey = key;
+            return false;
+          }
+        });
+        if (recordKey !== null && recordKey >= 0) {
+          this._records.splice(recordKey, 1);
+          var that = this;
+          var tr = TableElements.getTrByIndex(this.getId(), index);
+          if (tr.length >= 0) {
+            tr.fadeOut('fast', function () {
+              tr.remove();
+              if (that._records.length === 0) {
+                var tbody = TableElements.getTableTbody(that.getId());
+                tbody.append(TableUtils.render(tpl['table/record/empty.html'], {
+                  columnsCount: that._countColumnsShow,
+                  lang: that.getLang()
+                }));
+              }
+            });
+          }
+          this._recordsNumber--;
+        }
+      }
+
+      /**
+       * Добавление строки в таблицу после строки с индексом
+       * @param {object} recordData
+       * @param {number} index
+       */
+    }, {
+      key: "addRecordAfterIndex",
+      value: function addRecordAfterIndex(recordData, index) {
+        var tr = TableElements.getTrByIndex(this.getId(), index);
         if (tr.length >= 0) {
-          tr.fadeOut('fast', function () {
-            tr.remove();
-            if (that._records.length === 0) {
-              var tbody = coreuiTableElements.getTableTbody(that.getId());
-              tbody.append(coreuiTableUtils.render(tpl['table/record/empty.html'], {
-                columnsCount: that._countColumnsShow,
-                lang: that.getLang()
-              }));
+          var record = TablePrivate.addRecord(this, recordData, index);
+          if (record) {
+            TableElements.getTrEmpty(this.getId()).remove();
+            tr.after(TableRender.renderRecord(this, record));
+            this._recordsNumber++;
+          }
+        }
+      }
+
+      /**
+       * Добавление строки в таблицу перед строкой с индексом
+       * @param {object} recordData
+       * @param {number} index
+       */
+    }, {
+      key: "addRecordBeforeIndex",
+      value: function addRecordBeforeIndex(recordData, index) {
+        var tr = TableElements.getTrByIndex(this.getId(), index);
+        if (tr.length >= 0) {
+          var record = TablePrivate.addRecordBefore(this, recordData, index);
+          if (record) {
+            TableElements.getTrEmpty(this.getId()).remove();
+            tr.before(TableRender.renderRecord(this, record));
+            this._recordsNumber++;
+          }
+        }
+      }
+
+      /**
+       * Добавление строки в начало таблицы
+       * @param {object} recordData
+       */
+    }, {
+      key: "addRecordFirst",
+      value: function addRecordFirst(recordData) {
+        var tbody = TableElements.getTableTbody(this.getId());
+        if (tbody.length >= 0) {
+          var record = TablePrivate.addRecord(this, recordData, 0);
+          if (record) {
+            TableElements.getTrEmpty(this.getId()).remove();
+            tbody.prepend(TableRender.renderRecord(this, record));
+            this._recordsNumber++;
+          }
+        }
+      }
+
+      /**
+       * Добавление строки в конец таблицы
+       * @param {object} recordData
+       */
+    }, {
+      key: "addRecordLast",
+      value: function addRecordLast(recordData) {
+        var tbody = TableElements.getTableTbody(this.getId());
+        if (tbody.length >= 0) {
+          var record = TablePrivate.addRecord(this, recordData);
+          if (record) {
+            TableElements.getTrEmpty(this.getId()).remove();
+            tbody.append(TableRender.renderRecord(this, record));
+            this._recordsNumber++;
+          }
+        }
+      }
+
+      /**
+       * Установка записей для таблицы
+       * @param {Array}  records
+       * @param {number} total
+       */
+    }, {
+      key: "setRecords",
+      value: function setRecords(records, total) {
+        if (!Array.isArray(records)) {
+          return;
+        }
+        this._recordsTotal = TableUtils.isNumeric(total) ? parseInt(total) : records.length;
+        TablePrivate.setRecords(this, records);
+        if (records.length > 0) {
+          this._recordsNumber = this._page === 1 ? 1 : (this._page - 1) * this._recordsPerPage + 1;
+        }
+        var recordsElements = TableRender.renderRecords(this, this._records);
+        var tableBody = TableElements.getTableTbody(this.getId());
+        tableBody.html('');
+        $.each(recordsElements, function (key, recordElement) {
+          tableBody.append(recordElement);
+        });
+        TablePrivate._trigger(this, 'records_show', [this]);
+      }
+
+      /**
+       * Получение количества строк
+       * @return {number}
+       */
+    }, {
+      key: "getRecordsCount",
+      value: function getRecordsCount() {
+        var count = 0;
+        if (this._isRecordsRequest) {
+          count = this._recordsTotal;
+        } else {
+          this._records.map(function (record) {
+            if (record.show) {
+              count++;
             }
           });
         }
-        this._recordsNumber--;
+        return count;
       }
-    },
-    /**
-     * Добавление строки в таблицу после строки с индексом
-     * @param {object} recordData
-     * @param {number} index
-     */
-    addRecordAfterIndex: function addRecordAfterIndex(recordData, index) {
-      var tr = coreuiTableElements.getTrByIndex(this.getId(), index);
-      if (tr.length >= 0) {
-        var record = coreuiTablePrivate.addRecord(this, recordData, index);
-        if (record) {
-          coreuiTableElements.getTrEmpty(this.getId()).remove();
-          tr.after(coreuiTableRender.renderRecord(this, record));
-          this._recordsNumber++;
-        }
-      }
-    },
-    /**
-     * Добавление строки в таблицу перед строкой с индексом
-     * @param {object} recordData
-     * @param {number} index
-     */
-    addRecordBeforeIndex: function addRecordBeforeIndex(recordData, index) {
-      var tr = coreuiTableElements.getTrByIndex(this.getId(), index);
-      if (tr.length >= 0) {
-        var record = coreuiTablePrivate.addRecordBefore(this, recordData, index);
-        if (record) {
-          coreuiTableElements.getTrEmpty(this.getId()).remove();
-          tr.before(coreuiTableRender.renderRecord(this, record));
-          this._recordsNumber++;
-        }
-      }
-    },
-    /**
-     * Добавление строки в начало таблицы
-     * @param {object} recordData
-     */
-    addRecordFirst: function addRecordFirst(recordData) {
-      var tbody = coreuiTableElements.getTableTbody(this.getId());
-      if (tbody.length >= 0) {
-        var record = coreuiTablePrivate.addRecord(this, recordData, 0);
-        if (record) {
-          coreuiTableElements.getTrEmpty(this.getId()).remove();
-          tbody.prepend(coreuiTableRender.renderRecord(this, record));
-          this._recordsNumber++;
-        }
-      }
-    },
-    /**
-     * Добавление строки в конец таблицы
-     * @param {object} recordData
-     */
-    addRecordLast: function addRecordLast(recordData) {
-      var tbody = coreuiTableElements.getTableTbody(this.getId());
-      if (tbody.length >= 0) {
-        var record = coreuiTablePrivate.addRecord(this, recordData);
-        if (record) {
-          coreuiTableElements.getTrEmpty(this.getId()).remove();
-          tbody.append(coreuiTableRender.renderRecord(this, record));
-          this._recordsNumber++;
-        }
-      }
-    },
-    /**
-     * Установка записей для таблицы
-     * @param {Array}  records
-     * @param {number} total
-     */
-    setRecords: function setRecords(records, total) {
-      if (!Array.isArray(records)) {
-        return;
-      }
-      this._recordsTotal = coreuiTableUtils.isNumeric(total) ? parseInt(total) : records.length;
-      coreuiTablePrivate.setRecords(this, records);
-      if (records.length > 0) {
-        this._recordsNumber = this._page === 1 ? 1 : (this._page - 1) * this._recordsPerPage + 1;
-      }
-      var recordsElements = coreuiTableRender.renderRecords(this, this._records);
-      var tableBody = coreuiTableElements.getTableTbody(this.getId());
-      tableBody.html('');
-      $.each(recordsElements, function (key, recordElement) {
-        tableBody.append(recordElement);
-      });
-      coreuiTablePrivate._trigger(this, 'records_show', [this]);
-    },
-    /**
-     * Получение количества строк
-     * @return {number}
-     */
-    getRecordsCount: function getRecordsCount() {
-      var count = 0;
-      if (this._isRecordsRequest) {
-        count = this._recordsTotal;
-      } else {
-        this._records.map(function (record) {
-          if (record.show) {
-            count++;
-          }
-        });
-      }
-      return count;
-    },
-    /**
-     * Раскрытие / скрытие дополнительных данных строки
-     * @param {number}                                   recordIndex
-     * @param {HTMLElement|jQuery|string|Array|function} content
-     * @param {boolean}                                  isRebuild - true default
-     */
-    expandRecordContent: function expandRecordContent(recordIndex, content, isRebuild) {
-      var recordElement = coreuiTableElements.getTrByIndex(this.getId(), recordIndex);
-      var recordExpanded = coreuiTableElements.getExpandRow(recordElement);
-      if (recordElement.hasClass('record-expanded')) {
-        if (recordExpanded) {
-          if (isRebuild === undefined || isRebuild) {
-            coreuiTableElements.removeExpandRow(recordExpanded);
-          } else {
-            coreuiTableElements.hideExpandRow(recordExpanded);
-          }
-        }
-        recordElement.removeClass('record-expanded');
-        coreuiTablePrivate._trigger(this, 'record_expand_hide', [recordIndex]);
-      } else {
-        if (recordExpanded) {
-          coreuiTableElements.showExpandRow(recordExpanded);
-          recordElement.addClass('record-expanded');
-          coreuiTablePrivate._trigger(this, 'record_expand_show', [recordIndex]);
-        } else {
-          var _recordIndex = recordElement.data('record-index');
-          if (typeof content === 'function') {
-            var callbackResult = content();
-            if (callbackResult instanceof Promise) {
-              var that = this;
-              callbackResult.then(function (result) {
-                coreuiTableElements.addExpandRow(that, recordElement, result);
-                coreuiTablePrivate._trigger(that, 'record_expand_show', [_recordIndex]);
-              })["catch"](function () {
-                coreuiTableElements.addExpandRow(that, recordElement, '');
-                coreuiTablePrivate._trigger(that, 'record_expand_show', [_recordIndex]);
-              });
+
+      /**
+       * Раскрытие / скрытие дополнительных данных строки
+       * @param {number}                                   recordIndex
+       * @param {HTMLElement|jQuery|string|Array|function} content
+       * @param {boolean}                                  isRebuild - true default
+       */
+    }, {
+      key: "expandRecordContent",
+      value: function expandRecordContent(recordIndex, content, isRebuild) {
+        var recordElement = TableElements.getTrByIndex(this.getId(), recordIndex);
+        var recordExpanded = TableElements.getExpandRow(recordElement);
+        if (recordElement.hasClass('record-expanded')) {
+          if (recordExpanded) {
+            if (isRebuild === undefined || isRebuild) {
+              TableElements.removeExpandRow(recordExpanded);
             } else {
-              coreuiTableElements.addExpandRow(this, recordElement, callbackResult);
-              coreuiTablePrivate._trigger(this, 'record_expand_show', [_recordIndex]);
+              TableElements.hideExpandRow(recordExpanded);
             }
+          }
+          recordElement.removeClass('record-expanded');
+          TablePrivate._trigger(this, 'record_expand_hide', [recordIndex]);
+        } else {
+          if (recordExpanded) {
+            TableElements.showExpandRow(recordExpanded);
+            recordElement.addClass('record-expanded');
+            TablePrivate._trigger(this, 'record_expand_show', [recordIndex]);
           } else {
-            coreuiTableElements.addExpandRow(this, recordElement, content);
-            coreuiTablePrivate._trigger(this, 'record_expand_show', [_recordIndex]);
+            var _recordIndex = recordElement.data('record-index');
+            if (typeof content === 'function') {
+              var callbackResult = content();
+              if (callbackResult instanceof Promise) {
+                var that = this;
+                callbackResult.then(function (result) {
+                  TableElements.addExpandRow(that, recordElement, result);
+                  TablePrivate._trigger(that, 'record_expand_show', [_recordIndex]);
+                })["catch"](function () {
+                  TableElements.addExpandRow(that, recordElement, '');
+                  TablePrivate._trigger(that, 'record_expand_show', [_recordIndex]);
+                });
+              } else {
+                TableElements.addExpandRow(this, recordElement, callbackResult);
+                TablePrivate._trigger(this, 'record_expand_show', [_recordIndex]);
+              }
+            } else {
+              TableElements.addExpandRow(this, recordElement, content);
+              TablePrivate._trigger(this, 'record_expand_show', [_recordIndex]);
+            }
           }
         }
       }
-    },
-    /**
-     * Раскрытие / скрытие дополнительных данных строки
-     * @param {number}  recordIndex
-     * @param {string}  url
-     * @param {boolean} isRebuild
-     */
-    expandRecordUrl: function expandRecordUrl(recordIndex, url, isRebuild) {
-      var that = this;
-      this.expandRecordContent(recordIndex, function () {
-        that.lock();
-        return new Promise(function (resolve, reject) {
-          $.ajax({
-            method: 'get',
-            url: url,
-            success: function success(response, textStatus, xhr) {
-              var result = response;
-              if (typeof response === 'string') {
-                if (String(xhr.getResponseHeader('Content-Type')).indexOf('application/json') === 0) {
-                  try {
-                    result = JSON.parse(response);
-                  } catch (e) {
-                    console.warn(e);
+
+      /**
+       * Раскрытие / скрытие дополнительных данных строки
+       * @param {number}  recordIndex
+       * @param {string}  url
+       * @param {boolean} isRebuild
+       */
+    }, {
+      key: "expandRecordUrl",
+      value: function expandRecordUrl(recordIndex, url, isRebuild) {
+        var that = this;
+        this.expandRecordContent(recordIndex, function () {
+          that.lock();
+          return new Promise(function (resolve, reject) {
+            $.ajax({
+              method: 'get',
+              url: url,
+              success: function success(response, textStatus, xhr) {
+                var result = response;
+                if (typeof response === 'string') {
+                  if (String(xhr.getResponseHeader('Content-Type')).indexOf('application/json') === 0) {
+                    try {
+                      result = JSON.parse(response);
+                    } catch (e) {
+                      console.warn(e);
+                    }
                   }
                 }
+                resolve(result);
+              },
+              error: function error(xhr, textStatus, errorThrown) {
+                reject(xhr, textStatus, errorThrown);
+              },
+              complete: function complete(xhr, textStatus) {
+                that.unlock();
               }
-              resolve(result);
-            },
-            error: function error(xhr, textStatus, errorThrown) {
-              reject(xhr, textStatus, errorThrown);
-            },
-            complete: function complete(xhr, textStatus) {
-              that.unlock();
-            }
+            });
           });
-        });
-      }, isRebuild);
-    }
-  };
+        }, isRebuild);
+      }
+    }]);
+  }();
 
-  var coreuiTable = {
+  var Table = {
     columns: {},
     controls: {},
     filters: {},
@@ -4265,9 +4425,8 @@
         options.lang = this.getSetting('lang');
       }
       var langItems = this.lang.hasOwnProperty(options.lang) ? this.lang[options.lang] : {};
-      options.langItems = options.hasOwnProperty('langItems') && coreuiTableUtils.isObject(options.langItems) ? $.extend(true, {}, langItems, options.langItems) : langItems;
-      var instance = $.extend(true, {}, coreuiTableInstance);
-      instance._init(this, options instanceof Object ? options : {});
+      options.langItems = options.hasOwnProperty('langItems') && TableUtils.isObject(options.langItems) ? $.extend(true, {}, langItems, options.langItems) : langItems;
+      var instance = new TableInstance(this, options instanceof Object ? options : {});
       var tableId = instance.getId();
       this._instances[tableId] = instance;
       return instance;
@@ -4352,7 +4511,7 @@
       });
       this._table = table;
       this._options = $.extend(true, this._options, options);
-      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : coreuiTableUtils.hashCode();
+      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : TableUtils.hashCode();
     }
 
     /**
@@ -4404,7 +4563,7 @@
   var ControlLink = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ControlLink(table, options) {
@@ -4437,7 +4596,7 @@
             }
           });
         }
-        var link = $(coreuiTableUtils.render(tpl['controls/link.html'], {
+        var link = $(TableUtils.render(tpl['controls/link.html'], {
           url: this._options.url,
           content: this._options.content,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
@@ -4474,7 +4633,7 @@
   var ControlButton = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ControlButton(table, options) {
@@ -4500,14 +4659,14 @@
       key: "render",
       value: function render() {
         var attributes = [];
-        if (coreuiTableUtils.isObject(this._options.attr)) {
+        if (TableUtils.isObject(this._options.attr)) {
           $.each(this._options.attr, function (name, value) {
             if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
               attributes.push(name + '="' + value + '"');
             }
           });
         }
-        var btn = $(coreuiTableUtils.render(tpl['controls/button.html'], {
+        var btn = $(TableUtils.render(tpl['controls/button.html'], {
           content: this._options.content,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
@@ -4544,7 +4703,7 @@
   var ControlDropdown = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ControlDropdown(table, options) {
@@ -4576,10 +4735,10 @@
         var attributes = [];
         if (Array.isArray(options.items)) {
           options.items.map(function (item) {
-            if (coreuiTableUtils.isObject(item) && typeof item.type === 'string') {
+            if (TableUtils.isObject(item) && typeof item.type === 'string') {
               if (item.type === 'link') {
                 if (item.hasOwnProperty('url') && item.hasOwnProperty('content') && typeof item.url === 'string' && typeof item.content === 'string') {
-                  var link = coreuiTableUtils.render(tpl['controls/dropdown/link.html'], {
+                  var link = TableUtils.render(tpl['controls/dropdown/link.html'], {
                     url: item.url,
                     content: item.content
                   });
@@ -4587,7 +4746,7 @@
                 }
               } else if (item.type === 'button') {
                 if (item.hasOwnProperty('content') && typeof item.content === 'string') {
-                  var button = $(coreuiTableUtils.render(tpl['controls/dropdown/button.html'], {
+                  var button = $(TableUtils.render(tpl['controls/dropdown/button.html'], {
                     url: item.url,
                     content: item.content
                   }));
@@ -4609,7 +4768,7 @@
             }
           });
         }
-        if (coreuiTableUtils.isObject(options.attr)) {
+        if (TableUtils.isObject(options.attr)) {
           if (options.attr.hasOwnProperty('type')) {
             delete options.attr.type;
           }
@@ -4623,7 +4782,7 @@
             attributes.push(name + '="' + value + '"');
           });
         }
-        var dropdown = $(coreuiTableUtils.render(tpl['controls/dropdown.html'], {
+        var dropdown = $(TableUtils.render(tpl['controls/dropdown.html'], {
           content: options.content,
           position: options.hasOwnProperty('position') && typeof options.position === 'string' ? options.position : 'end',
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
@@ -4656,7 +4815,7 @@
   var ControlButtonGroup = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ControlButtonGroup(table, options) {
@@ -4706,7 +4865,7 @@
             var result = null;
             if (link.hasOwnProperty('url') && link.hasOwnProperty('content') && typeof link.url === 'string' && typeof link.content === 'string') {
               var attributes = [];
-              if (!coreuiTableUtils.isObject(link.attr)) {
+              if (!TableUtils.isObject(link.attr)) {
                 link.attr = {};
               }
               if (link.attr.hasOwnProperty('href')) {
@@ -4720,7 +4879,7 @@
                   attributes.push(name + '="' + value + '"');
                 }
               });
-              result = coreuiTableUtils.render(tpl['controls/button_group/link.html'], {
+              result = TableUtils.render(tpl['controls/button_group/link.html'], {
                 url: link.url,
                 attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
                 content: link.content
@@ -4736,7 +4895,7 @@
             var result = null;
             if (button.hasOwnProperty('content') && typeof button.content === 'string') {
               var attributes = [];
-              if (!coreuiTableUtils.isObject(button.attr)) {
+              if (!TableUtils.isObject(button.attr)) {
                 button.attr = {};
               }
               if (button.attr.hasOwnProperty('type')) {
@@ -4750,7 +4909,7 @@
                   attributes.push(name + '="' + value + '"');
                 }
               });
-              result = $(coreuiTableUtils.render(tpl['controls/button_group/button.html'], {
+              result = $(TableUtils.render(tpl['controls/button_group/button.html'], {
                 content: button.content,
                 attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
               }));
@@ -4777,17 +4936,17 @@
               var attributes = [];
               var items = [];
               button.items.map(function (item) {
-                if (coreuiTableUtils.isObject(item) && typeof item.type === 'string') {
+                if (TableUtils.isObject(item) && typeof item.type === 'string') {
                   if (item.type === 'link') {
                     if (item.hasOwnProperty('url') && item.hasOwnProperty('content') && typeof item.url === 'string' && typeof item.content === 'string' && item.url) {
-                      items.push(coreuiTableUtils.render(tpl['controls/button_group/dropdown/link.html'], {
+                      items.push(TableUtils.render(tpl['controls/button_group/dropdown/link.html'], {
                         url: item.url,
                         content: item.content
                       }));
                     }
                   } else if (item.type === 'button') {
                     if (item.hasOwnProperty('content') && typeof item.content === 'string') {
-                      var btn = $(coreuiTableUtils.render(tpl['controls/button_group/dropdown/button.html'], {
+                      var btn = $(TableUtils.render(tpl['controls/button_group/dropdown/button.html'], {
                         content: item.content
                       }));
                       if (item.hasOwnProperty('onClick') && ['string', 'function'].indexOf(_typeof(item.onClick)) >= 0) {
@@ -4807,7 +4966,7 @@
                   }
                 }
               });
-              if (!coreuiTableUtils.isObject(button.attr)) {
+              if (!TableUtils.isObject(button.attr)) {
                 button.attr = {};
               }
               if (button.attr.hasOwnProperty('type')) {
@@ -4821,7 +4980,7 @@
                   attributes.push(name + '="' + value + '"');
                 }
               });
-              result = $(coreuiTableUtils.render(tpl['controls/button_group/dropdown.html'], {
+              result = $(TableUtils.render(tpl['controls/button_group/dropdown.html'], {
                 attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
                 position: button.hasOwnProperty('position') && typeof button.position === 'string' ? button.position : 'end',
                 content: button.content
@@ -4836,7 +4995,7 @@
             return result;
           };
           options.buttons.map(function (button) {
-            if (coreuiTableUtils.isObject(button) && typeof button.type === 'string') {
+            if (TableUtils.isObject(button) && typeof button.type === 'string') {
               if (button.type === 'link') {
                 var linkElement = makeLink(button);
                 if (linkElement) {
@@ -4882,7 +5041,7 @@
   var ControlCustom = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ControlCustom(table, options) {
@@ -4929,7 +5088,7 @@
   var ControlPageSize = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ControlPageSize(table, options) {
@@ -4943,8 +5102,8 @@
         },
         list: [25, 50, 100, 1000]
       };
-      if (options.hasOwnProperty('attr') && coreuiTableUtils.isObject(options.attr)) {
-        options.attr = coreuiTableUtils.mergeAttr(optionsOriginal.attr, options.attr);
+      if (options.hasOwnProperty('attr') && TableUtils.isObject(options.attr)) {
+        options.attr = TableUtils.mergeAttr(optionsOriginal.attr, options.attr);
       }
       options = $.extend(true, optionsOriginal, options);
       _this2 = _callSuper$N(this, ControlPageSize, [table, options]);
@@ -4967,14 +5126,14 @@
       value: function render() {
         var attributes = [];
         var table = this._table;
-        if (coreuiTableUtils.isObject(this._options.attr)) {
+        if (TableUtils.isObject(this._options.attr)) {
           $.each(this._options.attr, function (name, value) {
             if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
               attributes.push(name + '="' + value + '"');
             }
           });
         }
-        var control = $(coreuiTableUtils.render(tpl['controls/page-size.html'], {
+        var control = $(TableUtils.render(tpl['controls/page-size.html'], {
           recordsPerPageList: this._options.list,
           recordsPerPage: table._recordsPerPage,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
@@ -5010,7 +5169,7 @@
   var ControlPageJump = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ControlPageJump(table, options) {
@@ -5022,8 +5181,8 @@
           "class": 'input-group'
         }
       };
-      if (options.hasOwnProperty('attr') && coreuiTableUtils.isObject(options.attr)) {
-        options.attr = coreuiTableUtils.mergeAttr(optionsOriginal.attr, options.attr);
+      if (options.hasOwnProperty('attr') && TableUtils.isObject(options.attr)) {
+        options.attr = TableUtils.mergeAttr(optionsOriginal.attr, options.attr);
       }
       options = $.extend(true, optionsOriginal, options);
       return _callSuper$M(this, ControlPageJump, [table, options]);
@@ -5039,14 +5198,14 @@
       value: function render() {
         var attributes = [];
         var table = this._table;
-        if (coreuiTableUtils.isObject(this._options.attr)) {
+        if (TableUtils.isObject(this._options.attr)) {
           $.each(this._options.attr, function (name, value) {
             if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
               attributes.push(name + '="' + value + '"');
             }
           });
         }
-        var control = $(coreuiTableUtils.render(tpl['controls/page-jump.html'], {
+        var control = $(TableUtils.render(tpl['controls/page-jump.html'], {
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
         var input = $('input', control);
@@ -5067,7 +5226,7 @@
   var controlPages = {
     /**
      * Формирование контрола
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {object}              options
      * @return {jQuery}
      */
@@ -5081,14 +5240,14 @@
       var showPageLast = false;
       var pages = [];
       var pagesTotal = table._recordsTotal > 0 && table._recordsPerPage > 0 ? Math.ceil(table._recordsTotal / table._recordsPerPage) : 1;
-      if (coreuiTableUtils.isObject(options.attr)) {
+      if (TableUtils.isObject(options.attr)) {
         $.each(options.attr, function (name, value) {
           if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
             attributes.push(name + '="' + value + '"');
           }
         });
       }
-      if (table._recordsTotal > 0 && options.count > 0 && coreuiTableUtils.isNumeric(options.count)) {
+      if (table._recordsTotal > 0 && options.count > 0 && TableUtils.isNumeric(options.count)) {
         var count = Math.min(options.count, pagesTotal);
         var countHalf = Math.max(0, Math.floor(count / 2));
         if (count % 2 === 0) {
@@ -5120,7 +5279,7 @@
           showPageLast = true;
         }
       }
-      var control = $(coreuiTableUtils.render(tpl['controls/pages.html'], {
+      var control = $(TableUtils.render(tpl['controls/pages.html'], {
         currentPage: table._page,
         isActivePrev: table._page > 1,
         isActiveNext: table._page < pagesTotal,
@@ -5183,7 +5342,7 @@
   var ControlPages = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ControlPages(table, options) {
@@ -5199,8 +5358,8 @@
           "class": 'pagination mb-0'
         }
       };
-      if (options.hasOwnProperty('attr') && coreuiTableUtils.isObject(options.attr)) {
-        options.attr = coreuiTableUtils.mergeAttr(optionsOriginal.attr, options.attr);
+      if (options.hasOwnProperty('attr') && TableUtils.isObject(options.attr)) {
+        options.attr = TableUtils.mergeAttr(optionsOriginal.attr, options.attr);
       }
       options = $.extend(true, optionsOriginal, options);
       _this2 = _callSuper$L(this, ControlPages, [table, options]);
@@ -5247,7 +5406,7 @@
   var ControlTotal = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ControlTotal(table, options) {
@@ -5258,8 +5417,8 @@
           "class": 'px-1'
         }
       };
-      if (options.hasOwnProperty('attr') && coreuiTableUtils.isObject(options.attr)) {
-        options.attr = coreuiTableUtils.mergeAttr(optionsOriginal.attr, options.attr);
+      if (options.hasOwnProperty('attr') && TableUtils.isObject(options.attr)) {
+        options.attr = TableUtils.mergeAttr(optionsOriginal.attr, options.attr);
       }
       options = $.extend(true, optionsOriginal, options);
       return _callSuper$K(this, ControlTotal, [table, options]);
@@ -5275,14 +5434,14 @@
       value: function render() {
         var attributes = [];
         var table = this._table;
-        if (coreuiTableUtils.isObject(this._options.attr)) {
+        if (TableUtils.isObject(this._options.attr)) {
           $.each(this._options.attr, function (name, value) {
             if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
               attributes.push(name + '="' + value + '"');
             }
           });
         }
-        var control = $(coreuiTableUtils.render(tpl['controls/total.html'], {
+        var control = $(TableUtils.render(tpl['controls/total.html'], {
           recordsTotal: table._recordsTotal,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
           lang: table.getLang()
@@ -5312,7 +5471,7 @@
   var ControlSearch = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ControlSearch(table, options) {
@@ -5339,19 +5498,19 @@
         }
       }, options);
       _this2 = _callSuper$J(this, ControlSearch, [table, options]);
-      if (!coreuiTableUtils.isObject(_this2._options.btn)) {
+      if (!TableUtils.isObject(_this2._options.btn)) {
         _this2._options.btn = {};
       }
       if (!_this2._options.btn.hasOwnProperty('content') || typeof _this2._options.btn.content !== 'string') {
         _this2._options.btn.content = '<i class="bi bi-search"></i> ' + table.getLang().search;
       }
-      if (!coreuiTableUtils.isObject(_this2._options.btnClear)) {
+      if (!TableUtils.isObject(_this2._options.btnClear)) {
         _this2._options.btnClear = {};
       }
       if (!_this2._options.btnClear.hasOwnProperty('content') || typeof _this2._options.btnClear.content !== 'string') {
         _this2._options.btnClear.content = table.getLang().clear;
       }
-      if (!coreuiTableUtils.isObject(_this2._options.btnComplete)) {
+      if (!TableUtils.isObject(_this2._options.btnComplete)) {
         _this2._options.btnComplete = {};
       }
       if (!_this2._options.btnComplete.hasOwnProperty('content') || typeof _this2._options.btnComplete.content !== 'string') {
@@ -5373,10 +5532,10 @@
         var btnClear = '';
         var that = this;
         var table = this._table;
-        if (!coreuiTableUtils.isObject(this._options.btn)) {
+        if (!TableUtils.isObject(this._options.btn)) {
           this._options.btn = {};
         }
-        if (!coreuiTableUtils.isObject(this._options.btn.attr)) {
+        if (!TableUtils.isObject(this._options.btn.attr)) {
           this._options.btn.attr = {};
         }
         if (!this._options.btn.attr.hasOwnProperty('class') || typeof this._options.btn.attr["class"] !== 'string') {
@@ -5393,7 +5552,7 @@
         if (this._table.getSearchData().length > 0) {
           btnClear = this._renderBtnClear();
         }
-        var control = $(coreuiTableUtils.render(tpl['controls/search.html'], {
+        var control = $(TableUtils.render(tpl['controls/search.html'], {
           btnContent: btnContent,
           btnAttr: btnAttr.length > 0 ? ' ' + btnAttr.join(' ') : '',
           btnClear: btnClear
@@ -5401,8 +5560,8 @@
         var buttonToggle = control.find('.btn-search-toggle');
         var buttonClear = control.find('.btn-clear');
         buttonToggle.click(function () {
-          var container = coreuiTableElements.getSearchContainer(table.getId());
-          var columnsContainer = coreuiTableElements.getColumnsContainer(table.getId());
+          var container = TableElements.getSearchContainer(table.getId());
+          var columnsContainer = TableElements.getColumnsContainer(table.getId());
           if (columnsContainer[0]) {
             columnsContainer.hide();
           }
@@ -5418,7 +5577,7 @@
               var options = searchControl.getOptions();
               if (options.hasOwnProperty('field') && typeof options.field === 'string' && options.field) {
                 var descriptionLabel = options.hasOwnProperty('descriptionLabel') && options.descriptionLabel ? options.descriptionLabel : null;
-                var controlContainer = $(coreuiTableUtils.render(tpl['controls/search/control.html'], {
+                var controlContainer = $(TableUtils.render(tpl['controls/search/control.html'], {
                   labelWidth: labelWidth + (typeof labelWidth === 'number' ? 'px' : ''),
                   descriptionLabel: descriptionLabel,
                   label: options.hasOwnProperty('label') && typeof options.label === 'string' ? options.label : '',
@@ -5429,10 +5588,10 @@
                 controls.push(controlContainer);
               }
             });
-            if (!coreuiTableUtils.isObject(that._options.btnComplete)) {
+            if (!TableUtils.isObject(that._options.btnComplete)) {
               that._options.btnComplete = {};
             }
-            if (!coreuiTableUtils.isObject(that._options.btnComplete.attr)) {
+            if (!TableUtils.isObject(that._options.btnComplete.attr)) {
               that._options.btnComplete.attr = {};
             }
             if (that._options.btnComplete.attr.hasOwnProperty('type')) {
@@ -5443,7 +5602,7 @@
             } else {
               that._options.btnComplete.attr["class"] += ' btn-complete';
             }
-            if (coreuiTableUtils.isObject(that._options.btnComplete.attr)) {
+            if (TableUtils.isObject(that._options.btnComplete.attr)) {
               $.each(that._options.btnComplete.attr, function (name, value) {
                 if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
                   btnCompleteAttr.push(name + '="' + value + '"');
@@ -5453,14 +5612,14 @@
             if (typeof that._options.btnComplete.content === 'string') {
               btnCompleteContent = that._options.btnComplete.content;
             }
-            var searchContainer = $(coreuiTableUtils.render(tpl['controls/search/container.html'], {
+            var searchContainer = $(TableUtils.render(tpl['controls/search/container.html'], {
               labelWidth: labelWidth + (typeof labelWidth === 'number' ? 'px' : ''),
               btnCompleteAttr: btnCompleteAttr.length > 0 ? ' ' + btnCompleteAttr.join(' ') : '',
               btnCompleteContent: btnCompleteContent
             }));
             $('.btn-complete', searchContainer).click(function () {
               table.searchRecords();
-              var container = coreuiTableElements.getSearchContainer(table.getId());
+              var container = TableElements.getSearchContainer(table.getId());
               if (container[0]) {
                 container.fadeOut(200);
               }
@@ -5471,13 +5630,13 @@
                 searchControls.append(control);
               });
             }
-            var wrapper = coreuiTableElements.getWrapper(table.getId());
+            var wrapper = TableElements.getWrapper(table.getId());
             wrapper.before(searchContainer);
           }
         });
         buttonClear.click(function () {
           table.clearSearch();
-          var container = coreuiTableElements.getSearchContainer(table.getId());
+          var container = TableElements.getSearchContainer(table.getId());
           if (container[0]) {
             container.fadeOut('fast');
           }
@@ -5490,7 +5649,7 @@
               var _btnClear = $(that._renderBtnClear());
               _btnClear.click(function () {
                 table.clearSearch();
-                var container = coreuiTableElements.getSearchContainer(table.getId());
+                var container = TableElements.getSearchContainer(table.getId());
                 if (container[0]) {
                   container.fadeOut('fast');
                 }
@@ -5500,7 +5659,7 @@
             }
           } else {
             buttonClear.remove();
-            var container = coreuiTableElements.getSearchContainer(table.getId());
+            var container = TableElements.getSearchContainer(table.getId());
             if (container[0]) {
               container.fadeOut('fast');
             }
@@ -5518,10 +5677,10 @@
       value: function _renderBtnClear() {
         var attributes = [];
         var content = '';
-        if (!coreuiTableUtils.isObject(this._options.btnClear)) {
+        if (!TableUtils.isObject(this._options.btnClear)) {
           this._options.btnClear = {};
         }
-        if (!coreuiTableUtils.isObject(this._options.btnClear.attr)) {
+        if (!TableUtils.isObject(this._options.btnClear.attr)) {
           this._options.btnClear.attr = {};
         }
         if (!this._options.btnClear.attr.hasOwnProperty('class') || typeof this._options.btnClear.attr["class"] !== 'string') {
@@ -5535,7 +5694,7 @@
         if (typeof this._options.btnClear.content === 'string') {
           content = this._options.btnClear.content;
         }
-        return coreuiTableUtils.render(tpl['controls/search/clear.html'], {
+        return TableUtils.render(tpl['controls/search/clear.html'], {
           content: content,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         });
@@ -5560,7 +5719,7 @@
   var ControlColumns = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ControlColumns(table, options) {
@@ -5583,13 +5742,13 @@
         }
       }, options);
       _this2 = _callSuper$I(this, ControlColumns, [table, options]);
-      if (!coreuiTableUtils.isObject(_this2._options.btn)) {
+      if (!TableUtils.isObject(_this2._options.btn)) {
         _this2._options.btn = {};
       }
-      if (!coreuiTableUtils.isObject(_this2._options.btnComplete)) {
+      if (!TableUtils.isObject(_this2._options.btnComplete)) {
         _this2._options.btnComplete = {};
       }
-      if (coreuiTableUtils.isObject(_this2._options.btnComplete) && typeof _this2._options.btnComplete.content !== 'string') {
+      if (TableUtils.isObject(_this2._options.btnComplete) && typeof _this2._options.btnComplete.content !== 'string') {
         _this2._options.btnComplete.content = table.getLang().complete;
       }
       return _this2;
@@ -5606,20 +5765,20 @@
         var that = this;
         var table = this._table;
         var attributes = [];
-        if (coreuiTableUtils.isObject(this._options.btn.attr)) {
+        if (TableUtils.isObject(this._options.btn.attr)) {
           $.each(this._options.btn.attr, function (name, value) {
             if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
               attributes.push(name + '="' + value + '"');
             }
           });
         }
-        var btn = $(coreuiTableUtils.render(tpl['controls/columns.html'], {
+        var btn = $(TableUtils.render(tpl['controls/columns.html'], {
           btnContent: this._options.btn.content,
           btnAttr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
         btn.click(function () {
-          var container = coreuiTableElements.getColumnsContainer(table.getId());
-          var containerSearch = coreuiTableElements.getSearchContainer(table.getId());
+          var container = TableElements.getColumnsContainer(table.getId());
+          var containerSearch = TableElements.getSearchContainer(table.getId());
           if (containerSearch[0]) {
             containerSearch.hide();
           }
@@ -5630,7 +5789,7 @@
             var showAll = true;
             var btnCompleteAttr = [];
             var btnCompleteContent = '';
-            var wrapper = coreuiTableElements.getWrapper(table.getId());
+            var wrapper = TableElements.getWrapper(table.getId());
             table._columns.map(function (column) {
               var options = column.getOptions();
               if (options.hasOwnProperty('field') && typeof options.field === 'string' && options.field) {
@@ -5646,10 +5805,10 @@
               }
             });
             var options = that.getOptions();
-            if (!coreuiTableUtils.isObject(options.btnComplete)) {
+            if (!TableUtils.isObject(options.btnComplete)) {
               options.btnComplete = {};
             }
-            if (!coreuiTableUtils.isObject(options.btnComplete.attr)) {
+            if (!TableUtils.isObject(options.btnComplete.attr)) {
               options.btnComplete.attr = {};
             }
             if (options.btnComplete.attr.hasOwnProperty('type')) {
@@ -5660,7 +5819,7 @@
             } else {
               options.btnComplete.attr["class"] += ' btn-complete';
             }
-            if (coreuiTableUtils.isObject(options.btnComplete.attr)) {
+            if (TableUtils.isObject(options.btnComplete.attr)) {
               $.each(options.btnComplete.attr, function (name, value) {
                 if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
                   btnCompleteAttr.push(name + '="' + value + '"');
@@ -5670,7 +5829,7 @@
             if (typeof options.btnComplete.content === 'string') {
               btnCompleteContent = options.btnComplete.content;
             }
-            var containerList = $(coreuiTableUtils.render(tpl['controls/columns/list.html'], {
+            var containerList = $(TableUtils.render(tpl['controls/columns/list.html'], {
               showAll: showAll,
               columns: columns,
               btnCompleteAttr: btnCompleteAttr.length > 0 ? ' ' + btnCompleteAttr.join(' ') : '',
@@ -5713,7 +5872,7 @@
   var ControlCaption = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ControlCaption(table, options) {
@@ -5736,7 +5895,7 @@
     return _createClass(ControlCaption, [{
       key: "render",
       value: function render() {
-        return coreuiTableUtils.render(tpl['controls/caption.html'], {
+        return TableUtils.render(tpl['controls/caption.html'], {
           title: this._options.title,
           description: this._options.description,
           value: this._options.value
@@ -5762,7 +5921,7 @@
   var ControlFilterClear = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ControlFilterClear(table, options) {
@@ -5793,7 +5952,7 @@
       value: function render() {
         var options = this.getOptions();
         var table = this._table;
-        if (!coreuiTableUtils.isObject(options.attr)) {
+        if (!TableUtils.isObject(options.attr)) {
           options.attr = {};
         }
         if (options.attr.hasOwnProperty('type')) {
@@ -5813,7 +5972,7 @@
             attr.push(name + '="' + value + '"');
           }
         });
-        var button = $(coreuiTableUtils.render(tpl['controls/filter_clear.html'], {
+        var button = $(TableUtils.render(tpl['controls/filter_clear.html'], {
           attr: attr.length > 0 ? ' ' + attr.join(' ') : '',
           content: options.content ? options.content : ''
         }));
@@ -5849,7 +6008,7 @@
   var ControlDivider = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ControlDivider(table, options) {
@@ -5875,7 +6034,7 @@
       key: "render",
       value: function render() {
         var attributes = [];
-        this._options.attr = coreuiTableUtils.mergeAttr(this._options.attr, {
+        this._options.attr = TableUtils.mergeAttr(this._options.attr, {
           style: 'width:' + this._options.width + 'px'
         });
         $.each(this._options.attr, function (name, value) {
@@ -5883,7 +6042,7 @@
             attributes.push(name + '="' + value + '"');
           }
         });
-        return coreuiTableUtils.render(tpl['controls/divider.html'], {
+        return TableUtils.render(tpl['controls/divider.html'], {
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
           text: typeof this._options.text === 'string' && this._options.text !== '' ? this._options.text : ''
         });
@@ -5910,7 +6069,7 @@
       });
       this._table = table;
       this._options = $.extend(true, this._options, options);
-      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : coreuiTableUtils.hashCode();
+      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : TableUtils.hashCode();
     }
 
     /**
@@ -6001,7 +6160,7 @@
   var FilterText = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function FilterText(table, options) {
@@ -6072,10 +6231,10 @@
       value: function render() {
         var options = this.getOptions();
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        if (!coreuiTableUtils.isObject(options.attr)) {
+        if (!TableUtils.isObject(options.attr)) {
           options.attr = {};
         }
-        if (options.hasOwnProperty('width') && coreuiTableUtils.isNumeric(options.width)) {
+        if (options.hasOwnProperty('width') && TableUtils.isNumeric(options.width)) {
           if (options.attr.hasOwnProperty('style')) {
             options.attr['style'] += ';width:' + options.width + 'px';
           } else {
@@ -6086,10 +6245,10 @@
         if (options.attr.hasOwnProperty('type')) {
           delete options.attr.type;
         }
-        if (!coreuiTableUtils.isObject(options.btn)) {
+        if (!TableUtils.isObject(options.btn)) {
           options.btn = {};
         }
-        if (!coreuiTableUtils.isObject(options.btn.attr)) {
+        if (!TableUtils.isObject(options.btn.attr)) {
           options.btn.attr = {};
         }
         if (options.btn.attr.hasOwnProperty('type')) {
@@ -6104,7 +6263,7 @@
         $.each(options.btn.attr, function (name, value) {
           attrBtn.push(name + '="' + value + '"');
         });
-        this._control = $(coreuiTableUtils.render(tpl['filters/text.html'], {
+        this._control = $(TableUtils.render(tpl['filters/text.html'], {
           attr: attr.length > 0 ? ' ' + attr.join(' ') : '',
           label: label,
           btnAttr: attrBtn.length > 0 ? ' ' + attrBtn.join(' ') : '',
@@ -6142,7 +6301,7 @@
   var FilterNumber = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function FilterNumber(table, options) {
@@ -6181,7 +6340,7 @@
       key: "setValue",
       value: function setValue(value) {
         if (value) {
-          if (!coreuiTableUtils.isObject(value)) {
+          if (!TableUtils.isObject(value)) {
             return;
           }
           var numberStart = null;
@@ -6209,7 +6368,7 @@
           if (this._value === null) {
             inputStart.val('');
             inputEnd.val('');
-          } else if (coreuiTableUtils.isObject(this._value)) {
+          } else if (TableUtils.isObject(this._value)) {
             inputStart.val(_typeof(this._value.start) !== null ? this._value.start : '');
             inputEnd.val(_typeof(this._value.end) !== null ? this._value.end : '');
           }
@@ -6250,7 +6409,7 @@
     }, {
       key: "filter",
       value: function filter(fieldValue, searchValue) {
-        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !coreuiTableUtils.isObject(searchValue) || ['string', 'number'].indexOf(_typeof(searchValue.start)) < 0 && ['string', 'number'].indexOf(_typeof(searchValue.end)) < 0) {
+        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !TableUtils.isObject(searchValue) || ['string', 'number'].indexOf(_typeof(searchValue.start)) < 0 && ['string', 'number'].indexOf(_typeof(searchValue.end)) < 0) {
           return false;
         }
         var issetStart = ['string', 'number'].indexOf(_typeof(searchValue.start)) >= 0;
@@ -6273,10 +6432,10 @@
       value: function render() {
         var options = this.getOptions();
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        if (!coreuiTableUtils.isObject(options.attr)) {
+        if (!TableUtils.isObject(options.attr)) {
           options.attr = {};
         }
-        if (options.hasOwnProperty('width') && coreuiTableUtils.isNumeric(options.width)) {
+        if (options.hasOwnProperty('width') && TableUtils.isNumeric(options.width)) {
           if (options.attr.hasOwnProperty('style')) {
             options.attr['style'] += ';width:' + options.width + 'px';
           } else {
@@ -6314,10 +6473,10 @@
         }
         startAttr.push('value="' + (this._value ? this._value.start : '') + '"');
         endAttr.push('value="' + (this._value ? this._value.end : '') + '"');
-        if (!coreuiTableUtils.isObject(options.btn)) {
+        if (!TableUtils.isObject(options.btn)) {
           options.btn = {};
         }
-        if (!coreuiTableUtils.isObject(options.btn.attr)) {
+        if (!TableUtils.isObject(options.btn.attr)) {
           options.btn.attr = {};
         }
         if (options.btn.attr.hasOwnProperty('type')) {
@@ -6326,7 +6485,7 @@
         $.each(options.btn.attr, function (name, value) {
           attrBtn.push(name + '="' + value + '"');
         });
-        this._control = $(coreuiTableUtils.render(tpl['filters/number.html'], {
+        this._control = $(TableUtils.render(tpl['filters/number.html'], {
           attrStart: startAttr.length > 0 ? ' ' + startAttr.join(' ') : '',
           attrEnd: endAttr.length > 0 ? ' ' + endAttr.join(' ') : '',
           label: label,
@@ -6363,7 +6522,7 @@
   var FilterDate = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function FilterDate(table, options) {
@@ -6445,10 +6604,10 @@
       value: function render() {
         var options = this.getOptions();
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        if (!coreuiTableUtils.isObject(options.attr)) {
+        if (!TableUtils.isObject(options.attr)) {
           options.attr = {};
         }
-        if (options.hasOwnProperty('width') && coreuiTableUtils.isNumeric(options.width)) {
+        if (options.hasOwnProperty('width') && TableUtils.isNumeric(options.width)) {
           if (options.attr.hasOwnProperty('style')) {
             options.attr['style'] += ';width:' + options.width + 'px';
           } else {
@@ -6464,7 +6623,7 @@
         $.each(options.attr, function (name, value) {
           attr.push(name + '="' + value + '"');
         });
-        this._control = $(coreuiTableUtils.render(tpl['filters/date.html'], {
+        this._control = $(TableUtils.render(tpl['filters/date.html'], {
           attr: attr.length > 0 ? ' ' + attr.join(' ') : '',
           label: label
         }));
@@ -6493,7 +6652,7 @@
   var FilterDatetime = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function FilterDatetime(table, options) {
@@ -6575,10 +6734,10 @@
       value: function render() {
         var options = this.getOptions();
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        if (!coreuiTableUtils.isObject(options.attr)) {
+        if (!TableUtils.isObject(options.attr)) {
           options.attr = {};
         }
-        if (options.hasOwnProperty('width') && coreuiTableUtils.isNumeric(options.width)) {
+        if (options.hasOwnProperty('width') && TableUtils.isNumeric(options.width)) {
           if (options.attr.hasOwnProperty('style')) {
             options.attr['style'] += ';width:' + options.width + 'px';
           } else {
@@ -6594,7 +6753,7 @@
         $.each(options.attr, function (name, value) {
           attr.push(name + '="' + value + '"');
         });
-        this._control = $(coreuiTableUtils.render(tpl['filters/datetime.html'], {
+        this._control = $(TableUtils.render(tpl['filters/datetime.html'], {
           attr: attr.length > 0 ? ' ' + attr.join(' ') : '',
           label: label
         }));
@@ -6623,7 +6782,7 @@
   var FilterDateMonth = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function FilterDateMonth(table, options) {
@@ -6705,10 +6864,10 @@
       value: function render() {
         var options = this.getOptions();
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        if (!coreuiTableUtils.isObject(options.attr)) {
+        if (!TableUtils.isObject(options.attr)) {
           options.attr = {};
         }
-        if (options.hasOwnProperty('width') && coreuiTableUtils.isNumeric(options.width)) {
+        if (options.hasOwnProperty('width') && TableUtils.isNumeric(options.width)) {
           if (options.attr.hasOwnProperty('style')) {
             options.attr['style'] += ';width:' + options.width + 'px';
           } else {
@@ -6724,7 +6883,7 @@
         $.each(options.attr, function (name, value) {
           attr.push(name + '="' + value + '"');
         });
-        this._control = $(coreuiTableUtils.render(tpl['filters/date_month.html'], {
+        this._control = $(TableUtils.render(tpl['filters/date_month.html'], {
           attr: attr.length > 0 ? ' ' + attr.join(' ') : '',
           label: label
         }));
@@ -6753,7 +6912,7 @@
   var FilterDateRange = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function FilterDateRange(table, options) {
@@ -6786,7 +6945,7 @@
       key: "setValue",
       value: function setValue(value) {
         if (value) {
-          if (!coreuiTableUtils.isObject(value)) {
+          if (!TableUtils.isObject(value)) {
             return;
           }
           var dateStart = null;
@@ -6814,7 +6973,7 @@
           if (this._value === null) {
             inputStart.val('');
             inputEnd.val('');
-          } else if (coreuiTableUtils.isObject(this._value)) {
+          } else if (TableUtils.isObject(this._value)) {
             inputStart.val(_typeof(this._value.start) !== null ? this._value.start : '');
             inputEnd.val(_typeof(this._value.end) !== null ? this._value.end : '');
           }
@@ -6855,7 +7014,7 @@
     }, {
       key: "filter",
       value: function filter(fieldValue, searchValue) {
-        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !coreuiTableUtils.isObject(searchValue) || typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string') {
+        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !TableUtils.isObject(searchValue) || typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string') {
           return false;
         }
         var issetStart = ['string', 'number'].indexOf(_typeof(searchValue.start)) >= 0;
@@ -6878,10 +7037,10 @@
       value: function render() {
         var options = this.getOptions();
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        if (!coreuiTableUtils.isObject(options.attr)) {
+        if (!TableUtils.isObject(options.attr)) {
           options.attr = {};
         }
-        if (options.hasOwnProperty('width') && coreuiTableUtils.isNumeric(options.width)) {
+        if (options.hasOwnProperty('width') && TableUtils.isNumeric(options.width)) {
           if (options.attr.hasOwnProperty('style')) {
             options.attr['style'] += ';width:' + options.width + 'px';
           } else {
@@ -6918,7 +7077,7 @@
         }
         startAttr.push('value="' + (this._value ? this._value.start : '') + '"');
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
-        var control = $(coreuiTableUtils.render(tpl['filters/date_range.html'], {
+        var control = $(TableUtils.render(tpl['filters/date_range.html'], {
           label: label,
           startAttr: startAttr.length > 0 ? ' ' + startAttr.join(' ') : '',
           endAttr: startEnd.length > 0 ? ' ' + startEnd.join(' ') : ''
@@ -6958,7 +7117,7 @@
   var FilterDatetimeRange = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function FilterDatetimeRange(table, options) {
@@ -6991,7 +7150,7 @@
       key: "setValue",
       value: function setValue(value) {
         if (value) {
-          if (!coreuiTableUtils.isObject(value)) {
+          if (!TableUtils.isObject(value)) {
             return;
           }
           var dateStart = null;
@@ -7019,7 +7178,7 @@
           if (this._value === null) {
             inputStart.val('');
             inputEnd.val('');
-          } else if (coreuiTableUtils.isObject(this._value)) {
+          } else if (TableUtils.isObject(this._value)) {
             inputStart.val(_typeof(this._value.start) !== null ? this._value.start : '');
             inputEnd.val(_typeof(this._value.end) !== null ? this._value.end : '');
           }
@@ -7060,7 +7219,7 @@
     }, {
       key: "filter",
       value: function filter(fieldValue, searchValue) {
-        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !coreuiTableUtils.isObject(searchValue) || typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string') {
+        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !TableUtils.isObject(searchValue) || typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string') {
           return false;
         }
         var issetStart = ['string', 'number'].indexOf(_typeof(searchValue.start)) >= 0;
@@ -7083,10 +7242,10 @@
       value: function render() {
         var options = this.getOptions();
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        if (!coreuiTableUtils.isObject(options.attr)) {
+        if (!TableUtils.isObject(options.attr)) {
           options.attr = {};
         }
-        if (options.hasOwnProperty('width') && coreuiTableUtils.isNumeric(options.width)) {
+        if (options.hasOwnProperty('width') && TableUtils.isNumeric(options.width)) {
           if (options.attr.hasOwnProperty('style')) {
             options.attr['style'] += ';width:' + options.width + 'px';
           } else {
@@ -7123,7 +7282,7 @@
         }
         startAttr.push('value="' + (this._value ? this._value.start : '') + '"');
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
-        var control = $(coreuiTableUtils.render(tpl['filters/datetime_range.html'], {
+        var control = $(TableUtils.render(tpl['filters/datetime_range.html'], {
           label: label,
           startAttr: startAttr.length > 0 ? ' ' + startAttr.join(' ') : '',
           endAttr: startEnd.length > 0 ? ' ' + startEnd.join(' ') : ''
@@ -7163,7 +7322,7 @@
   var FilterCheckbox = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function FilterCheckbox(table, options) {
@@ -7272,7 +7431,7 @@
         var items = [];
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
         $.each(options.options, function (key, option) {
-          if (!coreuiTableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
+          if (!TableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
             return;
           }
           var checked = Array.isArray(that._value) ? that._value.indexOf(option.value) >= 0 : false;
@@ -7284,7 +7443,7 @@
             checked: checked
           });
         });
-        this._control = $(coreuiTableUtils.render(tpl['filters/checkbox.html'], {
+        this._control = $(TableUtils.render(tpl['filters/checkbox.html'], {
           label: label,
           items: items,
           field: field + this.getId(),
@@ -7315,7 +7474,7 @@
   var FilterRadio = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function FilterRadio(table, options) {
@@ -7405,7 +7564,7 @@
         var items = [];
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
         $.each(options.options, function (key, option) {
-          if (!coreuiTableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
+          if (!TableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
             return;
           }
           var text = option.hasOwnProperty('text') ? option.text : option.value;
@@ -7416,7 +7575,7 @@
             checked: option.value == that._value
           });
         });
-        this._control = $(coreuiTableUtils.render(tpl['filters/radio.html'], {
+        this._control = $(TableUtils.render(tpl['filters/radio.html'], {
           label: label,
           items: items,
           field: field + this.getId(),
@@ -7447,7 +7606,7 @@
   var FilterSelect = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function FilterSelect(table, options) {
@@ -7564,14 +7723,14 @@
         var attributes = [];
         var table = this._table;
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        if (!options.hasOwnProperty('attr') || !coreuiTableUtils.isObject(options.attr)) {
+        if (!options.hasOwnProperty('attr') || !TableUtils.isObject(options.attr)) {
           options.attr = {};
         }
         if (options.field) {
           options.attr.name = this._options.field;
         }
         if (options.width) {
-          options.attr = coreuiTableUtils.mergeAttr({
+          options.attr = TableUtils.mergeAttr({
             style: 'width:' + options.width + 'px'
           }, options.attr);
         }
@@ -7583,13 +7742,13 @@
                 value: key,
                 text: option
               }));
-            } else if (coreuiTableUtils.isObject(option)) {
+            } else if (TableUtils.isObject(option)) {
               var type = option.hasOwnProperty('type') && typeof option.type === 'string' ? option.type : 'option';
               if (type === 'group') {
                 var renderAttr = [];
                 var groupAttr = {};
                 var groupOptions = [];
-                if (option.hasOwnProperty('attr') && coreuiTableUtils.isObject(option.attr)) {
+                if (option.hasOwnProperty('attr') && TableUtils.isObject(option.attr)) {
                   groupAttr = option.attr;
                 }
                 if (option.hasOwnProperty('label') && ['string', 'number'].indexOf(_typeof(option.label)) >= 0) {
@@ -7617,7 +7776,7 @@
         $.each(options.attr, function (name, value) {
           attributes.push(name + '="' + value + '"');
         });
-        this._control = $(coreuiTableUtils.render(tpl['filters/select.html'], {
+        this._control = $(TableUtils.render(tpl['filters/select.html'], {
           label: label,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
           options: selectOptions
@@ -7680,7 +7839,7 @@
   var FilterSwitch = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function FilterSwitch(table, options) {
@@ -7765,7 +7924,7 @@
         var options = this.getOptions();
         var valueY = typeof options.valueY === 'string' || typeof options.valueY === 'number' ? options.valueY : '';
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        this._control = $(coreuiTableUtils.render(tpl['filters/switch.html'], {
+        this._control = $(TableUtils.render(tpl['filters/switch.html'], {
           id: this._id,
           valueY: valueY,
           field: typeof options.field === 'string' ? options.field : '',
@@ -7800,7 +7959,7 @@
       });
       this._table = table;
       this._options = $.extend(true, this._options, options);
-      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : coreuiTableUtils.hashCode();
+      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : TableUtils.hashCode();
     }
 
     /**
@@ -7891,7 +8050,7 @@
   var SearchText = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function SearchText(table, options) {
@@ -7953,10 +8112,10 @@
     }, {
       key: "render",
       value: function render() {
-        if (!coreuiTableUtils.isObject(this._options.attr)) {
+        if (!TableUtils.isObject(this._options.attr)) {
           this._options.attr = {};
         }
-        if (this._options.hasOwnProperty('width') && coreuiTableUtils.isNumeric(this._options.width)) {
+        if (this._options.hasOwnProperty('width') && TableUtils.isNumeric(this._options.width)) {
           if (this._options.attr.hasOwnProperty('style')) {
             this._options.attr['style'] += ';width:' + this._options.width + 'px';
           } else {
@@ -7974,13 +8133,13 @@
             attributes.push(name + '="' + value + '"');
           }
         });
-        this._control = $(coreuiTableUtils.render(tpl['search/text.html'], {
+        this._control = $(TableUtils.render(tpl['search/text.html'], {
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
         $('input', this._control).keyup(function (e) {
           if (e.key === 'Enter' || e.keyCode === 13) {
             table.searchRecords();
-            var container = coreuiTableElements.getSearchContainer(table.getId());
+            var container = TableElements.getSearchContainer(table.getId());
             container.fadeOut('fast');
           }
         });
@@ -8006,7 +8165,7 @@
   var SearchNumber = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function SearchNumber(table, options) {
@@ -8039,7 +8198,7 @@
       key: "setValue",
       value: function setValue(value) {
         if (value) {
-          if (!coreuiTableUtils.isObject(value)) {
+          if (!TableUtils.isObject(value)) {
             return;
           }
           var numberStart = null;
@@ -8067,7 +8226,7 @@
           if (this._value === null) {
             inputStart.val('');
             inputEnd.val('');
-          } else if (coreuiTableUtils.isObject(this._value)) {
+          } else if (TableUtils.isObject(this._value)) {
             inputStart.val(_typeof(this._value.start) !== null ? this._value.start : '');
             inputEnd.val(_typeof(this._value.end) !== null ? this._value.end : '');
           }
@@ -8108,7 +8267,7 @@
     }, {
       key: "filter",
       value: function filter(fieldValue, searchValue) {
-        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !coreuiTableUtils.isObject(searchValue) || ['string', 'number'].indexOf(_typeof(searchValue.start)) < 0 && ['string', 'number'].indexOf(_typeof(searchValue.end)) < 0) {
+        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !TableUtils.isObject(searchValue) || ['string', 'number'].indexOf(_typeof(searchValue.start)) < 0 && ['string', 'number'].indexOf(_typeof(searchValue.end)) < 0) {
           return false;
         }
         var issetStart = ['string', 'number'].indexOf(_typeof(searchValue.start)) >= 0;
@@ -8129,10 +8288,10 @@
     }, {
       key: "render",
       value: function render() {
-        if (!coreuiTableUtils.isObject(this._options.attr)) {
+        if (!TableUtils.isObject(this._options.attr)) {
           this._options.attr = {};
         }
-        if (this._options.hasOwnProperty('width') && coreuiTableUtils.isNumeric(this._options.width)) {
+        if (this._options.hasOwnProperty('width') && TableUtils.isNumeric(this._options.width)) {
           if (this._options.attr.hasOwnProperty('style')) {
             this._options.attr['style'] += ';width:' + this._options.width + 'px';
           } else {
@@ -8169,14 +8328,14 @@
         }
         startAttr.push('value="' + (this._value ? this._value.start : '') + '"');
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
-        this._control = $(coreuiTableUtils.render(tpl['search/number.html'], {
+        this._control = $(TableUtils.render(tpl['search/number.html'], {
           startAttr: startAttr.length > 0 ? ' ' + startAttr.join(' ') : '',
           endAttr: startEnd.length > 0 ? ' ' + startEnd.join(' ') : ''
         }));
         $('input.number-start, input.number-end', this._control).keyup(function (e) {
           if (e.key === 'Enter' || e.keyCode === 13) {
             table.searchRecords();
-            var container = coreuiTableElements.getSearchContainer(table.getId());
+            var container = TableElements.getSearchContainer(table.getId());
             container.fadeOut('fast');
           }
         });
@@ -8202,8 +8361,8 @@
   var SearchDate = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
-     * @param {Object}              options
+     * @param {TableInstance} table
+     * @param {Object}        options
      */
     function SearchDate(table, options) {
       var _this2;
@@ -8282,10 +8441,10 @@
     }, {
       key: "render",
       value: function render() {
-        if (!coreuiTableUtils.isObject(this._options.attr)) {
+        if (!TableUtils.isObject(this._options.attr)) {
           this._options.attr = {};
         }
-        if (this._options.hasOwnProperty('width') && coreuiTableUtils.isNumeric(this._options.width)) {
+        if (this._options.hasOwnProperty('width') && TableUtils.isNumeric(this._options.width)) {
           if (this._options.attr.hasOwnProperty('style')) {
             this._options.attr['style'] += ';width:' + this._options.width + 'px';
           } else {
@@ -8301,13 +8460,13 @@
         $.each(this._options.attr, function (name, value) {
           attributes.push(name + '="' + value + '"');
         });
-        this._control = $(coreuiTableUtils.render(tpl['search/date.html'], {
+        this._control = $(TableUtils.render(tpl['search/date.html'], {
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
         this._control.keyup(function (e) {
           if (e.key === 'Enter' || e.keyCode === 13) {
             table.searchRecords();
-            var container = coreuiTableElements.getSearchContainer(table.getId());
+            var container = TableElements.getSearchContainer(table.getId());
             container.fadeOut('fast');
           }
         });
@@ -8333,7 +8492,7 @@
   var SearchDateMonth = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function SearchDateMonth(table, options) {
@@ -8413,10 +8572,10 @@
     }, {
       key: "render",
       value: function render() {
-        if (!coreuiTableUtils.isObject(this._options.attr)) {
+        if (!TableUtils.isObject(this._options.attr)) {
           this._options.attr = {};
         }
-        if (this._options.hasOwnProperty('width') && coreuiTableUtils.isNumeric(this._options.width)) {
+        if (this._options.hasOwnProperty('width') && TableUtils.isNumeric(this._options.width)) {
           if (this._options.attr.hasOwnProperty('style')) {
             this._options.attr['style'] += ';width:' + this._options.width + 'px';
           } else {
@@ -8432,13 +8591,13 @@
         $.each(this._options.attr, function (name, value) {
           attributes.push(name + '="' + value + '"');
         });
-        this._control = $(coreuiTableUtils.render(tpl['search/date_month.html'], {
+        this._control = $(TableUtils.render(tpl['search/date_month.html'], {
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
         this._control.keyup(function (e) {
           if (e.key === 'Enter' || e.keyCode === 13) {
             table.searchRecords();
-            var container = coreuiTableElements.getSearchContainer(table.getId());
+            var container = TableElements.getSearchContainer(table.getId());
             container.fadeOut('fast');
           }
         });
@@ -8464,7 +8623,7 @@
   var SearchDatetime = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function SearchDatetime(table, options) {
@@ -8544,10 +8703,10 @@
     }, {
       key: "render",
       value: function render() {
-        if (!coreuiTableUtils.isObject(this._options.attr)) {
+        if (!TableUtils.isObject(this._options.attr)) {
           this._options.attr = {};
         }
-        if (this._options.hasOwnProperty('width') && coreuiTableUtils.isNumeric(this._options.width)) {
+        if (this._options.hasOwnProperty('width') && TableUtils.isNumeric(this._options.width)) {
           if (this._options.attr.hasOwnProperty('style')) {
             this._options.attr['style'] += ';width:' + this._options.width + 'px';
           } else {
@@ -8565,13 +8724,13 @@
             attributes.push(name + '="' + value + '"');
           }
         });
-        this._control = $(coreuiTableUtils.render(tpl['search/datetime.html'], {
+        this._control = $(TableUtils.render(tpl['search/datetime.html'], {
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
         this._control.keyup(function (e) {
           if (e.key === 'Enter' || e.keyCode === 13) {
             table.searchRecords();
-            var container = coreuiTableElements.getSearchContainer(table.getId());
+            var container = TableElements.getSearchContainer(table.getId());
             container.fadeOut('fast');
           }
         });
@@ -8597,7 +8756,7 @@
   var SearchDateRange = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function SearchDateRange(table, options) {
@@ -8630,7 +8789,7 @@
       key: "setValue",
       value: function setValue(value) {
         if (value) {
-          if (!coreuiTableUtils.isObject(value)) {
+          if (!TableUtils.isObject(value)) {
             return;
           }
           var dateStart = null;
@@ -8658,7 +8817,7 @@
           if (this._value === null) {
             inputStart.val('');
             inputEnd.val('');
-          } else if (coreuiTableUtils.isObject(this._value)) {
+          } else if (TableUtils.isObject(this._value)) {
             inputStart.val(_typeof(this._value.start) !== null ? this._value.start : '');
             inputEnd.val(_typeof(this._value.end) !== null ? this._value.end : '');
           }
@@ -8699,7 +8858,7 @@
     }, {
       key: "filter",
       value: function filter(fieldValue, searchValue) {
-        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !coreuiTableUtils.isObject(searchValue) || typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string') {
+        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !TableUtils.isObject(searchValue) || typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string') {
           return false;
         }
         var issetStart = ['string', 'number'].indexOf(_typeof(searchValue.start)) >= 0;
@@ -8721,10 +8880,10 @@
       key: "render",
       value: function render() {
         var options = this.getOptions();
-        if (!coreuiTableUtils.isObject(options.attr)) {
+        if (!TableUtils.isObject(options.attr)) {
           options.attr = {};
         }
-        if (options.hasOwnProperty('width') && coreuiTableUtils.isNumeric(options.width)) {
+        if (options.hasOwnProperty('width') && TableUtils.isNumeric(options.width)) {
           if (options.attr.hasOwnProperty('style')) {
             options.attr['style'] += ';width:' + options.width + 'px';
           } else {
@@ -8755,7 +8914,7 @@
         }
         startAttr.push('value="' + (this._value ? this._value.start : '') + '"');
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
-        var control = $(coreuiTableUtils.render(tpl['search/date_range.html'], {
+        var control = $(TableUtils.render(tpl['search/date_range.html'], {
           startAttr: startAttr.length > 0 ? ' ' + startAttr.join(' ') : '',
           endAttr: startEnd.length > 0 ? ' ' + startEnd.join(' ') : ''
         }));
@@ -8791,7 +8950,7 @@
   var SearchDatetimeRange = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function SearchDatetimeRange(table, options) {
@@ -8824,7 +8983,7 @@
       key: "setValue",
       value: function setValue(value) {
         if (value) {
-          if (!coreuiTableUtils.isObject(value)) {
+          if (!TableUtils.isObject(value)) {
             return;
           }
           var dateStart = null;
@@ -8852,7 +9011,7 @@
           if (this._value === null) {
             inputStart.val('');
             inputEnd.val('');
-          } else if (coreuiTableUtils.isObject(this._value)) {
+          } else if (TableUtils.isObject(this._value)) {
             inputStart.val(_typeof(this._value.start) !== null ? this._value.start : '');
             inputEnd.val(_typeof(this._value.end) !== null ? this._value.end : '');
           }
@@ -8893,7 +9052,7 @@
     }, {
       key: "filter",
       value: function filter(fieldValue, searchValue) {
-        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !coreuiTableUtils.isObject(searchValue) || typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string') {
+        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !TableUtils.isObject(searchValue) || typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string') {
           return false;
         }
         var issetStart = ['string', 'number'].indexOf(_typeof(searchValue.start)) >= 0;
@@ -8914,10 +9073,10 @@
     }, {
       key: "render",
       value: function render() {
-        if (!coreuiTableUtils.isObject(this._options.attr)) {
+        if (!TableUtils.isObject(this._options.attr)) {
           this._options.attr = {};
         }
-        if (this._options.hasOwnProperty('width') && coreuiTableUtils.isNumeric(this._options.width)) {
+        if (this._options.hasOwnProperty('width') && TableUtils.isNumeric(this._options.width)) {
           if (this._options.attr.hasOwnProperty('style')) {
             this._options.attr['style'] += ';width:' + this._options.width + 'px';
           } else {
@@ -8949,7 +9108,7 @@
         }
         startAttr.push('value="' + (this._value ? this._value.start : '') + '"');
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
-        var control = $(coreuiTableUtils.render(tpl['search/datetime_range.html'], {
+        var control = $(TableUtils.render(tpl['search/datetime_range.html'], {
           startAttr: startAttr.length > 0 ? ' ' + startAttr.join(' ') : '',
           endAttr: startEnd.length > 0 ? ' ' + startEnd.join(' ') : ''
         }));
@@ -8985,7 +9144,7 @@
   var SearchCheckbox = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function SearchCheckbox(table, options) {
@@ -9097,7 +9256,7 @@
               checked: checked
             });
           } else {
-            if (!coreuiTableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
+            if (!TableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
               return;
             }
             var _checked = Array.isArray(that._value) ? that._value.indexOf(option.value) >= 0 : false;
@@ -9109,7 +9268,7 @@
             });
           }
         });
-        this._control = $(coreuiTableUtils.render(tpl['search/checkbox.html'], {
+        this._control = $(TableUtils.render(tpl['search/checkbox.html'], {
           options: options
         }));
         return this._control;
@@ -9134,7 +9293,7 @@
   var SearchCheckboxBtn = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function SearchCheckboxBtn(table, options) {
@@ -9246,10 +9405,10 @@
               value: key,
               checked: checked,
               optionsClass: that._options.optionsClass,
-              hash: coreuiTableUtils.hashCode()
+              hash: TableUtils.hashCode()
             });
           } else {
-            if (!coreuiTableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
+            if (!TableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
               return;
             }
             var _checked = Array.isArray(that._value) ? that._value.indexOf(option.value) >= 0 : false;
@@ -9259,11 +9418,11 @@
               value: option.value,
               checked: _checked,
               optionsClass: that._options.optionsClass,
-              hash: coreuiTableUtils.hashCode()
+              hash: TableUtils.hashCode()
             });
           }
         });
-        this._control = $(coreuiTableUtils.render(tpl['search/checkbox-btn.html'], {
+        this._control = $(TableUtils.render(tpl['search/checkbox-btn.html'], {
           options: options
         }));
         return this._control;
@@ -9288,7 +9447,7 @@
   var SearchRadio = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function SearchRadio(table, options) {
@@ -9388,7 +9547,7 @@
               checked: checked
             });
           } else {
-            if (!coreuiTableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
+            if (!TableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
               return;
             }
             var _checked = option.value == that._value;
@@ -9403,10 +9562,10 @@
             });
           }
         });
-        this._control = $(coreuiTableUtils.render(tpl['search/radio.html'], {
+        this._control = $(TableUtils.render(tpl['search/radio.html'], {
           options: options,
           checkedAll: checkedAll,
-          field: coreuiTableUtils.hashCode(),
+          field: TableUtils.hashCode(),
           lang: this._table.getLang()
         }));
         return this._control;
@@ -9431,7 +9590,7 @@
   var SearchRadioBtn = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function SearchRadioBtn(table, options) {
@@ -9531,10 +9690,10 @@
               value: key,
               checked: checked,
               optionsClass: that._options.optionsClass,
-              hash: coreuiTableUtils.hashCode()
+              hash: TableUtils.hashCode()
             });
           } else {
-            if (!coreuiTableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
+            if (!TableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
               return;
             }
             var _checked = option.value == that._value;
@@ -9547,16 +9706,16 @@
               value: option.value,
               checked: _checked,
               optionsClass: that._options.optionsClass,
-              hash: coreuiTableUtils.hashCode()
+              hash: TableUtils.hashCode()
             });
           }
         });
-        this._control = $(coreuiTableUtils.render(tpl['search/radio-btn.html'], {
+        this._control = $(TableUtils.render(tpl['search/radio-btn.html'], {
           options: options,
           checkedAll: checkedAll,
-          optionAllHash: coreuiTableUtils.hashCode(),
+          optionAllHash: TableUtils.hashCode(),
           optionOptionsClass: that._options.optionsClass,
-          field: coreuiTableUtils.hashCode(),
+          field: TableUtils.hashCode(),
           lang: this._table.getLang()
         }));
         return this._control;
@@ -9581,7 +9740,7 @@
   var SearchSelect = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function SearchSelect(table, options) {
@@ -9695,14 +9854,14 @@
         var options = this.getOptions();
         var selectOptions = [];
         var attributes = [];
-        if (!options.hasOwnProperty('attr') || !coreuiTableUtils.isObject(options.attr)) {
+        if (!options.hasOwnProperty('attr') || !TableUtils.isObject(options.attr)) {
           options.attr = {};
         }
         if (options.field) {
           options.attr.name = this._options.field;
         }
         if (options.width) {
-          options.attr = coreuiTableUtils.mergeAttr({
+          options.attr = TableUtils.mergeAttr({
             style: 'width:' + options.width + 'px'
           }, options.attr);
         }
@@ -9714,13 +9873,13 @@
                 value: key,
                 text: option
               }));
-            } else if (coreuiTableUtils.isObject(option)) {
+            } else if (TableUtils.isObject(option)) {
               var type = option.hasOwnProperty('type') && typeof option.type === 'string' ? option.type : 'option';
               if (type === 'group') {
                 var renderAttr = [];
                 var groupAttr = {};
                 var groupOptions = [];
-                if (option.hasOwnProperty('attr') && coreuiTableUtils.isObject(option.attr)) {
+                if (option.hasOwnProperty('attr') && TableUtils.isObject(option.attr)) {
                   groupAttr = option.attr;
                 }
                 if (option.hasOwnProperty('label') && ['string', 'number'].indexOf(_typeof(option.label)) >= 0) {
@@ -9748,7 +9907,7 @@
         $.each(options.attr, function (name, value) {
           attributes.push(name + '="' + value + '"');
         });
-        this._control = $(coreuiTableUtils.render(tpl['search/select.html'], {
+        this._control = $(TableUtils.render(tpl['search/select.html'], {
           field: options,
           value: this._value,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
@@ -9809,7 +9968,7 @@
   var SearchSwitch = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function SearchSwitch(table, options) {
@@ -9891,7 +10050,7 @@
       value: function render() {
         var options = this.getOptions();
         var valueY = typeof options.valueY === 'string' || typeof options.valueY === 'number' ? options.valueY : '';
-        this._control = $(coreuiTableUtils.render(tpl['search/switch.html'], {
+        this._control = $(TableUtils.render(tpl['search/switch.html'], {
           id: this._id,
           valueY: valueY,
           field: typeof options.field === 'string' ? options.field : '',
@@ -9905,7 +10064,7 @@
   var Column = /*#__PURE__*/function () {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function Column(table, options) {
@@ -9996,7 +10155,7 @@
   var ColumnsDate = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsDate(table, options) {
@@ -10032,7 +10191,7 @@
           if (content !== '') {
             var lang = this._table.getLang();
             var date = new Date(content);
-            content = this._options.format.replace(/YYYY/g, coreuiTableUtils.strPadLeft(date.getFullYear(), 4)).replace(/MMMM/g, lang.monthNames[date.getMonth() + 1]).replace(/MMM/g, lang.monthNamesShort[date.getMonth() + 1]).replace(/MM/g, coreuiTableUtils.strPadLeft(date.getMonth() + 1, 2)).replace(/M/g, date.getMonth() + 1).replace(/DD/g, coreuiTableUtils.strPadLeft(date.getDate(), 2)).replace(/D/g, date.getDate()).replace(/dddd/g, lang.dayNames[date.getMonth() + 1]).replace(/ddd/g, lang.dayNamesMin[date.getMonth() + 1]);
+            content = this._options.format.replace(/YYYY/g, TableUtils.strPadLeft(date.getFullYear(), 4)).replace(/MMMM/g, lang.monthNames[date.getMonth() + 1]).replace(/MMM/g, lang.monthNamesShort[date.getMonth() + 1]).replace(/MM/g, TableUtils.strPadLeft(date.getMonth() + 1, 2)).replace(/M/g, date.getMonth() + 1).replace(/DD/g, TableUtils.strPadLeft(date.getDate(), 2)).replace(/D/g, date.getDate()).replace(/dddd/g, lang.dayNames[date.getMonth() + 1]).replace(/ddd/g, lang.dayNamesMin[date.getMonth() + 1]);
           }
         } catch (e) {
           content = '';
@@ -10059,7 +10218,7 @@
   var ColumnsDatetime = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsDatetime(table, options) {
@@ -10095,7 +10254,7 @@
           if (content !== '') {
             var lang = this._table.getLang();
             var date = new Date(content);
-            content = this._options.format.replace(/YYYY/g, coreuiTableUtils.strPadLeft(date.getFullYear(), 4)).replace(/MMMM/g, lang.monthNames[date.getMonth() + 1]).replace(/MMM/g, lang.monthNamesShort[date.getMonth() + 1]).replace(/MM/g, coreuiTableUtils.strPadLeft(date.getMonth() + 1, 2)).replace(/M/g, date.getMonth() + 1).replace(/DD/g, coreuiTableUtils.strPadLeft(date.getDate(), 2)).replace(/D/g, date.getDate()).replace(/dddd/g, lang.dayNames[date.getMonth() + 1]).replace(/ddd/g, lang.dayNamesMin[date.getMonth() + 1]).replace(/hh/g, coreuiTableUtils.strPadLeft(date.getHours(), 2)).replace(/mm/g, coreuiTableUtils.strPadLeft(date.getMinutes(), 2)).replace(/m/g, date.getMinutes()).replace(/ss/g, coreuiTableUtils.strPadLeft(date.getSeconds(), 2)).replace(/s/g, date.getSeconds());
+            content = this._options.format.replace(/YYYY/g, TableUtils.strPadLeft(date.getFullYear(), 4)).replace(/MMMM/g, lang.monthNames[date.getMonth() + 1]).replace(/MMM/g, lang.monthNamesShort[date.getMonth() + 1]).replace(/MM/g, TableUtils.strPadLeft(date.getMonth() + 1, 2)).replace(/M/g, date.getMonth() + 1).replace(/DD/g, TableUtils.strPadLeft(date.getDate(), 2)).replace(/D/g, date.getDate()).replace(/dddd/g, lang.dayNames[date.getMonth() + 1]).replace(/ddd/g, lang.dayNamesMin[date.getMonth() + 1]).replace(/hh/g, TableUtils.strPadLeft(date.getHours(), 2)).replace(/mm/g, TableUtils.strPadLeft(date.getMinutes(), 2)).replace(/m/g, date.getMinutes()).replace(/ss/g, TableUtils.strPadLeft(date.getSeconds(), 2)).replace(/s/g, date.getSeconds());
           }
         } catch (e) {
           content = '';
@@ -14891,7 +15050,7 @@
   var ColumnsDateHuman = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsDateHuman(table, options) {
@@ -14923,7 +15082,7 @@
     return _createClass(ColumnsDateHuman, [{
       key: "render",
       value: function render(content, record) {
-        if (['string', 'number'].indexOf(_typeof(content)) < 0 || !content instanceof Date) {
+        if (['string', 'number'].indexOf(_typeof(content)) < 0 || !(content instanceof Date)) {
           return '';
         }
         try {
@@ -14958,7 +15117,7 @@
   var ColumnsHtml = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsHtml(table, options) {
@@ -14986,7 +15145,7 @@
             "class": 'coreui_table__no-wrap'
           };
         } else {
-          _this2._options.attr = coreuiTableUtils.mergeAttr(_this2._options.attr, {
+          _this2._options.attr = TableUtils.mergeAttr(_this2._options.attr, {
             "class": 'coreui_table__no-wrap'
           });
         }
@@ -15054,7 +15213,7 @@
   var ColumnsNumber = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsNumber(table, options) {
@@ -15082,7 +15241,7 @@
             "class": 'coreui_table__no-wrap'
           };
         } else {
-          _this2._options.attr = coreuiTableUtils.mergeAttr(_this2._options.attr, {
+          _this2._options.attr = TableUtils.mergeAttr(_this2._options.attr, {
             "class": 'coreui_table__no-wrap'
           });
         }
@@ -15136,7 +15295,7 @@
   var ColumnsMoney = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsMoney(table, options) {
@@ -15169,7 +15328,7 @@
             "class": 'coreui_table__no-wrap'
           };
         } else {
-          _this2._options.attr = coreuiTableUtils.mergeAttr(_this2._options.attr, {
+          _this2._options.attr = TableUtils.mergeAttr(_this2._options.attr, {
             "class": 'coreui_table__no-wrap'
           });
         }
@@ -15251,7 +15410,7 @@
   var ColumnsNumbers = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsNumbers(table, options) {
@@ -15300,7 +15459,7 @@
   var ColumnsSelect = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsSelect(table, options) {
@@ -15320,10 +15479,10 @@
         }
       };
       if (options.hasOwnProperty('attr')) {
-        options.attr = coreuiTableUtils.mergeAttr(originalOptions.attr, options.attr);
+        options.attr = TableUtils.mergeAttr(originalOptions.attr, options.attr);
       }
       if (options.hasOwnProperty('attrHeader')) {
-        options.attrHeader = coreuiTableUtils.mergeAttr(originalOptions.attrHeader, options.attrHeader);
+        options.attrHeader = TableUtils.mergeAttr(originalOptions.attrHeader, options.attrHeader);
       }
       options = $.extend(true, originalOptions, options);
       _this2 = _callSuper$9(this, ColumnsSelect, [table, options]);
@@ -15331,8 +15490,8 @@
 
       // Показ строк
       table.on('records_show', function () {
-        var selects = coreuiTableElements.getRowsSelects(table.getId());
-        var selectAll = coreuiTableElements.getRowsSelectAll(table.getId());
+        var selects = TableElements.getRowsSelects(table.getId());
+        var selectAll = TableElements.getRowsSelectAll(table.getId());
 
         // Отмена обработки нажатия в select колонках
         $(selects).click(function (event) {
@@ -15384,23 +15543,23 @@
     }, {
       key: "render",
       value: function render(content, record) {
-        var select = $(coreuiTableUtils.render(tpl['columns/select.html'], {
+        var select = $(TableUtils.render(tpl['columns/select.html'], {
           index: record.index
         }));
         var that = this;
 
         // Выбор строки
         select.click(function () {
-          var tr = coreuiTableElements.getTrByIndex(that._table.getId(), record.index);
+          var tr = TableElements.getTrByIndex(that._table.getId(), record.index);
           if (!tr) {
             return;
           }
           if ($(this).is(':checked')) {
             $(tr).addClass('table-primary');
-            coreuiTablePrivate._trigger(that._table, 'record_select', [record]);
+            TablePrivate._trigger(that._table, 'record_select', [record]);
           } else {
             $(tr).removeClass('table-primary');
-            coreuiTablePrivate._trigger(that._table, 'record_unselect', [record]);
+            TablePrivate._trigger(that._table, 'record_unselect', [record]);
           }
         });
         return select;
@@ -15425,7 +15584,7 @@
   var ColumnsSwitch = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsSwitch(table, options) {
@@ -15450,7 +15609,7 @@
 
       // Показ строк
       table.on('records_show', function () {
-        var containers = coreuiTableElements.getRowsSwitches(table.getId());
+        var containers = TableElements.getRowsSwitches(table.getId());
 
         // Отмена обработки нажатия в switch колонках
         containers.click(function (event) {
@@ -15500,7 +15659,7 @@
       key: "render",
       value: function render(content, record) {
         var isChecked = content === this._options.valueY;
-        var formSwitch = $(coreuiTableUtils.render(tpl['columns/switch.html'], {
+        var formSwitch = $(TableUtils.render(tpl['columns/switch.html'], {
           index: record.index,
           field: this._options.field,
           disabled: this._options.disabled,
@@ -15550,7 +15709,7 @@
   var ColumnsText = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsText(table, options) {
@@ -15579,7 +15738,7 @@
             "class": 'coreui_table__no-wrap'
           };
         } else {
-          _this2._options.attr = coreuiTableUtils.mergeAttr(_this2._options.attr, {
+          _this2._options.attr = TableUtils.mergeAttr(_this2._options.attr, {
             "class": 'coreui_table__no-wrap'
           });
         }
@@ -15633,7 +15792,7 @@
   var ColumnsButton = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsButton(table, options) {
@@ -15660,10 +15819,10 @@
     return _createClass(ColumnsButton, [{
       key: "render",
       value: function render(content, record) {
-        if (!coreuiTableUtils.isObject(content)) {
+        if (!TableUtils.isObject(content)) {
           return '';
         }
-        if (!coreuiTableUtils.isObject(content.attr)) {
+        if (!TableUtils.isObject(content.attr)) {
           content.attr = {};
         }
         if (!content.attr.hasOwnProperty('class')) {
@@ -15678,7 +15837,7 @@
             attributes.push(name + '="' + value + '"');
           }
         });
-        var btn = $(coreuiTableUtils.render(tpl['columns/button.html'], {
+        var btn = $(TableUtils.render(tpl['columns/button.html'], {
           content: content.content,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
@@ -15731,7 +15890,7 @@
   var ColumnsLink = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsLink(table, options) {
@@ -15775,7 +15934,7 @@
     }, {
       key: "render",
       value: function render(content, record) {
-        if ((typeof content !== 'string' || !content) && (!coreuiTableUtils.isObject(content) || !content.hasOwnProperty('url') || typeof content.url !== 'string' || !content.url)) {
+        if ((typeof content !== 'string' || !content) && (!TableUtils.isObject(content) || !content.hasOwnProperty('url') || typeof content.url !== 'string' || !content.url)) {
           return '';
         }
         var linkContent = '';
@@ -15784,7 +15943,7 @@
           attr.href = content;
           linkContent = content;
         } else {
-          if (content.hasOwnProperty('attr') && coreuiTableUtils.isObject(content.attr)) {
+          if (content.hasOwnProperty('attr') && TableUtils.isObject(content.attr)) {
             attr = content.attr;
           }
           if (attr.hasOwnProperty('href')) {
@@ -15803,7 +15962,7 @@
             attributes.push(name + '="' + value + '"');
           }
         });
-        var link = $(coreuiTableUtils.render(tpl['columns/link.html'], {
+        var link = $(TableUtils.render(tpl['columns/link.html'], {
           content: linkContent,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
@@ -15833,7 +15992,7 @@
   var ColumnsMenu = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsMenu(table, options) {
@@ -15860,18 +16019,18 @@
     return _createClass(ColumnsMenu, [{
       key: "render",
       value: function render(content, record) {
-        if (!coreuiTableUtils.isObject(content) || !content.hasOwnProperty('items') || !Array.isArray(content.items) || content.items.length === 0) {
+        if (!TableUtils.isObject(content) || !content.hasOwnProperty('items') || !Array.isArray(content.items) || content.items.length === 0) {
           return '';
         }
         var items = [];
         var attr = {};
         if (Array.isArray(content.items)) {
           $.each(content.items, function (key, item) {
-            if (coreuiTableUtils.isObject(item) && typeof item.type === 'string') {
+            if (TableUtils.isObject(item) && typeof item.type === 'string') {
               if (item.type === 'link') {
                 if (item.hasOwnProperty('url') && item.hasOwnProperty('content') && typeof item.url === 'string' && typeof item.content === 'string') {
                   var linkAttr = {};
-                  if (item.hasOwnProperty('attr') || coreuiTableUtils.isObject(item.attr)) {
+                  if (item.hasOwnProperty('attr') || TableUtils.isObject(item.attr)) {
                     linkAttr = item.attr;
                   }
                   if (linkAttr.hasOwnProperty('href')) {
@@ -15898,7 +16057,7 @@
               } else if (item.type === 'button') {
                 if (item.hasOwnProperty('content') && item.hasOwnProperty('onClick') && typeof item.content === 'string' && ['string', 'function'].indexOf(_typeof(item.onClick)) >= 0) {
                   var btnAttr = {};
-                  if (item.hasOwnProperty('attr') || coreuiTableUtils.isObject(item.attr)) {
+                  if (item.hasOwnProperty('attr') || TableUtils.isObject(item.attr)) {
                     btnAttr = item.attr;
                   }
                   if (btnAttr.hasOwnProperty('type')) {
@@ -15920,7 +16079,7 @@
                   });
                   items.push({
                     type: 'button',
-                    id: coreuiTableUtils.hashCode(),
+                    id: TableUtils.hashCode(),
                     content: item.content,
                     onClick: item.onClick,
                     attr: btnAttributes.length > 0 ? ' ' + btnAttributes.join(' ') : ''
@@ -15941,7 +16100,7 @@
             }
           });
         }
-        if (content.hasOwnProperty('attr') && coreuiTableUtils.isObject(content.attr)) {
+        if (content.hasOwnProperty('attr') && TableUtils.isObject(content.attr)) {
           attr = content.attr;
         }
         if (!attr.hasOwnProperty('class') || ['string', 'number'].indexOf(_typeof(attr["class"])) < 0) {
@@ -15961,7 +16120,7 @@
         });
         var menuContent = content.hasOwnProperty('content') && typeof content.content === 'string' && content.content ? content.content : '<i class="bi bi-three-dots-vertical"></i>';
         var position = content.hasOwnProperty('position') && typeof content.position === 'string' && content.position ? content.position : 'end';
-        var menu = $(coreuiTableUtils.render(tpl['columns/menu.html'], {
+        var menu = $(TableUtils.render(tpl['columns/menu.html'], {
           content: menuContent,
           position: position,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
@@ -15989,7 +16148,7 @@
         if (Array.isArray(items)) {
           var that = this;
           $.each(items, function (key, item) {
-            if (coreuiTableUtils.isObject(item) && typeof item.type === 'string') {
+            if (TableUtils.isObject(item) && typeof item.type === 'string') {
               if (item.type === 'button') {
                 if (item.hasOwnProperty('content') && item.hasOwnProperty('onClick') && ['string', 'function'].indexOf(_typeof(item.onClick)) >= 0 && typeof item.content === 'string') {
                   $('button#btn-dropdown-' + item.id, menu).click(function (event) {
@@ -16026,7 +16185,7 @@
   var ColumnsBadge = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsBadge(table, options) {
@@ -16077,13 +16236,13 @@
             type: 'secondary',
             text: content
           };
-        } else if (!coreuiTableUtils.isObject(content) || !content.hasOwnProperty('type') || !content.hasOwnProperty('text') || typeof content.type !== 'string' || typeof content.text !== 'string' || !content.text) {
+        } else if (!TableUtils.isObject(content) || !content.hasOwnProperty('type') || !content.hasOwnProperty('text') || typeof content.type !== 'string' || typeof content.text !== 'string' || !content.text) {
           return '';
         }
         if (content.type === '' || content.type === 'none') {
           return content.text;
         }
-        return coreuiTableUtils.render(tpl['columns/badge.html'], {
+        return TableUtils.render(tpl['columns/badge.html'], {
           type: content.type,
           text: content.text
         });
@@ -16108,7 +16267,7 @@
   var ColumnsComponent = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsComponent(table, options) {
@@ -16135,10 +16294,10 @@
     return _createClass(ColumnsComponent, [{
       key: "render",
       value: function render(content, record) {
-        if (!coreuiTableUtils.isObject(content) || !content.hasOwnProperty('component') || typeof content.component !== 'string' || !content.component) {
+        if (!TableUtils.isObject(content) || !content.hasOwnProperty('component') || typeof content.component !== 'string' || !content.component) {
           return '';
         }
-        return coreuiTableRender.renderComponents(this._table, content, 'records_show');
+        return TableRender.renderComponents(this._table, content, 'records_show');
       }
     }]);
   }(Column);
@@ -16160,7 +16319,7 @@
   var ColumnsProgress = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsProgress(table, options) {
@@ -16209,7 +16368,7 @@
     }, {
       key: "render",
       value: function render(content, record) {
-        if (!coreuiTableUtils.isNumeric(content) && (!coreuiTableUtils.isObject(content) || !content.hasOwnProperty('percent') || !coreuiTableUtils.isNumeric(content.percent))) {
+        if (!TableUtils.isNumeric(content) && (!TableUtils.isObject(content) || !content.hasOwnProperty('percent') || !TableUtils.isNumeric(content.percent))) {
           return '';
         }
         var description = null;
@@ -16217,22 +16376,22 @@
         var percentText = '';
         var color = typeof this._options.barColor === 'string' ? this._options.barColor : 'primary';
         var attr = this._options.attr;
-        attr = coreuiTableUtils.mergeAttr(attr, {
+        attr = TableUtils.mergeAttr(attr, {
           "class": 'progress me-1'
         });
         if (this._options.barWidth) {
-          var barWidth = coreuiTableUtils.isNumeric(this._options.barWidth) ? this._options.barWidth + 'px' : this._options.barWidth;
-          attr = coreuiTableUtils.mergeAttr(attr, {
+          var barWidth = TableUtils.isNumeric(this._options.barWidth) ? this._options.barWidth + 'px' : this._options.barWidth;
+          attr = TableUtils.mergeAttr(attr, {
             style: 'width:' + barWidth
           });
         }
         if (this._options.barHeight) {
-          var barHeight = coreuiTableUtils.isNumeric(this._options.barHeight) ? this._options.barHeight + 'px' : this._options.barHeight;
-          attr = coreuiTableUtils.mergeAttr(attr, {
+          var barHeight = TableUtils.isNumeric(this._options.barHeight) ? this._options.barHeight + 'px' : this._options.barHeight;
+          attr = TableUtils.mergeAttr(attr, {
             style: 'height:' + barHeight
           });
         }
-        if (coreuiTableUtils.isNumeric(content)) {
+        if (TableUtils.isNumeric(content)) {
           if (content < 0) {
             percent = 0;
           } else if (content > 100) {
@@ -16264,7 +16423,7 @@
             attributes.push(name + '="' + value + '"');
           }
         });
-        return coreuiTableUtils.render(tpl['columns/progress.html'], {
+        return TableUtils.render(tpl['columns/progress.html'], {
           description: description,
           percent: percent,
           percentText: percentText,
@@ -16292,7 +16451,7 @@
   var ColumnsImage = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     function ColumnsImage(table, options) {
@@ -16334,36 +16493,36 @@
         var attr = this._options.attr;
         attr.src = content;
         if (this._options.imgWidth) {
-          var imgWidth = coreuiTableUtils.isNumeric(this._options.imgWidth) ? this._options.imgWidth + 'px' : this._options.imgWidth;
-          attr = coreuiTableUtils.mergeAttr(attr, {
+          var imgWidth = TableUtils.isNumeric(this._options.imgWidth) ? this._options.imgWidth + 'px' : this._options.imgWidth;
+          attr = TableUtils.mergeAttr(attr, {
             style: 'width:' + imgWidth
           });
         }
         if (this._options.imgHeight) {
-          var imgHeight = coreuiTableUtils.isNumeric(this._options.imgHeight) ? this._options.imgHeight + 'px' : this._options.imgHeight;
-          attr = coreuiTableUtils.mergeAttr(attr, {
+          var imgHeight = TableUtils.isNumeric(this._options.imgHeight) ? this._options.imgHeight + 'px' : this._options.imgHeight;
+          attr = TableUtils.mergeAttr(attr, {
             style: 'height:' + imgHeight
           });
         }
         if (this._options.imgBorder) {
-          attr = coreuiTableUtils.mergeAttr(attr, {
+          attr = TableUtils.mergeAttr(attr, {
             "class": 'border border-secondary-subtle'
           });
         }
         if (this._options.imgStyle && typeof this._options.imgStyle === 'string') {
           switch (this._options.imgStyle) {
             case 'circle':
-              attr = coreuiTableUtils.mergeAttr(attr, {
+              attr = TableUtils.mergeAttr(attr, {
                 "class": 'rounded-circle'
               });
               break;
             case 'thumb':
-              attr = coreuiTableUtils.mergeAttr(attr, {
+              attr = TableUtils.mergeAttr(attr, {
                 "class": 'img-thumbnail'
               });
               break;
             case 'rounded':
-              attr = coreuiTableUtils.mergeAttr(attr, {
+              attr = TableUtils.mergeAttr(attr, {
                 "class": 'rounded'
               });
               break;
@@ -16375,71 +16534,71 @@
             attributes.push(name + '="' + value + '"');
           }
         });
-        return coreuiTableUtils.render(tpl['columns/image.html'], {
+        return TableUtils.render(tpl['columns/image.html'], {
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         });
       }
     }]);
   }(Column);
 
-  coreuiTable.lang.ru = langRu;
-  coreuiTable.lang.en = langEn;
-  coreuiTable.controls.link = ControlLink;
-  coreuiTable.controls.button = ControlButton;
-  coreuiTable.controls.dropdown = ControlDropdown;
-  coreuiTable.controls.buttonGroup = ControlButtonGroup;
-  coreuiTable.controls.custom = ControlCustom;
-  coreuiTable.controls.pageSize = ControlPageSize;
-  coreuiTable.controls.pageJump = ControlPageJump;
-  coreuiTable.controls.pages = ControlPages;
-  coreuiTable.controls.total = ControlTotal;
-  coreuiTable.controls.search = ControlSearch;
-  coreuiTable.controls.columns = ControlColumns;
-  coreuiTable.controls.caption = ControlCaption;
-  coreuiTable.controls.filterClear = ControlFilterClear;
-  coreuiTable.controls.divider = ControlDivider;
-  coreuiTable.filters.text = FilterText;
-  coreuiTable.filters.number = FilterNumber;
-  coreuiTable.filters.date = FilterDate;
-  coreuiTable.filters.datetime = FilterDatetime;
-  coreuiTable.filters.dateMonth = FilterDateMonth;
-  coreuiTable.filters.dateRange = FilterDateRange;
-  coreuiTable.filters.datetimeRange = FilterDatetimeRange;
-  coreuiTable.filters.checkbox = FilterCheckbox;
-  coreuiTable.filters.radio = FilterRadio;
-  coreuiTable.filters.select = FilterSelect;
-  coreuiTable.filters["switch"] = FilterSwitch;
-  coreuiTable.search.text = SearchText;
-  coreuiTable.search.number = SearchNumber;
-  coreuiTable.search.date = SearchDate;
-  coreuiTable.search.dateMonth = SearchDateMonth;
-  coreuiTable.search.datetime = SearchDatetime;
-  coreuiTable.search.dateRange = SearchDateRange;
-  coreuiTable.search.datetimeRange = SearchDatetimeRange;
-  coreuiTable.search.checkbox = SearchCheckbox;
-  coreuiTable.search.checkboxBtn = SearchCheckboxBtn;
-  coreuiTable.search.radio = SearchRadio;
-  coreuiTable.search.radioBtn = SearchRadioBtn;
-  coreuiTable.search.select = SearchSelect;
-  coreuiTable.search["switch"] = SearchSwitch;
-  coreuiTable.columns.date = ColumnsDate;
-  coreuiTable.columns.datetime = ColumnsDatetime;
-  coreuiTable.columns.dateHuman = ColumnsDateHuman;
-  coreuiTable.columns.html = ColumnsHtml;
-  coreuiTable.columns.number = ColumnsNumber;
-  coreuiTable.columns.money = ColumnsMoney;
-  coreuiTable.columns.numbers = ColumnsNumbers;
-  coreuiTable.columns.select = ColumnsSelect;
-  coreuiTable.columns["switch"] = ColumnsSwitch;
-  coreuiTable.columns.text = ColumnsText;
-  coreuiTable.columns.button = ColumnsButton;
-  coreuiTable.columns.link = ColumnsLink;
-  coreuiTable.columns.menu = ColumnsMenu;
-  coreuiTable.columns.badge = ColumnsBadge;
-  coreuiTable.columns.component = ColumnsComponent;
-  coreuiTable.columns.progress = ColumnsProgress;
-  coreuiTable.columns.image = ColumnsImage;
+  Table.lang.ru = langRu;
+  Table.lang.en = langEn;
+  Table.controls.link = ControlLink;
+  Table.controls.button = ControlButton;
+  Table.controls.dropdown = ControlDropdown;
+  Table.controls.buttonGroup = ControlButtonGroup;
+  Table.controls.custom = ControlCustom;
+  Table.controls.pageSize = ControlPageSize;
+  Table.controls.pageJump = ControlPageJump;
+  Table.controls.pages = ControlPages;
+  Table.controls.total = ControlTotal;
+  Table.controls.search = ControlSearch;
+  Table.controls.columns = ControlColumns;
+  Table.controls.caption = ControlCaption;
+  Table.controls.filterClear = ControlFilterClear;
+  Table.controls.divider = ControlDivider;
+  Table.filters.text = FilterText;
+  Table.filters.number = FilterNumber;
+  Table.filters.date = FilterDate;
+  Table.filters.datetime = FilterDatetime;
+  Table.filters.dateMonth = FilterDateMonth;
+  Table.filters.dateRange = FilterDateRange;
+  Table.filters.datetimeRange = FilterDatetimeRange;
+  Table.filters.checkbox = FilterCheckbox;
+  Table.filters.radio = FilterRadio;
+  Table.filters.select = FilterSelect;
+  Table.filters["switch"] = FilterSwitch;
+  Table.search.text = SearchText;
+  Table.search.number = SearchNumber;
+  Table.search.date = SearchDate;
+  Table.search.dateMonth = SearchDateMonth;
+  Table.search.datetime = SearchDatetime;
+  Table.search.dateRange = SearchDateRange;
+  Table.search.datetimeRange = SearchDatetimeRange;
+  Table.search.checkbox = SearchCheckbox;
+  Table.search.checkboxBtn = SearchCheckboxBtn;
+  Table.search.radio = SearchRadio;
+  Table.search.radioBtn = SearchRadioBtn;
+  Table.search.select = SearchSelect;
+  Table.search["switch"] = SearchSwitch;
+  Table.columns.date = ColumnsDate;
+  Table.columns.datetime = ColumnsDatetime;
+  Table.columns.dateHuman = ColumnsDateHuman;
+  Table.columns.html = ColumnsHtml;
+  Table.columns.number = ColumnsNumber;
+  Table.columns.money = ColumnsMoney;
+  Table.columns.numbers = ColumnsNumbers;
+  Table.columns.select = ColumnsSelect;
+  Table.columns["switch"] = ColumnsSwitch;
+  Table.columns.text = ColumnsText;
+  Table.columns.button = ColumnsButton;
+  Table.columns.link = ColumnsLink;
+  Table.columns.menu = ColumnsMenu;
+  Table.columns.badge = ColumnsBadge;
+  Table.columns.component = ColumnsComponent;
+  Table.columns.progress = ColumnsProgress;
+  Table.columns.image = ColumnsImage;
 
-  return coreuiTable;
+  return Table;
 
 }));

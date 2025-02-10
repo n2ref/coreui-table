@@ -1,12 +1,12 @@
-import coreuiTableUtils  from "../coreui.table.utils";
-import coreuiTableRender from "../coreui.table.render";
+import TableUtils  from "../table.utils";
+import TableRender from "../table.render";
 import Column            from "../abstract/Column";
 
 class ColumnsComponent extends Column {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -33,7 +33,7 @@ class ColumnsComponent extends Column {
      */
     render(content, record) {
 
-        if ( ! coreuiTableUtils.isObject(content) ||
+        if ( ! TableUtils.isObject(content) ||
              ! content.hasOwnProperty('component') ||
              typeof content.component !== 'string' ||
              ! content.component
@@ -41,7 +41,7 @@ class ColumnsComponent extends Column {
             return '';
         }
 
-        return coreuiTableRender.renderComponents(this._table, content, 'records_show');
+        return TableRender.renderComponents(this._table, content, 'records_show');
     }
 }
 

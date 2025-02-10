@@ -1,13 +1,13 @@
 
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTableUtils from "../coreui.table.utils";
+import TableTpl   from "../table.tpl";
+import TableUtils from "../table.utils";
 import Search           from "../abstract/Search";
 
 class SearchSelect extends Search {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -144,7 +144,7 @@ class SearchSelect extends Search {
         let attributes    = [];
 
         if ( ! options.hasOwnProperty('attr') ||
-             ! coreuiTableUtils.isObject(options.attr)
+             ! TableUtils.isObject(options.attr)
         ) {
             options.attr = {};
         }
@@ -154,7 +154,7 @@ class SearchSelect extends Search {
         }
 
         if (options.width) {
-            options.attr = coreuiTableUtils.mergeAttr(
+            options.attr = TableUtils.mergeAttr(
                 { style: 'width:' + options.width + 'px' },
                 options.attr
             );
@@ -173,7 +173,7 @@ class SearchSelect extends Search {
                         text: option
                     }));
 
-                } else if (coreuiTableUtils.isObject(option)) {
+                } else if (TableUtils.isObject(option)) {
                     let type = option.hasOwnProperty('type') && typeof option.type === 'string'
                         ? option.type
                         : 'option';
@@ -184,7 +184,7 @@ class SearchSelect extends Search {
                         let groupOptions = [];
 
                         if (option.hasOwnProperty('attr') &&
-                            coreuiTableUtils.isObject(option.attr)
+                            TableUtils.isObject(option.attr)
                         ) {
                             groupAttr = option.attr;
                         }
@@ -221,7 +221,7 @@ class SearchSelect extends Search {
         });
 
 
-        this._control = $(coreuiTableUtils.render(coreuiTableTpl['search/select.html'], {
+        this._control = $(TableUtils.render(TableTpl['search/select.html'], {
             field: options,
             value: this._value,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',

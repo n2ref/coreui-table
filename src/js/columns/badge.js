@@ -1,12 +1,12 @@
-import coreuiTableUtils from "../coreui.table.utils";
-import coreuiTableTpl   from "../coreui.table.templates";
+import TableUtils from "../table.utils";
+import TableTpl   from "../table.tpl";
 import Column           from "../abstract/Column";
 
 class ColumnsBadge extends Column {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -61,7 +61,7 @@ class ColumnsBadge extends Column {
         if (['string', 'number'].indexOf(typeof content) >= 0) {
             content = { type: 'secondary', text: content };
 
-        } else if ( ! coreuiTableUtils.isObject(content) ||
+        } else if ( ! TableUtils.isObject(content) ||
              ! content.hasOwnProperty('type') ||
              ! content.hasOwnProperty('text') ||
              typeof content.type !== 'string' ||
@@ -75,7 +75,7 @@ class ColumnsBadge extends Column {
             return content.text;
         }
 
-        return coreuiTableUtils.render(coreuiTableTpl['columns/badge.html'], {
+        return TableUtils.render(TableTpl['columns/badge.html'], {
             type: content.type,
             text: content.text
         });

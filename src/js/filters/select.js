@@ -1,13 +1,13 @@
 
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTableUtils from "../coreui.table.utils";
+import TableTpl   from "../table.tpl";
+import TableUtils from "../table.utils";
 import Filter           from "../abstract/Filter";
 
 class FilterSelect extends Filter {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -150,7 +150,7 @@ class FilterSelect extends Filter {
             : '';
 
         if ( ! options.hasOwnProperty('attr') ||
-            ! coreuiTableUtils.isObject(options.attr)
+            ! TableUtils.isObject(options.attr)
         ) {
             options.attr = {};
         }
@@ -160,7 +160,7 @@ class FilterSelect extends Filter {
         }
 
         if (options.width) {
-            options.attr = coreuiTableUtils.mergeAttr(
+            options.attr = TableUtils.mergeAttr(
                 { style: 'width:' + options.width + 'px' },
                 options.attr
             );
@@ -179,7 +179,7 @@ class FilterSelect extends Filter {
                         text: option
                     }));
 
-                } else if (coreuiTableUtils.isObject(option)) {
+                } else if (TableUtils.isObject(option)) {
                     let type = option.hasOwnProperty('type') && typeof option.type === 'string'
                         ? option.type
                         : 'option';
@@ -190,7 +190,7 @@ class FilterSelect extends Filter {
                         let groupOptions = [];
 
                         if (option.hasOwnProperty('attr') &&
-                            coreuiTableUtils.isObject(option.attr)
+                            TableUtils.isObject(option.attr)
                         ) {
                             groupAttr = option.attr;
                         }
@@ -226,7 +226,7 @@ class FilterSelect extends Filter {
             attributes.push(name + '="' + value + '"');
         });
 
-        this._control = $(coreuiTableUtils.render(coreuiTableTpl['filters/select.html'], {
+        this._control = $(TableUtils.render(TableTpl['filters/select.html'], {
             label: label,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             options: selectOptions

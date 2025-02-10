@@ -1,15 +1,15 @@
 
-import coreuiTableElements from "../coreui.table.elements";
-import coreuiTablePrivate  from "../coreui.table.private";
-import coreuiTableTpl      from "../coreui.table.templates";
-import coreuiTableUtils    from "../coreui.table.utils";
+import TableElements from "../table.elements";
+import TablePrivate  from "../table.private";
+import TableTpl      from "../table.tpl";
+import TableUtils    from "../table.utils";
 import Column              from "../abstract/Column";
 
 class ColumnsSelect extends Column {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -25,10 +25,10 @@ class ColumnsSelect extends Column {
         };
 
         if (options.hasOwnProperty('attr')) {
-            options.attr = coreuiTableUtils.mergeAttr(originalOptions.attr, options.attr);
+            options.attr = TableUtils.mergeAttr(originalOptions.attr, options.attr);
         }
         if (options.hasOwnProperty('attrHeader')) {
-            options.attrHeader = coreuiTableUtils.mergeAttr(originalOptions.attrHeader, options.attrHeader);
+            options.attrHeader = TableUtils.mergeAttr(originalOptions.attrHeader, options.attrHeader);
         }
 
         options = $.extend(true, originalOptions, options);
@@ -36,13 +36,13 @@ class ColumnsSelect extends Column {
         super(table, options);
 
 
-        this._options.label = coreuiTableTpl['columns/select_label.html'];
+        this._options.label = TableTpl['columns/select_label.html'];
 
         // Показ строк
         table.on('records_show', function () {
 
-            let selects   = coreuiTableElements.getRowsSelects(table.getId());
-            let selectAll = coreuiTableElements.getRowsSelectAll(table.getId());
+            let selects   = TableElements.getRowsSelects(table.getId());
+            let selectAll = TableElements.getRowsSelectAll(table.getId());
 
             // Отмена обработки нажатия в select колонках
             $(selects).click(function (event) {
@@ -93,7 +93,7 @@ class ColumnsSelect extends Column {
      */
     render(content, record) {
 
-        let select = $(coreuiTableUtils.render(coreuiTableTpl['columns/select.html'], {
+        let select = $(TableUtils.render(TableTpl['columns/select.html'], {
             index: record.index
         }));
 
@@ -101,7 +101,7 @@ class ColumnsSelect extends Column {
 
         // Выбор строки
         select.click(function () {
-            let tr = coreuiTableElements.getTrByIndex(that._table.getId(), record.index);
+            let tr = TableElements.getTrByIndex(that._table.getId(), record.index);
 
             if ( ! tr) {
                 return;
@@ -110,11 +110,11 @@ class ColumnsSelect extends Column {
             if ($(this).is(':checked')) {
                 $(tr).addClass('table-primary');
 
-                coreuiTablePrivate._trigger(that._table, 'record_select', [ record ]);
+                TablePrivate._trigger(that._table, 'record_select', [ record ]);
             } else {
                 $(tr).removeClass('table-primary');
 
-                coreuiTablePrivate._trigger(that._table, 'record_unselect', [ record ]);
+                TablePrivate._trigger(that._table, 'record_unselect', [ record ]);
             }
         });
 

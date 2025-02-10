@@ -1,8 +1,8 @@
 
-import coreuiTableRender  from "./coreui.table.render";
+import TableRender from "./table.render";
 
 
-let coreuiTableElements = {
+let TableElements = {
 
     /**
      * Получение контейнера таблицы
@@ -183,7 +183,7 @@ let coreuiTableElements = {
      */
     addExpandRow: function (table, recordElement, content) {
 
-        let expandRecord = coreuiTableRender.renderExpand(table, content, 'record_expand_show');
+        let expandRecord = TableRender.renderExpand(table, content, 'record_expand_show');
 
         recordElement.after(expandRecord);
         recordElement.next().show('fast');
@@ -396,4 +396,4 @@ let coreuiTableElements = {
     }
 }
 
-export default coreuiTableElements;
+export default TableElements;

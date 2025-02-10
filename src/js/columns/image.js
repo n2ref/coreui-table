@@ -1,12 +1,12 @@
-import coreuiTableUtils from "../coreui.table.utils";
-import coreuiTableTpl   from "../coreui.table.templates";
+import TableUtils from "../table.utils";
+import TableTpl   from "../table.tpl";
 import Column           from "../abstract/Column";
 
 class ColumnsImage extends Column {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -50,28 +50,28 @@ class ColumnsImage extends Column {
         attr.src = content;
 
         if (this._options.imgWidth) {
-            let imgWidth = coreuiTableUtils.isNumeric(this._options.imgWidth)
+            let imgWidth = TableUtils.isNumeric(this._options.imgWidth)
                 ? (this._options.imgWidth + 'px')
                 : this._options.imgWidth;
-            attr = coreuiTableUtils.mergeAttr(attr, { style: 'width:' + imgWidth });
+            attr = TableUtils.mergeAttr(attr, { style: 'width:' + imgWidth });
         }
 
         if (this._options.imgHeight) {
-            let imgHeight = coreuiTableUtils.isNumeric(this._options.imgHeight)
+            let imgHeight = TableUtils.isNumeric(this._options.imgHeight)
                 ? (this._options.imgHeight + 'px')
                 : this._options.imgHeight;
-            attr = coreuiTableUtils.mergeAttr(attr, { style: 'height:' + imgHeight });
+            attr = TableUtils.mergeAttr(attr, { style: 'height:' + imgHeight });
         }
 
         if (this._options.imgBorder) {
-            attr = coreuiTableUtils.mergeAttr(attr, { class: 'border border-secondary-subtle' });
+            attr = TableUtils.mergeAttr(attr, { class: 'border border-secondary-subtle' });
         }
 
         if (this._options.imgStyle && typeof this._options.imgStyle === 'string') {
             switch (this._options.imgStyle) {
-                case 'circle':  attr = coreuiTableUtils.mergeAttr(attr, { class: 'rounded-circle' }); break;
-                case 'thumb':   attr = coreuiTableUtils.mergeAttr(attr, { class: 'img-thumbnail' }); break;
-                case 'rounded': attr = coreuiTableUtils.mergeAttr(attr, { class: 'rounded' }); break;
+                case 'circle':  attr = TableUtils.mergeAttr(attr, { class: 'rounded-circle' }); break;
+                case 'thumb':   attr = TableUtils.mergeAttr(attr, { class: 'img-thumbnail' }); break;
+                case 'rounded': attr = TableUtils.mergeAttr(attr, { class: 'rounded' }); break;
             }
         }
 
@@ -84,7 +84,7 @@ class ColumnsImage extends Column {
             }
         });
 
-        return coreuiTableUtils.render(coreuiTableTpl['columns/image.html'], {
+        return TableUtils.render(TableTpl['columns/image.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });
     }

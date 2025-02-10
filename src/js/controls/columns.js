@@ -1,16 +1,15 @@
 
-import coreuiTableUtils    from '../coreui.table.utils';
-import coreuiTableTpl      from "../coreui.table.templates";
-import CoreuiTableUtils    from "../coreui.table.utils";
-import coreuiTableElements from "../coreui.table.elements";
-import Control             from "../abstract/Control";
+import TableUtils    from '../table.utils';
+import TableTpl      from "../table.tpl";
+import TableElements from "../table.elements";
+import Control       from "../abstract/Control";
 
 
 class ControlColumns extends Control {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -33,15 +32,15 @@ class ControlColumns extends Control {
         super(table, options);
 
 
-        if ( ! CoreuiTableUtils.isObject(this._options.btn)) {
+        if ( ! TableUtils.isObject(this._options.btn)) {
             this._options.btn = {};
         }
 
-        if ( ! CoreuiTableUtils.isObject(this._options.btnComplete)) {
+        if ( ! TableUtils.isObject(this._options.btnComplete)) {
             this._options.btnComplete = {};
         }
 
-        if (CoreuiTableUtils.isObject(this._options.btnComplete) &&
+        if (TableUtils.isObject(this._options.btnComplete) &&
             typeof this._options.btnComplete.content !== 'string'
         ) {
             this._options.btnComplete.content = table.getLang().complete
@@ -59,7 +58,7 @@ class ControlColumns extends Control {
         let table      = this._table;
         let attributes = [];
 
-        if (coreuiTableUtils.isObject(this._options.btn.attr)) {
+        if (TableUtils.isObject(this._options.btn.attr)) {
             $.each(this._options.btn.attr, function (name, value) {
                 if (['string', 'number'].indexOf(typeof value) >= 0) {
                     attributes.push(name + '="' + value + '"');
@@ -67,15 +66,15 @@ class ControlColumns extends Control {
             });
         }
 
-        let btn = $(coreuiTableUtils.render(coreuiTableTpl['controls/columns.html'], {
+        let btn = $(TableUtils.render(TableTpl['controls/columns.html'], {
             btnContent: this._options.btn.content,
             btnAttr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         }));
 
 
         btn.click(function () {
-            let container       = coreuiTableElements.getColumnsContainer(table.getId());
-            let containerSearch = coreuiTableElements.getSearchContainer(table.getId());
+            let container       = TableElements.getColumnsContainer(table.getId());
+            let containerSearch = TableElements.getSearchContainer(table.getId());
 
             if (containerSearch[0]) {
                 containerSearch.hide();
@@ -89,7 +88,7 @@ class ControlColumns extends Control {
                 let showAll            = true;
                 let btnCompleteAttr    = [];
                 let btnCompleteContent = '';
-                let wrapper            = coreuiTableElements.getWrapper(table.getId());
+                let wrapper            = TableElements.getWrapper(table.getId());
 
                 table._columns.map(function (column) {
                     let options = column.getOptions();
@@ -115,11 +114,11 @@ class ControlColumns extends Control {
 
                 let options = that.getOptions();
 
-                if ( ! coreuiTableUtils.isObject(options.btnComplete)) {
+                if ( ! TableUtils.isObject(options.btnComplete)) {
                     options.btnComplete = {};
                 }
 
-                if ( ! coreuiTableUtils.isObject(options.btnComplete.attr)) {
+                if ( ! TableUtils.isObject(options.btnComplete.attr)) {
                     options.btnComplete.attr = {};
                 }
 
@@ -135,7 +134,7 @@ class ControlColumns extends Control {
                     options.btnComplete.attr.class += ' btn-complete';
                 }
 
-                if (coreuiTableUtils.isObject(options.btnComplete.attr)) {
+                if (TableUtils.isObject(options.btnComplete.attr)) {
                     $.each(options.btnComplete.attr, function (name, value) {
                         if (['string', 'number'].indexOf(typeof value) >= 0) {
                             btnCompleteAttr.push(name + '="' + value + '"');
@@ -148,7 +147,7 @@ class ControlColumns extends Control {
                 }
 
 
-                let containerList = $(coreuiTableUtils.render(coreuiTableTpl['controls/columns/list.html'], {
+                let containerList = $(TableUtils.render(TableTpl['controls/columns/list.html'], {
                     showAll:            showAll,
                     columns:            columns,
                     btnCompleteAttr:    btnCompleteAttr.length > 0 ? (' ' + btnCompleteAttr.join(' ')) : '',

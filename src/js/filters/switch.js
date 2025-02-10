@@ -1,13 +1,13 @@
 
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTableUtils from "../coreui.table.utils";
+import TableTpl   from "../table.tpl";
+import TableUtils from "../table.utils";
 import Filter           from "../abstract/Filter";
 
 class FilterSwitch extends Filter {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -116,7 +116,7 @@ class FilterSwitch extends Filter {
             : '';
 
 
-        this._control = $(coreuiTableUtils.render(coreuiTableTpl['filters/switch.html'], {
+        this._control = $(TableUtils.render(TableTpl['filters/switch.html'], {
             id: this._id,
             valueY: valueY,
             field: typeof options.field === 'string' ? options.field : '',

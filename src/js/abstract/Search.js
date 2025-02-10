@@ -1,4 +1,4 @@
-import coreuiTableUtils from "../coreui.table.utils";
+import TableUtils from "../table.utils";
 
 class Search {
 
@@ -25,7 +25,7 @@ class Search {
         this._options = $.extend(true, this._options, options);
         this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
             ? this._options.id
-            : coreuiTableUtils.hashCode();
+            : TableUtils.hashCode();
     }
 
 

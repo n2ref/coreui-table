@@ -1,6 +1,6 @@
 
-import coreuiTableTpl   from "../coreui.table.templates";
-import coreuiTableUtils from "../coreui.table.utils";
+import TableTpl   from "../table.tpl";
+import TableUtils from "../table.utils";
 import Control          from "../abstract/Control";
 
 
@@ -8,7 +8,7 @@ class ControlFilterClear extends Control {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -41,7 +41,7 @@ class ControlFilterClear extends Control {
         let options = this.getOptions();
         let table   = this._table;
 
-        if ( ! coreuiTableUtils.isObject(options.attr)) {
+        if ( ! TableUtils.isObject(options.attr)) {
             options.attr = {};
         }
 
@@ -68,7 +68,7 @@ class ControlFilterClear extends Control {
         });
 
 
-        let button = $(coreuiTableUtils.render(coreuiTableTpl['controls/filter_clear.html'], {
+        let button = $(TableUtils.render(TableTpl['controls/filter_clear.html'], {
             attr: attr.length > 0 ? (' ' + attr.join(' ')) : '',
             content: options.content ? options.content : '',
         }));

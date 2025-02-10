@@ -1,14 +1,14 @@
 
-import coreuiTableTpl      from "../coreui.table.templates";
-import coreuiTableUtils    from "../coreui.table.utils";
-import coreuiTableElements from "../coreui.table.elements";
+import TableTpl      from "../table.tpl";
+import TableUtils    from "../table.utils";
+import TableElements from "../table.elements";
 import Filter              from "../abstract/Filter";
 
 class FilterText extends Filter {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -92,12 +92,12 @@ class FilterText extends Filter {
             ? options.label
             : '';
 
-        if ( ! coreuiTableUtils.isObject(options.attr)) {
+        if ( ! TableUtils.isObject(options.attr)) {
             options.attr = {};
         }
 
         if (options.hasOwnProperty('width') &&
-            coreuiTableUtils.isNumeric(options.width)
+            TableUtils.isNumeric(options.width)
         ) {
             if (options.attr.hasOwnProperty('style')) {
                 options.attr['style'] += ';width:' + options.width + 'px';
@@ -116,10 +116,10 @@ class FilterText extends Filter {
 
 
 
-        if ( ! coreuiTableUtils.isObject(options.btn)) {
+        if ( ! TableUtils.isObject(options.btn)) {
             options.btn = {};
         }
-        if ( ! coreuiTableUtils.isObject(options.btn.attr)) {
+        if ( ! TableUtils.isObject(options.btn.attr)) {
             options.btn.attr = {};
         }
 
@@ -139,7 +139,7 @@ class FilterText extends Filter {
             attrBtn.push(name + '="' + value + '"');
         });
 
-        this._control = $(coreuiTableUtils.render(coreuiTableTpl['filters/text.html'], {
+        this._control = $(TableUtils.render(TableTpl['filters/text.html'], {
             attr: attr.length > 0 ? (' ' + attr.join(' ')) : '',
             label: label,
             btnAttr: attrBtn.length > 0 ? (' ' + attrBtn.join(' ')) : '',

@@ -1,13 +1,13 @@
 
-import coreuiTableUtils from "../coreui.table.utils";
-import coreuiTableTpl   from "../coreui.table.templates";
+import TableUtils from "../table.utils";
+import TableTpl   from "../table.tpl";
 import Column           from "../abstract/Column";
 
 class ColumnsLink extends Column {
 
     /**
      * Инициализация
-     * @param {coreuiTableInstance} table
+     * @param {TableInstance} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -59,7 +59,7 @@ class ColumnsLink extends Column {
         if (
             (typeof content !== 'string' || ! content)
             &&
-            ( ! coreuiTableUtils.isObject(content) ||
+            ( ! TableUtils.isObject(content) ||
               ! content.hasOwnProperty('url') ||
               typeof content.url !== 'string' ||
               ! content.url
@@ -77,7 +77,7 @@ class ColumnsLink extends Column {
 
         } else {
             if (content.hasOwnProperty('attr') &&
-                coreuiTableUtils.isObject(content.attr)
+                TableUtils.isObject(content.attr)
             ) {
                 attr = content.attr;
             }
@@ -110,7 +110,7 @@ class ColumnsLink extends Column {
         });
 
         let link = $(
-            coreuiTableUtils.render(coreuiTableTpl['columns/link.html'], {
+            TableUtils.render(TableTpl['columns/link.html'], {
                 content: linkContent,
                 attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             })
