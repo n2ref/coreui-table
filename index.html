@@ -209,13 +209,13 @@
                     type: 'out',
                     left: [
                         { type: "button", content: "Select row 2", attr: { class: 'btn btn-secondary' },
-                            onClick: function (event, table) {
-                                table.selectRecord('2');
+                            onClick: function (prop) {
+                                prop.table.selectRecord('2');
                             }
                         },
                         { type: "button", content: "Unselect row 2", attr: { class: 'btn btn-secondary' },
-                            onClick: function (event, table) {
-                                table.unselectRecord('2');
+                            onClick: function (prop) {
+                                prop.table.unselectRecord('2');
                             }
                         }
                     ]
@@ -257,14 +257,14 @@
                 {
                     type: 'out',
                     left: [
+                        { type: "button", content: "Select all",   attr: { class: 'btn btn-secondary' }, onClick: function (prop) { prop.table.selectAll(); } },
+                        { type: "button", content: "Unselect all", attr: { class: 'btn btn-secondary' }, onClick: function (prop) { prop.table.unselectAll(); } }
                         { type: "link",   content: "Link",         attr: { class: 'btn btn-success' },   onClick: function () { return false }, url: "/link-url" },
-                        { type: "button", content: "Select all",   attr: { class: 'btn btn-secondary' }, onClick: function (event, table) { table.selectAll(); } },
-                        { type: "button", content: "Unselect all", attr: { class: 'btn btn-secondary' }, onClick: function (event, table) { table.unselectAll(); } }
                     ],
                     right: [
                         { type: "button", content: "Show id", attr: { class: 'btn btn-secondary' },
-                            onClick: function (event, table) {
-                                let recordsId = table.getSelectedRecordsId();
+                            onClick: function (prop) {
+                                let recordsId = prop.table.getSelectedRecordsId();
 
                                 if (recordsId.length > 0) {
                                     alert('Selected records: ' + recordsId.join(', '))
@@ -274,8 +274,8 @@
                             }
                         },
                         { type: "button", content: "Show records", attr: { class: 'btn btn-secondary' },
-                            onClick: function (event, table) {
-                                let records = table.getSelectedRecords();
+                            onClick: function (prop) {
+                                let records = prop.table.getSelectedRecords();
 
                                 if (records.length > 0) {
                                     alert('Selected records: ' + JSON.stringify(records))
@@ -291,8 +291,8 @@
                     type: 'in',
                     left: [
                         { type: "button", content: "Add record", attr: { class: 'btn btn-secondary' },
-                            onClick: function (event, table) {
-                                table.addRecordLast({
+                            onClick: function (prop) {
+                                prop.table.addRecordLast({
                                     id:    Math.floor(Math.random() * (10 - 100) + 100),
                                     name:  'New name',
                                     email: 'example@gmail.com',
@@ -301,10 +301,10 @@
                             }
                         },
                         { type: "button", content: "Remove record", attr: { class: 'btn btn-secondary' },
-                            onClick: function (event, table) {
-                                let records = table.getRecords();
+                            onClick: function (prop) {
+                                let records = prop.table.getRecords();
                                 if (records.length > 0) {
-                                    table.removeRecordByIndex(records[records.length - 1].index);
+                                    prop.table.removeRecordByIndex(records[records.length - 1].index);
                                 }
                             }
                         }
@@ -313,21 +313,21 @@
                         { type: "dropdown", content: "Dropdown", attr: { class: 'btn btn-primary dropdown-toggle' }, position: 'end',
                             items: [
                                 { type: 'link',   content: 'Link', url: "#" },
-                                { type: 'button', content: 'Button 1', onClick: function (event, table) { console.log(1) } },
+                                { type: 'button', content: 'Button 1', onClick: function (prop) { console.log(1) } },
                                 { type: 'divider' },
-                                { type: 'button', content: 'Button 2', onClick: function (event, table) { console.log(2) } },
+                                { type: 'button', content: 'Button 2', onClick: function (prop) { console.log(2) } },
                             ]
                         },
                         { type: "buttonGroup", attr: { class: 'btn-group' },
                             buttons: [
                                 { type: "link",     content: "Link",     attr: { class: 'btn btn-outline-secondary' }, url: "#" },
-                                { type: "button",   content: "Button",   attr: { class: 'btn btn-outline-secondary' }, onClick: function (event, table) { console.log(1) } },
+                                { type: "button",   content: "Button",   attr: { class: 'btn btn-outline-secondary' }, onClick: function (prop) { console.log(1) } },
                                 { type: "dropdown", content: "Dropdown", attr: { class: 'btn btn-outline-primary dropdown-toggle' },  position: 'end',
                                     items: [
                                         { type: 'link',   content: 'Link', url: "#" },
-                                        { type: 'button', content: 'Button 1', onClick: function (event, table) { console.log(2) } },
+                                        { type: 'button', content: 'Button 1', onClick: function (prop) { console.log(2) } },
                                         { type: 'divider' },
-                                        { type: 'button', content: 'Button 2', onClick: function (event, table) { console.log(3) } },
+                                        { type: 'button', content: 'Button 2', onClick: function (prop) { console.log(3) } },
                                     ]
                                 },
                             ]
@@ -390,7 +390,7 @@
                                 '&lt;/div&gt;'
                         },
                         { type: "custom",
-                            content: function () {
+                            content: function (prop) {
                                 let btn = $('&lt;button type="button" class="btn btn-sm btn-secondary"&gt;Custom button&lt;/button&gt;');
 
                                 btn.click(function () {
@@ -454,20 +454,20 @@
                     left: [
                         {
                             type: "button", content: "Reload", attr: {class: 'btn btn-sm btn-secondary'},
-                            onClick: function (event, table) {
-                                table.reload();
+                            onClick: function (prop) {
+                                prop.table.reload();
                             }
                         },
                         {
                             type: "button", content: "Lock", attr: {class: 'btn btn-sm btn-secondary'},
-                            onClick: function (event, table) {
-                                table.lock();
+                            onClick: function (prop) {
+                                prop.table.lock();
                             }
                         },
                         {
                             type: "button", content: "Unlock", attr: {class: 'btn btn-sm btn-secondary'},
-                            onClick: function (event, table) {
-                                table.unlock();
+                            onClick: function (prop) {
+                                prop.table.unlock();
                             }
                         }
                     ],
@@ -602,15 +602,15 @@
             columns: [
                 { type: 'numbers', width: 10, attr: { class: "bg-light border-end text-end" } },
                 { field: 'btn_static', label: 'static content', type: 'html', width: 110,
-                    render: function (record, table) {
+                    render: function (prop) {
                         let btn = $(`&lt;button class="btn btn-sm btn-outline-secondary"&gt;
                                          &lt;i class="bi bi-chevron-down"&gt;&lt;/i&gt;
                                      &lt;/button&gt;`);
 
                         btn.click(function () {
                             table.expandRecordContent(
-                                record.index,
-                                `Record custom content: &lt;b&gt;${record.data.fname} ${record.data.lname}&lt;/b&gt;`,
+                                prop.record.index,
+                                `Record custom content: &lt;b&gt;${prop.record.data.fname} ${prop.record.data.lname}&lt;/b&gt;`,
                                 true
                             );
                         });
@@ -619,13 +619,13 @@
                     }
                 },
                 { field: 'btn_ajax', label: 'ajax content', type: 'html', width: 110,
-                    render: function (record, table) {
+                    render: function (prop) {
                         let btn = $(`&lt;button class="btn btn-sm btn-outline-secondary"&gt;
                                          &lt;i class="bi bi-chevron-down"&gt;&lt;/i&gt;
                                      &lt;/button&gt;`);
 
                         btn.click(function () {
-                            CoreUI.table.get('expand').expandRecordUrl(record.index, 'data/page1.json');
+                            prop.table.expandRecordUrl(prop.record.index, 'data/page1.json');
                         });
 
                         return btn;
@@ -666,13 +666,13 @@
                 { field: 'email',  label: 'Email',     width: 150 },
                 { type:  'date',   field: 'sdate',     label: 'Start Date', width: 100,  format: 'DD.MM.YYYY' },
                 { type:  'switch', field: 'is_active', label: 'On', valueY: 1, valueN: 0, disabled: false,
-                    onChange: function (record, value) {
-                        alert("Switch record to " + value + ": " + JSON.stringify(record));
+                    onChange: function (prop) {
+                        alert("Switch record to " + prop.input.checked + ": " + JSON.stringify(prop.record));
                     }
                 }
             ],
-            onClick: function (record, table, event) {
-                alert('Click record: ' + JSON.stringify(record))
+            onClick: function (prop) {
+                alert('Click record: ' + JSON.stringify(prop.record))
             },
             records: [
                 { id: "1", name: 'Jane Doe',       email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
@@ -681,11 +681,11 @@
             ]
         });
 
-        tableEvents.on('record_select', function (record) {
-            alert('Select record: ' + JSON.stringify(record));
+        tableEvents.on('record_select', function (prop) {
+            alert('Select record: ' + JSON.stringify(prop.record));
         });
-        tableEvents.on('record_unselect', function (record) {
-            alert('Unselect record: ' + JSON.stringify(record));
+        tableEvents.on('record_unselect', function (prop) {
+            alert('Unselect record: ' + JSON.stringify(prop.record));
         });
         tableEvents.on('record_select_all', function () {
             alert('Select all records');
@@ -776,7 +776,7 @@
                     button: {
                         content: "Button",
                         attr: { class: 'btn btn-sm btn-outline-secondary' },
-                        onClick: function (record, table) { console.log(record) }
+                        onClick: function (prop) { console.log(prop.record) }
                     }
                 },
                 {
@@ -788,7 +788,7 @@
                     button: {
                         content: "Button",
                         attr: { class: 'btn btn-sm btn-outline-secondary' },
-                        onClick: function (record, table) { console.log(record) }
+                        onClick: function (prop) { console.log(prop.record) }
                     }
                 },
                 {
@@ -804,7 +804,7 @@
                     button: {
                         content: "Button",
                         attr: { class: 'btn btn-sm btn-outline-secondary' },
-                        onClick: "console.log(record)"
+                        onClick: "console.log(prop.record)"
                     }
                 },
                 {
@@ -813,7 +813,7 @@
                     button: {
                         content: "Button",
                         attr: { class: 'btn btn-sm btn-outline-secondary' },
-                        onClick: "console.log(record)"
+                        onClick: "console.log(prop.record)"
                     },
                     datetime: '2025-04-06 17:04:10',
                     badge: { type: 'warning',   text: 'Warning' },
@@ -873,14 +873,14 @@
                             {
                                 type: 'button',
                                 content: 'Button',
-                                onClick: function (record, table, event) { console.log('button') }
+                                onClick: function (prop) { console.log('button') }
                             },
                             { type: 'divider' },
                             {
                                 type: 'button',
                                 content: '&lt;i class="bi bi-trash"&gt;&lt;/i&gt; Delete',
                                 attr: { class: 'text-danger' },
-                                onClick: function (record, table, event) { console.log('delete record ' + record.index) }
+                                onClick: function (prop) { console.log('delete record ' + prop.record.index) }
                             },
                         ]
                     }
@@ -1091,8 +1091,8 @@
                     menu: {
                         items: [
                             { type: 'button', text: '&lt;i class="bi bi-layout-text-sidebar-reverse"&gt;&lt;/i&gt; Hide',
-                                onClick: function (table) {
-                                    table.hideColumns([ 'fname' ]);
+                                onClick: function (prop) {
+                                    prop.table.hideColumns([ 'fname' ]);
                                 },
                             },
                         ]
@@ -1103,19 +1103,19 @@
                         position: 'end',
                         items: [
                             { type: 'button', text: '&lt;i class="bi bi-filter-left"&gt;&lt;/i&gt; Sort asc',
-                                onClick: function (table) {
-                                    table.sortFields([ { field: 'lname', order: 'asc' } ]);
+                                onClick: function (prop) {
+                                    prop.table.sortFields([ { field: 'lname', order: 'asc' } ]);
                                 },
                             },
                             { type: 'button', text: '&lt;i class="bi bi-filter-right"&gt;&lt;/i&gt; Sort desc',
-                                onClick: function (table) {
-                                    table.sortFields([ { field: 'lname', order: 'desc' } ]);
+                                onClick: function (prop) {
+                                    prop.table.sortFields([ { field: 'lname', order: 'desc' } ]);
                                 },
                             },
                             { type: 'divider' },
                             { type: 'button', text: '&lt;i class="bi bi-filter-right"&gt;&lt;/i&gt; Sort default',
-                                onClick: function (table) {
-                                    table.sortDefault()
+                                onClick: function (prop) {
+                                    prop.table.sortDefault()
                                 },
                             }
                         ]
@@ -1182,9 +1182,9 @@
                 { type: 'date',    field: 'sdate', label: 'Start Date', width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
                 { type: 'date',    field: 'edate', label: 'End Date',   width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
                 { type: 'switch', field: 'is_active', label: 'On', valueY: 1, valueN: 0,
-                    onChange: function (record, value) {
-                        console.log(record);
-                        console.log(value);
+                    onChange: function (prop) {
+                        console.log(prop.record);
+                        console.log(prop.input);
                     }
                 },
             ],
@@ -1249,9 +1249,9 @@
                 { type: 'date',   field: 'sdate', label: 'Start Date', width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
                 { type: 'date',   field: 'edate', label: 'End Date',   width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
                 { type: 'switch', field: 'is_active', label: 'On', valueY: 1, valueN: 0,
-                    onChange: function (record, value) {
-                        console.log(record);
-                        console.log(value);
+                    onChange: function (prop) {
+                        console.log(prop.record);
+                        console.log(prop.value);
                     }
                 },
             ],
@@ -1368,8 +1368,8 @@
             group: {
                 field: 'fname',
                 attr: { class: 'table-secondary' },
-                render: function (record) {
-                    return 'Group: ' + record.data.fname + ' ' + record.data.lname
+                render: function (prop) {
+                    return 'Group: ' + prop.record.data.fname + ' ' + prop.record.data.lname
                 },
             },
             columns: [

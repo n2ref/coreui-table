@@ -36,13 +36,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 type: 'out',
                 left: [
                     { type: "button", content: "Select row 2", attr: { class: 'btn btn-secondary' },
-                        onClick: function (event, table) {
-                            table.selectRecord('2');
+                        onClick: function (prop) {
+                            prop.table.selectRecord('2');
                         }
                     },
                     { type: "button", content: "Unselect row 2", attr: { class: 'btn btn-secondary' },
-                        onClick: function (event, table) {
-                            table.unselectRecord('2');
+                        onClick: function (prop) {
+                            prop.table.unselectRecord('2');
                         }
                     }
                 ]
@@ -71,14 +71,14 @@ document.addEventListener('DOMContentLoaded', function () {
             {
                 type: 'out',
                 left: [
-                    { type: "button", content: "Select all",   attr: { class: 'btn btn-secondary' }, onClick: function (event, table) { table.selectAll(); } },
-                    { type: "button", content: "Unselect all", attr: { class: 'btn btn-secondary' }, onClick: function (event, table) { table.unselectAll(); } },
+                    { type: "button", content: "Select all",   attr: { class: 'btn btn-secondary' }, onClick: function (prop) { prop.table.selectAll(); } },
+                    { type: "button", content: "Unselect all", attr: { class: 'btn btn-secondary' }, onClick: function (prop) { prop.table.unselectAll(); } },
                     { type: "link",   content: "Link",         attr: { class: 'btn btn-success' },   onClick: function () { return false }, url: "/link-url" }
                 ],
                 right: [
                     { type: "button", content: "Show id", attr: { class: 'btn btn-secondary' },
-                        onClick: function (event, table) {
-                            let recordsId = table.getSelectedRecordsId();
+                        onClick: function (prop) {
+                            let recordsId = prop.table.getSelectedRecordsId();
 
                             if (recordsId.length > 0) {
                                 alert('Selected records: ' + recordsId.join(', '))
@@ -88,8 +88,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     },
                     { type: "button", content: "Show records", attr: { class: 'btn btn-secondary' },
-                        onClick: function (event, table) {
-                            let records = table.getSelectedRecords();
+                        onClick: function (prop) {
+                            let records = prop.table.getSelectedRecords();
 
                             if (records.length > 0) {
                                 alert('Selected records: ' + JSON.stringify(records))
@@ -105,8 +105,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 type: 'in',
                 left: [
                     { type: "button", content: "Add record", attr: { class: 'btn btn-secondary' },
-                        onClick: function (event, table) {
-                            table.addRecordLast({
+                        onClick: function (prop) {
+                            prop.table.addRecordLast({
                                 id:    Math.floor(Math.random() * (10 - 100) + 100),
                                 name:  'New name',
                                 email: 'example@gmail.com',
@@ -115,10 +115,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     },
                     { type: "button", content: "Remove record", attr: { class: 'btn btn-secondary' },
-                        onClick: function (event, table) {
-                            let records = table.getRecords();
+                        onClick: function (prop) {
+                            let records = prop.table.getRecords();
                             if (records.length > 0) {
-                                table.removeRecordByIndex(records[records.length - 1].index);
+                                prop.table.removeRecordByIndex(records[records.length - 1].index);
                             }
                         }
                     }
@@ -127,21 +127,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     { type: "dropdown", content: "Dropdown", attr: { class: 'btn btn-primary dropdown-toggle' }, position: 'end',
                         items: [
                             { type: 'link',   content: 'Link', url: "#" },
-                            { type: 'button', content: 'Button 1', onClick: function (event, table) { console.log(1) } },
+                            { type: 'button', content: 'Button 1', onClick: function (prop) { console.log(1) } },
                             { type: 'divider' },
-                            { type: 'button', content: 'Button 2', onClick: function (event, table) { console.log(2) } },
+                            { type: 'button', content: 'Button 2', onClick: function (prop) { console.log(2) } },
                         ]
                     },
                     { type: "buttonGroup", attr: { class: 'btn-group' },
                         buttons: [
                             { type: "link",     content: "Link",     attr: { class: 'btn btn-outline-secondary' }, url: "#" },
-                            { type: "button",   content: "Button",   attr: { class: 'btn btn-outline-secondary' }, onClick: function (event, table) { console.log(1) } },
+                            { type: "button",   content: "Button",   attr: { class: 'btn btn-outline-secondary' }, onClick: function (prop) { console.log(1) } },
                             { type: "dropdown", content: "Dropdown", attr: { class: 'btn btn-outline-primary dropdown-toggle' }, position: 'end',
                                 items: [
                                     { type: 'link',   content: 'Link', url: "#" },
-                                    { type: 'button', content: 'Button 1', onClick: function (event, table) { console.log(2) } },
+                                    { type: 'button', content: 'Button 1', onClick: function (prop) { console.log(2) } },
                                     { type: 'divider' },
-                                    { type: 'button', content: 'Button 2', onClick: function (event, table) { console.log(3) } },
+                                    { type: 'button', content: 'Button 2', onClick: function (prop) { console.log(3) } },
                                 ]
                             },
                         ]
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             '</div>'
                     },
                     { type: "custom",
-                        content: function () {
+                        content: function (prop) {
                             let btn = $('<button type="button" class="btn btn-sm btn-secondary">Custom button</button>');
 
                             btn.click(function () {
@@ -242,20 +242,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 left: [
                     {
                         type: "button", content: "Reload", attr: {class: 'btn btn-sm btn-secondary'},
-                        onClick: function (event, table) {
-                            table.reload();
+                        onClick: function (prop) {
+                            prop.table.reload();
                         }
                     },
                     {
                         type: "button", content: "Lock", attr: {class: 'btn btn-sm btn-secondary'},
-                        onClick: function (event, table) {
-                            table.lock();
+                        onClick: function (prop) {
+                            prop.table.lock();
                         }
                     },
                     {
                         type: "button", content: "Unlock", attr: {class: 'btn btn-sm btn-secondary'},
-                        onClick: function (event, table) {
-                            table.unlock();
+                        onClick: function (prop) {
+                            prop.table.unlock();
                         }
                     }
                 ],
@@ -352,15 +352,15 @@ document.addEventListener('DOMContentLoaded', function () {
         columns: [
             { type: 'numbers', width: 10, attr: { class: "bbg-body-tertiary border-end text-end" } },
             { field: 'btn_static', label: 'static content', type: 'html', width: 110,
-                render: function (record, table) {
+                render: function (prop) {
                     let btn = $(`<button class="btn btn-sm btn-outline-secondary">
                                      <i class="bi bi-chevron-down"></i>
                                  </button>`);
 
                     btn.click(function () {
-                        table.expandRecordContent(
-                            record.index,
-                            `Record custom content: <b>${record.data.fname} ${record.data.lname}</b>`,
+                        prop.table.expandRecordContent(
+                            prop.record.index,
+                            `Record custom content: <b>${prop.record.data.fname} ${prop.record.data.lname}</b>`,
                             true
                         );
                     });
@@ -369,13 +369,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             },
             { field: 'btn_ajax', label: 'ajax content', type: 'html', width: 110,
-                render: function (record, table) {
+                render: function (prop) {
                     let btn = $(`<button class="btn btn-sm btn-outline-secondary">
                                      <i class="bi bi-chevron-down"></i>
                                  </button>`);
 
                     btn.click(function () {
-                        CoreUI.table.get('expand').expandRecordUrl(record.index, 'data/expand/row' + record.index + '.json');
+                        prop.table.expandRecordUrl(prop.record.index, 'data/expand/row' + prop.record.index + '.json');
                     });
 
                     return btn;
@@ -403,13 +403,13 @@ document.addEventListener('DOMContentLoaded', function () {
             { field: 'email',  label: 'Email',     width: 150 },
             { type:  'date',   field: 'sdate',     label: 'Start Date', width: 100,  format: 'DD.MM.YYYY' },
             { type:  'switch', field: 'is_active', label: 'On', valueY: 1, valueN: 0, disabled: false,
-                onChange: function (record, value) {
-                    alert("Switch record to " + value + ": " + JSON.stringify(record));
+                onChange: function (prop) {
+                    alert("Switch record to " + prop.input.checked + ": " + JSON.stringify(prop.record));
                 }
             }
         ],
-        onClick: function (record, table, event) {
-            alert('Click record: ' + JSON.stringify(record))
+        onClick: function (prop) {
+            alert('Click record: ' + JSON.stringify(prop.record))
         },
         records: [
             { id: "1", name: 'Jane Doe',       email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
@@ -418,11 +418,11 @@ document.addEventListener('DOMContentLoaded', function () {
         ]
     });
 
-    tableEvents.on('record_select', function (record) {
-        alert('Select record: ' + JSON.stringify(record));
+    tableEvents.on('record_select', function (prop) {
+        alert('Select record: ' + JSON.stringify(prop.record));
     });
-    tableEvents.on('record_unselect', function (record) {
-        alert('Unselect record: ' + JSON.stringify(record));
+    tableEvents.on('record_unselect', function (prop) {
+        alert('Unselect record: ' + JSON.stringify(prop.record));
     });
     tableEvents.on('record_select_all', function () {
         alert('Select all records');
@@ -487,7 +487,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 button: {
                     content: "Button",
                     attr: { class: 'btn btn-sm btn-outline-secondary' },
-                    onClick: function (record, table) { console.log(record) }
+                    onClick: function (prop) { console.log(prop.record) }
                 }
             },
             {
@@ -499,7 +499,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 button: {
                     content: "Button",
                     attr: { class: 'btn btn-sm btn-outline-secondary' },
-                    onClick: function (record, table) { console.log(record) }
+                    onClick: function (prop) { console.log(prop.record) }
                 }
             },
             {
@@ -515,7 +515,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 button: {
                     content: "Button",
                     attr: { class: 'btn btn-sm btn-outline-secondary' },
-                    onClick: "console.log(record)"
+                    onClick: "console.log(prop.record)"
                 }
             },
             {
@@ -524,7 +524,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 button: {
                     content: "Button",
                     attr: { class: 'btn btn-sm btn-outline-secondary' },
-                    onClick: "console.log(record)"
+                    onClick: "console.log(prop.record)"
                 },
                 datetime: '2025-04-06 17:04:10',
                 badge: { type: 'warning',   text: 'Warning' },
@@ -570,14 +570,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         {
                             type: 'button',
                             content: 'Button',
-                            onClick: function (record, table, event) { console.log('button') }
+                            onClick: function (prop) { console.log('button') }
                         },
                         { type: 'divider' },
                         {
                             type: 'button',
                             content: '<i class="bi bi-trash"></i> Delete',
                             attr: { class: 'text-danger' },
-                            onClick: function (record, table, event) { console.log('delete record ' + record.index) }
+                            onClick: function (prop) { console.log('delete record ' + prop.record.index) }
                         },
                     ]
                 }
@@ -748,8 +748,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 menu: {
                     items: [
                         { type: 'button', text: '<i class="bi bi-layout-text-sidebar-reverse"></i> Hide',
-                            onClick: function (table) {
-                                table.hideColumns([ 'fname' ]);
+                            onClick: function (prop) {
+                                prop.table.hideColumns([ 'fname' ]);
                             },
                         },
                     ]
@@ -760,19 +760,19 @@ document.addEventListener('DOMContentLoaded', function () {
                     position: 'end',
                     items: [
                         { type: 'button', text: '<i class="bi bi-filter-left"></i> Sort asc',
-                            onClick: function (table) {
-                                table.sortFields([ { field: 'lname', order: 'asc' } ]);
+                            onClick: function (prop) {
+                                prop.table.sortFields([ { field: 'lname', order: 'asc' } ]);
                             },
                         },
                         { type: 'button', text: '<i class="bi bi-filter-right"></i> Sort desc',
-                            onClick: function (table) {
-                                table.sortFields([ { field: 'lname', order: 'desc' } ]);
+                            onClick: function (prop) {
+                                prop.table.sortFields([ { field: 'lname', order: 'desc' } ]);
                             },
                         },
                         { type: 'divider' },
                         { type: 'button', text: '<i class="bi bi-filter-right"></i> Sort default',
-                            onClick: function (table) {
-                                table.sortDefault()
+                            onClick: function (prop) {
+                                prop.table.sortDefault()
                             },
                         }
                     ]
@@ -826,9 +826,9 @@ document.addEventListener('DOMContentLoaded', function () {
             { type: 'date',    field: 'sdate', label: 'Start Date', width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
             { type: 'date',    field: 'edate', label: 'End Date',   width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
             { type: 'switch', field: 'is_active', label: 'On', valueY: 1, valueN: 0,
-                onChange: function (record, value) {
-                    console.log(record);
-                    console.log(value);
+                onChange: function (prop) {
+                    console.log(prop.record);
+                    console.log(prop.input);
                 }
             },
         ],
@@ -880,9 +880,9 @@ document.addEventListener('DOMContentLoaded', function () {
             { type: 'date',   field: 'sdate', label: 'Start Date', width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
             { type: 'date',   field: 'edate', label: 'End Date',   width: 120, format: 'DD/MM/YYYY', attr: { class: 'text-end' }, attrHeader: { class: 'text-end' }},
             { type: 'switch', field: 'is_active', label: 'On', valueY: 1, valueN: 0,
-                onChange: function (record, value) {
-                    console.log(record);
-                    console.log(value);
+                onChange: function (prop) {
+                    console.log(prop.record);
+                    console.log(prop.input);
                 }
             },
         ],
@@ -994,8 +994,8 @@ document.addEventListener('DOMContentLoaded', function () {
             field: 'fname',
             attr: { class: 'table-secondary' },
             isCollapsing: true,
-            render: function (record) {
-                return 'Group: ' + record.data.fname + ' ' + record.data.lname
+            render: function (prop) {
+                return 'Group: ' + prop.record.data.fname + ' ' + prop.record.data.lname
             },
         },
         columns: [
