@@ -72,22 +72,31 @@ class ColumnsButton extends Column {
         if (content.hasOwnProperty('onClick')) {
             let that = this;
 
+            let prop = {
+                table: that._table,
+                record: record,
+            };
+
             if (typeof content.onClick === 'function') {
                 btn.click(function (event) {
                     event.cancelBubble = true;
                     event.preventDefault();
 
-                    content.onClick(record, that._table)
+                    prop.event = event;
+
+                    content.onClick(prop);
                 });
 
             } else if (typeof content.onClick === 'string') {
-                let func = new Function('record', 'table', content.onClick);
+                let func = new Function('prop', content.onClick);
 
                 btn.click(function (event) {
                     event.cancelBubble = true;
                     event.preventDefault();
 
-                    func(record, that._table);
+                    prop.event = event;
+
+                    func(prop);
                 });
 
             } else {

@@ -52,12 +52,18 @@ class ControlLink extends Control {
         if (typeof this._options.onClick === 'function' || typeof this._options.onClick === 'string') {
 
             link.click(function (event) {
+                let prop = {
+                    table: that._table,
+                    control: that,
+                    event: event,
+                };
+
                 if (typeof that._options.onClick === 'function') {
-                    return that._options.onClick(event, that._table);
+                    return that._options.onClick(prop);
 
                 } else if (typeof that._options.onClick === 'string') {
-                    let func = new Function('event', 'table', 'control', that._options.onClick);
-                    func(event, that._table, that);
+                    let func = new Function('prop', that._options.onClick);
+                    func(prop);
                 }
             });
         }

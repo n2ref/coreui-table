@@ -249,11 +249,17 @@ class ColumnsMenu extends Column {
 
                             $('button#btn-dropdown-' + item.id, menu)
                                 .click(function (event) {
+                                    let prop = {
+                                        table: that._table,
+                                        record: record,
+                                        event: event,
+                                    };
+
                                     if (typeof item.onClick === 'function') {
-                                        item.onClick(record, that._table, event);
+                                        item.onClick(prop);
 
                                     } else if (typeof item.onClick === 'string') {
-                                        (new Function('record', 'table', 'event', item.onClick))(record, that._table, event);
+                                        (new Function('prop', item.onClick))(prop);
                                     }
                                 });
                         }

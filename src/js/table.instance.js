@@ -251,13 +251,18 @@ class TableInstance {
                         return;
                     }
 
+                    let prop = {
+                        table: table,
+                        record: record,
+                        event: event,
+                    };
+
                     if (typeof table._options.onClick === 'function') {
-                        table._options.onClick(record, table, event);
+                        table._options.onClick(prop);
 
                     } else if (typeof table._options.onClick === 'string') {
-                        let func = new Function('record', 'table', 'event', table._options.onClick);
-
-                        func(record, table, event);
+                        let func = new Function('prop', table._options.onClick);
+                        func(prop);
                     }
                 });
             }

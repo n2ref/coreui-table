@@ -70,12 +70,18 @@ class ControlDropdown extends Control {
                                 ['string', 'function'].indexOf(typeof item.onClick) >= 0
                             ) {
                                 button.click(function (event) {
+                                    let prop = {
+                                        table: table,
+                                        control: that,
+                                        event: event,
+                                    };
+
                                     if (typeof item.onClick === 'function') {
-                                        item.onClick(event, table, that);
+                                        item.onClick(prop);
 
                                     } else if (typeof item.onClick === 'string') {
-                                        let func = new Function('event', 'table', 'control', item.onClick);
-                                        func(event, table, that);
+                                        let func = new Function('prop', item.onClick);
+                                        func(prop);
                                     }
                                 });
                             }

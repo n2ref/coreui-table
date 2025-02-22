@@ -23,7 +23,7 @@ let TableRender = {
 
         // Колонки
         if (table._columns.length > 0) {
-            $.each(table._columns, function (key, column) {
+            table._columns.map(function (column) {
                 if ( ! column.isShow()) {
                     return;
                 }
@@ -128,12 +128,17 @@ let TableRender = {
                                             attr: attrItem.join(' '),
                                         }));
 
-                                        menuElement.find('button').click(function () {
+                                        menuElement.find('button').click(function (event) {
+                                            let prop = {
+                                                table: table,
+                                                event: event,
+                                            };
+
                                             if (typeof item.onClick === 'function') {
-                                                item.onClick(table);
+                                                item.onClick(prop);
 
                                             } else if (typeof item.onClick === 'string') {
-                                                (new Function('table', item.onClick))(table);
+                                                (new Function('prop', item.onClick))(prop);
                                             }
                                         });
 
@@ -490,8 +495,8 @@ let TableRender = {
 
     /**
      * Сборка записи таблицы
-     * @param {object} table
-     * @param {object} record
+     * @param {TableInstance} table
+     * @param {object}        record
      * @returns {{ attr: (string), fields: (object) }}}
      * @private
      */
@@ -584,9 +589,9 @@ let TableRender = {
 
         if (typeof columnOptions.render === 'function') {
             content = columnOptions.render({
-                data: record.data,
-                meta: record.meta,
-                index: record.index,
+                table: table,
+                record: record,
+                field: columnField,
             }, table);
         } else {
             content = columnField && record.data.hasOwnProperty(columnField)
@@ -662,11 +667,16 @@ let TableRender = {
         if (group.hasOwnProperty('render')) {
             let renderContent = null;
 
+            let prop = {
+                table: table,
+                record: record,
+            };
+
             if (typeof group.render === 'function') {
-                renderContent = group.render(record);
+                renderContent = group.render(prop);
 
             } else if (typeof group.render === 'string') {
-                renderContent = (new Function('record', group.render))(record);
+                renderContent = (new Function('prop', group.render))(prop);
             }
 
             if (renderContent) {

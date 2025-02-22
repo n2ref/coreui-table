@@ -52,12 +52,18 @@ class ControlButton extends Control {
             let that = this;
 
             btn.click(function (event) {
+                let prop = {
+                    table: that._table,
+                    control: that,
+                    event: event,
+                };
+
                 if (typeof that._options.onClick === 'function') {
-                    that._options.onClick(event, that._table, that);
+                    that._options.onClick(prop);
 
                 } else if (typeof that._options.onClick === 'string') {
-                    let func = new Function('event', 'table', 'control', that._options.onClick);
-                    func(event, that._table, that);
+                    let func = new Function('prop', that._options.onClick);
+                    func(prop);
                 }
             });
         }

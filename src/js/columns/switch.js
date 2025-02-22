@@ -112,12 +112,19 @@ class ColumnsSwitch extends Column {
             if (that._options.hasOwnProperty('onChange') &&
                 (typeof that._options.onChange === 'function' || typeof that._options.onChange === 'string')
             ) {
+                let prop = {
+                    table: table,
+                    record: record,
+                    input: input,
+                    event: event,
+                };
+
                 if (typeof that._options.onChange === 'function') {
-                    that._options.onChange(record, input);
+                    that._options.onChange(prop);
 
                 } else {
-                    let func = new Function('record', 'input', that._options.onChange);
-                    func(record, input);
+                    let func = new Function('prop', that._options.onChange);
+                    func(prop);
                 }
 
                 return false;

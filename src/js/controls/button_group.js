@@ -135,12 +135,18 @@ class ControlButtonGroup extends Control {
                     ) {
 
                         result.click(function (event) {
+                            let prop = {
+                                table: that._table,
+                                control: that,
+                                event: event,
+                            };
+
                             if (typeof button.onClick === 'function') {
-                                button.onClick(event, that._table, that);
+                                button.onClick(prop);
 
                             } else if (typeof button.onClick === 'string') {
-                                let func = new Function('event', 'table', 'control', button.onClick);
-                                func(event, that._table, that);
+                                let func = new Function('prop', button.onClick);
+                                func(prop);
                             }
                         });
                     }
@@ -190,12 +196,18 @@ class ControlButtonGroup extends Control {
                                         ['string', 'function'].indexOf(typeof item.onClick) >= 0
                                     ) {
                                         btn.click(function (event) {
+                                            let prop = {
+                                                table: that._table,
+                                                control: that,
+                                                event: event,
+                                            };
+
                                             if (typeof item.onClick === 'function') {
-                                                item.onClick(event, that._table, that);
+                                                item.onClick(prop);
 
                                             } else if (typeof item.onClick === 'string') {
-                                                let func = new Function('event', 'table', 'control', item.onClick);
-                                                func(event, that._table, that);
+                                                let func = new Function('prop', item.onClick);
+                                                func(prop);
                                             }
                                         });
                                     }

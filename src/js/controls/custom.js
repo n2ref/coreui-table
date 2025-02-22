@@ -29,7 +29,11 @@ class ControlCustom extends Control {
             return this._options.content;
 
         } else if (typeof this._options.content === 'function') {
-            return this._options.content();
+            let prop = {
+                table: this._options.table,
+            };
+
+            return this._options.content(prop);
         }
     }
 }
