@@ -182,7 +182,7 @@
   tpl['table/controls/footer.html'] = ' <div class="coreui-table__footer ps-1 pe-1 d-flex justify-content-between border-top border-secondary-subtle"> <% if (controlsLeft.length) { %> <div class="coreui-table__controls coreui-table__controls_left d-flex justify-content-start gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center"></div> <% } %> <% if (controlsCenter.length) { %> <div class="coreui-table__controls coreui-table__controls_center d-flex justify-content-center gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center"></div> <% } %> <% if (controlsRight.length) { %> <div class="coreui-table__controls coreui-table__controls_right d-flex justify-content-end gap-2 flex-wrap flex-fill mb-1 mt-1 align-items-center"></div> <% } %> </div>';
   tpl['table/controls/header-out.html'] = ' <div class="coreui-table__header d-flex justify-content-between"> <% if (controlsLeft.length) { %> <div class="coreui-table__controls coreui-table__controls_left d-flex justify-content-start gap-2 flex-wrap flex-fill mb-2 mt-1 align-items-center"></div> <% } %> <% if (controlsCenter.length) { %> <div class="coreui-table__controls coreui-table__controls_center d-flex justify-content-center gap-2 flex-wrap flex-fill mb-2 mt-1 align-items-center"></div> <% } %> <% if (controlsRight.length) { %> <div class="coreui-table__controls coreui-table__controls_right d-flex justify-content-end gap-2 flex-wrap flex-fill mb-2 mt-1 align-items-center"></div> <% } %> </div>';
   tpl['table/controls/header.html'] = ' <div class="coreui-table__header ps-1 pe-1 d-flex justify-content-between border-bottom border-secondary-subtle"> <% if (controlsLeft.length) { %> <div class="coreui-table__controls coreui-table__controls_left d-flex justify-content-start gap-2 flex-wrap flex-fill my-1 align-items-center"></div> <% } %> <% if (controlsCenter.length) { %> <div class="coreui-table__controls coreui-table__controls_center d-flex justify-content-center gap-2 flex-wrap flex-fill my-1 align-items-center"></div> <% } %> <% if (controlsRight.length) { %> <div class="coreui-table__controls coreui-table__controls_right d-flex justify-content-end gap-2 flex-wrap flex-fill my-1 align-items-center"></div> <% } %> </div>';
-  tpl['table/loader.html'] = '<div class="coreui-table-lock position-absolute w-100 top-0 bottom-0"> <div class="coreui-table-block bg-secondary-subtle position-absolute opacity-50 w-100 top-0 bottom-0"></div> <div class="coreui-table-message position-relative d-flex align-content-center justify-content-start gap-2 mt-3 py-1 px-2 m-auto border border-secondary-subtle rounded-3 bg-body-secondary"> <div class="spinner-border text-secondary align-self-center"></div> <span class="lh-lg"><%= lang.loading %></span> </div> </div>';
+  tpl['table/loader.html'] = '<div class="coreui-table-lock position-absolute w-100 top-0 bottom-0"> <div class="coreui-table-block bg-secondary-subtle position-absolute opacity-50 w-100 top-0 bottom-0"></div> <div class="coreui-table-message position-relative shadow-sm d-flex align-content-center justify-content-start gap-2 mt-3 py-1 px-2 m-auto border border-secondary-subtle rounded-3 bg-body-secondary"> <div class="spinner-border text-secondary align-self-center"></div> <span class="lh-lg"><%= lang.loading %></span> </div> </div>';
   tpl['table/record.html'] = '<tr<%- attr %> data-record-index="<%= index %>"> <% fields.map(function(field) { %> <td<%- field.attr %>></td> <% }); %> </tr>';
   tpl['table/record/empty.html'] = '<tr class="coreui-table__record-empty"> <td class="text-center" colspan="<%= columnsCount %>"><%= lang.emptyRecords %></td> </tr>';
   tpl['table/record/expand.html'] = '<tr class="coreui-table__record-expanded" style="display: none"> <td colspan="<%= colspan %>"></td> </tr>';
@@ -1406,7 +1406,7 @@
 
       // Колонки
       if (table._columns.length > 0) {
-        $.each(table._columns, function (key, column) {
+        table._columns.map(function (column) {
           if (!column.isShow()) {
             return;
           }
@@ -1475,11 +1475,15 @@
                         text: item.text,
                         attr: attrItem.join(' ')
                       }));
-                      menuElement.find('button').click(function () {
+                      menuElement.find('button').click(function (event) {
+                        var prop = {
+                          table: table,
+                          event: event
+                        };
                         if (typeof item.onClick === 'function') {
-                          item.onClick(table);
+                          item.onClick(prop);
                         } else if (typeof item.onClick === 'string') {
-                          new Function('table', item.onClick)(table);
+                          new Function('prop', item.onClick)(prop);
                         }
                       });
                       menuElements.push(menuElement);
@@ -1724,8 +1728,8 @@
     },
     /**
      * Сборка записи таблицы
-     * @param {object} table
-     * @param {object} record
+     * @param {TableInstance} table
+     * @param {object}        record
      * @returns {{ attr: (string), fields: (object) }}}
      * @private
      */
@@ -1794,9 +1798,9 @@
       }
       if (typeof columnOptions.render === 'function') {
         content = columnOptions.render({
-          data: record.data,
-          meta: record.meta,
-          index: record.index
+          table: table,
+          record: record,
+          field: columnField
         }, table);
       } else {
         content = columnField && record.data.hasOwnProperty(columnField) ? record.data[columnField] : null;
@@ -1849,10 +1853,14 @@
       var content = record.data[group.field];
       if (group.hasOwnProperty('render')) {
         var renderContent = null;
+        var prop = {
+          table: table,
+          record: record
+        };
         if (typeof group.render === 'function') {
-          renderContent = group.render(record);
+          renderContent = group.render(prop);
         } else if (typeof group.render === 'string') {
-          renderContent = new Function('record', group.render)(record);
+          renderContent = new Function('prop', group.render)(prop);
         }
         if (renderContent) {
           content = renderContent;
@@ -2947,11 +2955,16 @@
               if (!record) {
                 return;
               }
+              var prop = {
+                table: table,
+                record: record,
+                event: event
+              };
               if (typeof table._options.onClick === 'function') {
-                table._options.onClick(record, table, event);
+                table._options.onClick(prop);
               } else if (typeof table._options.onClick === 'string') {
-                var func = new Function('record', 'table', 'event', table._options.onClick);
-                func(record, table, event);
+                var func = new Function('prop', table._options.onClick);
+                func(prop);
               }
             });
           }
@@ -4603,11 +4616,16 @@
         }));
         if (typeof this._options.onClick === 'function' || typeof this._options.onClick === 'string') {
           link.click(function (event) {
+            var prop = {
+              table: that._table,
+              control: that,
+              event: event
+            };
             if (typeof that._options.onClick === 'function') {
-              return that._options.onClick(event, that._table);
+              return that._options.onClick(prop);
             } else if (typeof that._options.onClick === 'string') {
-              var func = new Function('event', 'table', 'control', that._options.onClick);
-              func(event, that._table, that);
+              var func = new Function('prop', that._options.onClick);
+              func(prop);
             }
           });
         }
@@ -4673,11 +4691,16 @@
         if (typeof this._options.onClick === 'function' || typeof this._options.onClick === 'string') {
           var that = this;
           btn.click(function (event) {
+            var prop = {
+              table: that._table,
+              control: that,
+              event: event
+            };
             if (typeof that._options.onClick === 'function') {
-              that._options.onClick(event, that._table, that);
+              that._options.onClick(prop);
             } else if (typeof that._options.onClick === 'string') {
-              var func = new Function('event', 'table', 'control', that._options.onClick);
-              func(event, that._table, that);
+              var func = new Function('prop', that._options.onClick);
+              func(prop);
             }
           });
         }
@@ -4752,11 +4775,16 @@
                   }));
                   if (item.hasOwnProperty('onClick') && ['string', 'function'].indexOf(_typeof(item.onClick)) >= 0) {
                     button.click(function (event) {
+                      var prop = {
+                        table: table,
+                        control: that,
+                        event: event
+                      };
                       if (typeof item.onClick === 'function') {
-                        item.onClick(event, table, that);
+                        item.onClick(prop);
                       } else if (typeof item.onClick === 'string') {
-                        var func = new Function('event', 'table', 'control', item.onClick);
-                        func(event, table, that);
+                        var func = new Function('prop', item.onClick);
+                        func(prop);
                       }
                     });
                   }
@@ -4915,11 +4943,16 @@
               }));
               if (button.hasOwnProperty('onClick') && ['string', 'function'].indexOf(_typeof(button.onClick)) >= 0) {
                 result.click(function (event) {
+                  var prop = {
+                    table: that._table,
+                    control: that,
+                    event: event
+                  };
                   if (typeof button.onClick === 'function') {
-                    button.onClick(event, that._table, that);
+                    button.onClick(prop);
                   } else if (typeof button.onClick === 'string') {
-                    var func = new Function('event', 'table', 'control', button.onClick);
-                    func(event, that._table, that);
+                    var func = new Function('prop', button.onClick);
+                    func(prop);
                   }
                 });
               }
@@ -4951,11 +4984,16 @@
                       }));
                       if (item.hasOwnProperty('onClick') && ['string', 'function'].indexOf(_typeof(item.onClick)) >= 0) {
                         btn.click(function (event) {
+                          var prop = {
+                            table: that._table,
+                            control: that,
+                            event: event
+                          };
                           if (typeof item.onClick === 'function') {
-                            item.onClick(event, that._table, that);
+                            item.onClick(prop);
                           } else if (typeof item.onClick === 'string') {
-                            var func = new Function('event', 'table', 'control', item.onClick);
-                            func(event, that._table, that);
+                            var func = new Function('prop', item.onClick);
+                            func(prop);
                           }
                         });
                       }
@@ -5065,7 +5103,10 @@
         if (typeof this._options.content === 'string') {
           return this._options.content;
         } else if (typeof this._options.content === 'function') {
-          return this._options.content();
+          var prop = {
+            table: this._options.table
+          };
+          return this._options.content(prop);
         }
       }
     }]);
@@ -15678,11 +15719,17 @@
             }
           });
           if (that._options.hasOwnProperty('onChange') && (typeof that._options.onChange === 'function' || typeof that._options.onChange === 'string')) {
+            var prop = {
+              table: table,
+              record: record,
+              input: input,
+              event: event
+            };
             if (typeof that._options.onChange === 'function') {
-              that._options.onChange(record, input);
+              that._options.onChange(prop);
             } else {
-              var func = new Function('record', 'input', that._options.onChange);
-              func(record, input);
+              var func = new Function('prop', that._options.onChange);
+              func(prop);
             }
             return false;
           }
@@ -15843,18 +15890,24 @@
         }));
         if (content.hasOwnProperty('onClick')) {
           var that = this;
+          var prop = {
+            table: that._table,
+            record: record
+          };
           if (typeof content.onClick === 'function') {
             btn.click(function (event) {
               event.cancelBubble = true;
               event.preventDefault();
-              content.onClick(record, that._table);
+              prop.event = event;
+              content.onClick(prop);
             });
           } else if (typeof content.onClick === 'string') {
-            var func = new Function('record', 'table', content.onClick);
+            var func = new Function('prop', content.onClick);
             btn.click(function (event) {
               event.cancelBubble = true;
               event.preventDefault();
-              func(record, that._table);
+              prop.event = event;
+              func(prop);
             });
           } else {
             btn.click(function (event) {
@@ -16152,10 +16205,15 @@
               if (item.type === 'button') {
                 if (item.hasOwnProperty('content') && item.hasOwnProperty('onClick') && ['string', 'function'].indexOf(_typeof(item.onClick)) >= 0 && typeof item.content === 'string') {
                   $('button#btn-dropdown-' + item.id, menu).click(function (event) {
+                    var prop = {
+                      table: that._table,
+                      record: record,
+                      event: event
+                    };
                     if (typeof item.onClick === 'function') {
-                      item.onClick(record, that._table, event);
+                      item.onClick(prop);
                     } else if (typeof item.onClick === 'string') {
-                      new Function('record', 'table', 'event', item.onClick)(record, that._table, event);
+                      new Function('prop', item.onClick)(prop);
                     }
                   });
                 }

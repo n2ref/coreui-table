@@ -1,11 +1,11 @@
 {
   "name": "coreui-table",
-  "version": "1.1.55",
+  "version": "1.2.0",
   "description": "CoreUI table",
   "scripts": {
-    "build_all": "gulp build_tpl && gulp build_js && gulp build_js_min && gulp build_css && gulp build_css_min && npm run test_js",
-    "build_watch": "gulp build_watch",
+    "build": "gulp build_tpl && gulp build_js && gulp build_js_min && gulp build_css && gulp build_css_min && npm run test_js",
     "build_bootstrap": "gulp build_bootstrap",
+    "watch": "gulp build_watch",
     "test_js": "eslint -c .eslintrc.json --max-warnings 100 --ext .js ./dist"
   },
   "dependencies": {

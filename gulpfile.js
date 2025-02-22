@@ -34,7 +34,7 @@ var conf = {
     },
     css_bootstrap: {
         fileMin: 'coreui-table.bootstrap.min.css',
-        main: 'src/css/coreui.table.bootstrap.scss',
+        main: 'src/css/table.bootstrap.scss',
     },
     tpl: {
         file: 'table.tpl.js',
@@ -176,7 +176,7 @@ gulp.task('build_tpl', function() {
 gulp.task('build_bootstrap', function() {
     return gulp.src(conf.css_bootstrap.main)
         .pipe(sourcemaps.init())
-        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(sass({outputStyle: 'compressed', includePaths: ['node_modules']}).on('error', sass.logError))
         .pipe(concat(conf.css_bootstrap.fileMin))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(conf.dist));
