@@ -107,7 +107,14 @@ class TableInstance {
         }
 
         if (this._options.saveState && this._options.id) {
-            this._recordsPerPage = TablePrivate.getStorageField(this._id, 'page_size')
+            let pageSize = TablePrivate.getStorageField(this._id, 'page_size');
+
+            if (TableUtils.isNumeric(pageSize) && pageSize > 0) {
+                this._recordsPerPage = pageSize;
+
+            } else if (this._options.recordsPerPage > 0) {
+                this._recordsPerPage = this._options.recordsPerPage;
+            }
 
         } else if (this._options.recordsPerPage > 0) {
             this._recordsPerPage = this._options.recordsPerPage;
@@ -1833,10 +1840,12 @@ class TableInstance {
             let tr   = TableElements.getTrByIndex(this.getId(), index);
 
             if (tr.length >= 0) {
+                let emptyRecords = that._records.length === 0;
+
                 tr.fadeOut('fast', function () {
                     tr.remove();
 
-                    if (that._records.length === 0) {
+                    if (emptyRecords) {
                         let tbody = TableElements.getTableTbody(that.getId());
 
                         tbody.append(

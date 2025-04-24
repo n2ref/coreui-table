@@ -4,6 +4,84 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, (global.CoreUI = global.CoreUI || {}, global.CoreUI.table = factory()));
 })(this, (function () { 'use strict';
 
+  function _assertThisInitialized(e) {
+    if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    return e;
+  }
+  function _callSuper(t, o, e) {
+    return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+  }
+  function _classCallCheck(a, n) {
+    if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
+  }
+  function _defineProperties(e, r) {
+    for (var t = 0; t < r.length; t++) {
+      var o = r[t];
+      o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
+    }
+  }
+  function _createClass(e, r, t) {
+    return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
+      writable: !1
+    }), e;
+  }
+  function _defineProperty(e, r, t) {
+    return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+      value: t,
+      enumerable: !0,
+      configurable: !0,
+      writable: !0
+    }) : e[r] = t, e;
+  }
+  function _getPrototypeOf(t) {
+    return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
+      return t.__proto__ || Object.getPrototypeOf(t);
+    }, _getPrototypeOf(t);
+  }
+  function _inherits(t, e) {
+    if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
+    t.prototype = Object.create(e && e.prototype, {
+      constructor: {
+        value: t,
+        writable: !0,
+        configurable: !0
+      }
+    }), Object.defineProperty(t, "prototype", {
+      writable: !1
+    }), e && _setPrototypeOf(t, e);
+  }
+  function _isNativeReflectConstruct() {
+    try {
+      var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+    } catch (t) {}
+    return (_isNativeReflectConstruct = function () {
+      return !!t;
+    })();
+  }
+  function _possibleConstructorReturn(t, e) {
+    if (e && ("object" == typeof e || "function" == typeof e)) return e;
+    if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
+    return _assertThisInitialized(t);
+  }
+  function _setPrototypeOf(t, e) {
+    return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
+      return t.__proto__ = e, t;
+    }, _setPrototypeOf(t, e);
+  }
+  function _toPrimitive(t, r) {
+    if ("object" != typeof t || !t) return t;
+    var e = t[Symbol.toPrimitive];
+    if (void 0 !== e) {
+      var i = e.call(t, r || "default");
+      if ("object" != typeof i) return i;
+      throw new TypeError("@@toPrimitive must return a primitive value.");
+    }
+    return ("string" === r ? String : Number)(t);
+  }
+  function _toPropertyKey(t) {
+    var i = _toPrimitive(t, "string");
+    return "symbol" == typeof i ? i : i + "";
+  }
   function _typeof(o) {
     "@babel/helpers - typeof";
 
@@ -12,99 +90,6 @@
     } : function (o) {
       return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
     }, _typeof(o);
-  }
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-  function _defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor);
-    }
-  }
-  function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
-    Object.defineProperty(Constructor, "prototype", {
-      writable: false
-    });
-    return Constructor;
-  }
-  function _defineProperty(obj, key, value) {
-    key = _toPropertyKey(key);
-    if (key in obj) {
-      Object.defineProperty(obj, key, {
-        value: value,
-        enumerable: true,
-        configurable: true,
-        writable: true
-      });
-    } else {
-      obj[key] = value;
-    }
-    return obj;
-  }
-  function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        writable: true,
-        configurable: true
-      }
-    });
-    Object.defineProperty(subClass, "prototype", {
-      writable: false
-    });
-    if (superClass) _setPrototypeOf(subClass, superClass);
-  }
-  function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
-      return o.__proto__ || Object.getPrototypeOf(o);
-    };
-    return _getPrototypeOf(o);
-  }
-  function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
-      o.__proto__ = p;
-      return o;
-    };
-    return _setPrototypeOf(o, p);
-  }
-  function _assertThisInitialized(self) {
-    if (self === void 0) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-    return self;
-  }
-  function _possibleConstructorReturn(self, call) {
-    if (call && (typeof call === "object" || typeof call === "function")) {
-      return call;
-    } else if (call !== void 0) {
-      throw new TypeError("Derived constructors may only return object or undefined");
-    }
-    return _assertThisInitialized(self);
-  }
-  function _toPrimitive(input, hint) {
-    if (typeof input !== "object" || input === null) return input;
-    var prim = input[Symbol.toPrimitive];
-    if (prim !== undefined) {
-      var res = prim.call(input, hint || "default");
-      if (typeof res !== "object") return res;
-      throw new TypeError("@@toPrimitive must return a primitive value.");
-    }
-    return (hint === "string" ? String : Number)(input);
-  }
-  function _toPropertyKey(arg) {
-    var key = _toPrimitive(arg, "string");
-    return typeof key === "symbol" ? key : String(key);
   }
 
   var tpl = Object.create(null);
@@ -2864,7 +2849,12 @@
         this._page = this._options.page;
       }
       if (this._options.saveState && this._options.id) {
-        this._recordsPerPage = TablePrivate.getStorageField(this._id, 'page_size');
+        var pageSize = TablePrivate.getStorageField(this._id, 'page_size');
+        if (TableUtils.isNumeric(pageSize) && pageSize > 0) {
+          this._recordsPerPage = pageSize;
+        } else if (this._options.recordsPerPage > 0) {
+          this._recordsPerPage = this._options.recordsPerPage;
+        }
       } else if (this._options.recordsPerPage > 0) {
         this._recordsPerPage = this._options.recordsPerPage;
       }
@@ -4192,9 +4182,10 @@
           var that = this;
           var tr = TableElements.getTrByIndex(this.getId(), index);
           if (tr.length >= 0) {
+            var emptyRecords = that._records.length === 0;
             tr.fadeOut('fast', function () {
               tr.remove();
-              if (that._records.length === 0) {
+              if (emptyRecords) {
                 var tbody = TableElements.getTableTbody(that.getId());
                 tbody.append(TableUtils.render(tpl['table/record/empty.html'], {
                   columnsCount: that._countColumnsShow,
@@ -4559,20 +4550,6 @@
     }]);
   }();
 
-  function _callSuper$S(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ControlLink = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
@@ -4589,7 +4566,7 @@
         onClick: null,
         attr: null
       }, options);
-      return _callSuper$S(this, ControlLink, [table, options]);
+      return _callSuper(this, ControlLink, [table, options]);
     }
 
     /**
@@ -4634,20 +4611,6 @@
     }]);
   }(Control);
 
-  function _callSuper$R(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ControlButton = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
@@ -4665,7 +4628,7 @@
           "class": 'btn btn-secondary'
         }
       }, options);
-      return _callSuper$R(this, ControlButton, [table, options]);
+      return _callSuper(this, ControlButton, [table, options]);
     }
 
     /**
@@ -4709,20 +4672,6 @@
     }]);
   }(Control);
 
-  function _callSuper$Q(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ControlDropdown = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
@@ -4740,7 +4689,7 @@
           "class": 'btn btn-secondary dropdown-toggle'
         }
       }, options);
-      return _callSuper$Q(this, ControlDropdown, [table, options]);
+      return _callSuper(this, ControlDropdown, [table, options]);
     }
 
     /**
@@ -4826,20 +4775,6 @@
     }]);
   }(Control);
 
-  function _callSuper$P(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ControlButtonGroup = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
@@ -4847,30 +4782,30 @@
      * @param {Object}              options
      */
     function ControlButtonGroup(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, ControlButtonGroup);
       options = $.extend(true, {
         id: null,
         type: 'button_group',
         buttons: null
       }, options);
-      _this2 = _callSuper$P(this, ControlButtonGroup, [table, options]);
-      _defineProperty(_this2, "_link", {
+      _this = _callSuper(this, ControlButtonGroup, [table, options]);
+      _defineProperty(_this, "_link", {
         attr: {
           "class": 'btn btn-secondary'
         }
       });
-      _defineProperty(_this2, "_button", {
+      _defineProperty(_this, "_button", {
         attr: {
           "class": 'btn btn-secondary'
         }
       });
-      _defineProperty(_this2, "_dropdown", {
+      _defineProperty(_this, "_dropdown", {
         attr: {
           "class": 'btn btn-secondary dropdown-toggle'
         }
       });
-      return _this2;
+      return _this;
     }
 
     /**
@@ -5062,20 +4997,6 @@
     }]);
   }(Control);
 
-  function _callSuper$O(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ControlCustom = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
@@ -5089,7 +5010,7 @@
         type: 'custom',
         content: null
       }, options);
-      return _callSuper$O(this, ControlCustom, [table, options]);
+      return _callSuper(this, ControlCustom, [table, options]);
     }
 
     /**
@@ -5112,20 +5033,6 @@
     }]);
   }(Control);
 
-  function _callSuper$N(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ControlPageSize = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
@@ -5133,7 +5040,7 @@
      * @param {Object}              options
      */
     function ControlPageSize(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, ControlPageSize);
       var optionsOriginal = {
         id: null,
@@ -5147,14 +5054,14 @@
         options.attr = TableUtils.mergeAttr(optionsOriginal.attr, options.attr);
       }
       options = $.extend(true, optionsOriginal, options);
-      _this2 = _callSuper$N(this, ControlPageSize, [table, options]);
-      if (!Array.isArray(_this2._options.list)) {
-        _this2._options.list = [];
+      _this = _callSuper(this, ControlPageSize, [table, options]);
+      if (!Array.isArray(_this._options.list)) {
+        _this._options.list = [];
       }
-      if (_this2._options.list.indexOf(_this2._table._recordsPerPage) < 0) {
-        _this2._options.list.unshift(_this2._table._recordsPerPage);
+      if (_this._options.list.indexOf(_this._table._recordsPerPage) < 0) {
+        _this._options.list.unshift(_this._table._recordsPerPage);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -5193,20 +5100,6 @@
     }]);
   }(Control);
 
-  function _callSuper$M(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ControlPageJump = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
@@ -5226,7 +5119,7 @@
         options.attr = TableUtils.mergeAttr(optionsOriginal.attr, options.attr);
       }
       options = $.extend(true, optionsOriginal, options);
-      return _callSuper$M(this, ControlPageJump, [table, options]);
+      return _callSuper(this, ControlPageJump, [table, options]);
     }
 
     /**
@@ -5366,20 +5259,6 @@
     }
   };
 
-  function _callSuper$L(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ControlPages = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
@@ -5387,7 +5266,7 @@
      * @param {Object}              options
      */
     function ControlPages(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, ControlPages);
       var optionsOriginal = {
         show: {
@@ -5403,9 +5282,9 @@
         options.attr = TableUtils.mergeAttr(optionsOriginal.attr, options.attr);
       }
       options = $.extend(true, optionsOriginal, options);
-      _this2 = _callSuper$L(this, ControlPages, [table, options]);
-      _defineProperty(_this2, "_control", null);
-      return _this2;
+      _this = _callSuper(this, ControlPages, [table, options]);
+      _defineProperty(_this, "_control", null);
+      return _this;
     }
 
     /**
@@ -5430,20 +5309,6 @@
     }]);
   }(Control);
 
-  function _callSuper$K(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ControlTotal = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
@@ -5462,7 +5327,7 @@
         options.attr = TableUtils.mergeAttr(optionsOriginal.attr, options.attr);
       }
       options = $.extend(true, optionsOriginal, options);
-      return _callSuper$K(this, ControlTotal, [table, options]);
+      return _callSuper(this, ControlTotal, [table, options]);
     }
 
     /**
@@ -5495,20 +5360,6 @@
     }]);
   }(Control);
 
-  function _callSuper$J(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ControlSearch = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
@@ -5516,7 +5367,7 @@
      * @param {Object}              options
      */
     function ControlSearch(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, ControlSearch);
       options = $.extend(true, {
         btn: {
@@ -5538,26 +5389,26 @@
           content: null
         }
       }, options);
-      _this2 = _callSuper$J(this, ControlSearch, [table, options]);
-      if (!TableUtils.isObject(_this2._options.btn)) {
-        _this2._options.btn = {};
+      _this = _callSuper(this, ControlSearch, [table, options]);
+      if (!TableUtils.isObject(_this._options.btn)) {
+        _this._options.btn = {};
       }
-      if (!_this2._options.btn.hasOwnProperty('content') || typeof _this2._options.btn.content !== 'string') {
-        _this2._options.btn.content = '<i class="bi bi-search"></i> ' + table.getLang().search;
+      if (!_this._options.btn.hasOwnProperty('content') || typeof _this._options.btn.content !== 'string') {
+        _this._options.btn.content = '<i class="bi bi-search"></i> ' + table.getLang().search;
       }
-      if (!TableUtils.isObject(_this2._options.btnClear)) {
-        _this2._options.btnClear = {};
+      if (!TableUtils.isObject(_this._options.btnClear)) {
+        _this._options.btnClear = {};
       }
-      if (!_this2._options.btnClear.hasOwnProperty('content') || typeof _this2._options.btnClear.content !== 'string') {
-        _this2._options.btnClear.content = table.getLang().clear;
+      if (!_this._options.btnClear.hasOwnProperty('content') || typeof _this._options.btnClear.content !== 'string') {
+        _this._options.btnClear.content = table.getLang().clear;
       }
-      if (!TableUtils.isObject(_this2._options.btnComplete)) {
-        _this2._options.btnComplete = {};
+      if (!TableUtils.isObject(_this._options.btnComplete)) {
+        _this._options.btnComplete = {};
       }
-      if (!_this2._options.btnComplete.hasOwnProperty('content') || typeof _this2._options.btnComplete.content !== 'string') {
-        _this2._options.btnComplete.content = table.getLang().searchAction;
+      if (!_this._options.btnComplete.hasOwnProperty('content') || typeof _this._options.btnComplete.content !== 'string') {
+        _this._options.btnComplete.content = table.getLang().searchAction;
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -5743,20 +5594,6 @@
     }]);
   }(Control);
 
-  function _callSuper$I(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ControlColumns = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
@@ -5764,7 +5601,7 @@
      * @param {Object}              options
      */
     function ControlColumns(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, ControlColumns);
       options = $.extend(true, {
         id: null,
@@ -5782,17 +5619,17 @@
           }
         }
       }, options);
-      _this2 = _callSuper$I(this, ControlColumns, [table, options]);
-      if (!TableUtils.isObject(_this2._options.btn)) {
-        _this2._options.btn = {};
+      _this = _callSuper(this, ControlColumns, [table, options]);
+      if (!TableUtils.isObject(_this._options.btn)) {
+        _this._options.btn = {};
       }
-      if (!TableUtils.isObject(_this2._options.btnComplete)) {
-        _this2._options.btnComplete = {};
+      if (!TableUtils.isObject(_this._options.btnComplete)) {
+        _this._options.btnComplete = {};
       }
-      if (TableUtils.isObject(_this2._options.btnComplete) && typeof _this2._options.btnComplete.content !== 'string') {
-        _this2._options.btnComplete.content = table.getLang().complete;
+      if (TableUtils.isObject(_this._options.btnComplete) && typeof _this._options.btnComplete.content !== 'string') {
+        _this._options.btnComplete.content = table.getLang().complete;
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -5896,20 +5733,6 @@
     }]);
   }(Control);
 
-  function _callSuper$H(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ControlCaption = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
@@ -5925,7 +5748,7 @@
         description: null,
         value: null
       }, options);
-      return _callSuper$H(this, ControlCaption, [table, options]);
+      return _callSuper(this, ControlCaption, [table, options]);
     }
 
     /**
@@ -5945,20 +5768,6 @@
     }]);
   }(Control);
 
-  function _callSuper$G(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ControlFilterClear = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
@@ -5966,7 +5775,7 @@
      * @param {Object}              options
      */
     function ControlFilterClear(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, ControlFilterClear);
       options = $.extend(true, {
         id: null,
@@ -5976,11 +5785,11 @@
           "class": 'btn btn-secondary'
         }
       }, options);
-      _this2 = _callSuper$G(this, ControlFilterClear, [table, options]);
-      if (!_this2._options.hasOwnProperty('content') || typeof _this2._options.content !== 'string') {
-        _this2._options.content = '<i class="bi bi-x"></i> ' + table.getLang().clear;
+      _this = _callSuper(this, ControlFilterClear, [table, options]);
+      if (!_this._options.hasOwnProperty('content') || typeof _this._options.content !== 'string') {
+        _this._options.content = '<i class="bi bi-x"></i> ' + table.getLang().clear;
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -6032,20 +5841,6 @@
     }]);
   }(Control);
 
-  function _callSuper$F(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ControlDivider = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
@@ -6063,7 +5858,7 @@
           style: 'height:20px'
         }
       }, options);
-      return _callSuper$F(this, ControlDivider, [table, options]);
+      return _callSuper(this, ControlDivider, [table, options]);
     }
 
     /**
@@ -6184,20 +5979,6 @@
     }]);
   }();
 
-  function _callSuper$E(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var FilterText = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
@@ -6205,7 +5986,7 @@
      * @param {Object}              options
      */
     function FilterText(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, FilterText);
       options = $.extend(true, {
         id: null,
@@ -6225,11 +6006,11 @@
           content: '<i class="bi bi-search"></i>'
         }
       }, options);
-      _this2 = _callSuper$E(this, FilterText, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, FilterText, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -6325,20 +6106,6 @@
     }]);
   }(Filter);
 
-  function _callSuper$D(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var FilterNumber = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
@@ -6346,7 +6113,7 @@
      * @param {Object}              options
      */
     function FilterNumber(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, FilterNumber);
       options = $.extend(true, {
         id: null,
@@ -6365,11 +6132,11 @@
           content: '<i class="bi bi-search"></i>'
         }
       }, options);
-      _this2 = _callSuper$D(this, FilterNumber, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, FilterNumber, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -6546,20 +6313,6 @@
     }]);
   }(Filter);
 
-  function _callSuper$C(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var FilterDate = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
@@ -6567,7 +6320,7 @@
      * @param {Object}              options
      */
     function FilterDate(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, FilterDate);
       options = $.extend(true, {
         id: null,
@@ -6580,11 +6333,11 @@
           "class": "form-control"
         }
       }, options);
-      _this2 = _callSuper$C(this, FilterDate, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, FilterDate, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -6676,20 +6429,6 @@
     }]);
   }(Filter);
 
-  function _callSuper$B(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var FilterDatetime = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
@@ -6697,7 +6436,7 @@
      * @param {Object}              options
      */
     function FilterDatetime(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, FilterDatetime);
       options = $.extend(true, {
         id: null,
@@ -6710,11 +6449,11 @@
           "class": "form-control"
         }
       }, options);
-      _this2 = _callSuper$B(this, FilterDatetime, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, FilterDatetime, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -6806,20 +6545,6 @@
     }]);
   }(Filter);
 
-  function _callSuper$A(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var FilterDateMonth = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
@@ -6827,7 +6552,7 @@
      * @param {Object}              options
      */
     function FilterDateMonth(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, FilterDateMonth);
       options = $.extend(true, {
         id: null,
@@ -6840,11 +6565,11 @@
           "class": "form-control"
         }
       }, options);
-      _this2 = _callSuper$A(this, FilterDateMonth, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, FilterDateMonth, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -6936,20 +6661,6 @@
     }]);
   }(Filter);
 
-  function _callSuper$z(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var FilterDateRange = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
@@ -6957,7 +6668,7 @@
      * @param {Object}              options
      */
     function FilterDateRange(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, FilterDateRange);
       options = $.extend(true, {
         id: null,
@@ -6970,11 +6681,11 @@
           "class": "form-control d-inline-block"
         }
       }, options);
-      _this2 = _callSuper$z(this, FilterDateRange, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, FilterDateRange, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -7141,20 +6852,6 @@
     }]);
   }(Filter);
 
-  function _callSuper$y(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var FilterDatetimeRange = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
@@ -7162,7 +6859,7 @@
      * @param {Object}              options
      */
     function FilterDatetimeRange(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, FilterDatetimeRange);
       options = $.extend(true, {
         id: null,
@@ -7175,11 +6872,11 @@
           "class": "form-control d-inline-block"
         }
       }, options);
-      _this2 = _callSuper$y(this, FilterDatetimeRange, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, FilterDatetimeRange, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -7346,20 +7043,6 @@
     }]);
   }(Filter);
 
-  function _callSuper$x(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var FilterCheckbox = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
@@ -7367,7 +7050,7 @@
      * @param {Object}              options
      */
     function FilterCheckbox(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, FilterCheckbox);
       options = $.extend(true, {
         id: null,
@@ -7377,12 +7060,12 @@
         value: null,
         options: []
       }, options);
-      _this2 = _callSuper$x(this, FilterCheckbox, [table, options]);
-      _defineProperty(_this2, "_class", 'btn btn-outline-secondary');
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, FilterCheckbox, [table, options]);
+      _defineProperty(_this, "_class", 'btn btn-outline-secondary');
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -7498,20 +7181,6 @@
     }]);
   }(Filter);
 
-  function _callSuper$w(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var FilterRadio = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
@@ -7519,7 +7188,7 @@
      * @param {Object}              options
      */
     function FilterRadio(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, FilterRadio);
       options = $.extend(true, {
         id: null,
@@ -7529,12 +7198,12 @@
         value: null,
         options: []
       }, options);
-      _this2 = _callSuper$w(this, FilterRadio, [table, options]);
-      _defineProperty(_this2, "_class", 'btn btn-outline-secondary');
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, FilterRadio, [table, options]);
+      _defineProperty(_this, "_class", 'btn btn-outline-secondary');
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -7630,20 +7299,6 @@
     }]);
   }(Filter);
 
-  function _callSuper$v(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var FilterSelect = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
@@ -7651,7 +7306,7 @@
      * @param {Object}              options
      */
     function FilterSelect(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, FilterSelect);
       options = $.extend(true, {
         id: null,
@@ -7665,11 +7320,11 @@
         },
         options: []
       }, options);
-      _this2 = _callSuper$v(this, FilterSelect, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, FilterSelect, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -7863,20 +7518,6 @@
     }]);
   }(Filter);
 
-  function _callSuper$u(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var FilterSwitch = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
@@ -7884,7 +7525,7 @@
      * @param {Object}              options
      */
     function FilterSwitch(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, FilterSwitch);
       options = $.extend(true, {
         id: null,
@@ -7894,11 +7535,11 @@
         value: null,
         valueY: 1
       }, options);
-      _this2 = _callSuper$u(this, FilterSwitch, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, FilterSwitch, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -8074,20 +7715,6 @@
     }]);
   }();
 
-  function _callSuper$t(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var SearchText = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
@@ -8095,7 +7722,7 @@
      * @param {Object}              options
      */
     function SearchText(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, SearchText);
       options = $.extend(true, {
         id: null,
@@ -8108,11 +7735,11 @@
           "class": "form-control d-inline-block"
         }
       }, options);
-      _this2 = _callSuper$t(this, SearchText, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, SearchText, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -8189,20 +7816,6 @@
     }]);
   }(Search);
 
-  function _callSuper$s(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var SearchNumber = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
@@ -8210,7 +7823,7 @@
      * @param {Object}              options
      */
     function SearchNumber(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, SearchNumber);
       options = $.extend(true, {
         id: null,
@@ -8223,11 +7836,11 @@
           "class": "form-control d-inline-block"
         }
       }, options);
-      _this2 = _callSuper$s(this, SearchNumber, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, SearchNumber, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -8385,20 +7998,6 @@
     }]);
   }(Search);
 
-  function _callSuper$r(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var SearchDate = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
@@ -8406,7 +8005,7 @@
      * @param {Object}        options
      */
     function SearchDate(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, SearchDate);
       options = $.extend(true, {
         id: null,
@@ -8419,11 +8018,11 @@
           "class": "form-control d-inline-block"
         }
       }, options);
-      _this2 = _callSuper$r(this, SearchDate, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, SearchDate, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -8516,20 +8115,6 @@
     }]);
   }(Search);
 
-  function _callSuper$q(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var SearchDateMonth = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
@@ -8537,7 +8122,7 @@
      * @param {Object}              options
      */
     function SearchDateMonth(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, SearchDateMonth);
       options = $.extend(true, {
         id: null,
@@ -8550,11 +8135,11 @@
           "class": "form-control d-inline-block"
         }
       }, options);
-      _this2 = _callSuper$q(this, SearchDateMonth, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, SearchDateMonth, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -8647,20 +8232,6 @@
     }]);
   }(Search);
 
-  function _callSuper$p(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var SearchDatetime = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
@@ -8668,7 +8239,7 @@
      * @param {Object}              options
      */
     function SearchDatetime(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, SearchDatetime);
       options = $.extend(true, {
         id: null,
@@ -8681,11 +8252,11 @@
           "class": "form-control d-inline-block"
         }
       }, options);
-      _this2 = _callSuper$p(this, SearchDatetime, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, SearchDatetime, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -8780,20 +8351,6 @@
     }]);
   }(Search);
 
-  function _callSuper$o(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var SearchDateRange = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
@@ -8801,7 +8358,7 @@
      * @param {Object}              options
      */
     function SearchDateRange(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, SearchDateRange);
       options = $.extend(true, {
         id: null,
@@ -8814,11 +8371,11 @@
           "class": "form-control d-inline-block"
         }
       }, options);
-      _this2 = _callSuper$o(this, SearchDateRange, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, SearchDateRange, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -8974,20 +8531,6 @@
     }]);
   }(Search);
 
-  function _callSuper$n(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var SearchDatetimeRange = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
@@ -8995,7 +8538,7 @@
      * @param {Object}              options
      */
     function SearchDatetimeRange(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, SearchDatetimeRange);
       options = $.extend(true, {
         id: null,
@@ -9008,11 +8551,11 @@
           "class": "form-control d-inline-block"
         }
       }, options);
-      _this2 = _callSuper$n(this, SearchDatetimeRange, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, SearchDatetimeRange, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -9168,20 +8711,6 @@
     }]);
   }(Search);
 
-  function _callSuper$m(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var SearchCheckbox = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
@@ -9189,7 +8718,7 @@
      * @param {Object}              options
      */
     function SearchCheckbox(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, SearchCheckbox);
       options = $.extend(true, {
         id: null,
@@ -9199,11 +8728,11 @@
         value: null,
         options: []
       }, options);
-      _this2 = _callSuper$m(this, SearchCheckbox, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, SearchCheckbox, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -9317,20 +8846,6 @@
     }]);
   }(Search);
 
-  function _callSuper$l(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var SearchCheckboxBtn = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
@@ -9338,7 +8853,7 @@
      * @param {Object}              options
      */
     function SearchCheckboxBtn(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, SearchCheckboxBtn);
       options = $.extend(true, {
         id: null,
@@ -9349,11 +8864,11 @@
         value: null,
         options: []
       }, options);
-      _this2 = _callSuper$l(this, SearchCheckboxBtn, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, SearchCheckboxBtn, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -9471,20 +8986,6 @@
     }]);
   }(Search);
 
-  function _callSuper$k(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var SearchRadio = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
@@ -9492,7 +8993,7 @@
      * @param {Object}              options
      */
     function SearchRadio(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, SearchRadio);
       options = $.extend(true, {
         id: null,
@@ -9502,11 +9003,11 @@
         value: null,
         options: []
       }, options);
-      _this2 = _callSuper$k(this, SearchRadio, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, SearchRadio, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -9614,20 +9115,6 @@
     }]);
   }(Search);
 
-  function _callSuper$j(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var SearchRadioBtn = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
@@ -9635,7 +9122,7 @@
      * @param {Object}              options
      */
     function SearchRadioBtn(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, SearchRadioBtn);
       options = $.extend(true, {
         id: null,
@@ -9646,11 +9133,11 @@
         value: null,
         options: []
       }, options);
-      _this2 = _callSuper$j(this, SearchRadioBtn, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, SearchRadioBtn, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -9764,20 +9251,6 @@
     }]);
   }(Search);
 
-  function _callSuper$i(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var SearchSelect = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
@@ -9785,7 +9258,7 @@
      * @param {Object}              options
      */
     function SearchSelect(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, SearchSelect);
       options = $.extend(true, {
         id: null,
@@ -9799,11 +9272,11 @@
         },
         options: []
       }, options);
-      _this2 = _callSuper$i(this, SearchSelect, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, SearchSelect, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -9992,20 +9465,6 @@
     }]);
   }(Search);
 
-  function _callSuper$h(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var SearchSwitch = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
@@ -10013,7 +9472,7 @@
      * @param {Object}              options
      */
     function SearchSwitch(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, SearchSwitch);
       options = $.extend(true, {
         id: null,
@@ -10022,11 +9481,11 @@
         value: null,
         valueY: 1
       }, options);
-      _this2 = _callSuper$h(this, SearchSwitch, [table, options]);
-      if (_this2._options.value !== null) {
-        _this2.setValue(_this2._options.value);
+      _this = _callSuper(this, SearchSwitch, [table, options]);
+      if (_this._options.value !== null) {
+        _this.setValue(_this._options.value);
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -10179,20 +9638,6 @@
     }]);
   }();
 
-  function _callSuper$g(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsDate = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -10212,7 +9657,7 @@
         attrHeader: {},
         render: null
       }, options);
-      return _callSuper$g(this, ColumnsDate, [table, options]);
+      return _callSuper(this, ColumnsDate, [table, options]);
     }
 
     /**
@@ -10242,20 +9687,6 @@
     }]);
   }(Column);
 
-  function _callSuper$f(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsDatetime = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -10275,7 +9706,7 @@
         attrHeader: {},
         render: null
       }, options);
-      return _callSuper$f(this, ColumnsDatetime, [table, options]);
+      return _callSuper(this, ColumnsDatetime, [table, options]);
     }
 
     /**
@@ -15074,20 +14505,6 @@
     }
   });
 
-  function _callSuper$e(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsDateHuman = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -15095,7 +14512,7 @@
      * @param {Object}              options
      */
     function ColumnsDateHuman(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, ColumnsDateHuman);
       options = $.extend(true, {
         type: 'dateHuman',
@@ -15107,10 +14524,10 @@
         attrHeader: {},
         render: null
       }, options);
-      _this2 = _callSuper$e(this, ColumnsDateHuman, [table, options]);
-      _defineProperty(_this2, "_lang", null);
-      _this2._lang = table.getOptions().lang;
-      return _this2;
+      _this = _callSuper(this, ColumnsDateHuman, [table, options]);
+      _defineProperty(_this, "_lang", null);
+      _this._lang = table.getOptions().lang;
+      return _this;
     }
 
     /**
@@ -15141,20 +14558,6 @@
     }]);
   }(Column);
 
-  function _callSuper$d(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsHtml = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -15162,7 +14565,7 @@
      * @param {Object}              options
      */
     function ColumnsHtml(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, ColumnsHtml);
       options = $.extend(true, {
         type: 'html',
@@ -15178,24 +14581,24 @@
         attrHeader: {},
         render: null
       }, options);
-      _this2 = _callSuper$d(this, ColumnsHtml, [table, options]);
-      var tableOptions = _this2._table.getOptions();
-      if (_this2._options.noWrap || _this2._options.noWrap === null && tableOptions.noWrap) {
-        if (!_this2._options.attr) {
-          _this2._options.attr = {
+      _this = _callSuper(this, ColumnsHtml, [table, options]);
+      var tableOptions = _this._table.getOptions();
+      if (_this._options.noWrap || _this._options.noWrap === null && tableOptions.noWrap) {
+        if (!_this._options.attr) {
+          _this._options.attr = {
             "class": 'coreui_table__no-wrap'
           };
         } else {
-          _this2._options.attr = TableUtils.mergeAttr(_this2._options.attr, {
+          _this._options.attr = TableUtils.mergeAttr(_this._options.attr, {
             "class": 'coreui_table__no-wrap'
           });
         }
-        _this2._options.noWrap = true;
-        if (_this2._options.noWrapToggle || _this2._options.noWrapToggle === null && tableOptions.noWrapToggle) {
-          _this2._options.noWrapToggle = true;
+        _this._options.noWrap = true;
+        if (_this._options.noWrapToggle || _this._options.noWrapToggle === null && tableOptions.noWrapToggle) {
+          _this._options.noWrapToggle = true;
         }
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -15237,20 +14640,6 @@
     }]);
   }(Column);
 
-  function _callSuper$c(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsNumber = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -15258,7 +14647,7 @@
      * @param {Object}              options
      */
     function ColumnsNumber(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, ColumnsNumber);
       options = $.extend(true, {
         type: 'number',
@@ -15274,24 +14663,24 @@
         attrHeader: {},
         render: null
       }, options);
-      _this2 = _callSuper$c(this, ColumnsNumber, [table, options]);
-      var tableOptions = _this2._table.getOptions();
-      if (_this2._options.noWrap || _this2._options.noWrap === null && tableOptions.noWrap) {
-        if (!_this2._options.attr) {
-          _this2._options.attr = {
+      _this = _callSuper(this, ColumnsNumber, [table, options]);
+      var tableOptions = _this._table.getOptions();
+      if (_this._options.noWrap || _this._options.noWrap === null && tableOptions.noWrap) {
+        if (!_this._options.attr) {
+          _this._options.attr = {
             "class": 'coreui_table__no-wrap'
           };
         } else {
-          _this2._options.attr = TableUtils.mergeAttr(_this2._options.attr, {
+          _this._options.attr = TableUtils.mergeAttr(_this._options.attr, {
             "class": 'coreui_table__no-wrap'
           });
         }
-        _this2._options.noWrap = true;
-        if (_this2._options.noWrapToggle || _this2._options.noWrapToggle === null && tableOptions.noWrapToggle) {
-          _this2._options.noWrapToggle = true;
+        _this._options.noWrap = true;
+        if (_this._options.noWrapToggle || _this._options.noWrapToggle === null && tableOptions.noWrapToggle) {
+          _this._options.noWrapToggle = true;
         }
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -15319,20 +14708,6 @@
     }]);
   }(Column);
 
-  function _callSuper$b(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsMoney = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -15340,7 +14715,7 @@
      * @param {Object}              options
      */
     function ColumnsMoney(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, ColumnsMoney);
       options = $.extend(true, {
         type: 'money',
@@ -15361,24 +14736,24 @@
         },
         render: null
       }, options);
-      _this2 = _callSuper$b(this, ColumnsMoney, [table, options]);
-      var tableOptions = _this2._table.getOptions();
-      if (_this2._options.noWrap || _this2._options.noWrap === null && tableOptions.noWrap) {
-        if (!_this2._options.attr) {
-          _this2._options.attr = {
+      _this = _callSuper(this, ColumnsMoney, [table, options]);
+      var tableOptions = _this._table.getOptions();
+      if (_this._options.noWrap || _this._options.noWrap === null && tableOptions.noWrap) {
+        if (!_this._options.attr) {
+          _this._options.attr = {
             "class": 'coreui_table__no-wrap'
           };
         } else {
-          _this2._options.attr = TableUtils.mergeAttr(_this2._options.attr, {
+          _this._options.attr = TableUtils.mergeAttr(_this._options.attr, {
             "class": 'coreui_table__no-wrap'
           });
         }
-        _this2._options.noWrap = true;
-        if (_this2._options.noWrapToggle || _this2._options.noWrapToggle === null && tableOptions.noWrapToggle) {
-          _this2._options.noWrapToggle = true;
+        _this._options.noWrap = true;
+        if (_this._options.noWrapToggle || _this._options.noWrapToggle === null && tableOptions.noWrapToggle) {
+          _this._options.noWrapToggle = true;
         }
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -15434,20 +14809,6 @@
     }]);
   }(Column);
 
-  function _callSuper$a(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsNumbers = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -15465,7 +14826,7 @@
         },
         attrHeader: null
       }, options);
-      return _callSuper$a(this, ColumnsNumbers, [table, options]);
+      return _callSuper(this, ColumnsNumbers, [table, options]);
     }
 
     /**
@@ -15483,20 +14844,6 @@
     }]);
   }(Column);
 
-  function _callSuper$9(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsSelect = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -15504,7 +14851,7 @@
      * @param {Object}              options
      */
     function ColumnsSelect(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, ColumnsSelect);
       var originalOptions = {
         type: 'select',
@@ -15526,8 +14873,8 @@
         options.attrHeader = TableUtils.mergeAttr(originalOptions.attrHeader, options.attrHeader);
       }
       options = $.extend(true, originalOptions, options);
-      _this2 = _callSuper$9(this, ColumnsSelect, [table, options]);
-      _this2._options.label = tpl['columns/select_label.html'];
+      _this = _callSuper(this, ColumnsSelect, [table, options]);
+      _this._options.label = tpl['columns/select_label.html'];
 
       // Показ строк
       table.on('records_show', function () {
@@ -15548,7 +14895,7 @@
           }
         });
       });
-      return _this2;
+      return _this;
     }
 
     /**
@@ -15608,20 +14955,6 @@
     }]);
   }(Column);
 
-  function _callSuper$8(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsSwitch = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -15629,7 +14962,7 @@
      * @param {Object}              options
      */
     function ColumnsSwitch(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, ColumnsSwitch);
       options = $.extend(true, {
         type: 'switch',
@@ -15646,7 +14979,7 @@
         attrHeader: {},
         onChange: null
       }, options);
-      _this2 = _callSuper$8(this, ColumnsSwitch, [table, options]);
+      _this = _callSuper(this, ColumnsSwitch, [table, options]);
 
       // Показ строк
       table.on('records_show', function () {
@@ -15657,7 +14990,7 @@
           event.stopPropagation();
         });
       });
-      return _this2;
+      return _this;
     }
 
     /**
@@ -15739,20 +15072,6 @@
     }]);
   }(Column);
 
-  function _callSuper$7(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsText = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -15760,7 +15079,7 @@
      * @param {Object}              options
      */
     function ColumnsText(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, ColumnsText);
       options = $.extend(true, {
         type: 'text',
@@ -15777,24 +15096,24 @@
         attrHeader: null,
         render: null
       }, options);
-      _this2 = _callSuper$7(this, ColumnsText, [table, options]);
-      var tableOptions = _this2._table.getOptions();
-      if (_this2._options.noWrap || _this2._options.noWrap === null && tableOptions.noWrap) {
-        if (!_this2._options.attr) {
-          _this2._options.attr = {
+      _this = _callSuper(this, ColumnsText, [table, options]);
+      var tableOptions = _this._table.getOptions();
+      if (_this._options.noWrap || _this._options.noWrap === null && tableOptions.noWrap) {
+        if (!_this._options.attr) {
+          _this._options.attr = {
             "class": 'coreui_table__no-wrap'
           };
         } else {
-          _this2._options.attr = TableUtils.mergeAttr(_this2._options.attr, {
+          _this._options.attr = TableUtils.mergeAttr(_this._options.attr, {
             "class": 'coreui_table__no-wrap'
           });
         }
-        _this2._options.noWrap = true;
-        if (_this2._options.noWrapToggle || _this2._options.noWrapToggle === null && tableOptions.noWrapToggle) {
-          _this2._options.noWrapToggle = true;
+        _this._options.noWrap = true;
+        if (_this._options.noWrapToggle || _this._options.noWrapToggle === null && tableOptions.noWrapToggle) {
+          _this._options.noWrapToggle = true;
         }
       }
-      return _this2;
+      return _this;
     }
 
     /**
@@ -15822,20 +15141,6 @@
     }]);
   }(Column);
 
-  function _callSuper$6(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsButton = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -15853,7 +15158,7 @@
         minWidth: null,
         maxWidth: null
       }, options);
-      return _callSuper$6(this, ColumnsButton, [table, options]);
+      return _callSuper(this, ColumnsButton, [table, options]);
     }
 
     /**
@@ -15926,20 +15231,6 @@
     }]);
   }(Column);
 
-  function _callSuper$5(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsLink = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -15957,7 +15248,7 @@
         minWidth: null,
         maxWidth: null
       }, options);
-      return _callSuper$5(this, ColumnsLink, [table, options]);
+      return _callSuper(this, ColumnsLink, [table, options]);
     }
 
     /**
@@ -16028,20 +15319,6 @@
     }]);
   }(Column);
 
-  function _callSuper$4(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsMenu = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -16059,7 +15336,7 @@
         minWidth: null,
         maxWidth: null
       }, options);
-      return _callSuper$4(this, ColumnsMenu, [table, options]);
+      return _callSuper(this, ColumnsMenu, [table, options]);
     }
 
     /**
@@ -16226,20 +15503,6 @@
     }]);
   }(Column);
 
-  function _callSuper$3(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsBadge = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -16257,7 +15520,7 @@
         minWidth: null,
         maxWidth: null
       }, options);
-      return _callSuper$3(this, ColumnsBadge, [table, options]);
+      return _callSuper(this, ColumnsBadge, [table, options]);
     }
 
     /**
@@ -16308,20 +15571,6 @@
     }]);
   }(Column);
 
-  function _callSuper$2(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsComponent = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -16339,7 +15588,7 @@
         minWidth: null,
         maxWidth: null
       }, options);
-      return _callSuper$2(this, ColumnsComponent, [table, options]);
+      return _callSuper(this, ColumnsComponent, [table, options]);
     }
 
     /**
@@ -16360,20 +15609,6 @@
     }]);
   }(Column);
 
-  function _callSuper$1(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsProgress = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -16396,7 +15631,7 @@
         barWidth: null,
         barHeight: null
       }, options);
-      return _callSuper$1(this, ColumnsProgress, [table, options]);
+      return _callSuper(this, ColumnsProgress, [table, options]);
     }
 
     /**
@@ -16492,20 +15727,6 @@
     }]);
   }(Column);
 
-  function _callSuper(_this, derived, args) {
-    function isNativeReflectConstruct() {
-      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-      if (Reflect.construct.sham) return false;
-      if (typeof Proxy === "function") return true;
-      try {
-        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      } catch (e) {
-        return false;
-      }
-    }
-    derived = _getPrototypeOf(derived);
-    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-  }
   var ColumnsImage = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
@@ -16513,7 +15734,7 @@
      * @param {Object}              options
      */
     function ColumnsImage(table, options) {
-      var _this2;
+      var _this;
       _classCallCheck(this, ColumnsImage);
       options = $.extend(true, {
         type: 'image',
@@ -16529,10 +15750,10 @@
         imgBorder: null,
         imgStyle: null
       }, options);
-      _this2 = _callSuper(this, ColumnsImage, [table, options]);
-      _this2._table = table;
-      _this2._options = $.extend(true, {}, _this2._options, options);
-      return _this2;
+      _this = _callSuper(this, ColumnsImage, [table, options]);
+      _this._table = table;
+      _this._options = $.extend(true, {}, _this._options, options);
+      return _this;
     }
 
     /**
