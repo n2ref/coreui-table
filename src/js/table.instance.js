@@ -1732,10 +1732,12 @@ class TableInstance {
             let tr   = TableElements.getTrByIndex(this.getId(), index);
 
             if (tr.length >= 0) {
+                let emptyRecords = that._records.length === 0;
+
                 tr.fadeOut('fast', function () {
                     tr.remove();
 
-                    if (that._records.length === 0) {
+                    if (emptyRecords) {
                         let tbody = TableElements.getTableTbody(that.getId());
 
                         tbody.append(
