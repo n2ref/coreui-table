@@ -90,117 +90,14 @@ class TableInstance {
 
     /**
      * Инициализация
-     * @param {object} tableWrapper
-     * @param {object} options
+     * @param {Table}  tableWrapper
+     * @param {Object} options
      * @private
      */
     constructor(tableWrapper, options) {
 
-        this._options = $.extend(true, {}, this._options, options);
-        this._events  = {};
-        this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
-            ? this._options.id
-            : TableUtils.hashCode();
-
-        if (this._options.page > 0) {
-            this._page = this._options.page;
-        }
-
-        if (this._options.saveState && this._options.id) {
-            this._recordsPerPage = TablePrivate.getStorageField(this._id, 'page_size')
-
-        } else if (this._options.recordsPerPage > 0) {
-            this._recordsPerPage = this._options.recordsPerPage;
-        }
-
-        this._isRecordsRequest = (
-            this._options.hasOwnProperty('recordsRequest') &&
-            (
-                typeof this._options.recordsRequest === 'function' ||
-                (TableUtils.isObject(this._options.recordsRequest) &&
-                this._options.recordsRequest.hasOwnProperty('url') &&
-                typeof this._options.recordsRequest.url === 'string' &&
-                this._options.recordsRequest.url !== '' &&
-                this._options.recordsRequest.url !== '#')
-            )
-        );
-
-        if (this._isRecordsRequest) {
-            if (typeof this._options.recordsRequest === 'object' &&
-                ( ! this._options.recordsRequest.hasOwnProperty('method') ||
-                 typeof this._options.recordsRequest.method !== 'string')
-            ) {
-                this._options.recordsRequest.method = 'GET';
-            }
-
-        } else if (Array.isArray(this._options.records)) {
-            TablePrivate.setRecords(this, this._options.records);
-        }
-
-        // Очистка записей после инициализации
-        this._options.records = [];
-
-        // Инициализация колонок
-        if (typeof this._options.columns === 'object' &&
-            Array.isArray(this._options.columns) &&
-            this._options.columns.length > 0
-        ) {
-            TablePrivate.initColumns(tableWrapper, this, this._options.columns);
-        }
-
-
-        // Инициализация поисковых полей
-        if (TableUtils.isObject(this._options.search) &&
-            typeof this._options.search.controls === 'object' &&
-            Array.isArray(this._options.search.controls) &&
-            this._options.search.controls.length > 0
-        ) {
-            TablePrivate.initSearch(tableWrapper, this, this._options.search.controls);
-        }
-
-
-        // Инициализация контролов и фильтров
-        if (this._options.hasOwnProperty('header') &&
-            Array.isArray(this._options.header) &&
-            this._options.header.length > 0
-        ) {
-            TablePrivate.initControls(tableWrapper, this, this._options.header, 'header');
-        }
-
-        if (this._options.hasOwnProperty('footer') &&
-            Array.isArray(this._options.footer) &&
-            this._options.footer.length > 0
-        ) {
-            TablePrivate.initControls(tableWrapper, this, this._options.footer, 'footer');
-        }
-
-
-        if (this._options.saveState && this._options.id) {
-
-            // Поиск по сохраненным поисковым данным
-            if ( ! this._isRecordsRequest) {
-                TablePrivate.searchLocalRecords(this);
-            }
-
-            // Сортировка
-            let sort = TablePrivate.getStorageField(this.getId(), 'sort');
-
-            if (Array.isArray(sort) && sort.length > 0) {
-                TablePrivate.initSort(this, sort);
-
-                if ( ! this._isRecordsRequest && this._records.length > 0) {
-                    this._records = TablePrivate.sortRecordsByFields(this._records, this._sort);
-                }
-            }
-
-        } else {
-            if (this._options.hasOwnProperty('sort') &&
-                Array.isArray(this._options.sort) &&
-                this._options.sort.length > 0
-            ) {
-                TablePrivate.initSort(this, this._options.sort);
-            }
-        }
+        this._tableWrapper = tableWrapper;
+        this._options      = $.extend(true, {}, this._options, options);
     }
 
 
@@ -416,6 +313,8 @@ class TableInstance {
      * @returns {*}
      */
     render(element) {
+
+        TablePrivate.init(this._tableWrapper, this);
 
         let that        = this;
         let widthSizes  = [];

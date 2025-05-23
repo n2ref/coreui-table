@@ -11,7 +11,7 @@ class ControlPages extends Control {
     /**
      * Инициализация
      * @param {TableInstance} table
-     * @param {Object}              options
+     * @param {Object}        options
      */
     constructor(table, options) {
 

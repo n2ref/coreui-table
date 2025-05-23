@@ -2253,6 +2253,69 @@
 
   var TablePrivate = {
     /**
+     * @param {Table}         tableWrapper
+     * @param {TableInstance} table
+     */
+    init: function init(tableWrapper, table) {
+      table._id = table._options.hasOwnProperty('id') && typeof table._options.id === 'string' && table._options.id ? table._options.id : TableUtils.hashCode();
+      if (table._options.page > 0) {
+        table._page = table._options.page;
+      }
+      if (table._options.saveState && table._options.id) {
+        table._recordsPerPage = this.getStorageField(table._id, 'page_size');
+      } else if (table._options.recordsPerPage > 0) {
+        table._recordsPerPage = table._options.recordsPerPage;
+      }
+      table._isRecordsRequest = table._options.hasOwnProperty('recordsRequest') && (typeof table._options.recordsRequest === 'function' || TableUtils.isObject(table._options.recordsRequest) && table._options.recordsRequest.hasOwnProperty('url') && typeof table._options.recordsRequest.url === 'string' && table._options.recordsRequest.url !== '' && table._options.recordsRequest.url !== '#');
+      if (table._isRecordsRequest) {
+        if (_typeof(table._options.recordsRequest) === 'object' && (!table._options.recordsRequest.hasOwnProperty('method') || typeof table._options.recordsRequest.method !== 'string')) {
+          table._options.recordsRequest.method = 'GET';
+        }
+      } else if (Array.isArray(table._options.records)) {
+        this.setRecords(table, table._options.records);
+      }
+
+      // Очистка записей после инициализации
+      table._options.records = [];
+
+      // Инициализация колонок
+      if (_typeof(table._options.columns) === 'object' && Array.isArray(table._options.columns) && table._options.columns.length > 0) {
+        this.initColumns(tableWrapper, table, table._options.columns);
+      }
+
+      // Инициализация поисковых полей
+      if (TableUtils.isObject(table._options.search) && _typeof(table._options.search.controls) === 'object' && Array.isArray(table._options.search.controls) && table._options.search.controls.length > 0) {
+        this.initSearch(tableWrapper, table, table._options.search.controls);
+      }
+
+      // Инициализация контролов и фильтров
+      if (table._options.hasOwnProperty('header') && Array.isArray(table._options.header) && table._options.header.length > 0) {
+        this.initControls(tableWrapper, table, table._options.header, 'header');
+      }
+      if (table._options.hasOwnProperty('footer') && Array.isArray(table._options.footer) && table._options.footer.length > 0) {
+        this.initControls(tableWrapper, table, table._options.footer, 'footer');
+      }
+      if (table._options.saveState && table._options.id) {
+        // Поиск по сохраненным поисковым данным
+        if (!table._isRecordsRequest) {
+          this.searchLocalRecords(table);
+        }
+
+        // Сортировка
+        var sort = this.getStorageField(table.getId(), 'sort');
+        if (Array.isArray(sort) && sort.length > 0) {
+          this.initSort(table, sort);
+          if (!table._isRecordsRequest && table._records.length > 0) {
+            table._records = this.sortRecordsByFields(table._records, table._sort);
+          }
+        }
+      } else {
+        if (table._options.hasOwnProperty('sort') && Array.isArray(table._options.sort) && table._options.sort.length > 0) {
+          this.initSort(table, table._options.sort);
+        }
+      }
+    },
+    /**
      * Инициализация колонок
      * @param {Table}         tableWrapper
      * @param {TableInstance} table
@@ -2261,7 +2324,7 @@
      */
     initColumns: function initColumns(tableWrapper, table, columns) {
       var options = table.getOptions();
-      var columnsStorage = options.saveState && options.id ? TablePrivate.getStorageField(table.getId(), 'columns') : null;
+      var columnsStorage = options.saveState && options.id ? this.getStorageField(table.getId(), 'columns') : null;
       columns.map(function (column) {
         if (typeof column.type === 'undefined' || !tableWrapper.columns.hasOwnProperty(column.type)) {
           column.type = 'text';
@@ -2280,7 +2343,7 @@
         if (column.hasOwnProperty('fixed') && typeof column.fixed === 'string') {
           table._options.overflow = true;
         }
-        var columnInstance = new Table.columns[column.type](table, column);
+        var columnInstance = new tableWrapper.columns[column.type](table, column);
         table._columns.push(columnInstance);
         if (columnInstance.isShow()) {
           table._countColumnsShow++;
@@ -2296,7 +2359,7 @@
      */
     initSearch: function initSearch(tableWrapper, table, searchControls) {
       var options = table.getOptions();
-      var searchValues = options.saveState && options.id ? TablePrivate.getStorageField(table.getId(), 'search') : null;
+      var searchValues = options.saveState && options.id ? this.getStorageField(table.getId(), 'search') : null;
       $.each(searchControls, function (key, control) {
         if (!TableUtils.isObject(control)) {
           control = {};
@@ -2315,7 +2378,7 @@
             });
           }
         }
-        var controlInstance = new Table.search[control.type](table, control);
+        var controlInstance = new tableWrapper.search[control.type](table, control);
         table._search.push(controlInstance);
       });
     },
@@ -2382,7 +2445,7 @@
       var instance = null;
       if (TableUtils.isObject(control) && typeof control.type === 'string') {
         if (tableWrapper.controls.hasOwnProperty(control.type)) {
-          instance = new Table.controls[control.type](table, control);
+          instance = new tableWrapper.controls[control.type](table, control);
           table._controls.push(instance);
         } else if (control.type.indexOf('filter:') === 0) {
           var filterName = control.type.substring(7);
@@ -2390,7 +2453,7 @@
             if (control.hasOwnProperty('field')) {
               var options = table.getOptions();
               if (options.saveState && options.id) {
-                var filterValues = options.saveState && options.id ? TablePrivate.getStorageField(table.getId(), 'filters') : null;
+                var filterValues = options.saveState && options.id ? this.getStorageField(table.getId(), 'filters') : null;
                 control.value = null;
                 if (Array.isArray(filterValues)) {
                   $.each(filterValues, function (key, filter) {
@@ -2402,7 +2465,7 @@
                 }
               }
             }
-            instance = new Table.filters[filterName](table, control);
+            instance = new tableWrapper.filters[filterName](table, control);
             table._filters.push(instance);
           }
         }
@@ -2779,8 +2842,8 @@
   var TableInstance = /*#__PURE__*/function () {
     /**
      * Инициализация
-     * @param {object} tableWrapper
-     * @param {object} options
+     * @param {Table}  tableWrapper
+     * @param {Object} options
      * @private
      */
     function TableInstance(tableWrapper, options) {
@@ -2857,65 +2920,8 @@
         footer: []
       });
       _defineProperty(this, "_events", {});
+      this._tableWrapper = tableWrapper;
       this._options = $.extend(true, {}, this._options, options);
-      this._events = {};
-      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : TableUtils.hashCode();
-      if (this._options.page > 0) {
-        this._page = this._options.page;
-      }
-      if (this._options.saveState && this._options.id) {
-        this._recordsPerPage = TablePrivate.getStorageField(this._id, 'page_size');
-      } else if (this._options.recordsPerPage > 0) {
-        this._recordsPerPage = this._options.recordsPerPage;
-      }
-      this._isRecordsRequest = this._options.hasOwnProperty('recordsRequest') && (typeof this._options.recordsRequest === 'function' || TableUtils.isObject(this._options.recordsRequest) && this._options.recordsRequest.hasOwnProperty('url') && typeof this._options.recordsRequest.url === 'string' && this._options.recordsRequest.url !== '' && this._options.recordsRequest.url !== '#');
-      if (this._isRecordsRequest) {
-        if (_typeof(this._options.recordsRequest) === 'object' && (!this._options.recordsRequest.hasOwnProperty('method') || typeof this._options.recordsRequest.method !== 'string')) {
-          this._options.recordsRequest.method = 'GET';
-        }
-      } else if (Array.isArray(this._options.records)) {
-        TablePrivate.setRecords(this, this._options.records);
-      }
-
-      // Очистка записей после инициализации
-      this._options.records = [];
-
-      // Инициализация колонок
-      if (_typeof(this._options.columns) === 'object' && Array.isArray(this._options.columns) && this._options.columns.length > 0) {
-        TablePrivate.initColumns(tableWrapper, this, this._options.columns);
-      }
-
-      // Инициализация поисковых полей
-      if (TableUtils.isObject(this._options.search) && _typeof(this._options.search.controls) === 'object' && Array.isArray(this._options.search.controls) && this._options.search.controls.length > 0) {
-        TablePrivate.initSearch(tableWrapper, this, this._options.search.controls);
-      }
-
-      // Инициализация контролов и фильтров
-      if (this._options.hasOwnProperty('header') && Array.isArray(this._options.header) && this._options.header.length > 0) {
-        TablePrivate.initControls(tableWrapper, this, this._options.header, 'header');
-      }
-      if (this._options.hasOwnProperty('footer') && Array.isArray(this._options.footer) && this._options.footer.length > 0) {
-        TablePrivate.initControls(tableWrapper, this, this._options.footer, 'footer');
-      }
-      if (this._options.saveState && this._options.id) {
-        // Поиск по сохраненным поисковым данным
-        if (!this._isRecordsRequest) {
-          TablePrivate.searchLocalRecords(this);
-        }
-
-        // Сортировка
-        var sort = TablePrivate.getStorageField(this.getId(), 'sort');
-        if (Array.isArray(sort) && sort.length > 0) {
-          TablePrivate.initSort(this, sort);
-          if (!this._isRecordsRequest && this._records.length > 0) {
-            this._records = TablePrivate.sortRecordsByFields(this._records, this._sort);
-          }
-        }
-      } else {
-        if (this._options.hasOwnProperty('sort') && Array.isArray(this._options.sort) && this._options.sort.length > 0) {
-          TablePrivate.initSort(this, this._options.sort);
-        }
-      }
     }
 
     /**
@@ -3094,6 +3100,7 @@
     }, {
       key: "render",
       value: function render(element) {
+        TablePrivate.init(this._tableWrapper, this);
         var that = this;
         var widthSizes = [];
         var heightSizes = [];
@@ -5384,7 +5391,7 @@
     /**
      * Инициализация
      * @param {TableInstance} table
-     * @param {Object}              options
+     * @param {Object}        options
      */
     function ControlPages(table, options) {
       var _this2;
