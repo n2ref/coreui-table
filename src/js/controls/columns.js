@@ -1,7 +1,7 @@
 
-import TableUtils    from '../table.utils';
-import TableTpl      from "../table.tpl";
-import TableElements from "../table.elements";
+import Utils    from '../utils';
+import Tpl      from "../tpl";
+import Elements from "../elements";
 import Control       from "../abstract/Control";
 
 
@@ -9,7 +9,7 @@ class ControlColumns extends Control {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -32,15 +32,15 @@ class ControlColumns extends Control {
         super(table, options);
 
 
-        if ( ! TableUtils.isObject(this._options.btn)) {
+        if ( ! Utils.isObject(this._options.btn)) {
             this._options.btn = {};
         }
 
-        if ( ! TableUtils.isObject(this._options.btnComplete)) {
+        if ( ! Utils.isObject(this._options.btnComplete)) {
             this._options.btnComplete = {};
         }
 
-        if (TableUtils.isObject(this._options.btnComplete) &&
+        if (Utils.isObject(this._options.btnComplete) &&
             typeof this._options.btnComplete.content !== 'string'
         ) {
             this._options.btnComplete.content = table.getLang().complete
@@ -58,7 +58,7 @@ class ControlColumns extends Control {
         let table      = this._table;
         let attributes = [];
 
-        if (TableUtils.isObject(this._options.btn.attr)) {
+        if (Utils.isObject(this._options.btn.attr)) {
             $.each(this._options.btn.attr, function (name, value) {
                 if (['string', 'number'].indexOf(typeof value) >= 0) {
                     attributes.push(name + '="' + value + '"');
@@ -66,15 +66,15 @@ class ControlColumns extends Control {
             });
         }
 
-        let btn = $(TableUtils.render(TableTpl['controls/columns.html'], {
+        let btn = $(Utils.render(Tpl['controls/columns.html'], {
             btnContent: this._options.btn.content,
             btnAttr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         }));
 
 
         btn.click(function () {
-            let container       = TableElements.getColumnsContainer(table.getId());
-            let containerSearch = TableElements.getSearchContainer(table.getId());
+            let container       = Elements.getColumnsContainer(table.getId());
+            let containerSearch = Elements.getSearchContainer(table.getId());
 
             if (containerSearch[0]) {
                 containerSearch.hide();
@@ -88,7 +88,7 @@ class ControlColumns extends Control {
                 let showAll            = true;
                 let btnCompleteAttr    = [];
                 let btnCompleteContent = '';
-                let wrapper            = TableElements.getWrapper(table.getId());
+                let wrapper            = Elements.getWrapper(table.getId());
 
                 table._columns.map(function (column) {
                     let options = column.getOptions();
@@ -114,11 +114,11 @@ class ControlColumns extends Control {
 
                 let options = that.getOptions();
 
-                if ( ! TableUtils.isObject(options.btnComplete)) {
+                if ( ! Utils.isObject(options.btnComplete)) {
                     options.btnComplete = {};
                 }
 
-                if ( ! TableUtils.isObject(options.btnComplete.attr)) {
+                if ( ! Utils.isObject(options.btnComplete.attr)) {
                     options.btnComplete.attr = {};
                 }
 
@@ -134,7 +134,7 @@ class ControlColumns extends Control {
                     options.btnComplete.attr.class += ' btn-complete';
                 }
 
-                if (TableUtils.isObject(options.btnComplete.attr)) {
+                if (Utils.isObject(options.btnComplete.attr)) {
                     $.each(options.btnComplete.attr, function (name, value) {
                         if (['string', 'number'].indexOf(typeof value) >= 0) {
                             btnCompleteAttr.push(name + '="' + value + '"');
@@ -147,7 +147,7 @@ class ControlColumns extends Control {
                 }
 
 
-                let containerList = $(TableUtils.render(TableTpl['controls/columns/list.html'], {
+                let containerList = $(Utils.render(Tpl['controls/columns/list.html'], {
                     showAll:            showAll,
                     columns:            columns,
                     btnCompleteAttr:    btnCompleteAttr.length > 0 ? (' ' + btnCompleteAttr.join(' ')) : '',

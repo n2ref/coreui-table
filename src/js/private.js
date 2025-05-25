@@ -1,26 +1,43 @@
+import Utils    from "./utils";
+import Elements from "./elements";
+import ToolBox from "./toolbox";
 
-import TableUtils    from "./table.utils";
-import TableElements from "./table.elements";
 
-
-let TablePrivate = {
+let Private = {
 
     /**
-     * @param {Table}         tableWrapper
-     * @param {TableInstance} table
+     * @param {Controller} controller
+     * @param {Table}      table
      */
-    init: function (tableWrapper, table) {
+    init: function (controller, table) {
 
         table._id = table._options.hasOwnProperty('id') && typeof table._options.id === 'string' && table._options.id
             ? table._options.id
-            : TableUtils.hashCode();
+            : Utils.hashCode();
+
+
+        if ( ! table._options.hasOwnProperty('lang') || typeof table._options.lang !== 'string') {
+            table._options.lang = controller.getSetting('lang');
+        }
+
+        let langItems     = controller.lang.hasOwnProperty(table._options.lang) ? controller.lang[table._options.lang] : {};
+        table._options.langItems = table._options.hasOwnProperty('langItems') && Utils.isObject(table._options.langItems)
+            ? $.extend(true, {}, langItems, table._options.langItems)
+            : langItems;
 
         if (table._options.page > 0) {
             table._page = table._options.page;
         }
 
         if (table._options.saveState && table._options.id) {
-            table._recordsPerPage = this.getStorageField(table._id, 'page_size')
+            let pageSize = Private.getStorageField(table._id, 'page_size');
+
+            if (Utils.isNumeric(pageSize) && pageSize > 0) {
+                table._recordsPerPage = pageSize;
+
+            } else if (table._options.recordsPerPage > 0) {
+                table._recordsPerPage = table._options.recordsPerPage;
+            }
 
         } else if (table._options.recordsPerPage > 0) {
             table._recordsPerPage = table._options.recordsPerPage;
@@ -30,7 +47,7 @@ let TablePrivate = {
             table._options.hasOwnProperty('recordsRequest') &&
             (
                 typeof table._options.recordsRequest === 'function' ||
-                (TableUtils.isObject(table._options.recordsRequest) &&
+                (Utils.isObject(table._options.recordsRequest) &&
                     table._options.recordsRequest.hasOwnProperty('url') &&
                     typeof table._options.recordsRequest.url === 'string' &&
                     table._options.recordsRequest.url !== '' &&
@@ -58,17 +75,17 @@ let TablePrivate = {
             Array.isArray(table._options.columns) &&
             table._options.columns.length > 0
         ) {
-            this.initColumns(tableWrapper, table, table._options.columns);
+            this.initColumns(controller, table, table._options.columns);
         }
 
 
         // Инициализация поисковых полей
-        if (TableUtils.isObject(table._options.search) &&
+        if (Utils.isObject(table._options.search) &&
             typeof table._options.search.controls === 'object' &&
             Array.isArray(table._options.search.controls) &&
             table._options.search.controls.length > 0
         ) {
-            this.initSearch(tableWrapper, table, table._options.search.controls);
+            this.initSearch(controller, table, table._options.search.controls);
         }
 
 
@@ -77,14 +94,14 @@ let TablePrivate = {
             Array.isArray(table._options.header) &&
             table._options.header.length > 0
         ) {
-            this.initControls(tableWrapper, table, table._options.header, 'header');
+            this.initControls(controller, table, table._options.header, 'header');
         }
 
         if (table._options.hasOwnProperty('footer') &&
             Array.isArray(table._options.footer) &&
             table._options.footer.length > 0
         ) {
-            this.initControls(tableWrapper, table, table._options.footer, 'footer');
+            this.initControls(controller, table, table._options.footer, 'footer');
         }
 
 
@@ -119,12 +136,12 @@ let TablePrivate = {
 
     /**
      * Инициализация колонок
-     * @param {Table}         tableWrapper
-     * @param {TableInstance} table
-     * @param {Array}         columns
+     * @param {Controller} controller
+     * @param {Table}      table
+     * @param {Array}      columns
      * @private
      */
-    initColumns(tableWrapper, table, columns) {
+    initColumns(controller, table, columns) {
 
         let options        = table.getOptions();
         let columnsStorage = options.saveState && options.id
@@ -133,7 +150,7 @@ let TablePrivate = {
 
         columns.map(function (column) {
             if (typeof column.type === 'undefined' ||
-                ! tableWrapper.columns.hasOwnProperty(column.type)
+                ! controller.columns.hasOwnProperty(column.type)
             ) {
                 column.type = 'text';
             }
@@ -160,7 +177,20 @@ let TablePrivate = {
                 table._options.overflow = true;
             }
 
-            let columnInstance = new tableWrapper.columns[column.type](table, column);
+            let columnObject   = controller.columns[column.type];
+            let columnInstance = null;
+
+            if (Utils.isClass(columnObject)) {
+                columnInstance = new columnObject(table, column);
+
+            } else if (Utils.isObject(columnObject)) {
+                columnInstance = $.extend(true, {}, columnObject);
+                columnInstance.init(table, column);
+
+            } else {
+                throw new Error(`Incorrect type column: ${column.type}`);
+            }
+
             table._columns.push(columnInstance);
 
             if (columnInstance.isShow()) {
@@ -172,12 +202,12 @@ let TablePrivate = {
 
     /**
      * Инициализация поисковых полей
-     * @param {object} tableWrapper
-     * @param {Object} table
-     * @param {Array}  searchControls
+     * @param {Controller} controller
+     * @param {Object}     table
+     * @param {Array}      searchControls
      * @private
      */
-    initSearch: function (tableWrapper, table, searchControls) {
+    initSearch: function (controller, table, searchControls) {
 
         let options      = table.getOptions();
         let searchValues = options.saveState && options.id
@@ -185,13 +215,13 @@ let TablePrivate = {
             : null;
 
         $.each(searchControls, function (key, control) {
-            if ( ! TableUtils.isObject(control)) {
+            if ( ! Utils.isObject(control)) {
                 control = {};
             }
 
             if ( ! control.hasOwnProperty('type') ||
                 typeof control.type !== 'string' ||
-                ! tableWrapper.search.hasOwnProperty(control.type)
+                ! controller.search.hasOwnProperty(control.type)
             ) {
                 control.type = 'text';
             }
@@ -201,7 +231,7 @@ let TablePrivate = {
 
                 if (Array.isArray(searchValues) && control.hasOwnProperty('field')) {
                     $.each(searchValues, function (key, search) {
-                        if (TableUtils.isObject(search) &&
+                        if (Utils.isObject(search) &&
                             search.hasOwnProperty('field') &&
                             search.hasOwnProperty('value') &&
                             search.field &&
@@ -214,7 +244,20 @@ let TablePrivate = {
                 }
             }
 
-            let controlInstance = new tableWrapper.search[control.type](table, control);
+            let searchObject    = controller.search[control.type];
+            let controlInstance = null;
+
+            if (Utils.isClass(searchObject)) {
+                controlInstance = new searchObject(table, control);
+
+            } else if (Utils.isObject(searchObject)) {
+                controlInstance = $.extend(true, {}, searchObject);
+                controlInstance.init(table, control);
+
+            } else {
+                throw new Error(`Incorrect type search: ${control.type}`);
+            }
+
             table._search.push(controlInstance);
         });
     },
@@ -222,17 +265,23 @@ let TablePrivate = {
 
     /**
      * Инициализация контролов и фильтров
-     * @param {Object} tableWrapper
-     * @param {Object} table
-     * @param {Array}  rows
-     * @param {string} position
+     * @param {Controller} controller
+     * @param {Object}     table
+     * @param {Array}      rows
+     * @param {string}     position
      * @private
      */
-    initControls: function (tableWrapper, table, rows, position) {
+    initControls: function (controller, table, rows, position) {
 
         let that = this;
 
         rows.map(function (row) {
+
+            if (row instanceof ToolBox) {
+                row = row.toObject();
+            }
+
+
 
             let type           = 'in';
             let controlsLeft   = [];
@@ -247,9 +296,9 @@ let TablePrivate = {
 
             if (row.hasOwnProperty('left') && Array.isArray(row.left)) {
                 row.left.map(function (control) {
-                    let instance = that.initControl(tableWrapper, table, control);
+                    let instance = that.initControl(controller, table, control);
 
-                    if (TableUtils.isObject(instance)) {
+                    if (Utils.isObject(instance)) {
                         controlsLeft.push(instance);
                     }
                 });
@@ -257,9 +306,9 @@ let TablePrivate = {
 
             if (row.hasOwnProperty('center') && Array.isArray(row.center)) {
                 row.center.map(function (control) {
-                    let instance = that.initControl(tableWrapper, table, control);
+                    let instance = that.initControl(controller, table, control);
 
-                    if (TableUtils.isObject(instance)) {
+                    if (Utils.isObject(instance)) {
                         controlsCenter.push(instance);
                     }
                 });
@@ -267,9 +316,9 @@ let TablePrivate = {
 
             if (row.hasOwnProperty('right') && Array.isArray(row.right)) {
                 row.right.map(function (control) {
-                    let instance = that.initControl(tableWrapper, table, control);
+                    let instance = that.initControl(controller, table, control);
 
-                    if (TableUtils.isObject(instance)) {
+                    if (Utils.isObject(instance)) {
                         controlsRight.push(instance);
                     }
                 });
@@ -289,25 +338,38 @@ let TablePrivate = {
 
     /**
      * Инициализация контрола или фильтра
-     * @param {object} tableWrapper
-     * @param {Object} table
-     * @param {object} control
+     * @param {Controller} controller
+     * @param {Object}     table
+     * @param {object}     control
      * @private
      */
-    initControl: function (tableWrapper, table, control) {
+    initControl: function (controller, table, control) {
 
         let instance = null;
 
-        if (TableUtils.isObject(control) && typeof control.type === 'string') {
+        if (Utils.isObject(control) && typeof control.type === 'string') {
 
-            if (tableWrapper.controls.hasOwnProperty(control.type)) {
-                instance = new tableWrapper.controls[control.type](table, control);
+            if (controller.controls.hasOwnProperty(control.type)) {
+
+                let controlObject = controller.controls[control.type];
+
+                if (Utils.isClass(controlObject)) {
+                    instance = new controlObject(table, control);
+
+                } else if (Utils.isObject(controlObject)) {
+                    instance = $.extend(true, {}, controlObject);
+                    instance.init(table, control);
+
+                } else {
+                    throw new Error(`Incorrect type control: ${control.type}`);
+                }
+
                 table._controls.push(instance);
 
             } else if (control.type.indexOf('filter:') === 0) {
                 let filterName = control.type.substring(7);
 
-                if (tableWrapper.filters.hasOwnProperty(filterName)) {
+                if (controller.filters.hasOwnProperty(filterName)) {
 
                     if (control.hasOwnProperty('field')) {
                         let options = table.getOptions();
@@ -321,7 +383,7 @@ let TablePrivate = {
 
                             if (Array.isArray(filterValues)) {
                                 $.each(filterValues, function (key, filter) {
-                                    if (TableUtils.isObject(filter) &&
+                                    if (Utils.isObject(filter) &&
                                         filter.hasOwnProperty('field') &&
                                         filter.hasOwnProperty('value') &&
                                         filter.field &&
@@ -335,7 +397,19 @@ let TablePrivate = {
                         }
                     }
 
-                    instance = new tableWrapper.filters[filterName](table, control);
+
+                    let filterObject = controller.filters[filterName];
+
+                    if (Utils.isClass(filterObject)) {
+                        instance = new filterObject(table, control);
+
+                    } else if (Utils.isObject(filterObject)) {
+                        instance = $.extend(true, {}, filterObject);
+                        instance.init(table, control);
+
+                    } else {
+                        throw new Error(`Incorrect type filter: ${filterName}`);
+                    }
                     table._filters.push(instance);
                 }
             }
@@ -354,9 +428,9 @@ let TablePrivate = {
     initSort: function (table, sort) {
 
         if (Array.isArray(sort) && sort.length > 0) {
-            $.each(sort, function (key, sortField) {
+            sort.map(function (sortField) {
 
-                if (TableUtils.isObject(sortField) &&
+                if (Utils.isObject(sortField) &&
                     sortField.hasOwnProperty('field') &&
                     sortField.hasOwnProperty('order') &&
                     typeof sortField.field === 'string' &&
@@ -402,11 +476,11 @@ let TablePrivate = {
             let isShow = true;
 
             if (searchData.length > 0) {
-                isShow = TablePrivate.isFilteredRecord(searchData, record.data, columnsOptions);
+                isShow = Private.isFilteredRecord(searchData, record.data, columnsOptions);
             }
 
             if (isShow && filterData.length > 0) {
-                isShow = TablePrivate.isFilteredRecord(filterData, record.data, columnsOptions);
+                isShow = Private.isFilteredRecord(filterData, record.data, columnsOptions);
             }
 
             record.show = isShow;
@@ -444,10 +518,10 @@ let TablePrivate = {
      */
     addRecord: function (table, data, afterIndex) {
 
-        if (TableUtils.isObject(data)) {
+        if (Utils.isObject(data)) {
             data = $.extend(true, {}, data);
 
-            let meta = data.hasOwnProperty('_meta') && TableUtils.isObject(data._meta)
+            let meta = data.hasOwnProperty('_meta') && Utils.isObject(data._meta)
                 ? data._meta
                 : null;
 
@@ -507,10 +581,10 @@ let TablePrivate = {
      */
     addRecordBefore: function (table, data, index) {
 
-        if (TableUtils.isObject(data) && typeof index === 'number') {
+        if (Utils.isObject(data) && typeof index === 'number') {
             data = $.extend(true, {}, data);
 
-            let meta = data.hasOwnProperty('_meta') && TableUtils.isObject(data._meta)
+            let meta = data.hasOwnProperty('_meta') && Utils.isObject(data._meta)
                 ? data._meta
                 : null;
 
@@ -719,7 +793,7 @@ let TablePrivate = {
      */
     setColumnsSort: function (table, sort) {
 
-        let thead = TableElements.getTableThead(table.getId());
+        let thead = Elements.getTableThead(table.getId());
 
         $.each(table._columns, function (key, column) {
             let options = column.getOptions();
@@ -734,7 +808,7 @@ let TablePrivate = {
 
                 if (Array.isArray(sort)) {
                     $.each(sort, function (key, sortItem) {
-                        if (TableUtils.isObject(sortItem) &&
+                        if (Utils.isObject(sortItem) &&
                             sortItem.hasOwnProperty('field') &&
                             sortItem.hasOwnProperty('order') &&
                             typeof sortItem.field === 'string' &&
@@ -777,7 +851,7 @@ let TablePrivate = {
             if (typeof storage === 'string' && storage) {
                 storage = JSON.parse(storage);
 
-                if (TableUtils.isObject(storage)) {
+                if (Utils.isObject(storage)) {
                     return tableId && typeof tableId === 'string'
                         ? (storage.hasOwnProperty(tableId) ? storage[tableId] : null)
                         : storage;
@@ -805,7 +879,7 @@ let TablePrivate = {
 
         let storageAll = this.getStorage();
 
-        if (TableUtils.isObject(storageAll)) {
+        if (Utils.isObject(storageAll)) {
             if (storageAll.hasOwnProperty(tableId)) {
                 if (storage) {
                     storageAll[tableId] = storage;
@@ -861,4 +935,4 @@ let TablePrivate = {
     }
 }
 
-export default TablePrivate;
+export default Private;

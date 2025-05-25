@@ -1,8 +1,8 @@
 
-import TableTpl      from "../table.tpl";
-import TableUtils    from "../table.utils";
-import TableElements from "../table.elements";
-import Filter              from "../abstract/Filter";
+import Tpl    from "../tpl";
+import Utils  from "../utils";
+import Filter from "../abstract/Filter";
+
 
 class FilterCheckbox extends Filter {
 
@@ -10,7 +10,7 @@ class FilterCheckbox extends Filter {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -139,7 +139,7 @@ class FilterCheckbox extends Filter {
             : '';
 
         $.each(options.options, function (key, option) {
-            if ( ! TableUtils.isObject(option) ||
+            if ( ! Utils.isObject(option) ||
                 ! option.hasOwnProperty('value') ||
                 ['string', 'numeric'].indexOf(typeof option.value) === -1
             ) {
@@ -159,7 +159,7 @@ class FilterCheckbox extends Filter {
             });
         });
 
-        this._control = $(TableUtils.render(TableTpl['filters/checkbox.html'], {
+        this._control = $(Utils.render(Tpl['filters/checkbox.html'], {
             label: label,
             items: items,
             field: field + this.getId(),

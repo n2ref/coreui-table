@@ -4,7 +4,7 @@ class ControlCustom extends Control {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {

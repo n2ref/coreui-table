@@ -1,14 +1,14 @@
 
-import TableElements from "../table.elements";
-import TableTpl      from "../table.tpl";
-import TableUtils    from "../table.utils";
+import Elements from "../elements";
+import Tpl      from "../tpl";
+import Utils    from "../utils";
 import Column              from "../abstract/Column";
 
-class ColumnsSwitch extends Column {
+class ColumnSwitch extends Column {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -33,7 +33,7 @@ class ColumnsSwitch extends Column {
         // Показ строк
         table.on('records_show', function () {
 
-            let containers = TableElements.getRowsSwitches(table.getId());
+            let containers = Elements.getRowsSwitches(table.getId());
 
             // Отмена обработки нажатия в switch колонках
             containers.click(function (event) {
@@ -86,7 +86,7 @@ class ColumnsSwitch extends Column {
 
         let isChecked = content === this._options.valueY;
 
-        let formSwitch = $(TableUtils.render(TableTpl['columns/switch.html'], {
+        let formSwitch = $(Utils.render(Tpl['columns/switch.html'], {
             index: record.index,
             field: this._options.field,
             disabled: this._options.disabled,
@@ -135,4 +135,4 @@ class ColumnsSwitch extends Column {
     }
 }
 
-export default ColumnsSwitch;
+export default ColumnSwitch;

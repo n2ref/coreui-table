@@ -1,13 +1,13 @@
 
-import TableTpl   from "../table.tpl";
-import TableUtils from "../table.utils";
+import Tpl   from "../tpl";
+import Utils from "../utils";
 import Search           from "../abstract/Search";
 
 class SearchSelect extends Search {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -144,7 +144,7 @@ class SearchSelect extends Search {
         let attributes    = [];
 
         if ( ! options.hasOwnProperty('attr') ||
-             ! TableUtils.isObject(options.attr)
+             ! Utils.isObject(options.attr)
         ) {
             options.attr = {};
         }
@@ -154,7 +154,7 @@ class SearchSelect extends Search {
         }
 
         if (options.width) {
-            options.attr = TableUtils.mergeAttr(
+            options.attr = Utils.mergeAttr(
                 { style: 'width:' + options.width + 'px' },
                 options.attr
             );
@@ -173,7 +173,7 @@ class SearchSelect extends Search {
                         text: option
                     }));
 
-                } else if (TableUtils.isObject(option)) {
+                } else if (Utils.isObject(option)) {
                     let type = option.hasOwnProperty('type') && typeof option.type === 'string'
                         ? option.type
                         : 'option';
@@ -184,7 +184,7 @@ class SearchSelect extends Search {
                         let groupOptions = [];
 
                         if (option.hasOwnProperty('attr') &&
-                            TableUtils.isObject(option.attr)
+                            Utils.isObject(option.attr)
                         ) {
                             groupAttr = option.attr;
                         }
@@ -221,7 +221,7 @@ class SearchSelect extends Search {
         });
 
 
-        this._control = $(TableUtils.render(TableTpl['search/select.html'], {
+        this._control = $(Utils.render(Tpl['search/select.html'], {
             field: options,
             value: this._value,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',

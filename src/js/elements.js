@@ -1,8 +1,8 @@
 
-import TableRender from "./table.render";
+import Render from "./render";
 
 
-let TableElements = {
+let Elements = {
 
     /**
      * Получение контейнера таблицы
@@ -183,7 +183,7 @@ let TableElements = {
      */
     addExpandRow: function (table, recordElement, content) {
 
-        let expandRecord = TableRender.renderExpand(table, content, 'record_expand_show');
+        let expandRecord = Render.renderExpand(table, content, 'record_expand_show');
 
         recordElement.after(expandRecord);
         recordElement.next().show('fast');
@@ -396,4 +396,4 @@ let TableElements = {
     }
 }
 
-export default TableElements;
+export default Elements;

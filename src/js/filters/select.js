@@ -1,13 +1,13 @@
 
-import TableTpl   from "../table.tpl";
-import TableUtils from "../table.utils";
+import Tpl   from "../tpl";
+import Utils from "../utils";
 import Filter           from "../abstract/Filter";
 
 class FilterSelect extends Filter {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -150,7 +150,7 @@ class FilterSelect extends Filter {
             : '';
 
         if ( ! options.hasOwnProperty('attr') ||
-            ! TableUtils.isObject(options.attr)
+            ! Utils.isObject(options.attr)
         ) {
             options.attr = {};
         }
@@ -160,7 +160,7 @@ class FilterSelect extends Filter {
         }
 
         if (options.width) {
-            options.attr = TableUtils.mergeAttr(
+            options.attr = Utils.mergeAttr(
                 { style: 'width:' + options.width + 'px' },
                 options.attr
             );
@@ -179,7 +179,7 @@ class FilterSelect extends Filter {
                         text: option
                     }));
 
-                } else if (TableUtils.isObject(option)) {
+                } else if (Utils.isObject(option)) {
                     let type = option.hasOwnProperty('type') && typeof option.type === 'string'
                         ? option.type
                         : 'option';
@@ -190,7 +190,7 @@ class FilterSelect extends Filter {
                         let groupOptions = [];
 
                         if (option.hasOwnProperty('attr') &&
-                            TableUtils.isObject(option.attr)
+                            Utils.isObject(option.attr)
                         ) {
                             groupAttr = option.attr;
                         }
@@ -226,7 +226,7 @@ class FilterSelect extends Filter {
             attributes.push(name + '="' + value + '"');
         });
 
-        this._control = $(TableUtils.render(TableTpl['filters/select.html'], {
+        this._control = $(Utils.render(Tpl['filters/select.html'], {
             label: label,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             options: selectOptions

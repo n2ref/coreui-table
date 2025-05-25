@@ -1,5 +1,5 @@
-import TableUtils from "../table.utils";
-import TableElements from "../table.elements";
+import Utils from "../utils";
+import Elements from "../elements";
 
 
 class Control {
@@ -23,7 +23,7 @@ class Control {
         this._options = $.extend(true, this._options, options);
         this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
             ? this._options.id
-            : TableUtils.hashCode();
+            : Utils.hashCode();
     }
 
 

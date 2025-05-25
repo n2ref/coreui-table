@@ -1,13 +1,13 @@
 
 import Column           from "../abstract/Column";
-import TableUtils from "../table.utils";
+import Utils from "../utils";
 
 
-class ColumnsDate extends Column {
+class ColumnDate extends Column {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -47,18 +47,19 @@ class ColumnsDate extends Column {
                 let date = new Date(content);
 
                 content = this._options.format
-                    .replace(/YYYY/g, TableUtils.strPadLeft(date.getFullYear(), 4))
+                    .replace(/YYYY/g, Utils.strPadLeft(date.getFullYear(), 4))
                     .replace(/MMMM/g, lang.monthNames[date.getMonth() + 1])
                     .replace(/MMM/g, lang.monthNamesShort[date.getMonth() + 1])
-                    .replace(/MM/g, TableUtils.strPadLeft(date.getMonth() + 1, 2))
+                    .replace(/MM/g, Utils.strPadLeft(date.getMonth() + 1, 2))
                     .replace(/M/g, date.getMonth() + 1)
-                    .replace(/DD/g, TableUtils.strPadLeft(date.getDate(), 2))
+                    .replace(/DD/g, Utils.strPadLeft(date.getDate(), 2))
                     .replace(/D/g, date.getDate())
                     .replace(/dddd/g, lang.dayNames[date.getMonth() + 1])
                     .replace(/ddd/g, lang.dayNamesMin[date.getMonth() + 1]);
             }
 
         } catch (e) {
+            console.warn(e);
             content = '';
         }
 
@@ -68,4 +69,4 @@ class ColumnsDate extends Column {
 }
 
 
-export default ColumnsDate;
+export default ColumnDate;

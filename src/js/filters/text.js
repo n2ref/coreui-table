@@ -1,14 +1,13 @@
 
-import TableTpl      from "../table.tpl";
-import TableUtils    from "../table.utils";
-import TableElements from "../table.elements";
-import Filter              from "../abstract/Filter";
+import Tpl    from "../tpl";
+import Utils  from "../utils";
+import Filter from "../abstract/Filter";
 
 class FilterText extends Filter {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -92,12 +91,12 @@ class FilterText extends Filter {
             ? options.label
             : '';
 
-        if ( ! TableUtils.isObject(options.attr)) {
+        if ( ! Utils.isObject(options.attr)) {
             options.attr = {};
         }
 
         if (options.hasOwnProperty('width') &&
-            TableUtils.isNumeric(options.width)
+            Utils.isNumeric(options.width)
         ) {
             if (options.attr.hasOwnProperty('style')) {
                 options.attr['style'] += ';width:' + options.width + 'px';
@@ -116,10 +115,10 @@ class FilterText extends Filter {
 
 
 
-        if ( ! TableUtils.isObject(options.btn)) {
+        if ( ! Utils.isObject(options.btn)) {
             options.btn = {};
         }
-        if ( ! TableUtils.isObject(options.btn.attr)) {
+        if ( ! Utils.isObject(options.btn.attr)) {
             options.btn.attr = {};
         }
 
@@ -139,7 +138,7 @@ class FilterText extends Filter {
             attrBtn.push(name + '="' + value + '"');
         });
 
-        this._control = $(TableUtils.render(TableTpl['filters/text.html'], {
+        this._control = $(Utils.render(Tpl['filters/text.html'], {
             attr: attr.length > 0 ? (' ' + attr.join(' ')) : '',
             label: label,
             btnAttr: attrBtn.length > 0 ? (' ' + attrBtn.join(' ')) : '',

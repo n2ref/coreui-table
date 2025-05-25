@@ -1,13 +1,13 @@
 
-import TableUtils from "../table.utils";
-import TableTpl   from "../table.tpl";
+import Utils from "../utils";
+import Tpl   from "../tpl";
 import Column           from "../abstract/Column";
 
-class ColumnsLink extends Column {
+class ColumnLink extends Column {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -59,7 +59,7 @@ class ColumnsLink extends Column {
         if (
             (typeof content !== 'string' || ! content)
             &&
-            ( ! TableUtils.isObject(content) ||
+            ( ! Utils.isObject(content) ||
               ! content.hasOwnProperty('url') ||
               typeof content.url !== 'string' ||
               ! content.url
@@ -77,7 +77,7 @@ class ColumnsLink extends Column {
 
         } else {
             if (content.hasOwnProperty('attr') &&
-                TableUtils.isObject(content.attr)
+                Utils.isObject(content.attr)
             ) {
                 attr = content.attr;
             }
@@ -110,7 +110,7 @@ class ColumnsLink extends Column {
         });
 
         let link = $(
-            TableUtils.render(TableTpl['columns/link.html'], {
+            Utils.render(Tpl['columns/link.html'], {
                 content: linkContent,
                 attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             })
@@ -127,4 +127,4 @@ class ColumnsLink extends Column {
 }
 
 
-export default ColumnsLink;
+export default ColumnLink;

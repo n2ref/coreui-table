@@ -1,13 +1,13 @@
 
-import TableTpl   from "../table.tpl";
-import TableUtils from "../table.utils";
+import Tpl   from "../tpl";
+import Utils from "../utils";
 import Search           from "../abstract/Search";
 
 class SearchRadioBtn extends Search {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -127,11 +127,11 @@ class SearchRadioBtn extends Search {
                     value:   key,
                     checked: checked,
                     optionsClass: that._options.optionsClass,
-                    hash: TableUtils.hashCode(),
+                    hash: Utils.hashCode(),
                 });
 
             } else {
-                if ( ! TableUtils.isObject(option) ||
+                if ( ! Utils.isObject(option) ||
                     ! option.hasOwnProperty('value') ||
                     ['string', 'numeric'].indexOf(typeof option.value) === -1
                 ) {
@@ -152,17 +152,17 @@ class SearchRadioBtn extends Search {
                     value:   option.value,
                     checked: checked,
                     optionsClass: that._options.optionsClass,
-                    hash: TableUtils.hashCode(),
+                    hash: Utils.hashCode(),
                 });
             }
         });
 
-        this._control = $(TableUtils.render(TableTpl['search/radio-btn.html'], {
+        this._control = $(Utils.render(Tpl['search/radio-btn.html'], {
             options: options,
             checkedAll: checkedAll,
-            optionAllHash: TableUtils.hashCode(),
+            optionAllHash: Utils.hashCode(),
             optionOptionsClass: that._options.optionsClass,
-            field: TableUtils.hashCode(),
+            field: Utils.hashCode(),
             lang: this._table.getLang()
         }));
 

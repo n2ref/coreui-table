@@ -1,13 +1,13 @@
 
-import TableTpl   from '../table.tpl';
-import TableUtils from '../table.utils';
+import Tpl   from '../tpl';
+import Utils from '../utils';
 import Control          from "../abstract/Control";
 
 class ControlLink extends Control {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -42,7 +42,7 @@ class ControlLink extends Control {
             });
         }
 
-        let link = $(TableUtils.render(TableTpl['controls/link.html'], {
+        let link = $(Utils.render(Tpl['controls/link.html'], {
             url: this._options.url,
             content: this._options.content,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',

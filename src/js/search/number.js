@@ -1,14 +1,14 @@
 
-import TableTpl      from "../table.tpl";
-import TableUtils    from "../table.utils";
-import TableElements from "../table.elements";
+import Tpl      from "../tpl";
+import Utils    from "../utils";
+import Elements from "../elements";
 import Search              from "../abstract/Search";
 
 class SearchNumber extends Search {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -41,7 +41,7 @@ class SearchNumber extends Search {
     setValue (value) {
 
         if (value) {
-            if ( ! TableUtils.isObject(value)) {
+            if ( ! Utils.isObject(value)) {
                 return;
             }
 
@@ -85,7 +85,7 @@ class SearchNumber extends Search {
                 inputStart.val('');
                 inputEnd.val('');
 
-            } else if (TableUtils.isObject(this._value)) {
+            } else if (Utils.isObject(this._value)) {
                 inputStart.val(typeof this._value.start !== null ? this._value.start : '');
                 inputEnd.val(typeof this._value.end !== null ? this._value.end : '');
             }
@@ -135,7 +135,7 @@ class SearchNumber extends Search {
     filter(fieldValue, searchValue) {
 
         if (['string', 'number'].indexOf(typeof fieldValue) < 0 ||
-            ! TableUtils.isObject(searchValue) ||
+            ! Utils.isObject(searchValue) ||
             (
                 ['string', 'number'].indexOf(typeof searchValue.start) < 0 &&
                 ['string', 'number'].indexOf(typeof searchValue.end) < 0
@@ -166,12 +166,12 @@ class SearchNumber extends Search {
      */
     render() {
 
-        if ( ! TableUtils.isObject(this._options.attr)) {
+        if ( ! Utils.isObject(this._options.attr)) {
             this._options.attr = {};
         }
 
         if (this._options.hasOwnProperty('width') &&
-            TableUtils.isNumeric(this._options.width)
+            Utils.isNumeric(this._options.width)
         ) {
             if (this._options.attr.hasOwnProperty('style')) {
                 this._options.attr['style'] += ';width:' + this._options.width + 'px';
@@ -226,7 +226,7 @@ class SearchNumber extends Search {
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
 
 
-        this._control = $(TableUtils.render(TableTpl['search/number.html'], {
+        this._control = $(Utils.render(Tpl['search/number.html'], {
             startAttr: startAttr.length > 0 ? (' ' + startAttr.join(' ')) : '',
             endAttr: startEnd.length > 0 ? (' ' + startEnd.join(' ')) : '',
         }));
@@ -235,7 +235,7 @@ class SearchNumber extends Search {
             if (e.key === 'Enter' || e.keyCode === 13) {
                 table.searchRecords();
 
-                let container = TableElements.getSearchContainer(table.getId());
+                let container = Elements.getSearchContainer(table.getId());
                 container.fadeOut('fast');
             }
         });

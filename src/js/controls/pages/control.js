@@ -1,5 +1,5 @@
-import TableUtils from "../../table.utils";
-import TableTpl   from "../../table.tpl";
+import Utils from "../../utils";
+import Tpl   from "../../tpl";
 
 
 let controlPages = {
@@ -7,7 +7,7 @@ let controlPages = {
 
     /**
      * Формирование контрола
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {object}              options
      * @return {jQuery}
      */
@@ -26,7 +26,7 @@ let controlPages = {
             : 1;
 
 
-        if (TableUtils.isObject(options.attr)) {
+        if (Utils.isObject(options.attr)) {
             $.each(options.attr, function (name, value) {
                 if (['string', 'number'].indexOf(typeof value) >= 0) {
                     attributes.push(name + '="' + value + '"');
@@ -36,7 +36,7 @@ let controlPages = {
 
         if (table._recordsTotal > 0 &&
             options.count > 0 &&
-            TableUtils.isNumeric(options.count)
+            Utils.isNumeric(options.count)
         ) {
             let count     = Math.min(options.count, pagesTotal);
             let countHalf = Math.max(0, Math.floor(count / 2));
@@ -80,7 +80,7 @@ let controlPages = {
             }
         }
 
-        let control = $(TableUtils.render(TableTpl['controls/pages.html'], {
+        let control = $(Utils.render(Tpl['controls/pages.html'], {
             currentPage: table._page,
             isActivePrev: table._page > 1,
             isActiveNext: table._page < pagesTotal,

@@ -1,12 +1,12 @@
-import TableUtils  from "../table.utils";
-import TableRender from "../table.render";
-import Column            from "../abstract/Column";
+import Utils  from "../utils";
+import Render from "../render";
+import Column from "../abstract/Column";
 
-class ColumnsComponent extends Column {
+class ColumnComponent extends Column {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -33,7 +33,7 @@ class ColumnsComponent extends Column {
      */
     render(content, record) {
 
-        if ( ! TableUtils.isObject(content) ||
+        if ( ! Utils.isObject(content) ||
              ! content.hasOwnProperty('component') ||
              typeof content.component !== 'string' ||
              ! content.component
@@ -41,9 +41,9 @@ class ColumnsComponent extends Column {
             return '';
         }
 
-        return TableRender.renderComponents(this._table, content, 'records_show');
+        return Render.renderComponents(this._table, content, 'records_show');
     }
 }
 
 
-export default ColumnsComponent;
+export default ColumnComponent;

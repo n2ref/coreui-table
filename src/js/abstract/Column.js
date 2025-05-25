@@ -5,6 +5,9 @@ class Column {
     _table   = null;
     _options = {
         type: '',
+        description: null,
+        fixed: null,
+        sortable: null,
         field: null,
         label: null,
         show: true,
@@ -14,13 +17,14 @@ class Column {
         maxWidth: null,
         attr: null,
         attrHeader: null,
-        render: null
+        render: null,
+        menu: [],
     };
 
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {

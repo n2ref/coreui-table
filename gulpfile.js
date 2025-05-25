@@ -37,7 +37,7 @@ var conf = {
         main: 'src/css/table.bootstrap.scss',
     },
     tpl: {
-        file: 'table.tpl.js',
+        file: 'tpl.js',
         dist: './src/js',
         src: [
             'src/html/**/*.html',

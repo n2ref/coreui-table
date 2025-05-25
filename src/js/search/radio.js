@@ -1,13 +1,13 @@
 
-import TableTpl   from "../table.tpl";
-import TableUtils from "../table.utils";
+import Tpl   from "../tpl";
+import Utils from "../utils";
 import Search           from "../abstract/Search";
 
 class SearchRadio extends Search {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -128,7 +128,7 @@ class SearchRadio extends Search {
                 });
 
             } else {
-                if ( ! TableUtils.isObject(option) ||
+                if ( ! Utils.isObject(option) ||
                     ! option.hasOwnProperty('value') ||
                     ['string', 'numeric'].indexOf(typeof option.value) === -1
                 ) {
@@ -152,10 +152,10 @@ class SearchRadio extends Search {
             }
         });
 
-        this._control = $(TableUtils.render(TableTpl['search/radio.html'], {
+        this._control = $(Utils.render(Tpl['search/radio.html'], {
             options: options,
             checkedAll: checkedAll,
-            field: TableUtils.hashCode(),
+            field: Utils.hashCode(),
             lang: this._table.getLang()
         }));
 

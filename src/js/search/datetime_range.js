@@ -1,14 +1,14 @@
 
-import TableTpl      from "../table.tpl";
-import TableUtils    from "../table.utils";
-import TableElements from "../table.elements";
+import Tpl      from "../tpl";
+import Utils    from "../utils";
+import Elements from "../elements";
 import Search              from "../abstract/Search";
 
 class SearchDatetimeRange extends Search {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -41,7 +41,7 @@ class SearchDatetimeRange extends Search {
     setValue(value) {
 
         if (value) {
-            if ( ! TableUtils.isObject(value)) {
+            if ( ! Utils.isObject(value)) {
                 return;
             }
 
@@ -87,7 +87,7 @@ class SearchDatetimeRange extends Search {
                 inputStart.val('');
                 inputEnd.val('');
 
-            } else if (TableUtils.isObject(this._value)) {
+            } else if (Utils.isObject(this._value)) {
                 inputStart.val(typeof this._value.start !== null ? this._value.start : '');
                 inputEnd.val(typeof this._value.end !== null ? this._value.end : '');
             }
@@ -137,7 +137,7 @@ class SearchDatetimeRange extends Search {
     filter(fieldValue, searchValue) {
 
         if (['string', 'number'].indexOf(typeof fieldValue) < 0 ||
-            ! TableUtils.isObject(searchValue) ||
+            ! Utils.isObject(searchValue) ||
             (typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string')
         ) {
             return false;
@@ -165,12 +165,12 @@ class SearchDatetimeRange extends Search {
      */
     render() {
 
-        if ( ! TableUtils.isObject(this._options.attr)) {
+        if ( ! Utils.isObject(this._options.attr)) {
             this._options.attr = {};
         }
 
         if (this._options.hasOwnProperty('width') &&
-            TableUtils.isNumeric(this._options.width)
+            Utils.isNumeric(this._options.width)
         ) {
             if (this._options.attr.hasOwnProperty('style')) {
                 this._options.attr['style'] += ';width:' + this._options.width + 'px';
@@ -219,7 +219,7 @@ class SearchDatetimeRange extends Search {
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
 
 
-        let control = $(TableUtils.render(TableTpl['search/datetime_range.html'], {
+        let control = $(Utils.render(Tpl['search/datetime_range.html'], {
             startAttr: startAttr.length > 0 ? (' ' + startAttr.join(' ')) : '',
             endAttr: startEnd.length > 0 ? (' ' + startEnd.join(' ')) : '',
         }));

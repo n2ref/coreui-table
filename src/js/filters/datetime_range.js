@@ -1,13 +1,13 @@
 
-import TableTpl   from "../table.tpl";
-import TableUtils from "../table.utils";
+import Tpl   from "../tpl";
+import Utils from "../utils";
 import Filter           from "../abstract/Filter";
 
 class FilterDatetimeRange extends Filter {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -40,7 +40,7 @@ class FilterDatetimeRange extends Filter {
     setValue(value) {
 
         if (value) {
-            if ( ! TableUtils.isObject(value)) {
+            if ( ! Utils.isObject(value)) {
                 return;
             }
 
@@ -86,7 +86,7 @@ class FilterDatetimeRange extends Filter {
                 inputStart.val('');
                 inputEnd.val('');
 
-            } else if (TableUtils.isObject(this._value)) {
+            } else if (Utils.isObject(this._value)) {
                 inputStart.val(typeof this._value.start !== null ? this._value.start : '');
                 inputEnd.val(typeof this._value.end !== null ? this._value.end : '');
             }
@@ -135,7 +135,7 @@ class FilterDatetimeRange extends Filter {
     filter(fieldValue, searchValue) {
 
         if (['string', 'number'].indexOf(typeof fieldValue) < 0 ||
-            ! TableUtils.isObject(searchValue) ||
+            ! Utils.isObject(searchValue) ||
             (typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string')
         ) {
             return false;
@@ -168,12 +168,12 @@ class FilterDatetimeRange extends Filter {
             ? options.label
             : '';
 
-        if ( ! TableUtils.isObject(options.attr)) {
+        if ( ! Utils.isObject(options.attr)) {
             options.attr = {};
         }
 
         if (options.hasOwnProperty('width') &&
-            TableUtils.isNumeric(options.width)
+            Utils.isNumeric(options.width)
         ) {
             if (options.attr.hasOwnProperty('style')) {
                 options.attr['style'] += ';width:' + options.width + 'px';
@@ -228,7 +228,7 @@ class FilterDatetimeRange extends Filter {
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
 
 
-        let control = $(TableUtils.render(TableTpl['filters/datetime_range.html'], {
+        let control = $(Utils.render(Tpl['filters/datetime_range.html'], {
             label: label,
             startAttr: startAttr.length > 0 ? (' ' + startAttr.join(' ')) : '',
             endAttr: startEnd.length > 0 ? (' ' + startEnd.join(' ')) : '',

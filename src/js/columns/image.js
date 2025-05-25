@@ -1,12 +1,12 @@
-import TableUtils from "../table.utils";
-import TableTpl   from "../table.tpl";
-import Column           from "../abstract/Column";
+import Utils  from "../utils";
+import Tpl    from "../tpl";
+import Column from "../abstract/Column";
 
-class ColumnsImage extends Column {
+class ColumnImage extends Column {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -50,28 +50,28 @@ class ColumnsImage extends Column {
         attr.src = content;
 
         if (this._options.imgWidth) {
-            let imgWidth = TableUtils.isNumeric(this._options.imgWidth)
+            let imgWidth = Utils.isNumeric(this._options.imgWidth)
                 ? (this._options.imgWidth + 'px')
                 : this._options.imgWidth;
-            attr = TableUtils.mergeAttr(attr, { style: 'width:' + imgWidth });
+            attr = Utils.mergeAttr(attr, { style: 'width:' + imgWidth });
         }
 
         if (this._options.imgHeight) {
-            let imgHeight = TableUtils.isNumeric(this._options.imgHeight)
+            let imgHeight = Utils.isNumeric(this._options.imgHeight)
                 ? (this._options.imgHeight + 'px')
                 : this._options.imgHeight;
-            attr = TableUtils.mergeAttr(attr, { style: 'height:' + imgHeight });
+            attr = Utils.mergeAttr(attr, { style: 'height:' + imgHeight });
         }
 
         if (this._options.imgBorder) {
-            attr = TableUtils.mergeAttr(attr, { class: 'border border-secondary-subtle' });
+            attr = Utils.mergeAttr(attr, { class: 'border border-secondary-subtle' });
         }
 
         if (this._options.imgStyle && typeof this._options.imgStyle === 'string') {
             switch (this._options.imgStyle) {
-                case 'circle':  attr = TableUtils.mergeAttr(attr, { class: 'rounded-circle' }); break;
-                case 'thumb':   attr = TableUtils.mergeAttr(attr, { class: 'img-thumbnail' }); break;
-                case 'rounded': attr = TableUtils.mergeAttr(attr, { class: 'rounded' }); break;
+                case 'circle':  attr = Utils.mergeAttr(attr, { class: 'rounded-circle' }); break;
+                case 'thumb':   attr = Utils.mergeAttr(attr, { class: 'img-thumbnail' }); break;
+                case 'rounded': attr = Utils.mergeAttr(attr, { class: 'rounded' }); break;
             }
         }
 
@@ -84,11 +84,11 @@ class ColumnsImage extends Column {
             }
         });
 
-        return TableUtils.render(TableTpl['columns/image.html'], {
+        return Utils.render(Tpl['columns/image.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });
     }
 }
 
 
-export default ColumnsImage;
+export default ColumnImage;

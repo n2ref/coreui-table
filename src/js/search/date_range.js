@@ -1,14 +1,14 @@
 
-import TableTpl      from "../table.tpl";
-import TableUtils    from "../table.utils";
-import TableElements from "../table.elements";
+import Tpl      from "../tpl";
+import Utils    from "../utils";
+import Elements from "../elements";
 import Search              from "../abstract/Search";
 
 class SearchDateRange extends Search {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -41,7 +41,7 @@ class SearchDateRange extends Search {
     setValue(value) {
 
         if (value) {
-            if ( ! TableUtils.isObject(value)) {
+            if ( ! Utils.isObject(value)) {
                 return;
             }
 
@@ -87,7 +87,7 @@ class SearchDateRange extends Search {
                 inputStart.val('');
                 inputEnd.val('');
 
-            } else if (TableUtils.isObject(this._value)) {
+            } else if (Utils.isObject(this._value)) {
                 inputStart.val(typeof this._value.start !== null ? this._value.start : '');
                 inputEnd.val(typeof this._value.end !== null ? this._value.end : '');
             }
@@ -137,7 +137,7 @@ class SearchDateRange extends Search {
     filter(fieldValue, searchValue) {
 
         if (['string', 'number'].indexOf(typeof fieldValue) < 0 ||
-            ! TableUtils.isObject(searchValue) ||
+            ! Utils.isObject(searchValue) ||
             (typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string')
         ) {
             return false;
@@ -167,12 +167,12 @@ class SearchDateRange extends Search {
 
         let options = this.getOptions();
 
-        if ( ! TableUtils.isObject(options.attr)) {
+        if ( ! Utils.isObject(options.attr)) {
             options.attr = {};
         }
 
         if (options.hasOwnProperty('width') &&
-            TableUtils.isNumeric(options.width)
+            Utils.isNumeric(options.width)
         ) {
             if (options.attr.hasOwnProperty('style')) {
                 options.attr['style'] += ';width:' + options.width + 'px';
@@ -219,7 +219,7 @@ class SearchDateRange extends Search {
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
 
 
-        let control = $(TableUtils.render(TableTpl['search/date_range.html'], {
+        let control = $(Utils.render(Tpl['search/date_range.html'], {
             startAttr: startAttr.length > 0 ? (' ' + startAttr.join(' ')) : '',
             endAttr: startEnd.length > 0 ? (' ' + startEnd.join(' ')) : '',
         }));

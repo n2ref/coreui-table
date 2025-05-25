@@ -4,6 +4,33 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, (global.CoreUI = global.CoreUI || {}, global.CoreUI.table = factory()));
 })(this, (function () { 'use strict';
 
+  function _iterableToArrayLimit(r, l) {
+    var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+    if (null != t) {
+      var e,
+        n,
+        i,
+        u,
+        a = [],
+        f = !0,
+        o = !1;
+      try {
+        if (i = (t = t.call(r)).next, 0 === l) {
+          if (Object(t) !== t) return;
+          f = !1;
+        } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0);
+      } catch (r) {
+        o = !0, n = r;
+      } finally {
+        try {
+          if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return;
+        } finally {
+          if (o) throw n;
+        }
+      }
+      return a;
+    }
+  }
   function _typeof(o) {
     "@babel/helpers - typeof";
 
@@ -91,6 +118,51 @@
       throw new TypeError("Derived constructors may only return object or undefined");
     }
     return _assertThisInitialized(self);
+  }
+  function _superPropBase(object, property) {
+    while (!Object.prototype.hasOwnProperty.call(object, property)) {
+      object = _getPrototypeOf(object);
+      if (object === null) break;
+    }
+    return object;
+  }
+  function _get() {
+    if (typeof Reflect !== "undefined" && Reflect.get) {
+      _get = Reflect.get.bind();
+    } else {
+      _get = function _get(target, property, receiver) {
+        var base = _superPropBase(target, property);
+        if (!base) return;
+        var desc = Object.getOwnPropertyDescriptor(base, property);
+        if (desc.get) {
+          return desc.get.call(arguments.length < 3 ? target : receiver);
+        }
+        return desc.value;
+      };
+    }
+    return _get.apply(this, arguments);
+  }
+  function _slicedToArray(arr, i) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+  }
+  function _arrayWithHoles(arr) {
+    if (Array.isArray(arr)) return arr;
+  }
+  function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+  }
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+    return arr2;
+  }
+  function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
   function _toPrimitive(input, hint) {
     if (typeof input !== "object" || input === null) return input;
@@ -1293,7 +1365,7 @@
     }, {}, [1])(1);
   });
 
-  var TableUtils = {
+  var Utils = {
     _templates: {},
     /**
      * Объединение атрибутов
@@ -1344,6 +1416,14 @@
       return _typeof(value) === 'object' && !Array.isArray(value) && value !== null;
     },
     /**
+     * Проверка, что переменная является классом
+     * @param variable
+     * @return {boolean}
+     */
+    isClass: function isClass(variable) {
+      return typeof variable === 'function' && variable.prototype;
+    },
+    /**
      * @param str
      * @returns {number}
      */
@@ -1390,10 +1470,10 @@
     }
   };
 
-  var TableRender = {
+  var Render = {
     /**
      * Сборка таблицы
-     * @param {TableInstance} table
+     * @param {Table} table
      * @private
      */
     renderTable: function renderTable(table) {
@@ -1417,21 +1497,21 @@
           var menuShowAlways = '';
           var menuPosition = 'end';
           if (columnOptions.hasOwnProperty('field') && typeof columnOptions.field === 'string') {
-            columnOptions.attrHeader = TableUtils.mergeAttr(columnOptions.attrHeader, {
+            columnOptions.attrHeader = Utils.mergeAttr(columnOptions.attrHeader, {
               "data-field": columnOptions.field
             });
           }
           if (columnOptions.hasOwnProperty('fixed') && typeof columnOptions.fixed === 'string') {
-            columnOptions.attrHeader = TableUtils.mergeAttr(columnOptions.attrHeader, {
+            columnOptions.attrHeader = Utils.mergeAttr(columnOptions.attrHeader, {
               "class": 'coreui-table__fixed_' + columnOptions.fixed
             });
-            columnOptions.attr = TableUtils.mergeAttr(columnOptions.attr, {
+            columnOptions.attr = Utils.mergeAttr(columnOptions.attr, {
               "class": 'coreui-table__fixed_' + columnOptions.fixed
             });
           }
           if (columnOptions.type !== 'numbers') {
             if (columnOptions.hasOwnProperty('sortable') && columnOptions.sortable) {
-              columnOptions.attrHeader = TableUtils.mergeAttr(columnOptions.attrHeader, {
+              columnOptions.attrHeader = Utils.mergeAttr(columnOptions.attrHeader, {
                 "class": 'coreui-table__sortable'
               });
             }
@@ -1448,7 +1528,7 @@
               });
             }
           }
-          if (options.showHeaders && columnOptions.hasOwnProperty('menu') && TableUtils.isObject(columnOptions.menu) && columnOptions.menu.hasOwnProperty('items') && Array.isArray(columnOptions.menu.items)) {
+          if (options.showHeaders && columnOptions.hasOwnProperty('menu') && Utils.isObject(columnOptions.menu) && columnOptions.menu.hasOwnProperty('items') && Array.isArray(columnOptions.menu.items)) {
             if (columnOptions.menu.hasOwnProperty('showAlways') && columnOptions.menu.showAlways) {
               menuShowAlways = 'coreui-table__column-menu-always';
             }
@@ -1456,7 +1536,7 @@
               menuPosition = columnOptions.menu.position;
             }
             columnOptions.menu.items.map(function (item) {
-              if (TableUtils.isObject(item) && item.hasOwnProperty('type') && typeof item.type === 'string' && item.type) {
+              if (Utils.isObject(item) && item.hasOwnProperty('type') && typeof item.type === 'string' && item.type) {
                 switch (item.type.toLowerCase()) {
                   case 'button':
                     if (item.hasOwnProperty('text') && typeof item.text === 'string' && item.hasOwnProperty('onClick') && ['string', 'function'].indexOf(_typeof(item.onClick)) >= 0 && item.text.length > 0) {
@@ -1465,13 +1545,13 @@
                         type: 'button',
                         "class": 'dropdown-item'
                       };
-                      if (item.hasOwnProperty('attr') && TableUtils.isObject(item.attr)) {
-                        attr = TableUtils.mergeAttr(attr, item.attr);
+                      if (item.hasOwnProperty('attr') && Utils.isObject(item.attr)) {
+                        attr = Utils.mergeAttr(attr, item.attr);
                       }
                       $.each(attr, function (name, value) {
                         attrItem.push(name + '="' + value + '"');
                       });
-                      var menuElement = $(TableUtils.render(tpl['table/columns/menu/button.html'], {
+                      var menuElement = $(Utils.render(tpl['table/columns/menu/button.html'], {
                         text: item.text,
                         attr: attrItem.join(' ')
                       }));
@@ -1496,13 +1576,13 @@
                         href: item.url,
                         "class": 'dropdown-item'
                       };
-                      if (item.hasOwnProperty('attr') && TableUtils.isObject(item.attr)) {
-                        _attr = TableUtils.mergeAttr(_attr, item.attr);
+                      if (item.hasOwnProperty('attr') && Utils.isObject(item.attr)) {
+                        _attr = Utils.mergeAttr(_attr, item.attr);
                       }
                       $.each(_attr, function (name, value) {
                         _attrItem.push(name + '="' + value + '"');
                       });
-                      menuElements.push($(TableUtils.render(tpl['table/columns/menu/link.html'], {
+                      menuElements.push($(Utils.render(tpl['table/columns/menu/link.html'], {
                         text: item.text,
                         attr: _attrItem.join(' ')
                       })));
@@ -1512,7 +1592,7 @@
                     menuElements.push($(tpl['table/columns/menu/divider.html']));
                     break;
                   case 'header':
-                    menuElements.push($(TableUtils.render(tpl['table/columns/menu/header.html'], {
+                    menuElements.push($(Utils.render(tpl['table/columns/menu/header.html'], {
                       text: item.text
                     })));
                     break;
@@ -1520,7 +1600,7 @@
               }
             });
           }
-          if (columnOptions.attrHeader && TableUtils.isObject(columnOptions.attrHeader)) {
+          if (columnOptions.attrHeader && Utils.isObject(columnOptions.attrHeader)) {
             $.each(columnOptions.attrHeader, function (name, value) {
               attributes.push(name + '="' + value + '"');
             });
@@ -1550,7 +1630,7 @@
             if (columnOptions.hasOwnProperty('description') && typeof columnOptions.label === 'string') {
               description = columnOptions.description;
             }
-            var columnElement = $(TableUtils.render(tpl['table/columns/td.html'], {
+            var columnElement = $(Utils.render(tpl['table/columns/td.html'], {
               attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
               label: label,
               description: description,
@@ -1578,9 +1658,9 @@
       if (table._records.length > 0) {
         table._recordsTotal = table.getRecordsCount();
         table._recordsNumber = table._page === 1 ? 1 : (table._page - 1) * table._recordsPerPage + 1;
-        recordsElements = TableRender.renderRecords(table, table._records);
+        recordsElements = Render.renderRecords(table, table._records);
       } else {
-        recordsElements = TableRender.renderRecords(table, []);
+        recordsElements = Render.renderRecords(table, []);
       }
       if (options.showHeaders && options.hasOwnProperty('columnsHeader') && Array.isArray(options.columnsHeader) && options.columnsHeader.length > 0) {
         var rows = [];
@@ -1588,9 +1668,9 @@
           if (Array.isArray(headerRow)) {
             var cells = [];
             headerRow.map(function (headerColumn) {
-              if (TableUtils.isObject(headerColumn)) {
+              if (Utils.isObject(headerColumn)) {
                 var attributes = [];
-                if (headerColumn.hasOwnProperty('attr') && TableUtils.isObject(headerColumn.attr)) {
+                if (headerColumn.hasOwnProperty('attr') && Utils.isObject(headerColumn.attr)) {
                   $.each(headerColumn.attr, function (name, value) {
                     attributes.push(name + '="' + value + '"');
                   });
@@ -1602,7 +1682,7 @@
                 });
               }
             });
-            rows.push(TableUtils.render(tpl['table/columns/header.html'], {
+            rows.push(Utils.render(tpl['table/columns/header.html'], {
               columns: cells
             }));
           }
@@ -1615,9 +1695,9 @@
           if (Array.isArray(footerRow)) {
             var cells = [];
             $.each(footerRow, function (key, footerColumn) {
-              if (TableUtils.isObject(footerColumn)) {
+              if (Utils.isObject(footerColumn)) {
                 var attributes = [];
-                if (footerColumn.hasOwnProperty('attr') && TableUtils.isObject(footerColumn.attr)) {
+                if (footerColumn.hasOwnProperty('attr') && Utils.isObject(footerColumn.attr)) {
                   $.each(footerColumn.attr, function (name, value) {
                     attributes.push(name + '="' + value + '"');
                   });
@@ -1629,7 +1709,7 @@
                 });
               }
             });
-            _rows.push(TableUtils.render(tpl['table/columns/footer.html'], {
+            _rows.push(Utils.render(tpl['table/columns/footer.html'], {
               columns: cells
             }));
           }
@@ -1645,10 +1725,10 @@
       }
       var theadAttr = [];
       if (options.hasOwnProperty('theadTop') && ['string', 'number'].indexOf(_typeof(options.theadTop)) >= 0) {
-        var unit = TableUtils.isNumeric(options.theadTop) ? 'px' : '';
+        var unit = Utils.isNumeric(options.theadTop) ? 'px' : '';
         theadAttr.push('style="top:' + options.theadTop + unit + '"');
       }
-      var tableElement = $(TableUtils.render(tpl['table.html'], {
+      var tableElement = $(Utils.render(tpl['table.html'], {
         classes: classes.join(' '),
         theadAttr: theadAttr.length > 0 ? theadAttr.join(' ') : '',
         showHeaders: options.showHeaders,
@@ -1676,7 +1756,7 @@
       if (records.length > 0) {
         var that = this;
         var options = table.getOptions();
-        var group = options.hasOwnProperty('group') && TableUtils.isObject(options.group) && options.group.hasOwnProperty('field') && typeof options.group.field === 'string' && options.group.field ? options.group : null;
+        var group = options.hasOwnProperty('group') && Utils.isObject(options.group) && options.group.hasOwnProperty('field') && typeof options.group.field === 'string' && options.group.field ? options.group : null;
         if (group) {
           var groupValue = null;
           var groupIndex = 0;
@@ -1719,7 +1799,7 @@
         }
       }
       if (renderRecords.length === 0) {
-        renderRecords = [$(TableUtils.render(tpl['table/record/empty.html'], {
+        renderRecords = [$(Utils.render(tpl['table/record/empty.html'], {
           columnsCount: table._countColumnsShow,
           lang: table.getLang()
         }))];
@@ -1728,7 +1808,7 @@
     },
     /**
      * Сборка записи таблицы
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {object}        record
      * @returns {{ attr: (string), fields: (object) }}}
      * @private
@@ -1753,13 +1833,13 @@
         recordAttr["class"] += ' coreui-table_pointer';
       }
       if (record.meta) {
-        recordAttr = TableUtils.mergeAttr(recordAttr, record.meta.attr);
+        recordAttr = Utils.mergeAttr(recordAttr, record.meta.attr);
       }
       var attributes = [];
       $.each(recordAttr, function (name, value) {
         attributes.push(name + '="' + value + '"');
       });
-      var recordElement = $(TableUtils.render(tpl['table/record.html'], {
+      var recordElement = $(Utils.render(tpl['table/record.html'], {
         attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
         index: record.index,
         fields: fields
@@ -1771,7 +1851,7 @@
     },
     /**
      * Сборка ячейки таблицы
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Column}              column
      * @param {object}              record
      * @returns {{ attr: (string), content: (string) }}
@@ -1782,17 +1862,17 @@
       var columnField = column.getField();
       var content = null;
       var fieldProps = record.meta && record.meta.hasOwnProperty('fields') && record.meta.fields.hasOwnProperty(columnField) ? record.meta.fields[columnField] : null;
-      var fieldAttr = columnOptions.hasOwnProperty('attr') && TableUtils.isObject(columnOptions.attr) ? columnOptions.attr : {};
-      if (fieldProps && TableUtils.isObject(fieldProps)) {
+      var fieldAttr = columnOptions.hasOwnProperty('attr') && Utils.isObject(columnOptions.attr) ? columnOptions.attr : {};
+      if (fieldProps && Utils.isObject(fieldProps)) {
         if (fieldProps && fieldProps.hasOwnProperty('show') && !fieldProps.show) {
           return null;
         }
-        if (TableUtils.isObject(fieldProps.attr)) {
-          fieldAttr = TableUtils.mergeAttr(fieldAttr, fieldProps.attr);
+        if (Utils.isObject(fieldProps.attr)) {
+          fieldAttr = Utils.mergeAttr(fieldAttr, fieldProps.attr);
         }
       }
       if (columnOptions.hasOwnProperty('fixed') && typeof columnOptions.fixed === 'string') {
-        fieldAttr = TableUtils.mergeAttr(fieldAttr, {
+        fieldAttr = Utils.mergeAttr(fieldAttr, {
           "class": 'coreui-table__fixed_' + columnOptions.fixed
         });
       }
@@ -1808,7 +1888,7 @@
       content = column.render(content, record);
       if (typeof column.getActions === 'function') {
         var actions = column.getActions(content, columnField, record);
-        if (TableUtils.isObject(actions)) {
+        if (Utils.isObject(actions)) {
           record.fields[columnField] = actions;
         }
       }
@@ -1823,7 +1903,7 @@
     },
     /**
      * Сборка записи-группы
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {object}              group
      * @param {object}              record
      * @param {Array}               renderRecords
@@ -1831,7 +1911,7 @@
      * @private
      */
     renderGroup: function renderGroup(table, group, record, renderRecords) {
-      var attr = group.hasOwnProperty('attr') && TableUtils.isObject(group.attr) ? group.attr : {};
+      var attr = group.hasOwnProperty('attr') && Utils.isObject(group.attr) ? group.attr : {};
       if (attr.hasOwnProperty('class') && typeof attr["class"] === 'string') {
         attr["class"] += ' coreui-table__record-group';
       } else {
@@ -1844,7 +1924,7 @@
         }
       });
       var isCollapsing = group.hasOwnProperty('isCollapsing') ? !!group.isCollapsing : false;
-      var groupElement = $(TableUtils.render(tpl['table/record/group.html'], {
+      var groupElement = $(Utils.render(tpl['table/record/group.html'], {
         attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
         colspan: table._countColumnsShow,
         isCollapsing: isCollapsing
@@ -1893,9 +1973,9 @@
      */
     renderExpand: function renderExpand(table, content) {
       if (_typeof(content) === 'object') {
-        content = TableRender.renderComponents(table, content, 'record_expand_show');
+        content = Render.renderComponents(table, content, 'record_expand_show');
       }
-      var expandRecord = $(TableUtils.render(tpl['table/record/expand.html'], {
+      var expandRecord = $(Utils.render(tpl['table/record/expand.html'], {
         colspan: table._countColumnsShow
       }));
       if (['string', 'number'].indexOf(_typeof(content)) >= 0) {
@@ -1917,8 +1997,8 @@
      * @returns {HTMLElement|jQuery}
      */
     renderControl: function renderControl(table, control) {
-      if (TableUtils.isObject(control)) {
-        var controlElement = $(TableUtils.render(tpl['table/control.html'], {
+      if (Utils.isObject(control)) {
+        var controlElement = $(Utils.render(tpl['table/control.html'], {
           id: control.getId()
         }));
         controlElement.append(control.render());
@@ -1946,9 +2026,9 @@
             if (eventName) {
               table.on(eventName, components[i].initEvents, components[i], true);
             }
-          } else if (TableUtils.isObject(components[i]) && components[i].hasOwnProperty('component') && components[i].component.substring(0, 6) === 'coreui') {
+          } else if (Utils.isObject(components[i]) && components[i].hasOwnProperty('component') && components[i].component.substring(0, 6) === 'coreui') {
             var name = components[i].component.split('.')[1];
-            if (CoreUI.hasOwnProperty(name) && TableUtils.isObject(CoreUI[name])) {
+            if (CoreUI.hasOwnProperty(name) && Utils.isObject(CoreUI[name])) {
               var instance = CoreUI[name].create(components[i]);
               result.push(instance.render());
               if (eventName) {
@@ -1962,7 +2042,7 @@
     }
   };
 
-  var TableElements = {
+  var Elements = {
     /**
      * Получение контейнера таблицы
      * @param {string} tableId
@@ -2094,7 +2174,7 @@
      * @return {jQuery}
      */
     addExpandRow: function addExpandRow(table, recordElement, content) {
-      var expandRecord = TableRender.renderExpand(table, content, 'record_expand_show');
+      var expandRecord = Render.renderExpand(table, content, 'record_expand_show');
       recordElement.after(expandRecord);
       recordElement.next().show('fast');
       recordElement.addClass('record-expanded');
@@ -2251,22 +2331,287 @@
     }
   };
 
-  var TablePrivate = {
+  var Control$1 = /*#__PURE__*/function () {
     /**
-     * @param {Table}         tableWrapper
-     * @param {TableInstance} table
+     * Инициализация
+     * @param {object} table
+     * @param {object} options
      */
-    init: function init(tableWrapper, table) {
-      table._id = table._options.hasOwnProperty('id') && typeof table._options.id === 'string' && table._options.id ? table._options.id : TableUtils.hashCode();
+    function Control(table, options) {
+      _classCallCheck(this, Control);
+      _defineProperty(this, "_id", null);
+      _defineProperty(this, "_table", null);
+      _defineProperty(this, "_options", {
+        type: '',
+        id: ''
+      });
+      this._table = table;
+      this._options = $.extend(true, this._options, options);
+      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : Utils.hashCode();
+    }
+
+    /**
+     * Получение ID элемента управления
+     * @returns {string}
+     */
+    return _createClass(Control, [{
+      key: "getId",
+      value: function getId() {
+        return this._id;
+      }
+
+      /**
+       * Получение параметров
+       * @returns {object}
+       */
+    }, {
+      key: "getOptions",
+      value: function getOptions() {
+        return $.extend(true, {}, this._options);
+      }
+
+      /**
+       * Формирование контента для размещения на странице
+       * @returns {*}
+       */
+    }, {
+      key: "render",
+      value: function render() {
+        return '';
+      }
+    }]);
+  }();
+
+  var Filter$1 = /*#__PURE__*/function () {
+    /**
+     * Инициализация
+     * @param {object} table
+     * @param {object} options
+     */
+    function Filter(table, options) {
+      _classCallCheck(this, Filter);
+      _defineProperty(this, "_id", null);
+      _defineProperty(this, "_table", null);
+      _defineProperty(this, "_value", null);
+      _defineProperty(this, "_control", null);
+      _defineProperty(this, "_options", {
+        id: '',
+        type: '',
+        field: null
+      });
+      this._table = table;
+      this._options = $.extend(true, this._options, options);
+      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : Utils.hashCode();
+    }
+
+    /**
+     * Получение параметров
+     * @returns {object}
+     */
+    return _createClass(Filter, [{
+      key: "getOptions",
+      value: function getOptions() {
+        return $.extend(true, {}, this._options);
+      }
+
+      /**
+       * Получение id
+       * @returns {string}
+       */
+    }, {
+      key: "getId",
+      value: function getId() {
+        return this._id;
+      }
+
+      /**
+       * Фильтрация данных
+       * @returns {string} fieldValue
+       * @returns {string} searchValue
+       * @returns {boolean}
+       */
+    }, {
+      key: "filter",
+      value: function filter(fieldValue, searchValue) {
+        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || ['string', 'number'].indexOf(_typeof(searchValue)) < 0) {
+          return false;
+        }
+        return fieldValue.toString().toLowerCase().indexOf(searchValue.toString().toLowerCase()) >= 0;
+      }
+
+      /**
+       * Установка значения
+       * @param {string} value
+       */
+    }, {
+      key: "setValue",
+      value: function setValue(value) {}
+
+      /**
+       * Получение значения
+       * @returns {string|null}
+       */
+    }, {
+      key: "getValue",
+      value: function getValue() {}
+
+      /**
+       * Получение название поля
+       * @returns {string|null}
+       */
+    }, {
+      key: "getField",
+      value: function getField() {
+        return this._options.field;
+      }
+
+      /**
+       * Формирование контента
+       * @returns {string}
+       */
+    }, {
+      key: "render",
+      value: function render() {}
+    }]);
+  }();
+
+  var ToolBox = /*#__PURE__*/function () {
+    /**
+     * @param {string} type
+     */
+    function ToolBox(type) {
+      _classCallCheck(this, ToolBox);
+      _defineProperty(this, "_type", 'out');
+      _defineProperty(this, "_left", []);
+      _defineProperty(this, "_center", []);
+      _defineProperty(this, "_right", []);
+      if (type) {
+        this.type = type;
+      }
+    }
+
+    /**
+     *
+     * @return {string}
+     */
+    return _createClass(ToolBox, [{
+      key: "getType",
+      value: function getType() {
+        return this._type;
+      }
+
+      /**
+       * @param {Array} controls
+       */
+    }, {
+      key: "left",
+      value: function left(controls) {
+        if (!Array.isArray(controls)) {
+          return;
+        }
+        var left = [];
+        controls.map(function (control) {
+          if (control instanceof Control$1 || control instanceof Filter$1) {
+            left.push(control.toObject());
+          } else if (Utils.isObject(control)) {
+            left.push(control);
+          }
+        });
+        this._left = left;
+        return this;
+      }
+
+      /**
+       * @param {Array} controls
+       */
+    }, {
+      key: "center",
+      value: function center(controls) {
+        if (!Array.isArray(controls)) {
+          return;
+        }
+        var center = [];
+        controls.map(function (control) {
+          if (control instanceof Control$1 || control instanceof Filter$1) {
+            center.push(control.toObject());
+          } else if (Utils.isObject(control)) {
+            center.push(control);
+          }
+        });
+        this._center = center;
+        return this;
+      }
+
+      /**
+       * @param {Array} controls
+       */
+    }, {
+      key: "right",
+      value: function right(controls) {
+        if (!Array.isArray(controls)) {
+          return;
+        }
+        var right = [];
+        controls.map(function (control) {
+          if (control instanceof Control$1 || control instanceof Filter$1) {
+            right.push(control.toObject());
+          } else if (Utils.isObject(control)) {
+            right.push(control);
+          }
+        });
+        this._right = right;
+        return this;
+      }
+
+      /**
+       * @return {{type: string}}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = {
+          type: this._type
+        };
+        if (this._left.length > 0) {
+          result.left = this._left;
+        }
+        if (this._center.length > 0) {
+          result.center = this._center;
+        }
+        if (this._right.length > 0) {
+          result.right = this._right;
+        }
+        return result;
+      }
+    }]);
+  }();
+
+  var Private = {
+    /**
+     * @param {Controller} controller
+     * @param {Table}      table
+     */
+    init: function init(controller, table) {
+      table._id = table._options.hasOwnProperty('id') && typeof table._options.id === 'string' && table._options.id ? table._options.id : Utils.hashCode();
+      if (!table._options.hasOwnProperty('lang') || typeof table._options.lang !== 'string') {
+        table._options.lang = controller.getSetting('lang');
+      }
+      var langItems = controller.lang.hasOwnProperty(table._options.lang) ? controller.lang[table._options.lang] : {};
+      table._options.langItems = table._options.hasOwnProperty('langItems') && Utils.isObject(table._options.langItems) ? $.extend(true, {}, langItems, table._options.langItems) : langItems;
       if (table._options.page > 0) {
         table._page = table._options.page;
       }
       if (table._options.saveState && table._options.id) {
-        table._recordsPerPage = this.getStorageField(table._id, 'page_size');
+        var pageSize = Private.getStorageField(table._id, 'page_size');
+        if (Utils.isNumeric(pageSize) && pageSize > 0) {
+          table._recordsPerPage = pageSize;
+        } else if (table._options.recordsPerPage > 0) {
+          table._recordsPerPage = table._options.recordsPerPage;
+        }
       } else if (table._options.recordsPerPage > 0) {
         table._recordsPerPage = table._options.recordsPerPage;
       }
-      table._isRecordsRequest = table._options.hasOwnProperty('recordsRequest') && (typeof table._options.recordsRequest === 'function' || TableUtils.isObject(table._options.recordsRequest) && table._options.recordsRequest.hasOwnProperty('url') && typeof table._options.recordsRequest.url === 'string' && table._options.recordsRequest.url !== '' && table._options.recordsRequest.url !== '#');
+      table._isRecordsRequest = table._options.hasOwnProperty('recordsRequest') && (typeof table._options.recordsRequest === 'function' || Utils.isObject(table._options.recordsRequest) && table._options.recordsRequest.hasOwnProperty('url') && typeof table._options.recordsRequest.url === 'string' && table._options.recordsRequest.url !== '' && table._options.recordsRequest.url !== '#');
       if (table._isRecordsRequest) {
         if (_typeof(table._options.recordsRequest) === 'object' && (!table._options.recordsRequest.hasOwnProperty('method') || typeof table._options.recordsRequest.method !== 'string')) {
           table._options.recordsRequest.method = 'GET';
@@ -2280,20 +2625,20 @@
 
       // Инициализация колонок
       if (_typeof(table._options.columns) === 'object' && Array.isArray(table._options.columns) && table._options.columns.length > 0) {
-        this.initColumns(tableWrapper, table, table._options.columns);
+        this.initColumns(controller, table, table._options.columns);
       }
 
       // Инициализация поисковых полей
-      if (TableUtils.isObject(table._options.search) && _typeof(table._options.search.controls) === 'object' && Array.isArray(table._options.search.controls) && table._options.search.controls.length > 0) {
-        this.initSearch(tableWrapper, table, table._options.search.controls);
+      if (Utils.isObject(table._options.search) && _typeof(table._options.search.controls) === 'object' && Array.isArray(table._options.search.controls) && table._options.search.controls.length > 0) {
+        this.initSearch(controller, table, table._options.search.controls);
       }
 
       // Инициализация контролов и фильтров
       if (table._options.hasOwnProperty('header') && Array.isArray(table._options.header) && table._options.header.length > 0) {
-        this.initControls(tableWrapper, table, table._options.header, 'header');
+        this.initControls(controller, table, table._options.header, 'header');
       }
       if (table._options.hasOwnProperty('footer') && Array.isArray(table._options.footer) && table._options.footer.length > 0) {
-        this.initControls(tableWrapper, table, table._options.footer, 'footer');
+        this.initControls(controller, table, table._options.footer, 'footer');
       }
       if (table._options.saveState && table._options.id) {
         // Поиск по сохраненным поисковым данным
@@ -2317,16 +2662,16 @@
     },
     /**
      * Инициализация колонок
-     * @param {Table}         tableWrapper
-     * @param {TableInstance} table
-     * @param {Array}         columns
+     * @param {Controller} controller
+     * @param {Table}      table
+     * @param {Array}      columns
      * @private
      */
-    initColumns: function initColumns(tableWrapper, table, columns) {
+    initColumns: function initColumns(controller, table, columns) {
       var options = table.getOptions();
       var columnsStorage = options.saveState && options.id ? this.getStorageField(table.getId(), 'columns') : null;
       columns.map(function (column) {
-        if (typeof column.type === 'undefined' || !tableWrapper.columns.hasOwnProperty(column.type)) {
+        if (typeof column.type === 'undefined' || !controller.columns.hasOwnProperty(column.type)) {
           column.type = 'text';
         }
         if (!column.hasOwnProperty('show') || typeof column.show !== 'boolean') {
@@ -2343,7 +2688,16 @@
         if (column.hasOwnProperty('fixed') && typeof column.fixed === 'string') {
           table._options.overflow = true;
         }
-        var columnInstance = new tableWrapper.columns[column.type](table, column);
+        var columnObject = controller.columns[column.type];
+        var columnInstance = null;
+        if (Utils.isClass(columnObject)) {
+          columnInstance = new columnObject(table, column);
+        } else if (Utils.isObject(columnObject)) {
+          columnInstance = $.extend(true, {}, columnObject);
+          columnInstance.init(table, column);
+        } else {
+          throw new Error("Incorrect type column: ".concat(column.type));
+        }
         table._columns.push(columnInstance);
         if (columnInstance.isShow()) {
           table._countColumnsShow++;
@@ -2352,47 +2706,59 @@
     },
     /**
      * Инициализация поисковых полей
-     * @param {object} tableWrapper
-     * @param {Object} table
-     * @param {Array}  searchControls
+     * @param {Controller} controller
+     * @param {Object}     table
+     * @param {Array}      searchControls
      * @private
      */
-    initSearch: function initSearch(tableWrapper, table, searchControls) {
+    initSearch: function initSearch(controller, table, searchControls) {
       var options = table.getOptions();
       var searchValues = options.saveState && options.id ? this.getStorageField(table.getId(), 'search') : null;
       $.each(searchControls, function (key, control) {
-        if (!TableUtils.isObject(control)) {
+        if (!Utils.isObject(control)) {
           control = {};
         }
-        if (!control.hasOwnProperty('type') || typeof control.type !== 'string' || !tableWrapper.search.hasOwnProperty(control.type)) {
+        if (!control.hasOwnProperty('type') || typeof control.type !== 'string' || !controller.search.hasOwnProperty(control.type)) {
           control.type = 'text';
         }
         if (options.saveState && options.id) {
           control.value = null;
           if (Array.isArray(searchValues) && control.hasOwnProperty('field')) {
             $.each(searchValues, function (key, search) {
-              if (TableUtils.isObject(search) && search.hasOwnProperty('field') && search.hasOwnProperty('value') && search.field && search.field === control.field) {
+              if (Utils.isObject(search) && search.hasOwnProperty('field') && search.hasOwnProperty('value') && search.field && search.field === control.field) {
                 control.value = search.value;
                 return false;
               }
             });
           }
         }
-        var controlInstance = new tableWrapper.search[control.type](table, control);
+        var searchObject = controller.search[control.type];
+        var controlInstance = null;
+        if (Utils.isClass(searchObject)) {
+          controlInstance = new searchObject(table, control);
+        } else if (Utils.isObject(searchObject)) {
+          controlInstance = $.extend(true, {}, searchObject);
+          controlInstance.init(table, control);
+        } else {
+          throw new Error("Incorrect type search: ".concat(control.type));
+        }
         table._search.push(controlInstance);
       });
     },
     /**
      * Инициализация контролов и фильтров
-     * @param {Object} tableWrapper
-     * @param {Object} table
-     * @param {Array}  rows
-     * @param {string} position
+     * @param {Controller} controller
+     * @param {Object}     table
+     * @param {Array}      rows
+     * @param {string}     position
      * @private
      */
-    initControls: function initControls(tableWrapper, table, rows, position) {
+    initControls: function initControls(controller, table, rows, position) {
       var that = this;
       rows.map(function (row) {
+        if (row instanceof ToolBox) {
+          row = row.toObject();
+        }
         var type = 'in';
         var controlsLeft = [];
         var controlsCenter = [];
@@ -2402,24 +2768,24 @@
         }
         if (row.hasOwnProperty('left') && Array.isArray(row.left)) {
           row.left.map(function (control) {
-            var instance = that.initControl(tableWrapper, table, control);
-            if (TableUtils.isObject(instance)) {
+            var instance = that.initControl(controller, table, control);
+            if (Utils.isObject(instance)) {
               controlsLeft.push(instance);
             }
           });
         }
         if (row.hasOwnProperty('center') && Array.isArray(row.center)) {
           row.center.map(function (control) {
-            var instance = that.initControl(tableWrapper, table, control);
-            if (TableUtils.isObject(instance)) {
+            var instance = that.initControl(controller, table, control);
+            if (Utils.isObject(instance)) {
               controlsCenter.push(instance);
             }
           });
         }
         if (row.hasOwnProperty('right') && Array.isArray(row.right)) {
           row.right.map(function (control) {
-            var instance = that.initControl(tableWrapper, table, control);
-            if (TableUtils.isObject(instance)) {
+            var instance = that.initControl(controller, table, control);
+            if (Utils.isObject(instance)) {
               controlsRight.push(instance);
             }
           });
@@ -2436,20 +2802,28 @@
     },
     /**
      * Инициализация контрола или фильтра
-     * @param {object} tableWrapper
-     * @param {Object} table
-     * @param {object} control
+     * @param {Controller} controller
+     * @param {Object}     table
+     * @param {object}     control
      * @private
      */
-    initControl: function initControl(tableWrapper, table, control) {
+    initControl: function initControl(controller, table, control) {
       var instance = null;
-      if (TableUtils.isObject(control) && typeof control.type === 'string') {
-        if (tableWrapper.controls.hasOwnProperty(control.type)) {
-          instance = new tableWrapper.controls[control.type](table, control);
+      if (Utils.isObject(control) && typeof control.type === 'string') {
+        if (controller.controls.hasOwnProperty(control.type)) {
+          var controlObject = controller.controls[control.type];
+          if (Utils.isClass(controlObject)) {
+            instance = new controlObject(table, control);
+          } else if (Utils.isObject(controlObject)) {
+            instance = $.extend(true, {}, controlObject);
+            instance.init(table, control);
+          } else {
+            throw new Error("Incorrect type control: ".concat(control.type));
+          }
           table._controls.push(instance);
         } else if (control.type.indexOf('filter:') === 0) {
           var filterName = control.type.substring(7);
-          if (tableWrapper.filters.hasOwnProperty(filterName)) {
+          if (controller.filters.hasOwnProperty(filterName)) {
             if (control.hasOwnProperty('field')) {
               var options = table.getOptions();
               if (options.saveState && options.id) {
@@ -2457,7 +2831,7 @@
                 control.value = null;
                 if (Array.isArray(filterValues)) {
                   $.each(filterValues, function (key, filter) {
-                    if (TableUtils.isObject(filter) && filter.hasOwnProperty('field') && filter.hasOwnProperty('value') && filter.field && filter.field === control.field) {
+                    if (Utils.isObject(filter) && filter.hasOwnProperty('field') && filter.hasOwnProperty('value') && filter.field && filter.field === control.field) {
                       control.value = filter.value;
                       return false;
                     }
@@ -2465,7 +2839,15 @@
                 }
               }
             }
-            instance = new tableWrapper.filters[filterName](table, control);
+            var filterObject = controller.filters[filterName];
+            if (Utils.isClass(filterObject)) {
+              instance = new filterObject(table, control);
+            } else if (Utils.isObject(filterObject)) {
+              instance = $.extend(true, {}, filterObject);
+              instance.init(table, control);
+            } else {
+              throw new Error("Incorrect type filter: ".concat(filterName));
+            }
             table._filters.push(instance);
           }
         }
@@ -2480,8 +2862,8 @@
      */
     initSort: function initSort(table, sort) {
       if (Array.isArray(sort) && sort.length > 0) {
-        $.each(sort, function (key, sortField) {
-          if (TableUtils.isObject(sortField) && sortField.hasOwnProperty('field') && sortField.hasOwnProperty('order') && typeof sortField.field === 'string' && typeof sortField.order === 'string' && sortField.field && sortField.order && ['asc', 'desc'].indexOf(sortField.order) >= 0) {
+        sort.map(function (sortField) {
+          if (Utils.isObject(sortField) && sortField.hasOwnProperty('field') && sortField.hasOwnProperty('order') && typeof sortField.field === 'string' && typeof sortField.order === 'string' && sortField.field && sortField.order && ['asc', 'desc'].indexOf(sortField.order) >= 0) {
             table._sort.push({
               field: sortField.field,
               order: sortField.order
@@ -2510,10 +2892,10 @@
       table._records.map(function (record) {
         var isShow = true;
         if (searchData.length > 0) {
-          isShow = TablePrivate.isFilteredRecord(searchData, record.data, columnsOptions);
+          isShow = Private.isFilteredRecord(searchData, record.data, columnsOptions);
         }
         if (isShow && filterData.length > 0) {
-          isShow = TablePrivate.isFilteredRecord(filterData, record.data, columnsOptions);
+          isShow = Private.isFilteredRecord(filterData, record.data, columnsOptions);
         }
         record.show = isShow;
       });
@@ -2541,9 +2923,9 @@
      * @private
      */
     addRecord: function addRecord(table, data, afterIndex) {
-      if (TableUtils.isObject(data)) {
+      if (Utils.isObject(data)) {
         data = $.extend(true, {}, data);
-        var meta = data.hasOwnProperty('_meta') && TableUtils.isObject(data._meta) ? data._meta : null;
+        var meta = data.hasOwnProperty('_meta') && Utils.isObject(data._meta) ? data._meta : null;
         if (meta) {
           delete data._meta;
         }
@@ -2588,9 +2970,9 @@
      * @private
      */
     addRecordBefore: function addRecordBefore(table, data, index) {
-      if (TableUtils.isObject(data) && typeof index === 'number') {
+      if (Utils.isObject(data) && typeof index === 'number') {
         data = $.extend(true, {}, data);
-        var meta = data.hasOwnProperty('_meta') && TableUtils.isObject(data._meta) ? data._meta : null;
+        var meta = data.hasOwnProperty('_meta') && Utils.isObject(data._meta) ? data._meta : null;
         if (meta) {
           delete data._meta;
         }
@@ -2741,14 +3123,14 @@
      * @param {Array}  sort
      */
     setColumnsSort: function setColumnsSort(table, sort) {
-      var thead = TableElements.getTableThead(table.getId());
+      var thead = Elements.getTableThead(table.getId());
       $.each(table._columns, function (key, column) {
         var options = column.getOptions();
         if (options.hasOwnProperty('field') && options.hasOwnProperty('sortable') && typeof options.field === 'string' && options.sortable) {
           var sortColumn = null;
           if (Array.isArray(sort)) {
             $.each(sort, function (key, sortItem) {
-              if (TableUtils.isObject(sortItem) && sortItem.hasOwnProperty('field') && sortItem.hasOwnProperty('order') && typeof sortItem.field === 'string' && typeof sortItem.order === 'string' && options.field === sortItem.field) {
+              if (Utils.isObject(sortItem) && sortItem.hasOwnProperty('field') && sortItem.hasOwnProperty('order') && typeof sortItem.field === 'string' && typeof sortItem.order === 'string' && options.field === sortItem.field) {
                 sortColumn = {
                   field: sortItem.field,
                   order: sortItem.order
@@ -2778,7 +3160,7 @@
       try {
         if (typeof storage === 'string' && storage) {
           storage = JSON.parse(storage);
-          if (TableUtils.isObject(storage)) {
+          if (Utils.isObject(storage)) {
             return tableId && typeof tableId === 'string' ? storage.hasOwnProperty(tableId) ? storage[tableId] : null : storage;
           }
         }
@@ -2797,7 +3179,7 @@
         return;
       }
       var storageAll = this.getStorage();
-      if (TableUtils.isObject(storageAll)) {
+      if (Utils.isObject(storageAll)) {
         if (storageAll.hasOwnProperty(tableId)) {
           if (storage) {
             storageAll[tableId] = storage;
@@ -2839,15 +3221,5673 @@
     }
   };
 
-  var TableInstance = /*#__PURE__*/function () {
+  var Search = /*#__PURE__*/function () {
     /**
      * Инициализация
-     * @param {Table}  tableWrapper
-     * @param {Object} options
+     * @param {object} table
+     * @param {object} options
+     */
+    function Search(table, options) {
+      _classCallCheck(this, Search);
+      _defineProperty(this, "_id", null);
+      _defineProperty(this, "_table", null);
+      _defineProperty(this, "_value", null);
+      _defineProperty(this, "_control", null);
+      _defineProperty(this, "_options", {
+        id: '',
+        type: '',
+        field: null,
+        label: null
+      });
+      this._table = table;
+      this._options = $.extend(true, this._options, options);
+      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : Utils.hashCode();
+    }
+
+    /**
+     * Получение параметров
+     * @returns {object}
+     */
+    return _createClass(Search, [{
+      key: "getOptions",
+      value: function getOptions() {
+        return $.extend(true, {}, this._options);
+      }
+
+      /**
+       * Получение id
+       * @returns {string}
+       */
+    }, {
+      key: "getId",
+      value: function getId() {
+        return this._id;
+      }
+
+      /**
+       * Установка значения
+       * @param {string} value
+       */
+    }, {
+      key: "setValue",
+      value: function setValue(value) {}
+
+      /**
+       * Получение значения
+       * @returns {string|null}
+       */
+    }, {
+      key: "getValue",
+      value: function getValue() {}
+
+      /**
+       * Получение название поля
+       * @returns {string|null}
+       */
+    }, {
+      key: "getField",
+      value: function getField() {
+        return this._options.field;
+      }
+
+      /**
+       * Фильтрация данных
+       * @returns {string} fieldValue
+       * @returns {string} searchValue
+       * @returns {boolean}
+       */
+    }, {
+      key: "filter",
+      value: function filter(fieldValue, searchValue) {
+        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || ['string', 'number'].indexOf(_typeof(searchValue)) < 0) {
+          return false;
+        }
+        return fieldValue.toString().toLowerCase().indexOf(searchValue.toString().toLowerCase()) >= 0;
+      }
+
+      /**
+       * Формирование контента
+       * @returns {jQuery|string}
+       */
+    }, {
+      key: "render",
+      value: function render() {}
+    }]);
+  }();
+
+  var Column = /*#__PURE__*/function () {
+    /**
+     * Инициализация
+     * @param {Table} table
+     * @param {Object}              options
+     */
+    function Column(table, options) {
+      _classCallCheck(this, Column);
+      _defineProperty(this, "_table", null);
+      _defineProperty(this, "_options", {
+        type: '',
+        description: null,
+        fixed: null,
+        sortable: null,
+        field: null,
+        label: null,
+        show: true,
+        showLabel: true,
+        width: null,
+        minWidth: null,
+        maxWidth: null,
+        attr: null,
+        attrHeader: null,
+        render: null,
+        menu: []
+      });
+      this._table = table;
+      this._options = $.extend(true, this._options, options);
+    }
+
+    /**
+     * Установка видимости колонки
+     * @param {boolean} isShow
+     */
+    return _createClass(Column, [{
+      key: "setShow",
+      value: function setShow(isShow) {
+        this._options.show = !!isShow;
+      }
+
+      /**
+       * Видимости колонки
+       */
+    }, {
+      key: "isShow",
+      value: function isShow() {
+        return !!this._options.show;
+      }
+
+      /**
+       * Получение параметров
+       * @returns {object}
+       */
+    }, {
+      key: "getOptions",
+      value: function getOptions() {
+        return $.extend({}, this._options);
+      }
+
+      /**
+       * Получение имени поля
+       * @returns {string|null}
+       */
+    }, {
+      key: "getField",
+      value: function getField() {
+        return typeof this._options.field === 'string' ? this._options.field : null;
+      }
+
+      /**
+       * Формирование контента
+       * @param {*}      content
+       * @param {object} record
+       * @returns {string}
+       */
+    }, {
+      key: "render",
+      value: function render(content, record) {}
+    }]);
+  }();
+
+  var HelperControl = /*#__PURE__*/function () {
+    /**
+     * @param type
+     * @param id
+     */
+    function HelperControl(type, id) {
+      _classCallCheck(this, HelperControl);
+      _defineProperty(this, "_id", '');
+      _defineProperty(this, "_type", '');
+      _defineProperty(this, "_props", null);
+      this._type = type;
+      if (id) {
+        this._id = id;
+      }
+    }
+
+    /**
+     * Установка свойств
+     * @param {Object} props
+     */
+    return _createClass(HelperControl, [{
+      key: "setProp",
+      value: function setProp(props) {
+        this._props = $.extend(true, this._props || {}, props);
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = {
+          type: this._type
+        };
+        if (this._id) {
+          result.id = this._id;
+        }
+        if (this._props) {
+          result = $.extend(true, this._props, result);
+        }
+        return result;
+      }
+    }]);
+  }();
+
+  function _callSuper$1J(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperControlSearch = /*#__PURE__*/function (_HelperControl) {
+    /**
+     * @param {string} id
+     */
+    function HelperControlSearch(id) {
+      var _this2;
+      _classCallCheck(this, HelperControlSearch);
+      _this2 = _callSuper$1J(this, HelperControlSearch, ['search', id]);
+      _defineProperty(_this2, "_button", null);
+      _defineProperty(_this2, "_buttonClear", null);
+      _defineProperty(_this2, "_buttonComplete", null);
+      return _this2;
+    }
+
+    /**
+     * @param {string} content
+     * @param {Object} attr
+     * @return {HelperControlSearch}
+     */
+    _inherits(HelperControlSearch, _HelperControl);
+    return _createClass(HelperControlSearch, [{
+      key: "setBtn",
+      value: function setBtn(content, attr) {
+        this._button = {
+          content: content
+        };
+        if (attr) {
+          this._button.attr = attr;
+        }
+        return this;
+      }
+
+      /**
+       * @param {string} content
+       * @param {Object} attr
+       * @return {HelperControlSearch}
+       */
+    }, {
+      key: "setButtonClear",
+      value: function setButtonClear(content, attr) {
+        this._buttonClear = {
+          content: content
+        };
+        if (attr) {
+          this._buttonClear.attr = attr;
+        }
+        return this;
+      }
+
+      /**
+       * @param {string} content
+       * @param {Object} attr
+       * @return {HelperControlSearch}
+       */
+    }, {
+      key: "setButtonComplete",
+      value: function setButtonComplete(content, attr) {
+        this._buttonComplete = {
+          content: content
+        };
+        if (attr) {
+          this._buttonComplete.attr = attr;
+        }
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperControlSearch.prototype), "toObject", this).call(this);
+        if (this._button) {
+          result.btn = this._button;
+        }
+        if (this._buttonClear) {
+          result.btnClear = this._buttonClear;
+        }
+        if (this._buttonComplete) {
+          result.btnComplete = this._buttonComplete;
+        }
+        return result;
+      }
+    }]);
+  }(HelperControl);
+
+  function _callSuper$1I(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperControlButton = /*#__PURE__*/function (_HelperControl) {
+    /**
+     * @param content
+     * @param id
+     */
+    function HelperControlButton(content, id) {
+      var _this2;
+      _classCallCheck(this, HelperControlButton);
+      _this2 = _callSuper$1I(this, HelperControlButton, ['button', id]);
+      _defineProperty(_this2, "_content", '');
+      _defineProperty(_this2, "_onClick", null);
+      _defineProperty(_this2, "_attr", null);
+      if (content) {
+        _this2.setContent(content);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {function} onClick
+     * @return {HelperControlButton}
+     */
+    _inherits(HelperControlButton, _HelperControl);
+    return _createClass(HelperControlButton, [{
+      key: "setOnClick",
+      value: function setOnClick(onClick) {
+        this._onClick = onClick;
+        return this;
+      }
+
+      /**
+       * @param {string} content
+       * @return {HelperControlButton}
+       */
+    }, {
+      key: "setContent",
+      value: function setContent(content) {
+        this._content = content;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperControlButton}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperControlButton.prototype), "toObject", this).call(this);
+        if (this._content) {
+          result.content = this._content;
+        }
+        if (this._onClick) {
+          result.onClick = this._onClick;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperControl);
+
+  function _callSuper$1H(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperControlDivider = /*#__PURE__*/function (_HelperControl) {
+    /**
+     * @param {int}    width
+     * @param {string} id
+     */
+    function HelperControlDivider(width, id) {
+      var _this2;
+      _classCallCheck(this, HelperControlDivider);
+      _this2 = _callSuper$1H(this, HelperControlDivider, ['divider', id]);
+      _defineProperty(_this2, "_text", null);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_attr", null);
+      if (width) {
+        _this2.setWidth(width);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {int} width
+     * @return {HelperControlDivider}
+     */
+    _inherits(HelperControlDivider, _HelperControl);
+    return _createClass(HelperControlDivider, [{
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {string} text
+       * @return {HelperControlDivider}
+       */
+    }, {
+      key: "setText",
+      value: function setText(text) {
+        this._text = text;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperControlDivider}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperControlDivider.prototype), "toObject", this).call(this);
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._text) {
+          result.text = this._text;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperControl);
+
+  function _callSuper$1G(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperControlColumns = /*#__PURE__*/function (_HelperControl) {
+    /**
+     * @param {string} id
+     */
+    function HelperControlColumns(id) {
+      var _this2;
+      _classCallCheck(this, HelperControlColumns);
+      _this2 = _callSuper$1G(this, HelperControlColumns, ['columns', id]);
+      _defineProperty(_this2, "_button", null);
+      _defineProperty(_this2, "_buttonComplete", null);
+      return _this2;
+    }
+
+    /**
+     * @param {string} content
+     * @param {Object} attr
+     * @return {HelperControlColumns}
+     */
+    _inherits(HelperControlColumns, _HelperControl);
+    return _createClass(HelperControlColumns, [{
+      key: "setBtn",
+      value: function setBtn(content, attr) {
+        this._button = {
+          content: content
+        };
+        if (attr) {
+          this._button.attr = attr;
+        }
+        return this;
+      }
+
+      /**
+       * @param {string} content
+       * @param {Object} attr
+       * @return {HelperControlColumns}
+       */
+    }, {
+      key: "setButtonComplete",
+      value: function setButtonComplete(content, attr) {
+        this._buttonComplete = {
+          content: content
+        };
+        if (attr) {
+          this._buttonComplete.attr = attr;
+        }
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperControlColumns.prototype), "toObject", this).call(this);
+        if (this._button) {
+          result.btn = this._button;
+        }
+        if (this._buttonComplete) {
+          result.btnComplete = this._buttonComplete;
+        }
+        return result;
+      }
+    }]);
+  }(HelperControl);
+
+  function _callSuper$1F(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperControlFilterClear = /*#__PURE__*/function (_HelperControl) {
+    /**
+     * @param {string} content
+     * @param {string} id
+     */
+    function HelperControlFilterClear(content, id) {
+      var _this2;
+      _classCallCheck(this, HelperControlFilterClear);
+      _this2 = _callSuper$1F(this, HelperControlFilterClear, ['filter_clear', id]);
+      _defineProperty(_this2, "_content", null);
+      _defineProperty(_this2, "_attr", {
+        "class": 'btn btn-secondary'
+      });
+      if (content) {
+        _this2.setContent(content);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} content
+     * @return {HelperControlFilterClear}
+     */
+    _inherits(HelperControlFilterClear, _HelperControl);
+    return _createClass(HelperControlFilterClear, [{
+      key: "setContent",
+      value: function setContent(content) {
+        this._content = content;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperControlFilterClear}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperControlFilterClear.prototype), "toObject", this).call(this);
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._text) {
+          result.text = this._text;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperControl);
+
+  function _callSuper$1E(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperControlTotal = /*#__PURE__*/function (_HelperControl) {
+    /**
+     * @param {string} id
+     */
+    function HelperControlTotal(id) {
+      var _this2;
+      _classCallCheck(this, HelperControlTotal);
+      _this2 = _callSuper$1E(this, HelperControlTotal, ['total', id]);
+      _defineProperty(_this2, "_attr", null);
+      return _this2;
+    }
+
+    /**
+     * @param {Object} attr
+     * @return {HelperControlTotal}
+     */
+    _inherits(HelperControlTotal, _HelperControl);
+    return _createClass(HelperControlTotal, [{
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperControlTotal.prototype), "toObject", this).call(this);
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperControl);
+
+  function _callSuper$1D(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperControlPages = /*#__PURE__*/function (_HelperControl) {
+    /**
+     * @param {string} id
+     */
+    function HelperControlPages(id) {
+      var _this2;
+      _classCallCheck(this, HelperControlPages);
+      _this2 = _callSuper$1D(this, HelperControlPages, ['pages', id]);
+      _defineProperty(_this2, "_showNext", null);
+      _defineProperty(_this2, "_showPrev", null);
+      _defineProperty(_this2, "_count", null);
+      _defineProperty(_this2, "_attr", null);
+      return _this2;
+    }
+
+    /**
+     * @param {int} count
+     * @return {HelperControlPages}
+     */
+    _inherits(HelperControlPages, _HelperControl);
+    return _createClass(HelperControlPages, [{
+      key: "setCount",
+      value: function setCount(count) {
+        this._count = count;
+        return this;
+      }
+
+      /**
+       * @param {boolean} show
+       * @return {HelperControlPages}
+       */
+    }, {
+      key: "setShowNext",
+      value: function setShowNext(show) {
+        this._showNext = show;
+        return this;
+      }
+
+      /**
+       * @param {boolean} show
+       * @return {HelperControlPages}
+       */
+    }, {
+      key: "setShowPrev",
+      value: function setShowPrev(show) {
+        this._showPrev = show;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperControlPages}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperControlPages.prototype), "toObject", this).call(this);
+        if (this._count) {
+          result.count = this._count;
+        }
+        if (this._showNext) {
+          result.showNext = this._showNext;
+        }
+        if (this._showPrev) {
+          result.showPrev = this._showPrev;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperControl);
+
+  function _callSuper$1C(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperControlCaption = /*#__PURE__*/function (_HelperControl) {
+    /**
+     * @param {string} title
+     * @param {string} value
+     * @param {string} id
+     */
+    function HelperControlCaption(title, value, id) {
+      var _this2;
+      _classCallCheck(this, HelperControlCaption);
+      _this2 = _callSuper$1C(this, HelperControlCaption, ['caption', id]);
+      _defineProperty(_this2, "_title", null);
+      _defineProperty(_this2, "_description", null);
+      _defineProperty(_this2, "_value", null);
+      if (title) {
+        _this2.setTitle(title);
+      }
+      if (value) {
+        _this2.setValue(value);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} title
+     * @return {HelperControlCaption}
+     */
+    _inherits(HelperControlCaption, _HelperControl);
+    return _createClass(HelperControlCaption, [{
+      key: "setTitle",
+      value: function setTitle(title) {
+        this._title = title;
+        return this;
+      }
+
+      /**
+       * @param {string} value
+       * @return {HelperControlCaption}
+       */
+    }, {
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {string} text
+       * @return {HelperControlCaption}
+       */
+    }, {
+      key: "setDescription",
+      value: function setDescription(text) {
+        this._description = text;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperControlCaption.prototype), "toObject", this).call(this);
+        if (this._title) {
+          result.title = this._title;
+        }
+        if (this._description) {
+          result.description = this._description;
+        }
+        if (this._value) {
+          result.value = this._value;
+        }
+        return result;
+      }
+    }]);
+  }(HelperControl);
+
+  function _callSuper$1B(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperControlCustom = /*#__PURE__*/function (_HelperControl) {
+    /**
+     * @param {string} content
+     * @param {string} id
+     */
+    function HelperControlCustom(content, id) {
+      var _this2;
+      _classCallCheck(this, HelperControlCustom);
+      _this2 = _callSuper$1B(this, HelperControlCustom, ['custom', id]);
+      _defineProperty(_this2, "_content", null);
+      if (content) {
+        _this2.setContent(content);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} content
+     * @return {HelperControlCustom}
+     */
+    _inherits(HelperControlCustom, _HelperControl);
+    return _createClass(HelperControlCustom, [{
+      key: "setContent",
+      value: function setContent(content) {
+        this._content = content;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperControlCustom.prototype), "toObject", this).call(this);
+        if (this._content) {
+          result.content = this._content;
+        }
+        return result;
+      }
+    }]);
+  }(HelperControl);
+
+  function _callSuper$1A(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperControlLink = /*#__PURE__*/function (_HelperControl) {
+    /**
+     * @param content
+     * @param url
+     * @param id
+     */
+    function HelperControlLink(content, url, id) {
+      var _this2;
+      _classCallCheck(this, HelperControlLink);
+      _this2 = _callSuper$1A(this, HelperControlLink, ['link', id]);
+      _defineProperty(_this2, "_content", '');
+      _defineProperty(_this2, "_url", '');
+      _defineProperty(_this2, "_onClick", null);
+      _defineProperty(_this2, "_attr", null);
+      if (content) {
+        _this2.setContent(content);
+      }
+      if (url) {
+        _this2.setUrl(url);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {function} onClick
+     * @return {HelperControlLink}
+     */
+    _inherits(HelperControlLink, _HelperControl);
+    return _createClass(HelperControlLink, [{
+      key: "setOnClick",
+      value: function setOnClick(onClick) {
+        this._onClick = onClick;
+        return this;
+      }
+
+      /**
+       * @param {string} content
+       * @return {HelperControlLink}
+       */
+    }, {
+      key: "setContent",
+      value: function setContent(content) {
+        this._content = content;
+        return this;
+      }
+
+      /**
+       * @param {string} url
+       * @return {HelperControlLink}
+       */
+    }, {
+      key: "setUrl",
+      value: function setUrl(url) {
+        this._url = url;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperControlLink}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperControlLink.prototype), "toObject", this).call(this);
+        if (this._content) {
+          result.content = this._content;
+        }
+        if (this._url) {
+          result.url = this._url;
+        }
+        if (this._onClick) {
+          result.onClick = this._onClick;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperControl);
+
+  function _callSuper$1z(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperControlPageJump = /*#__PURE__*/function (_HelperControl) {
+    /**
+     * @param {string} id
+     */
+    function HelperControlPageJump(id) {
+      var _this2;
+      _classCallCheck(this, HelperControlPageJump);
+      _this2 = _callSuper$1z(this, HelperControlPageJump, ['page_jump', id]);
+      _defineProperty(_this2, "_attr", null);
+      return _this2;
+    }
+
+    /**
+     * @param {Object} attr
+     * @return {HelperControlPageJump}
+     */
+    _inherits(HelperControlPageJump, _HelperControl);
+    return _createClass(HelperControlPageJump, [{
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperControlPageJump.prototype), "toObject", this).call(this);
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperControl);
+
+  function _callSuper$1y(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperControlPageSize = /*#__PURE__*/function (_HelperControl) {
+    /**
+     * @param {Array}  list
+     * @param {string} id
+     */
+    function HelperControlPageSize(list, id) {
+      var _this2;
+      _classCallCheck(this, HelperControlPageSize);
+      _this2 = _callSuper$1y(this, HelperControlPageSize, ['page_jump', id]);
+      _defineProperty(_this2, "_attr", null);
+      _defineProperty(_this2, "_list", null);
+      if (list) {
+        _this2.setList(list);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {Array} list
+     * @return {HelperControlPageSize}
+     */
+    _inherits(HelperControlPageSize, _HelperControl);
+    return _createClass(HelperControlPageSize, [{
+      key: "setList",
+      value: function setList(list) {
+        this._list = list;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperControlPageSize}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperControlPageSize.prototype), "toObject", this).call(this);
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        if (this._list) {
+          result.list = this._list;
+        }
+        return result;
+      }
+    }]);
+  }(HelperControl);
+
+  var HelperControlButtonGroupDropdown = /*#__PURE__*/function () {
+    /**
+     * @param {string} content
+     * @param {string} position
+     */
+    function HelperControlButtonGroupDropdown(content, position) {
+      _classCallCheck(this, HelperControlButtonGroupDropdown);
+      _defineProperty(this, "_content", null);
+      _defineProperty(this, "_position", null);
+      _defineProperty(this, "_attr", null);
+      _defineProperty(this, "_items", []);
+      if (content) {
+        this._content = content;
+      }
+      if (position) {
+        this._position = position;
+      }
+    }
+
+    /**
+     * @param {string} content
+     * @return {HelperControlButtonGroupDropdown}
+     */
+    return _createClass(HelperControlButtonGroupDropdown, [{
+      key: "setContent",
+      value: function setContent(content) {
+        this._content = content;
+        return this;
+      }
+
+      /**
+       * @param {string} position
+       * @return {HelperControlButtonGroupDropdown}
+       */
+    }, {
+      key: "setPosition",
+      value: function setPosition(position) {
+        this._position = position;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperControlButtonGroupDropdown}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * @param {string}   content
+       * @param {function} onClick
+       * @return {HelperControlButtonGroupDropdown}
+       */
+    }, {
+      key: "addButton",
+      value: function addButton(content, onClick) {
+        this._items.push({
+          type: 'button',
+          content: content,
+          onClick: onClick
+        });
+        return this;
+      }
+
+      /**
+       * @param {string} content
+       * @param {string} url
+       * @return {HelperControlButtonGroupDropdown}
+       */
+    }, {
+      key: "addLink",
+      value: function addLink(content, url) {
+        this._items.push({
+          type: 'link',
+          content: content,
+          url: url
+        });
+        return this;
+      }
+
+      /**
+       * @return {HelperControlButtonGroupDropdown}
+       */
+    }, {
+      key: "addDivider",
+      value: function addDivider() {
+        this._items.push({
+          type: 'divider'
+        });
+        return this;
+      }
+
+      /**
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = {
+          type: 'dropdown'
+        };
+        if (this._content) {
+          result.content = this._content;
+        }
+        if (this._position) {
+          result.position = this._position;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        if (this._items) {
+          result.items = this._items;
+        }
+        return result;
+      }
+    }]);
+  }();
+
+  function _callSuper$1x(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperControlButtonGroup = /*#__PURE__*/function (_HelperControl) {
+    /**
+     * @param id
+     */
+    function HelperControlButtonGroup(id) {
+      var _this2;
+      _classCallCheck(this, HelperControlButtonGroup);
+      _this2 = _callSuper$1x(this, HelperControlButtonGroup, ['buttonGroup', id]);
+      _defineProperty(_this2, "_content", '');
+      _defineProperty(_this2, "_items", []);
+      _defineProperty(_this2, "_attr", null);
+      return _this2;
+    }
+
+    /**
+     * @param {string}   content
+     * @param {function} onClick
+     * @param {Object}   attr
+     * @return {HelperControlButtonGroup}
+     */
+    _inherits(HelperControlButtonGroup, _HelperControl);
+    return _createClass(HelperControlButtonGroup, [{
+      key: "addButton",
+      value: function addButton(content, onClick, attr) {
+        this._items.push({
+          type: 'button',
+          content: content,
+          onClick: onClick,
+          attr: attr
+        });
+        return this;
+      }
+
+      /**
+       * @param {string} content
+       * @param {string} url
+       * @param {Object} attr
+       * @return {HelperControlButtonGroup}
+       */
+    }, {
+      key: "addLink",
+      value: function addLink(content, url, attr) {
+        this._items.push({
+          type: 'link',
+          content: content,
+          url: url,
+          attr: attr
+        });
+        return this;
+      }
+
+      /**
+       * @param {string} content
+       * @param {string} position
+       * @return {HelperControlButtonGroupDropdown}
+       */
+    }, {
+      key: "addDropdown",
+      value: function addDropdown(content, position) {
+        var dropdown = new HelperControlButtonGroupDropdown(content, position);
+        this._items.push(dropdown);
+        return dropdown;
+      }
+
+      /**
+       * @param {string} content
+       * @return {HelperControlButtonGroup}
+       */
+    }, {
+      key: "setContent",
+      value: function setContent(content) {
+        this._content = content;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperControlButtonGroup}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperControlButtonGroup.prototype), "toObject", this).call(this);
+        if (this._content) {
+          result.content = this._content;
+        }
+        if (this.attr) {
+          result.attr = this._attr;
+        }
+        if (this._items) {
+          result.items = [];
+          this._items.map(function (item) {
+            if (item instanceof HelperControlButtonGroupDropdown) {
+              result.items.push(item.toObject());
+            } else {
+              result.items.push(item);
+            }
+          });
+        }
+        return result;
+      }
+    }]);
+  }(HelperControl);
+
+  function _callSuper$1w(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperControlDropdown = /*#__PURE__*/function (_HelperControl) {
+    /**
+     * @param content
+     * @param id
+     */
+    function HelperControlDropdown(content, id) {
+      var _this2;
+      _classCallCheck(this, HelperControlDropdown);
+      _this2 = _callSuper$1w(this, HelperControlDropdown, ['dropdown', id]);
+      _defineProperty(_this2, "_content", '');
+      _defineProperty(_this2, "_items", []);
+      _defineProperty(_this2, "_attr", null);
+      if (content) {
+        _this2.setContent(content);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string}   content
+     * @param {function} onClick
+     * @return {HelperControlDropdown}
+     */
+    _inherits(HelperControlDropdown, _HelperControl);
+    return _createClass(HelperControlDropdown, [{
+      key: "addButton",
+      value: function addButton(content, onClick) {
+        this._items.push({
+          type: 'button',
+          content: content,
+          onClick: onClick
+        });
+        return this;
+      }
+
+      /**
+       * @param {string} content
+       * @param {string} url
+       * @return {HelperControlDropdown}
+       */
+    }, {
+      key: "addLink",
+      value: function addLink(content, url) {
+        this._items.push({
+          type: 'link',
+          content: content,
+          url: url
+        });
+        return this;
+      }
+
+      /**
+       * @return {HelperControlDropdown}
+       */
+    }, {
+      key: "addDivider",
+      value: function addDivider() {
+        this._items.push({
+          type: 'divider'
+        });
+        return this;
+      }
+
+      /**
+       * @param {string} content
+       * @return {HelperControlDropdown}
+       */
+    }, {
+      key: "setContent",
+      value: function setContent(content) {
+        this._content = content;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperControlDropdown}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperControlDropdown.prototype), "toObject", this).call(this);
+        if (this._content) {
+          result.content = this._content;
+        }
+        if (this._items) {
+          result.items = this._items;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperControl);
+
+  var HelperFilter = /*#__PURE__*/function () {
+    /**
+     * @param {string} type
+     * @param {string} id
+     */
+    function HelperFilter(type, id) {
+      _classCallCheck(this, HelperFilter);
+      _defineProperty(this, "_id", '');
+      _defineProperty(this, "_type", '');
+      _defineProperty(this, "_field", null);
+      _defineProperty(this, "_props", null);
+      this._type = 'filter:' + type;
+      if (id) {
+        this._id = id;
+      }
+    }
+
+    /**
+     * @param {string} field
+     * @return {Filter}
+     */
+    return _createClass(HelperFilter, [{
+      key: "setField",
+      value: function setField(field) {
+        this._field = field;
+        return this;
+      }
+
+      /**
+       * Установка свойств
+       * @param {Object} props
+       */
+    }, {
+      key: "setProp",
+      value: function setProp(props) {
+        this._props = $.extend(true, this._props || {}, props);
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = {
+          type: this._type
+        };
+        if (this._field) {
+          result.field = this._field;
+        }
+        if (this._id) {
+          result.id = this._id;
+        }
+        if (this._props) {
+          result = $.extend(true, this._props, result);
+        }
+        return result;
+      }
+    }]);
+  }();
+
+  function _callSuper$1v(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperFilterText = /*#__PURE__*/function (_HelperFilter) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperFilterText(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperFilterText);
+      _this2 = _callSuper$1v(this, HelperFilterText, ['text', id]);
+      _defineProperty(_this2, "_label", null);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_autoSearch", null);
+      _defineProperty(_this2, "_btn", null);
+      _defineProperty(_this2, "_value", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} label
+     * @return {HelperFilterText}
+     */
+    _inherits(HelperFilterText, _HelperFilter);
+    return _createClass(HelperFilterText, [{
+      key: "setLabel",
+      value: function setLabel(label) {
+        this._label = label;
+        return this;
+      }
+
+      /**
+       * @param {string} value
+       * @return {HelperFilterText}
+       */
+    }, {
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {HelperFilterText}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {boolean} isAutoSearch
+       * @return {HelperFilterText}
+       */
+    }, {
+      key: "setAutoSearch",
+      value: function setAutoSearch(isAutoSearch) {
+        this._autoSearch = isAutoSearch;
+        return this;
+      }
+
+      /**
+       * @param {string} content
+       * @param {Object} attr
+       * @return {HelperFilterText}
+       */
+    }, {
+      key: "setButton",
+      value: function setButton(content, attr) {
+        this._btn = {
+          content: content
+        };
+        if (attr && Utils.isObject(attr)) {
+          this._btn.attr = attr;
+        }
+        return this;
+      }
+
+      /**
+       * @param {string} text
+       * @return {HelperFilterText}
+       */
+    }, {
+      key: "setAttrPlaceholder",
+      value: function setAttrPlaceholder(text) {
+        this._attr.placeholder = text;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperFilterText}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperFilterText.prototype), "toObject", this).call(this);
+        if (this._label !== null) {
+          result.label = this._label;
+        }
+        if (this._width !== null) {
+          result.width = this._width;
+        }
+        if (this._value !== null) {
+          result.value = this._value;
+        }
+        if (this._autoSearch !== null) {
+          result.autoSearch = this._autoSearch;
+        }
+        if (this._btn !== null) {
+          result.btn = this._btn;
+        }
+        if (this._attr !== null) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperFilter);
+
+  function _callSuper$1u(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperFilterCheckbox = /*#__PURE__*/function (_HelperFilter) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperFilterCheckbox(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperFilterCheckbox);
+      _this2 = _callSuper$1u(this, HelperFilterCheckbox, ['checkbox', id]);
+      _defineProperty(_this2, "_label", null);
+      _defineProperty(_this2, "_values", null);
+      _defineProperty(_this2, "_options", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} label
+     * @return {HelperFilterCheckbox}
+     */
+    _inherits(HelperFilterCheckbox, _HelperFilter);
+    return _createClass(HelperFilterCheckbox, [{
+      key: "setLabel",
+      value: function setLabel(label) {
+        this._label = label;
+        return this;
+      }
+
+      /**
+       * @param {Array} checkedItems
+       * @return {HelperFilterCheckbox}
+       */
+    }, {
+      key: "setValue",
+      value: function setValue(checkedItems) {
+        this._values = checkedItems;
+        return this;
+      }
+
+      /**
+       * @param {Array} options
+       * @return {HelperFilterCheckbox}
+       */
+    }, {
+      key: "setOptions",
+      value: function setOptions(options) {
+        this._options = options;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperFilterCheckbox.prototype), "toObject", this).call(this);
+        if (this._label) {
+          result.label = this._label;
+        }
+        if (this._values) {
+          result.value = this._values;
+        }
+        if (this._options) {
+          result.options = this._options;
+        }
+        return result;
+      }
+    }]);
+  }(HelperFilter);
+
+  function _callSuper$1t(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperFilterDate = /*#__PURE__*/function (_HelperFilter) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperFilterDate(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperFilterDate);
+      _this2 = _callSuper$1t(this, HelperFilterDate, ['date', id]);
+      _defineProperty(_this2, "_label", null);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_value", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} label
+     * @return {HelperFilterDate}
+     */
+    _inherits(HelperFilterDate, _HelperFilter);
+    return _createClass(HelperFilterDate, [{
+      key: "setLabel",
+      value: function setLabel(label) {
+        this._label = label;
+        return this;
+      }
+
+      /**
+       * @param {string} value
+       * @return {HelperFilterDate}
+       */
+    }, {
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {HelperFilterDate}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperFilterDate}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperFilterDate.prototype), "toObject", this).call(this);
+        if (this._label) {
+          result.label = this._label;
+        }
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._value) {
+          result.value = this._value;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperFilter);
+
+  function _callSuper$1s(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperFilterDateMonth = /*#__PURE__*/function (_HelperFilter) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperFilterDateMonth(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperFilterDateMonth);
+      _this2 = _callSuper$1s(this, HelperFilterDateMonth, ['dateMonth', id]);
+      _defineProperty(_this2, "_label", null);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_value", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} label
+     * @return {HelperFilterDateMonth}
+     */
+    _inherits(HelperFilterDateMonth, _HelperFilter);
+    return _createClass(HelperFilterDateMonth, [{
+      key: "setLabel",
+      value: function setLabel(label) {
+        this._label = label;
+        return this;
+      }
+
+      /**
+       * @param {string} value
+       * @return {HelperFilterDateMonth}
+       */
+    }, {
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {HelperFilterDateMonth}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperFilterDateMonth}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperFilterDateMonth.prototype), "toObject", this).call(this);
+        if (this._label) {
+          result.label = this._label;
+        }
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._value) {
+          result.value = this._value;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperFilter);
+
+  function _callSuper$1r(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperFilterDateRange = /*#__PURE__*/function (_HelperFilter) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperFilterDateRange(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperFilterDateRange);
+      _this2 = _callSuper$1r(this, HelperFilterDateRange, ['dateRange', id]);
+      _defineProperty(_this2, "_label", null);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_value", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} label
+     * @return {HelperFilterDateRange}
+     */
+    _inherits(HelperFilterDateRange, _HelperFilter);
+    return _createClass(HelperFilterDateRange, [{
+      key: "setLabel",
+      value: function setLabel(label) {
+        this._label = label;
+        return this;
+      }
+
+      /**
+       * @param {string} value
+       * @return {HelperFilterDateRange}
+       */
+    }, {
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {HelperFilterDateRange}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperFilterDateRange}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperFilterDateRange.prototype), "toObject", this).call(this);
+        if (this._label) {
+          result.label = this._label;
+        }
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._value) {
+          result.value = this._value;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperFilter);
+
+  function _callSuper$1q(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperFilterDateTime$2 = /*#__PURE__*/function (_HelperFilter) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperFilterDateTime(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperFilterDateTime);
+      _this2 = _callSuper$1q(this, HelperFilterDateTime, ['datetime', id]);
+      _defineProperty(_this2, "_label", null);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_value", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} label
+     * @return {HelperFilterDateTime}
+     */
+    _inherits(HelperFilterDateTime, _HelperFilter);
+    return _createClass(HelperFilterDateTime, [{
+      key: "setLabel",
+      value: function setLabel(label) {
+        this._label = label;
+        return this;
+      }
+
+      /**
+       * @param {string} value
+       * @return {HelperFilterDateTime}
+       */
+    }, {
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {HelperFilterDateTime}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperFilterDateTime}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperFilterDateTime.prototype), "toObject", this).call(this);
+        if (this._label) {
+          result.label = this._label;
+        }
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._value) {
+          result.value = this._value;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperFilter);
+
+  function _callSuper$1p(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperFilterDateTime$1 = /*#__PURE__*/function (_HelperFilter) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperFilterDateTime(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperFilterDateTime);
+      _this2 = _callSuper$1p(this, HelperFilterDateTime, ['datetimeRange', id]);
+      _defineProperty(_this2, "_label", null);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_valueStart", null);
+      _defineProperty(_this2, "_valueEnd", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} label
+     * @return {HelperFilterDateTime}
+     */
+    _inherits(HelperFilterDateTime, _HelperFilter);
+    return _createClass(HelperFilterDateTime, [{
+      key: "setLabel",
+      value: function setLabel(label) {
+        this._label = label;
+        return this;
+      }
+
+      /**
+       * @param {string} valueStart
+       * @param {string} valueEnd
+       * @return {HelperFilterDateTime}
+       */
+    }, {
+      key: "setValue",
+      value: function setValue(valueStart, valueEnd) {
+        this._valueStart = valueStart;
+        this._valueEnd = valueEnd;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {HelperFilterDateTime}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperFilterDateTime}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperFilterDateTime.prototype), "toObject", this).call(this);
+        if (this._label) {
+          result.label = this._label;
+        }
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._valueStart !== null || this._valueEnd !== null) {
+          result.value = {
+            start: this._valueStart,
+            end: this._valueEnd
+          };
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperFilter);
+
+  function _callSuper$1o(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperFilterDateTime = /*#__PURE__*/function (_HelperFilter) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperFilterDateTime(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperFilterDateTime);
+      _this2 = _callSuper$1o(this, HelperFilterDateTime, ['number', id]);
+      _defineProperty(_this2, "_label", null);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_valueStart", null);
+      _defineProperty(_this2, "_valueEnd", null);
+      _defineProperty(_this2, "_attr", null);
+      _defineProperty(_this2, "_btn", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} label
+     * @return {HelperFilterDateTime}
+     */
+    _inherits(HelperFilterDateTime, _HelperFilter);
+    return _createClass(HelperFilterDateTime, [{
+      key: "setLabel",
+      value: function setLabel(label) {
+        this._label = label;
+        return this;
+      }
+
+      /**
+       * @param {string} valueStart
+       * @param {string} valueEnd
+       * @return {HelperFilterDateTime}
+       */
+    }, {
+      key: "setValue",
+      value: function setValue(valueStart, valueEnd) {
+        this._valueStart = valueStart;
+        this._valueEnd = valueEnd;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {HelperFilterDateTime}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperFilterDateTime}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * @param {string} content
+       * @param {Object} attr
+       * @return {HelperFilterText}
+       */
+    }, {
+      key: "setButton",
+      value: function setButton(content, attr) {
+        this._btn = {
+          content: content
+        };
+        if (attr && Utils.isObject(attr)) {
+          this._btn.attr = attr;
+        }
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperFilterDateTime.prototype), "toObject", this).call(this);
+        if (this._field) {
+          result.field = this._field;
+        }
+        if (this._label) {
+          result.label = this._label;
+        }
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._valueStart !== null || this._valueEnd !== null) {
+          result.value = {
+            start: this._valueStart,
+            end: this._valueEnd
+          };
+        }
+        if (this._btn) {
+          result.btn = this._btn;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperFilter);
+
+  function _callSuper$1n(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperFilterRadio = /*#__PURE__*/function (_HelperFilter) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperFilterRadio(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperFilterRadio);
+      _this2 = _callSuper$1n(this, HelperFilterRadio, ['radio', id]);
+      _defineProperty(_this2, "_label", null);
+      _defineProperty(_this2, "_values", null);
+      _defineProperty(_this2, "_options", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} label
+     * @return {HelperFilterRadio}
+     */
+    _inherits(HelperFilterRadio, _HelperFilter);
+    return _createClass(HelperFilterRadio, [{
+      key: "setLabel",
+      value: function setLabel(label) {
+        this._label = label;
+        return this;
+      }
+
+      /**
+       * @param {Array} checkedItems
+       * @return {HelperFilterRadio}
+       */
+    }, {
+      key: "setValue",
+      value: function setValue(checkedItems) {
+        this._values = checkedItems;
+        return this;
+      }
+
+      /**
+       * @param {Array} options
+       * @return {HelperFilterRadio}
+       */
+    }, {
+      key: "setOptions",
+      value: function setOptions(options) {
+        this._options = options;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperFilterRadio.prototype), "toObject", this).call(this);
+        if (this._label) {
+          result.label = this._label;
+        }
+        if (this._values) {
+          result.value = this._values;
+        }
+        if (this._options) {
+          result.options = this._options;
+        }
+        return result;
+      }
+    }]);
+  }(HelperFilter);
+
+  function _callSuper$1m(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperFilterSelect = /*#__PURE__*/function (_HelperFilter) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperFilterSelect(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperFilterSelect);
+      _this2 = _callSuper$1m(this, HelperFilterSelect, ['select', id]);
+      _defineProperty(_this2, "_label", null);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_values", null);
+      _defineProperty(_this2, "_options", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} label
+     * @return {HelperFilterSelect}
+     */
+    _inherits(HelperFilterSelect, _HelperFilter);
+    return _createClass(HelperFilterSelect, [{
+      key: "setLabel",
+      value: function setLabel(label) {
+        this._label = label;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {HelperFilterSelect}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {Array} checkedItems
+       * @return {HelperFilterSelect}
+       */
+    }, {
+      key: "setValue",
+      value: function setValue(checkedItems) {
+        this._values = checkedItems;
+        return this;
+      }
+
+      /**
+       * @param {Array} options
+       * @return {HelperFilterSelect}
+       */
+    }, {
+      key: "setOptions",
+      value: function setOptions(options) {
+        this._options = options;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperFilterSelect}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperFilterSelect.prototype), "toObject", this).call(this);
+        if (this._label) {
+          result.label = this._label;
+        }
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._values) {
+          result.value = this._values;
+        }
+        if (this._options) {
+          result.options = this._options;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperFilter);
+
+  function _callSuper$1l(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperFilterSwitch = /*#__PURE__*/function (_HelperFilter) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperFilterSwitch(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperFilterSwitch);
+      _this2 = _callSuper$1l(this, HelperFilterSwitch, ['switch', id]);
+      _defineProperty(_this2, "_label", null);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_value", null);
+      _defineProperty(_this2, "_valueY", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} label
+     * @return {HelperFilterSwitch}
+     */
+    _inherits(HelperFilterSwitch, _HelperFilter);
+    return _createClass(HelperFilterSwitch, [{
+      key: "setLabel",
+      value: function setLabel(label) {
+        this._label = label;
+        return this;
+      }
+
+      /**
+       * @param {string} value
+       * @return {HelperFilterSwitch}
+       */
+    }, {
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {string} valueY
+       * @return {HelperFilterSwitch}
+       */
+    }, {
+      key: "setValueY",
+      value: function setValueY(valueY) {
+        this._valueY = valueY;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {HelperFilterSwitch}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperFilterSwitch.prototype), "toObject", this).call(this);
+        if (this._label !== null) {
+          result.label = this._label;
+        }
+        if (this._width !== null) {
+          result.width = this._width;
+        }
+        if (this._value !== null) {
+          result.value = this._value;
+        }
+        if (this._valueY !== null) {
+          result.valueY = this._valueY;
+        }
+        return result;
+      }
+    }]);
+  }(HelperFilter);
+
+  var HelperSearch = /*#__PURE__*/function () {
+    /**
+     * @param {string} type
+     * @param {string} id
+     */
+    function HelperSearch(type, id) {
+      _classCallCheck(this, HelperSearch);
+      _defineProperty(this, "_id", '');
+      _defineProperty(this, "_type", '');
+      _defineProperty(this, "_field", '');
+      _defineProperty(this, "_label", '');
+      _defineProperty(this, "_description", '');
+      _defineProperty(this, "_descriptionLabel", '');
+      _defineProperty(this, "_suffix", '');
+      _defineProperty(this, "_props", null);
+      this._type = type;
+      if (id) {
+        this._id = id;
+      }
+    }
+
+    /**
+     * @param {string} field
+     * @return {SearchText}
+     */
+    return _createClass(HelperSearch, [{
+      key: "setField",
+      value: function setField(field) {
+        this._field = field;
+        return this;
+      }
+
+      /**
+       * @param {string} label
+       * @return {SearchText}
+       */
+    }, {
+      key: "setLabel",
+      value: function setLabel(label) {
+        this._label = label;
+        return this;
+      }
+
+      /**
+       * Установка свойств
+       * @param {Object} props
+       */
+    }, {
+      key: "setProp",
+      value: function setProp(props) {
+        this._props = $.extend(true, this._props || {}, props);
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = {
+          type: this._type,
+          field: this._field,
+          label: this._label
+        };
+        if (this._id) {
+          result.id = this._id;
+        }
+        if (this._description) {
+          result.description = this._description;
+        }
+        if (this._descriptionLabel) {
+          result.descriptionLabel = this._descriptionLabel;
+        }
+        if (this._suffix) {
+          result.suffix = this._suffix;
+        }
+        if (this._props) {
+          result = $.extend(true, this._props, result);
+        }
+        return result;
+      }
+    }]);
+  }();
+
+  function _callSuper$1k(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperSearchText = /*#__PURE__*/function (_HelperSearch) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperSearchText(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperSearchText);
+      _this2 = _callSuper$1k(this, HelperSearchText, ['text', id]);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_value", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} value
+     * @return {HelperSearchText}
+     */
+    _inherits(HelperSearchText, _HelperSearch);
+    return _createClass(HelperSearchText, [{
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {HelperSearchText}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {string} text
+       * @return {HelperSearchText}
+       */
+    }, {
+      key: "setAttrPlaceholder",
+      value: function setAttrPlaceholder(text) {
+        if (!Utils.isObject(this._attr)) {
+          this._attr = {};
+        }
+        this._attr.placeholder = text;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperSearchText}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperSearchText.prototype), "toObject", this).call(this);
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._value) {
+          result.value = this._value;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperSearch);
+
+  function _callSuper$1j(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperSearchCheckbox = /*#__PURE__*/function (_HelperSearch) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperSearchCheckbox(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperSearchCheckbox);
+      _this2 = _callSuper$1j(this, HelperSearchCheckbox, ['checkbox', id]);
+      _defineProperty(_this2, "_options", null);
+      _defineProperty(_this2, "_value", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} value
+     * @return {HelperSearchCheckbox}
+     */
+    _inherits(HelperSearchCheckbox, _HelperSearch);
+    return _createClass(HelperSearchCheckbox, [{
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {Array} options
+       * @return {HelperSearchCheckbox}
+       */
+    }, {
+      key: "setOptions",
+      value: function setOptions(options) {
+        this._options = options;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperSearchCheckbox}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperSearchCheckbox.prototype), "toObject", this).call(this);
+        if (this._options) {
+          result.options = this._options;
+        }
+        if (this._value) {
+          result.value = this._value;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperSearch);
+
+  function _callSuper$1i(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperSearchCheckboxBtn = /*#__PURE__*/function (_HelperSearch) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperSearchCheckboxBtn(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperSearchCheckboxBtn);
+      _this2 = _callSuper$1i(this, HelperSearchCheckboxBtn, ['checkboxBtn', id]);
+      _defineProperty(_this2, "_options", null);
+      _defineProperty(_this2, "_optionClass", null);
+      _defineProperty(_this2, "_value", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} value
+     * @return {HelperSearchCheckboxBtn}
+     */
+    _inherits(HelperSearchCheckboxBtn, _HelperSearch);
+    return _createClass(HelperSearchCheckboxBtn, [{
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {Array} options
+       * @return {HelperSearchCheckboxBtn}
+       */
+    }, {
+      key: "setOptions",
+      value: function setOptions(options) {
+        this._options = options;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperSearchCheckboxBtn}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Установка класса для внешнего вида
+       * @param {setAttr} optionClass
+       * @return {HelperSearchCheckboxBtn}
+       */
+    }, {
+      key: "setOptionClass",
+      value: function setOptionClass(optionClass) {
+        this._optionClass = optionClass;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperSearchCheckboxBtn.prototype), "toObject", this).call(this);
+        if (this._options) {
+          result.options = this._options;
+        }
+        if (this._optionClass) {
+          result.optionClass = this._optionClass;
+        }
+        if (this._value) {
+          result.value = this._value;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperSearch);
+
+  function _callSuper$1h(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperSearchDate = /*#__PURE__*/function (_HelperSearch) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperSearchDate(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperSearchDate);
+      _this2 = _callSuper$1h(this, HelperSearchDate, ['date', id]);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_value", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} value
+     * @return {HelperSearchDate}
+     */
+    _inherits(HelperSearchDate, _HelperSearch);
+    return _createClass(HelperSearchDate, [{
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {HelperSearchDate}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperSearchDate}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperSearchDate.prototype), "toObject", this).call(this);
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._value) {
+          result.value = this._value;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperSearch);
+
+  function _callSuper$1g(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperSearchDateMonth = /*#__PURE__*/function (_HelperSearch) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperSearchDateMonth(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperSearchDateMonth);
+      _this2 = _callSuper$1g(this, HelperSearchDateMonth, ['dateMonth', id]);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_value", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} value
+     * @return {HelperSearchDateMonth}
+     */
+    _inherits(HelperSearchDateMonth, _HelperSearch);
+    return _createClass(HelperSearchDateMonth, [{
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {HelperSearchDateMonth}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperSearchDateMonth}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperSearchDateMonth.prototype), "toObject", this).call(this);
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._value) {
+          result.value = this._value;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperSearch);
+
+  function _callSuper$1f(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperSearchDateRange = /*#__PURE__*/function (_HelperSearch) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperSearchDateRange(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperSearchDateRange);
+      _this2 = _callSuper$1f(this, HelperSearchDateRange, ['dateRange', id]);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_valueStart", null);
+      _defineProperty(_this2, "_valueEnd", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} valueStart
+     * @param {string} valueEnd
+     * @return {HelperSearchDateRange}
+     */
+    _inherits(HelperSearchDateRange, _HelperSearch);
+    return _createClass(HelperSearchDateRange, [{
+      key: "setValue",
+      value: function setValue(valueStart, valueEnd) {
+        this._valueStart = valueStart;
+        this._valueEnd = valueEnd;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {HelperSearchDateRange}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperSearchDateRange}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperSearchDateRange.prototype), "toObject", this).call(this);
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        if (this._valueStart !== null || this._valueEnd !== null) {
+          result.value = {
+            start: this._valueStart,
+            end: this._valueEnd
+          };
+        }
+        return result;
+      }
+    }]);
+  }(HelperSearch);
+
+  function _callSuper$1e(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperSearchDatetime = /*#__PURE__*/function (_HelperSearch) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperSearchDatetime(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperSearchDatetime);
+      _this2 = _callSuper$1e(this, HelperSearchDatetime, ['datetime', id]);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_value", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} value
+     * @return {HelperSearchDatetime}
+     */
+    _inherits(HelperSearchDatetime, _HelperSearch);
+    return _createClass(HelperSearchDatetime, [{
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {HelperSearchDatetime}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperSearchDatetime}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperSearchDatetime.prototype), "toObject", this).call(this);
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._value) {
+          result.value = this._value;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperSearch);
+
+  function _callSuper$1d(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperSearchDatetimeRange = /*#__PURE__*/function (_HelperSearch) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperSearchDatetimeRange(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperSearchDatetimeRange);
+      _this2 = _callSuper$1d(this, HelperSearchDatetimeRange, ['datetimeRange', id]);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_valueStart", null);
+      _defineProperty(_this2, "_valueEnd", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} valueStart
+     * @param {string} valueEnd
+     * @return {HelperSearchDatetimeRange}
+     */
+    _inherits(HelperSearchDatetimeRange, _HelperSearch);
+    return _createClass(HelperSearchDatetimeRange, [{
+      key: "setValue",
+      value: function setValue(valueStart, valueEnd) {
+        this._valueStart = valueStart;
+        this._valueEnd = valueEnd;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {HelperSearchDatetimeRange}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperSearchDatetimeRange}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperSearchDatetimeRange.prototype), "toObject", this).call(this);
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        if (this._valueStart !== null || this._valueEnd !== null) {
+          result.value = {
+            start: this._valueStart,
+            end: this._valueEnd
+          };
+        }
+        return result;
+      }
+    }]);
+  }(HelperSearch);
+
+  function _callSuper$1c(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperSearchNumber = /*#__PURE__*/function (_HelperSearch) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperSearchNumber(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperSearchNumber);
+      _this2 = _callSuper$1c(this, HelperSearchNumber, ['number', id]);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_valueStart", null);
+      _defineProperty(_this2, "_valueEnd", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} valueStart
+     * @param {string} valueEnd
+     * @return {HelperSearchNumber}
+     */
+    _inherits(HelperSearchNumber, _HelperSearch);
+    return _createClass(HelperSearchNumber, [{
+      key: "setValue",
+      value: function setValue(valueStart, valueEnd) {
+        this._valueStart = valueStart;
+        this._valueEnd = valueEnd;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {HelperSearchNumber}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperSearchNumber}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperSearchNumber.prototype), "toObject", this).call(this);
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        if (this._valueStart !== null || this._valueEnd !== null) {
+          result.value = {
+            start: this._valueStart,
+            end: this._valueEnd
+          };
+        }
+        return result;
+      }
+    }]);
+  }(HelperSearch);
+
+  function _callSuper$1b(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperSearchRadio = /*#__PURE__*/function (_HelperSearch) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperSearchRadio(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperSearchRadio);
+      _this2 = _callSuper$1b(this, HelperSearchRadio, ['radio', id]);
+      _defineProperty(_this2, "_options", null);
+      _defineProperty(_this2, "_value", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} value
+     * @return {HelperSearchRadio}
+     */
+    _inherits(HelperSearchRadio, _HelperSearch);
+    return _createClass(HelperSearchRadio, [{
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {Array} options
+       * @return {HelperSearchRadio}
+       */
+    }, {
+      key: "setOptions",
+      value: function setOptions(options) {
+        this._options = options;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperSearchRadio}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperSearchRadio.prototype), "toObject", this).call(this);
+        if (this._options) {
+          result.options = this._options;
+        }
+        if (this._value) {
+          result.value = this._value;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperSearch);
+
+  function _callSuper$1a(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperSearchRadioBtn = /*#__PURE__*/function (_HelperSearch) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperSearchRadioBtn(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperSearchRadioBtn);
+      _this2 = _callSuper$1a(this, HelperSearchRadioBtn, ['radioBtn', id]);
+      _defineProperty(_this2, "_options", null);
+      _defineProperty(_this2, "_optionClass", null);
+      _defineProperty(_this2, "_value", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} value
+     * @return {HelperSearchRadioBtn}
+     */
+    _inherits(HelperSearchRadioBtn, _HelperSearch);
+    return _createClass(HelperSearchRadioBtn, [{
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {Array} options
+       * @return {HelperSearchRadioBtn}
+       */
+    }, {
+      key: "setOptions",
+      value: function setOptions(options) {
+        this._options = options;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperSearchRadioBtn}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * Установка класса для внешнего вида
+       * @param {setAttr} optionClass
+       * @return {HelperSearchRadioBtn}
+       */
+    }, {
+      key: "setOptionClass",
+      value: function setOptionClass(optionClass) {
+        this._optionClass = optionClass;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperSearchRadioBtn.prototype), "toObject", this).call(this);
+        if (this._options) {
+          result.options = this._options;
+        }
+        if (this._optionClass) {
+          result.optionClass = this._optionClass;
+        }
+        if (this._value) {
+          result.value = this._value;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperSearch);
+
+  function _callSuper$19(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperSearchSelect = /*#__PURE__*/function (_HelperSearch) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperSearchSelect(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperSearchSelect);
+      _this2 = _callSuper$19(this, HelperSearchSelect, ['select', id]);
+      _defineProperty(_this2, "_options", null);
+      _defineProperty(_this2, "_width", null);
+      _defineProperty(_this2, "_value", null);
+      _defineProperty(_this2, "_attr", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} value
+     * @return {HelperSearchSelect}
+     */
+    _inherits(HelperSearchSelect, _HelperSearch);
+    return _createClass(HelperSearchSelect, [{
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {int} width
+       * @return {FilterText}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * @param {Array} options
+       * @return {HelperSearchSelect}
+       */
+    }, {
+      key: "setOptions",
+      value: function setOptions(options) {
+        this._options = options;
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperSearchSelect}
+       */
+    }, {
+      key: "setAttr",
+      value: function setAttr(attr) {
+        this._attr = $.extend(true, this._attr || {}, attr);
+        return this;
+      }
+
+      /**
+       * @return {HelperSearchSelect}
+       */
+    }, {
+      key: "setAttrMultiple",
+      value: function setAttrMultiple() {
+        if (!Utils.isObject(this._attr)) {
+          this._attr = {};
+        }
+        this._attr.multiple = 'multiple';
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperSearchSelect.prototype), "toObject", this).call(this);
+        if (this._width) {
+          result.width = this._width;
+        }
+        if (this._options) {
+          result.options = this._options;
+        }
+        if (this._value) {
+          result.value = this._value;
+        }
+        if (this._attr) {
+          result.attr = this._attr;
+        }
+        return result;
+      }
+    }]);
+  }(HelperSearch);
+
+  function _callSuper$18(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperSearchSwitch = /*#__PURE__*/function (_HelperSearch) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} id
+     */
+    function HelperSearchSwitch(field, label, id) {
+      var _this2;
+      _classCallCheck(this, HelperSearchSwitch);
+      _this2 = _callSuper$18(this, HelperSearchSwitch, ['switch', id]);
+      _defineProperty(_this2, "_valueY", null);
+      _defineProperty(_this2, "_value", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} value
+     * @return {HelperSearchSwitch}
+     */
+    _inherits(HelperSearchSwitch, _HelperSearch);
+    return _createClass(HelperSearchSwitch, [{
+      key: "setValue",
+      value: function setValue(value) {
+        this._value = value;
+        return this;
+      }
+
+      /**
+       * @param {string} valueY
+       * @return {HelperSearchSwitch}
+       */
+    }, {
+      key: "setValueY",
+      value: function setValueY(valueY) {
+        this._valueY = valueY;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperSearchSwitch.prototype), "toObject", this).call(this);
+        if (this._value !== null) {
+          result.value = this._value;
+        }
+        if (this._valueY !== null) {
+          result.valueY = this._valueY;
+        }
+        return result;
+      }
+    }]);
+  }(HelperSearch);
+
+  var HelperColumn = /*#__PURE__*/function () {
+    /**
+     * @param {string} type
+     */
+    function HelperColumn(type) {
+      _classCallCheck(this, HelperColumn);
+      _defineProperty(this, "_type", '');
+      _defineProperty(this, "_field", '');
+      _defineProperty(this, "_label", '');
+      _defineProperty(this, "_description", '');
+      _defineProperty(this, "_fixed", null);
+      _defineProperty(this, "_isSortable", null);
+      _defineProperty(this, "_isShow", null);
+      _defineProperty(this, "_isShowLabel", null);
+      _defineProperty(this, "_width", null);
+      _defineProperty(this, "_minWidth", null);
+      _defineProperty(this, "_maxWidth", null);
+      _defineProperty(this, "_menuAlways", null);
+      _defineProperty(this, "_attrHeader", null);
+      _defineProperty(this, "_props", null);
+      _defineProperty(this, "_menu", []);
+      this._type = type;
+    }
+
+    /**
+     * Установка названия поля
+     * @param {string} field
+     * @return {HelperColumn}
+     */
+    return _createClass(HelperColumn, [{
+      key: "setField",
+      value: function setField(field) {
+        this._field = field;
+        return this;
+      }
+
+      /**
+       * Установка заголовка поля
+       * @param {string} label
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "setLabel",
+      value: function setLabel(label) {
+        this._label = label;
+        return this;
+      }
+
+      /**
+       * Установка описания для колонки
+       * @param {string} description
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "setDescription",
+      value: function setDescription(description) {
+        this._description = description;
+        return this;
+      }
+
+      /**
+       * Установка признака, что колонка будет зафиксирована слева
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "setFixedLeft",
+      value: function setFixedLeft() {
+        this._fixed = 'left';
+        return this;
+      }
+
+      /**
+       * Установка признака, что колонка будет зафиксирована справа
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "setFixedRight",
+      value: function setFixedRight() {
+        this._fixed = 'right';
+        return this;
+      }
+
+      /**
+       * Установка признака будет ли сортироваться колонка
+       * @param {boolean} isSort
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "setSort",
+      value: function setSort(isSort) {
+        this._isSortable = isSort;
+        return this;
+      }
+
+      /**
+       * Установка признака будет ли отображаться колонка
+       * @param {boolean} isShow
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "setShow",
+      value: function setShow(isShow) {
+        this._isShow = isShow;
+        return this;
+      }
+
+      /**
+       * Установка признака будет ли отображаться название колонки
+       * @param {boolean} isShowLabel
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "setShowLabel",
+      value: function setShowLabel(isShowLabel) {
+        this._isShowLabel = isShowLabel;
+        return this;
+      }
+
+      /**
+       * Установка ширины колонки
+       * @param {string} width
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "setWidth",
+      value: function setWidth(width) {
+        this._width = width;
+        return this;
+      }
+
+      /**
+       * Установка максимальной ширины колонки
+       * @param {string} width
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "setWidthMax",
+      value: function setWidthMax(width) {
+        this._maxWidth = width;
+        return this;
+      }
+
+      /**
+       * Установка минимальной ширины колонки
+       * @param {string} width
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "setWidthMin",
+      value: function setWidthMin(width) {
+        this._minWidth = width;
+        return this;
+      }
+
+      /**
+       * Указывает, будет ли меню видно всегда
+       * @param {boolean} isShow
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "showMenuAlways",
+      value: function showMenuAlways(isShow) {
+        this._menuAlways = isShow;
+        return this;
+      }
+
+      /**
+       * Добавление пункта меню для колонки
+       * @param {string} text
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "addMenuHeader",
+      value: function addMenuHeader(text) {
+        this._menu.push({
+          type: 'header',
+          text: text
+        });
+        return this;
+      }
+
+      /**
+       * Добавление пункта меню для колонки
+       * @param {string}   text
+       * @param {function} onClick
+       * @param {Object}   attr
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "addMenuButton",
+      value: function addMenuButton(text, onClick, attr) {
+        this._menu.push({
+          type: 'button',
+          text: text,
+          onClick: onClick,
+          attr: attr
+        });
+        return this;
+      }
+
+      /**
+       * Добавление пункта меню для колонки
+       * @param {string} text
+       * @param {string} url
+       * @param {Object} attr
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "addMenuLink",
+      value: function addMenuLink(text, url, attr) {
+        this._menu.push({
+          type: 'link',
+          text: text,
+          url: url,
+          attr: attr
+        });
+        return this;
+      }
+
+      /**
+       * Добавление пункта меню для колонки
+       * @param {string} text
+       * @param {string} url
+       * @param {Object} attr
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "addMenuDivider",
+      value: function addMenuDivider(text, url, attr) {
+        this._menu.push({
+          type: 'divider'
+        });
+        return this;
+      }
+
+      /**
+       * Очистка всех пунктов меню
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "clearMenu",
+      value: function clearMenu() {
+        this._menu = [];
+        return this;
+      }
+
+      /**
+       * @param {Object} attr
+       * @return {HelperColumn}
+       */
+    }, {
+      key: "setAttrHeader",
+      value: function setAttrHeader(attr) {
+        this._attrHeader = $.extend(true, this._attrHeader || {}, attr);
+        return this;
+      }
+
+      /**
+       * Установка свойств
+       * @param {Object} props
+       */
+    }, {
+      key: "setProp",
+      value: function setProp(props) {
+        this._props = $.extend(true, this._props || {}, props);
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = {
+          type: this._type
+        };
+        if (this._field) {
+          result.field = this._field;
+        }
+        if (this._label) {
+          result.label = this._label;
+        }
+        if (this._description) {
+          result.description = this._description;
+        }
+        if (this._width !== null) {
+          result.width = this._width;
+        }
+        if (this._minWidth !== null) {
+          result.minWidth = this._minWidth;
+        }
+        if (this._maxWidth !== null) {
+          result.maxWidth = this._maxWidth;
+        }
+        if (this._isShow !== null) {
+          result.show = this._isShow;
+        }
+        if (this._isShowLabel !== null) {
+          result.showLabel = this._isShowLabel;
+        }
+        if (this._isSortable !== null) {
+          result.sortable = this._isSortable;
+        }
+        if (this._fixed !== null) {
+          result.fixed = this._fixed;
+        }
+        if (this._attrHeader !== null) {
+          result.attrHeader = this._attrHeader;
+        }
+        if (this._menu.length > 0) {
+          result.menu = {};
+          result.menu.items = this._menu;
+          if (this._menuAlways) {
+            result.menu.showAlways = this._menuAlways;
+          }
+        }
+        if (this._props) {
+          result = $.extend(true, this._props, result);
+        }
+        return result;
+      }
+    }]);
+  }();
+
+  function _callSuper$17(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnText = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} width
+     */
+    function HelperColumnText(field, label, width) {
+      var _this2;
+      _classCallCheck(this, HelperColumnText);
+      _this2 = _callSuper$17(this, HelperColumnText, ['text']);
+      _defineProperty(_this2, "_isNoWrap", null);
+      _defineProperty(_this2, "_isNoWrapToggle", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      if (width) {
+        _this2.setWidth(width);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {boolean} isNoWrap
+     * @return {HelperColumnText}
+     */
+    _inherits(HelperColumnText, _HelperColumn);
+    return _createClass(HelperColumnText, [{
+      key: "setNoWrap",
+      value: function setNoWrap(isNoWrap) {
+        this._isNoWrap = isNoWrap;
+        return this;
+      }
+
+      /**
+       * @param {boolean} isNoWrapToggle
+       * @return {HelperColumnText}
+       */
+    }, {
+      key: "setNoWrapToggle",
+      value: function setNoWrapToggle(isNoWrapToggle) {
+        this._isNoWrapToggle = isNoWrapToggle;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperColumnText.prototype), "toObject", this).call(this);
+        if (this._isNoWrap !== null) {
+          result.noWrap = this._isNoWrap;
+        }
+        if (this._isNoWrapToggle !== null) {
+          result.noWrapToggle = this._isNoWrapToggle;
+        }
+        return result;
+      }
+    }]);
+  }(HelperColumn);
+
+  function _callSuper$16(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnBadge = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} width
+     */
+    function HelperColumnBadge(field, label, width) {
+      var _this2;
+      _classCallCheck(this, HelperColumnBadge);
+      _this2 = _callSuper$16(this, HelperColumnBadge, ['badge']);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      if (width) {
+        _this2.setWidth(width);
+      }
+      return _this2;
+    }
+    _inherits(HelperColumnBadge, _HelperColumn);
+    return _createClass(HelperColumnBadge);
+  }(HelperColumn);
+
+  function _callSuper$15(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnButton = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} width
+     */
+    function HelperColumnButton(field, label, width) {
+      var _this2;
+      _classCallCheck(this, HelperColumnButton);
+      _this2 = _callSuper$15(this, HelperColumnButton, ['button']);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      if (width) {
+        _this2.setWidth(width);
+      }
+      _this2.setSort(false);
+      return _this2;
+    }
+    _inherits(HelperColumnButton, _HelperColumn);
+    return _createClass(HelperColumnButton);
+  }(HelperColumn);
+
+  function _callSuper$14(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnComponent = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} width
+     */
+    function HelperColumnComponent(field, label, width) {
+      var _this2;
+      _classCallCheck(this, HelperColumnComponent);
+      _this2 = _callSuper$14(this, HelperColumnComponent, ['component']);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      if (width) {
+        _this2.setWidth(width);
+      }
+      _this2.setSort(false);
+      return _this2;
+    }
+    _inherits(HelperColumnComponent, _HelperColumn);
+    return _createClass(HelperColumnComponent);
+  }(HelperColumn);
+
+  function _callSuper$13(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnDate = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} width
+     */
+    function HelperColumnDate(field, label, width) {
+      var _this2;
+      _classCallCheck(this, HelperColumnDate);
+      _this2 = _callSuper$13(this, HelperColumnDate, ['date']);
+      _defineProperty(_this2, "_format", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      if (width) {
+        _this2.setWidth(width);
+      }
+      return _this2;
+    }
+
+    /**
+     * Установка формата даты YYYY, MM, M, DD, D, hh, mm, m, ss, s
+     * @param {string} format
+     * @return {HelperColumnDate}
+     */
+    _inherits(HelperColumnDate, _HelperColumn);
+    return _createClass(HelperColumnDate, [{
+      key: "setFormat",
+      value: function setFormat(format) {
+        this._format = format;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperColumnDate.prototype), "toObject", this).call(this);
+        if (this._format) {
+          result.format = this._format;
+        }
+        return result;
+      }
+    }]);
+  }(HelperColumn);
+
+  function _callSuper$12(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnDatetime = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} width
+     */
+    function HelperColumnDatetime(field, label, width) {
+      var _this2;
+      _classCallCheck(this, HelperColumnDatetime);
+      _this2 = _callSuper$12(this, HelperColumnDatetime, ['datetime']);
+      _defineProperty(_this2, "_format", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      if (width) {
+        _this2.setWidth(width);
+      }
+      return _this2;
+    }
+
+    /**
+     * Установка формата даты YYYY, MM, M, DD, D, hh, mm, m, ss, s
+     * @param {string} format
+     * @return {HelperColumnDatetime}
+     */
+    _inherits(HelperColumnDatetime, _HelperColumn);
+    return _createClass(HelperColumnDatetime, [{
+      key: "setFormat",
+      value: function setFormat(format) {
+        this._format = format;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperColumnDatetime.prototype), "toObject", this).call(this);
+        if (this._format) {
+          result.format = this._format;
+        }
+        return result;
+      }
+    }]);
+  }(HelperColumn);
+
+  function _callSuper$11(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnDateHuman = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} width
+     */
+    function HelperColumnDateHuman(field, label, width) {
+      var _this2;
+      _classCallCheck(this, HelperColumnDateHuman);
+      _this2 = _callSuper$11(this, HelperColumnDateHuman, ['dateHuman']);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      if (width) {
+        _this2.setWidth(width);
+      }
+      _this2.setSort(false);
+      return _this2;
+    }
+    _inherits(HelperColumnDateHuman, _HelperColumn);
+    return _createClass(HelperColumnDateHuman);
+  }(HelperColumn);
+
+  function _callSuper$10(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnHtml = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} width
+     */
+    function HelperColumnHtml(field, label, width) {
+      var _this2;
+      _classCallCheck(this, HelperColumnHtml);
+      _this2 = _callSuper$10(this, HelperColumnHtml, ['html']);
+      _defineProperty(_this2, "_isNoWrap", null);
+      _defineProperty(_this2, "_isNoWrapToggle", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      if (width) {
+        _this2.setWidth(width);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {boolean} isNoWrap
+     * @return {HelperColumnHtml}
+     */
+    _inherits(HelperColumnHtml, _HelperColumn);
+    return _createClass(HelperColumnHtml, [{
+      key: "setNoWrap",
+      value: function setNoWrap(isNoWrap) {
+        this._isNoWrap = isNoWrap;
+        return this;
+      }
+
+      /**
+       * @param {boolean} isNoWrapToggle
+       * @return {HelperColumnHtml}
+       */
+    }, {
+      key: "setNoWrapToggle",
+      value: function setNoWrapToggle(isNoWrapToggle) {
+        this._isNoWrapToggle = isNoWrapToggle;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperColumnHtml.prototype), "toObject", this).call(this);
+        if (this._isNoWrap !== null) {
+          result.noWrap = this._isNoWrap;
+        }
+        if (this._isNoWrapToggle !== null) {
+          result.noWrapToggle = this._isNoWrapToggle;
+        }
+        return result;
+      }
+    }]);
+  }(HelperColumn);
+
+  function _callSuper$$(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnImage = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} width
+     */
+    function HelperColumnImage(field, label, width) {
+      var _this2;
+      _classCallCheck(this, HelperColumnImage);
+      _this2 = _callSuper$$(this, HelperColumnImage, ['image']);
+      _defineProperty(_this2, "_style", null);
+      _defineProperty(_this2, "_border", null);
+      _defineProperty(_this2, "_imgWidth", null);
+      _defineProperty(_this2, "_imgHeight", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      if (width) {
+        _this2.setWidth(width);
+      }
+      _this2.setSort(false);
+      return _this2;
+    }
+
+    /**
+     * Установка стиля
+     * @param {string} style
+     * @return {HelperColumnImage}
+     */
+    _inherits(HelperColumnImage, _HelperColumn);
+    return _createClass(HelperColumnImage, [{
+      key: "setImgStyle",
+      value: function setImgStyle(style) {
+        this._style = style;
+        return this;
+      }
+
+      /**
+       * Установка наличия границ
+       * @param {boolean} border
+       * @return {HelperColumnImage}
+       */
+    }, {
+      key: "setImgBorder",
+      value: function setImgBorder(border) {
+        this._border = !!border;
+        return this;
+      }
+
+      /**
+       * Установка ширины картинки
+       * @param {int} width
+       * @return {HelperColumnImage}
+       */
+    }, {
+      key: "setImgWidth",
+      value: function setImgWidth(width) {
+        this._imgWidth = width;
+        return this;
+      }
+
+      /**
+       * Установка высоты картинки
+       * @param {int} height
+       * @return {HelperColumnImage}
+       */
+    }, {
+      key: "setImgHeight",
+      value: function setImgHeight(height) {
+        this._imgHeight = height;
+        return this;
+      }
+
+      /**
+       * Установка ширины и высоты картинки
+       * @param {int} width
+       * @param {int} height
+       * @return {HelperColumnImage}
+       */
+    }, {
+      key: "setImgSize",
+      value: function setImgSize(width, height) {
+        this._imgWidth = width;
+        this._imgHeight = height;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperColumnImage.prototype), "toObject", this).call(this);
+        if (this._style !== null) {
+          result.imgStyle = this._style;
+        }
+        if (this._border !== null) {
+          result.imgBorder = this._border;
+        }
+        if (this._imgWidth !== null) {
+          result.imgWidth = this._imgWidth;
+        }
+        if (this._imgHeight !== null) {
+          result.imgHeight = this._imgHeight;
+        }
+        return result;
+      }
+    }]);
+  }(HelperColumn);
+
+  function _callSuper$_(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnLink = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} width
+     */
+    function HelperColumnLink(field, label, width) {
+      var _this2;
+      _classCallCheck(this, HelperColumnLink);
+      _this2 = _callSuper$_(this, HelperColumnLink, ['link']);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      if (width) {
+        _this2.setWidth(width);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {boolean} isNoWrap
+     * @return {HelperColumnLink}
+     */
+    _inherits(HelperColumnLink, _HelperColumn);
+    return _createClass(HelperColumnLink, [{
+      key: "setNoWrap",
+      value: function setNoWrap(isNoWrap) {
+        this._isNoWrap = isNoWrap;
+        return this;
+      }
+
+      /**
+       * @param {boolean} isNoWrapToggle
+       * @return {HelperColumnLink}
+       */
+    }, {
+      key: "setNoWrapToggle",
+      value: function setNoWrapToggle(isNoWrapToggle) {
+        this._isNoWrapToggle = isNoWrapToggle;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperColumnLink.prototype), "toObject", this).call(this);
+        if (this._isNoWrap !== null) {
+          result.noWrap = this._isNoWrap;
+        }
+        if (this._isNoWrapToggle !== null) {
+          result.noWrapToggle = this._isNoWrapToggle;
+        }
+        return result;
+      }
+    }]);
+  }(HelperColumn);
+
+  function _callSuper$Z(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnMenu = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} width
+     */
+    function HelperColumnMenu(field, label, width) {
+      var _this2;
+      _classCallCheck(this, HelperColumnMenu);
+      _this2 = _callSuper$Z(this, HelperColumnMenu, ['menu']);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      if (width) {
+        _this2.setWidth(width);
+      }
+      _this2.setSort(false);
+      return _this2;
+    }
+    _inherits(HelperColumnMenu, _HelperColumn);
+    return _createClass(HelperColumnMenu);
+  }(HelperColumn);
+
+  function _callSuper$Y(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnMoney = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} width
+     */
+    function HelperColumnMoney(field, label, width) {
+      var _this2;
+      _classCallCheck(this, HelperColumnMoney);
+      _this2 = _callSuper$Y(this, HelperColumnMoney, ['money']);
+      _defineProperty(_this2, "_currency", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      if (width) {
+        _this2.setWidth(width);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string} currency
+     * @return {HelperColumnMoney}
+     */
+    _inherits(HelperColumnMoney, _HelperColumn);
+    return _createClass(HelperColumnMoney, [{
+      key: "setNoWrapToggle",
+      value: function setNoWrapToggle(currency) {
+        this._currency = currency;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperColumnMoney.prototype), "toObject", this).call(this);
+        if (this._currency) {
+          result.currency = this._currency;
+        }
+        return result;
+      }
+    }]);
+  }(HelperColumn);
+
+  function _callSuper$X(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnNumber = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} width
+     */
+    function HelperColumnNumber(field, label, width) {
+      var _this2;
+      _classCallCheck(this, HelperColumnNumber);
+      _this2 = _callSuper$X(this, HelperColumnNumber, ['number']);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      if (width) {
+        _this2.setWidth(width);
+      }
+      return _this2;
+    }
+    _inherits(HelperColumnNumber, _HelperColumn);
+    return _createClass(HelperColumnNumber);
+  }(HelperColumn);
+
+  function _callSuper$W(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnNumbers = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} width
+     */
+    function HelperColumnNumbers(field, label, width) {
+      var _this2;
+      _classCallCheck(this, HelperColumnNumbers);
+      _this2 = _callSuper$W(this, HelperColumnNumbers, ['numbers']);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      if (width) {
+        _this2.setWidth(width);
+      }
+      return _this2;
+    }
+    _inherits(HelperColumnNumbers, _HelperColumn);
+    return _createClass(HelperColumnNumbers);
+  }(HelperColumn);
+
+  function _callSuper$V(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnProgress = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} width
+     */
+    function HelperColumnProgress(field, label, width) {
+      var _this2;
+      _classCallCheck(this, HelperColumnProgress);
+      _this2 = _callSuper$V(this, HelperColumnProgress, ['progress']);
+      _defineProperty(_this2, "_barColor", null);
+      _defineProperty(_this2, "_showPercent", null);
+      _defineProperty(_this2, "_barWidth", null);
+      _defineProperty(_this2, "_barHeight", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      if (width) {
+        _this2.setWidth(width);
+      }
+      return _this2;
+    }
+
+    /**
+     * Установка цвета
+     * @param {string} color
+     * @return {HelperColumnProgress}
+     */
+    _inherits(HelperColumnProgress, _HelperColumn);
+    return _createClass(HelperColumnProgress, [{
+      key: "setBarColor",
+      value: function setBarColor(color) {
+        this._barColor = color;
+        return this;
+      }
+
+      /**
+       * Установка отображения процентов
+       * @param {boolean} showPercent
+       * @return {HelperColumnProgress}
+       */
+    }, {
+      key: "setShowPercent",
+      value: function setShowPercent(showPercent) {
+        this._showPercent = showPercent;
+        return this;
+      }
+
+      /**
+       * Установка ширины бара
+       * @param {string} width
+       * @return {HelperColumnProgress}
+       */
+    }, {
+      key: "setBarWidth",
+      value: function setBarWidth(width) {
+        this._barWidth = width;
+        return this;
+      }
+
+      /**
+       * Установка высоты бара
+       * @param {string} height
+       * @return {HelperColumnProgress}
+       */
+    }, {
+      key: "setBarHeight",
+      value: function setBarHeight(height) {
+        this._barHeight = height;
+        return this;
+      }
+
+      /**
+       * Установка ширины и высоты бара
+       * @param {string} width
+       * @param {string} height
+       * @return {HelperColumnProgress}
+       */
+    }, {
+      key: "setBarSize",
+      value: function setBarSize(width, height) {
+        this._barWidth = width;
+        this._barHeight = height;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperColumnProgress.prototype), "toObject", this).call(this);
+        if (this._showPercent !== null) {
+          result.showPercent = this._showPercent;
+        }
+        if (this._barColor !== null) {
+          result.barColor = this._barColor;
+        }
+        if (this._barWidth !== null) {
+          result.barWidth = this._barWidth;
+        }
+        if (this._barHeight !== null) {
+          result.barHeight = this._barHeight;
+        }
+        return result;
+      }
+    }]);
+  }(HelperColumn);
+
+  function _callSuper$U(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnSelect = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     *
+     */
+    function HelperColumnSelect() {
+      _classCallCheck(this, HelperColumnSelect);
+      return _callSuper$U(this, HelperColumnSelect, ['select']);
+    }
+    _inherits(HelperColumnSelect, _HelperColumn);
+    return _createClass(HelperColumnSelect);
+  }(HelperColumn);
+
+  function _callSuper$T(_this, derived, args) {
+    function isNativeReflectConstruct() {
+      if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+      if (Reflect.construct.sham) return false;
+      if (typeof Proxy === "function") return true;
+      try {
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      } catch (e) {
+        return false;
+      }
+    }
+    derived = _getPrototypeOf(derived);
+    return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
+  }
+  var HelperColumnSwitch = /*#__PURE__*/function (_HelperColumn) {
+    /**
+     * @param {string} field
+     * @param {string} label
+     * @param {string} width
+     */
+    function HelperColumnSwitch(field, label, width) {
+      var _this2;
+      _classCallCheck(this, HelperColumnSwitch);
+      _this2 = _callSuper$T(this, HelperColumnSwitch, ['switch']);
+      _defineProperty(_this2, "_valueY", null);
+      _defineProperty(_this2, "_valueN", null);
+      _defineProperty(_this2, "_disabled", null);
+      _defineProperty(_this2, "_onChange", null);
+      if (field) {
+        _this2.setField(field);
+      }
+      if (label) {
+        _this2.setLabel(label);
+      }
+      if (width) {
+        _this2.setWidth(width);
+      }
+      return _this2;
+    }
+
+    /**
+     * @param {string|number} valueY
+     * @return {HelperColumnSwitch}
+     */
+    _inherits(HelperColumnSwitch, _HelperColumn);
+    return _createClass(HelperColumnSwitch, [{
+      key: "setValueY",
+      value: function setValueY(valueY) {
+        this._valueY = valueY;
+        return this;
+      }
+
+      /**
+       * @param {string|number} valueN
+       * @return {HelperColumnSwitch}
+       */
+    }, {
+      key: "setValueN",
+      value: function setValueN(valueN) {
+        this._valueN = valueN;
+        return this;
+      }
+
+      /**
+       * @param {boolean} disabled
+       * @return {HelperColumnSwitch}
+       */
+    }, {
+      key: "setDisabled",
+      value: function setDisabled(disabled) {
+        this._disabled = disabled;
+        return this;
+      }
+
+      /**
+       * @param {function} onChange
+       * @return {HelperColumnSwitch}
+       */
+    }, {
+      key: "setOnChange",
+      value: function setOnChange(onChange) {
+        this._onChange = onChange;
+        return this;
+      }
+
+      /**
+       * Конвертирование в объект
+       * @return {Object}
+       */
+    }, {
+      key: "toObject",
+      value: function toObject() {
+        var result = _get(_getPrototypeOf(HelperColumnSwitch.prototype), "toObject", this).call(this);
+        if (this._valueY) {
+          result.valueY = this._valueY;
+        }
+        if (this._valueN) {
+          result.valueN = this._valueN;
+        }
+        if (this._disabled) {
+          result.disabled = this._disabled;
+        }
+        if (this._onChange) {
+          result.onChange = this._onChange;
+        }
+        return result;
+      }
+    }]);
+  }(HelperColumn);
+
+  var Table = /*#__PURE__*/function () {
+    /**
+     * Инициализация
+     * @param {Object}     options
      * @private
      */
-    function TableInstance(tableWrapper, options) {
-      _classCallCheck(this, TableInstance);
+    function Table(options) {
+      _classCallCheck(this, Table);
       _defineProperty(this, "_options", {
         id: null,
         "class": '',
@@ -2920,64 +8960,206 @@
         footer: []
       });
       _defineProperty(this, "_events", {});
-      this._tableWrapper = tableWrapper;
-      this._options = $.extend(true, {}, this._options, options);
-      this._events = {};
-      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : TableUtils.hashCode();
-      if (this._options.page > 0) {
-        this._page = this._options.page;
-      }
-      if (this._options.saveState && this._options.id) {
-        this._recordsPerPage = TablePrivate.getStorageField(this._id, 'page_size');
-      } else if (this._options.recordsPerPage > 0) {
-        this._recordsPerPage = this._options.recordsPerPage;
-      }
-      this._isRecordsRequest = this._options.hasOwnProperty('recordsRequest') && (typeof this._options.recordsRequest === 'function' || TableUtils.isObject(this._options.recordsRequest) && this._options.recordsRequest.hasOwnProperty('url') && typeof this._options.recordsRequest.url === 'string' && this._options.recordsRequest.url !== '' && this._options.recordsRequest.url !== '#');
-      if (this._isRecordsRequest) {
-        if (_typeof(this._options.recordsRequest) === 'object' && (!this._options.recordsRequest.hasOwnProperty('method') || typeof this._options.recordsRequest.method !== 'string')) {
-          this._options.recordsRequest.method = 'GET';
+      _defineProperty(this, "columns", {
+        select: function select() {
+          return new HelperColumnSelect();
+        },
+        text: function text(field, label, width) {
+          return new HelperColumnText(field, label, width);
+        },
+        badge: function badge(field, label, width) {
+          return new HelperColumnBadge(field, label, width);
+        },
+        button: function button(field, label, width) {
+          return new HelperColumnButton(field, label, width);
+        },
+        component: function component(field, label, width) {
+          return new HelperColumnComponent(field, label, width);
+        },
+        date: function date(field, label, width) {
+          return new HelperColumnDate(field, label, width);
+        },
+        datetime: function datetime(field, label, width) {
+          return new HelperColumnDatetime(field, label, width);
+        },
+        dateHuman: function dateHuman(field, label, width) {
+          return new HelperColumnDateHuman(field, label, width);
+        },
+        html: function html(field, label, width) {
+          return new HelperColumnHtml(field, label, width);
+        },
+        image: function image(field, label, width) {
+          return new HelperColumnImage(field, label, width);
+        },
+        link: function link(field, label, width) {
+          return new HelperColumnLink(field, label, width);
+        },
+        menu: function menu(field, label, width) {
+          return new HelperColumnMenu(field, label, width);
+        },
+        money: function money(field, label, width) {
+          return new HelperColumnMoney(field, label, width);
+        },
+        number: function number(field, label, width) {
+          return new HelperColumnNumber(field, label, width);
+        },
+        numbers: function numbers(field, label, width) {
+          return new HelperColumnNumbers(field, label, width);
+        },
+        progress: function progress(field, label, width) {
+          return new HelperColumnProgress(field, label, width);
+        },
+        "switch": function _switch(field, label, width) {
+          return new HelperColumnSwitch(field, label, width);
         }
-      } else if (Array.isArray(this._options.records)) {
-        TablePrivate.setRecords(this, this._options.records);
-      }
-
-      // Очистка записей после инициализации
-      this._options.records = [];
-
-      // Инициализация колонок
-      if (_typeof(this._options.columns) === 'object' && Array.isArray(this._options.columns) && this._options.columns.length > 0) {
-        TablePrivate.initColumns(tableWrapper, this, this._options.columns);
-      }
-
-      // Инициализация поисковых полей
-      if (TableUtils.isObject(this._options.search) && _typeof(this._options.search.controls) === 'object' && Array.isArray(this._options.search.controls) && this._options.search.controls.length > 0) {
-        TablePrivate.initSearch(tableWrapper, this, this._options.search.controls);
-      }
-
-      // Инициализация контролов и фильтров
-      if (this._options.hasOwnProperty('header') && Array.isArray(this._options.header) && this._options.header.length > 0) {
-        TablePrivate.initControls(tableWrapper, this, this._options.header, 'header');
-      }
-      if (this._options.hasOwnProperty('footer') && Array.isArray(this._options.footer) && this._options.footer.length > 0) {
-        TablePrivate.initControls(tableWrapper, this, this._options.footer, 'footer');
-      }
-      if (this._options.saveState && this._options.id) {
-        // Поиск по сохраненным поисковым данным
-        if (!this._isRecordsRequest) {
-          TablePrivate.searchLocalRecords(this);
+      });
+      _defineProperty(this, "controls", {
+        button: function button(content, id) {
+          return new HelperControlButton(content, id);
+        },
+        buttonGroup: function buttonGroup(id) {
+          return new HelperControlButtonGroup(id);
+        },
+        caption: function caption(title, value, id) {
+          return new HelperControlCaption(title, value, id);
+        },
+        columns: function columns(id) {
+          return new HelperControlColumns(id);
+        },
+        custom: function custom(content, id) {
+          return new HelperControlCustom(content, id);
+        },
+        divider: function divider(width, id) {
+          return new HelperControlDivider(width, id);
+        },
+        dropdown: function dropdown(content, id) {
+          return new HelperControlDropdown(content, id);
+        },
+        filterClear: function filterClear(content, id) {
+          return new HelperControlFilterClear(content, id);
+        },
+        link: function link(content, url, id) {
+          return new HelperControlLink(content, url, id);
+        },
+        pageJump: function pageJump(id) {
+          return new HelperControlPageJump(id);
+        },
+        pageSize: function pageSize(list, id) {
+          return new HelperControlPageSize(list, id);
+        },
+        pages: function pages(id) {
+          return new HelperControlPages(id);
+        },
+        search: function search(id) {
+          return new HelperControlSearch(id);
+        },
+        total: function total(id) {
+          return new HelperControlTotal(id);
         }
-
-        // Сортировка
-        var sort = TablePrivate.getStorageField(this.getId(), 'sort');
-        if (Array.isArray(sort) && sort.length > 0) {
-          TablePrivate.initSort(this, sort);
-          if (!this._isRecordsRequest && this._records.length > 0) {
-            this._records = TablePrivate.sortRecordsByFields(this._records, this._sort);
+      });
+      _defineProperty(this, "filters", {
+        text: function text(field, label, id) {
+          return new HelperFilterText(field, label, id);
+        },
+        checkbox: function checkbox(field, label, id) {
+          return new HelperFilterCheckbox(field, label, id);
+        },
+        date: function date(field, label, id) {
+          return new HelperFilterDate(field, label, id);
+        },
+        dateMonth: function dateMonth(field, label, id) {
+          return new HelperFilterDateMonth(field, label, id);
+        },
+        dateRange: function dateRange(field, label, id) {
+          return new HelperFilterDateRange(field, label, id);
+        },
+        datetime: function datetime(field, label, id) {
+          return new HelperFilterDateTime$2(field, label, id);
+        },
+        datetimeRange: function datetimeRange(field, label, id) {
+          return new HelperFilterDateTime$1(field, label, id);
+        },
+        number: function number(field, label, id) {
+          return new HelperFilterDateTime(field, label, id);
+        },
+        radio: function radio(field, label, id) {
+          return new HelperFilterRadio(field, label, id);
+        },
+        select: function select(field, label, id) {
+          return new HelperFilterSelect(field, label, id);
+        },
+        "switch": function _switch(field, label, id) {
+          return new HelperFilterSwitch(field, label, id);
+        }
+      });
+      _defineProperty(this, "search", {
+        text: function text(field, label, id) {
+          return new HelperSearchText(field, label, id);
+        },
+        checkbox: function checkbox(field, label, id) {
+          return new HelperSearchCheckbox(field, label, id);
+        },
+        checkboxBtn: function checkboxBtn(field, label, id) {
+          return new HelperSearchCheckboxBtn(field, label, id);
+        },
+        date: function date(field, label, id) {
+          return new HelperSearchDate(field, label, id);
+        },
+        dateMonth: function dateMonth(field, label, id) {
+          return new HelperSearchDateMonth(field, label, id);
+        },
+        dateRange: function dateRange(field, label, id) {
+          return new HelperSearchDateRange(field, label, id);
+        },
+        datetime: function datetime(field, label, id) {
+          return new HelperSearchDatetime(field, label, id);
+        },
+        datetimeRange: function datetimeRange(field, label, id) {
+          return new HelperSearchDatetimeRange(field, label, id);
+        },
+        number: function number(field, label, id) {
+          return new HelperSearchNumber(field, label, id);
+        },
+        radio: function radio(field, label, id) {
+          return new HelperSearchRadio(field, label, id);
+        },
+        radioBtn: function radioBtn(field, label, id) {
+          return new HelperSearchRadioBtn(field, label, id);
+        },
+        select: function select(field, label, id) {
+          return new HelperSearchSelect(field, label, id);
+        },
+        "switch": function _switch(field, label, id) {
+          return new HelperSearchSwitch(field, label, id);
+        }
+      });
+      if (options && Utils.isObject(options)) {
+        this._options = $.extend(true, {}, this._options, options);
+      }
+      if (Controller._helpers) {
+        if (Object.keys(Controller._helpers.columns).length > 0) {
+          for (var _i = 0, _Object$entries = Object.entries(Controller._helpers.columns); _i < _Object$entries.length; _i++) {
+            var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+              name = _Object$entries$_i[0],
+              helper = _Object$entries$_i[1];
+            this.columns[name] = helper;
           }
         }
-      } else {
-        if (this._options.hasOwnProperty('sort') && Array.isArray(this._options.sort) && this._options.sort.length > 0) {
-          TablePrivate.initSort(this, this._options.sort);
+        if (Object.keys(Controller._helpers.controls).length > 0) {
+          for (var _i2 = 0, _Object$entries2 = Object.entries(Controller._helpers.controls); _i2 < _Object$entries2.length; _i2++) {
+            var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
+              _name = _Object$entries2$_i[0],
+              _helper = _Object$entries2$_i[1];
+            this.controls[_name] = _helper;
+          }
+        }
+        if (Object.keys(Controller._helpers.controls).length > 0) {
+          for (var _i3 = 0, _Object$entries3 = Object.entries(Controller._helpers.controls); _i3 < _Object$entries3.length; _i3++) {
+            var _Object$entries3$_i = _slicedToArray(_Object$entries3[_i3], 2),
+              _name2 = _Object$entries3$_i[0],
+              _helper2 = _Object$entries3$_i[1];
+            this.controls[_name2] = _helper2;
+          }
         }
       }
     }
@@ -2985,7 +9167,7 @@
     /**
      * Инициализация событий таблицы
      */
-    return _createClass(TableInstance, [{
+    return _createClass(Table, [{
       key: "initEvents",
       value: function initEvents() {
         var table = this;
@@ -2994,7 +9176,7 @@
         this.on('records_show', function () {
           // Переход по ссылке
           if (typeof table._options.onClickUrl === 'string' && table._options.onClickUrl) {
-            TableElements.getTrRecords(table.getId()).click(function () {
+            Elements.getTrRecords(table.getId()).click(function () {
               var recordKey = $(this).data('record-index');
               var record = table.getRecordByIndex(recordKey);
               if (!record) {
@@ -3013,7 +9195,7 @@
 
           // Событие нажатия на строку
           if (['function', 'string'].indexOf(_typeof(table._options.onClick))) {
-            TableElements.getTrRecords(table.getId()).click(function (event) {
+            Elements.getTrRecords(table.getId()).click(function (event) {
               var recordKey = $(this).data('record-index');
               var record = table.getRecordByIndex(recordKey);
               if (!record) {
@@ -3034,7 +9216,7 @@
           }
 
           // Раскрытие строки
-          TableElements.getNoWrapToggles(table.getId()).click(function (event) {
+          Elements.getNoWrapToggles(table.getId()).click(function (event) {
             event.cancelBubble = true;
             event.preventDefault();
             var parent = $(this).parent();
@@ -3050,13 +9232,13 @@
           });
 
           // Фиксация колонок
-          TableElements.fixedColsLeft(table.getId());
-          TableElements.fixedColsRight(table.getId());
+          Elements.fixedColsLeft(table.getId());
+          Elements.fixedColsRight(table.getId());
         });
 
         // Показ таблицы
         this.on('table_show', function () {
-          var sortableColumns = TableElements.getTableSortable(table.getId());
+          var sortableColumns = Elements.getTableSortable(table.getId());
           if (sortableColumns[0]) {
             sortableColumns.click(function (event) {
               var field = $(this).data('field');
@@ -3089,7 +9271,7 @@
             });
           }
           if (window.hasOwnProperty('bootstrap') && bootstrap.hasOwnProperty('Tooltip')) {
-            $('.coreui-table__column-description', TableElements.getTableThead(table.getId())).each(function () {
+            $('.coreui-table__column-description', Elements.getTableThead(table.getId())).each(function () {
               new bootstrap.Tooltip(this);
             });
           }
@@ -3098,16 +9280,16 @@
         // События смены состояния
         if (this._options.saveState && this._options.id) {
           this.on('records_sort', function () {
-            TablePrivate.setStorageField(table.getId(), 'sort', table._sort);
+            Private.setStorageField(table.getId(), 'sort', table._sort);
           });
           this.on('search_change', function () {
-            TablePrivate.setStorageField(table.getId(), 'search', table.getSearchData());
+            Private.setStorageField(table.getId(), 'search', table.getSearchData());
           });
           this.on('filters_change', function () {
-            TablePrivate.setStorageField(table.getId(), 'filters', table.getFilterData());
+            Private.setStorageField(table.getId(), 'filters', table.getFilterData());
           });
           this.on('page_size_update', function () {
-            TablePrivate.setStorageField(table.getId(), 'page_size', table._recordsPerPage);
+            Private.setStorageField(table.getId(), 'page_size', table._recordsPerPage);
           });
           this.on('columns_change', function () {
             var columns = [];
@@ -3118,15 +9300,15 @@
                 isShow: column.isShow()
               });
             });
-            TablePrivate.setStorageField(table.getId(), 'columns', columns);
+            Private.setStorageField(table.getId(), 'columns', columns);
           });
         }
-        TablePrivate._trigger(this, 'table_show', [this]);
-        TablePrivate._trigger(this, 'container_show');
+        Private._trigger(this, 'table_show', [this]);
+        Private._trigger(this, 'container_show');
 
         // Вызов события показа строк
         if (!this._isRecordsRequest) {
-          TablePrivate._trigger(this, 'records_show', [this]);
+          Private._trigger(this, 'records_show', [this]);
         }
       }
 
@@ -3141,6 +9323,19 @@
       }
 
       /**
+       * Установка опций таблицы
+       * @param {Object} options
+       */
+    }, {
+      key: "setOptions",
+      value: function setOptions(options) {
+        if (!Utils.isObject(options)) {
+          return;
+        }
+        this._options = $.extend(true, this._options, options);
+      }
+
+      /**
        * Получение опций таблицы
        * @returns {*}
        */
@@ -3151,14 +9346,14 @@
       }
 
       /**
-       *
-       * @param element
+       * Рендер таблицы
+       * @param {HTMLElement|string} element
        * @returns {*}
        */
     }, {
       key: "render",
       value: function render(element) {
-        TablePrivate.init(this._tableWrapper, this);
+        Private.init(Controller, this);
         var that = this;
         var widthSizes = [];
         var heightSizes = [];
@@ -3205,7 +9400,7 @@
             var controlsRight = [];
             if (Array.isArray(header.left) && header.left.length > 0) {
               header.left.map(function (control) {
-                var controlRender = TableRender.renderControl(that, control);
+                var controlRender = Render.renderControl(that, control);
                 if (controlRender) {
                   controlsLeft.push(controlRender);
                 }
@@ -3213,7 +9408,7 @@
             }
             if (Array.isArray(header.center) && header.center.length > 0) {
               header.center.map(function (control) {
-                var controlRender = TableRender.renderControl(that, control);
+                var controlRender = Render.renderControl(that, control);
                 if (controlRender) {
                   controlsCenter.push(controlRender);
                 }
@@ -3221,7 +9416,7 @@
             }
             if (Array.isArray(header.right) && header.right.length > 0) {
               header.right.map(function (control) {
-                var controlRender = TableRender.renderControl(that, control);
+                var controlRender = Render.renderControl(that, control);
                 if (controlRender) {
                   controlsRight.push(controlRender);
                 }
@@ -3229,7 +9424,7 @@
             }
             if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
               if (header.type === 'in') {
-                var headerControls = $(TableUtils.render(tpl['table/controls/header.html'], {
+                var headerControls = $(Utils.render(tpl['table/controls/header.html'], {
                   controlsLeft: controlsLeft,
                   controlsCenter: controlsCenter,
                   controlsRight: controlsRight
@@ -3251,7 +9446,7 @@
                 }
                 render.headersIn.push(headerControls);
               } else {
-                var _headerControls = $(TableUtils.render(tpl['table/controls/header-out.html'], {
+                var _headerControls = $(Utils.render(tpl['table/controls/header-out.html'], {
                   controlsLeft: controlsLeft,
                   controlsCenter: controlsCenter,
                   controlsRight: controlsRight
@@ -3285,7 +9480,7 @@
             var controlsRight = [];
             if (Array.isArray(footer.left) && footer.left.length > 0) {
               $.each(footer.left, function (key, control) {
-                var controlRender = TableRender.renderControl(that, control);
+                var controlRender = Render.renderControl(that, control);
                 if (controlRender) {
                   controlsLeft.push(controlRender);
                 }
@@ -3293,7 +9488,7 @@
             }
             if (Array.isArray(footer.center) && footer.center.length > 0) {
               $.each(footer.center, function (key, control) {
-                var controlRender = TableRender.renderControl(that, control);
+                var controlRender = Render.renderControl(that, control);
                 if (controlRender) {
                   controlsCenter.push(controlRender);
                 }
@@ -3301,7 +9496,7 @@
             }
             if (Array.isArray(footer.right) && footer.right.length > 0) {
               $.each(footer.right, function (key, control) {
-                var controlRender = TableRender.renderControl(that, control);
+                var controlRender = Render.renderControl(that, control);
                 if (controlRender) {
                   controlsRight.push(controlRender);
                 }
@@ -3309,7 +9504,7 @@
             }
             if (controlsLeft.length > 0 || controlsCenter.length > 0 || controlsRight.length > 0) {
               if (footer.type === 'in') {
-                var footerControls = $(TableUtils.render(tpl['table/controls/footer.html'], {
+                var footerControls = $(Utils.render(tpl['table/controls/footer.html'], {
                   controlsLeft: controlsLeft,
                   controlsCenter: controlsCenter,
                   controlsRight: controlsRight
@@ -3331,7 +9526,7 @@
                 }
                 render.footersIn.push(footerControls);
               } else {
-                var _footerControls = $(TableUtils.render(tpl['table/controls/footer-out.html'], {
+                var _footerControls = $(Utils.render(tpl['table/controls/footer-out.html'], {
                   controlsLeft: controlsLeft,
                   controlsCenter: controlsCenter,
                   controlsRight: controlsRight
@@ -3378,8 +9573,8 @@
         if (options.hasOwnProperty('overflow') && typeof options.overflow === 'boolean' && options.overflow) {
           classesWrapper.push('overflow-x-auto');
         }
-        var tableElement = TableRender.renderTable(this);
-        var containerElement = $(TableUtils.render(tpl['container.html'], {
+        var tableElement = Render.renderTable(this);
+        var containerElement = $(Utils.render(tpl['container.html'], {
           id: this._id,
           classes: classes.length > 0 ? ' ' + classes.join(' ') : '',
           classesWrapper: classesWrapper.length > 0 ? ' ' + classesWrapper.join(' ') : '',
@@ -3400,6 +9595,7 @@
           containerElement.append(render.footersOut);
         }
         containerElement.find('.coreui-table__wrapper').html(tableElement);
+        Controller._instances[this.getId()] = this;
         if (element === undefined) {
           return containerElement;
         }
@@ -3423,9 +9619,9 @@
     }, {
       key: "lock",
       value: function lock() {
-        var container = TableElements.getContainer(this.getId());
+        var container = Elements.getContainer(this.getId());
         if (container[0] && !container.find('.coreui-table-lock')[0]) {
-          var html = TableUtils.render(tpl['table/loader.html'], {
+          var html = Utils.render(tpl['table/loader.html'], {
             lang: this.getLang()
           });
           container.prepend(html);
@@ -3438,7 +9634,7 @@
     }, {
       key: "unlock",
       value: function unlock() {
-        TableElements.getLock(this.getId()).hide(50, function () {
+        Elements.getLock(this.getId()).hide(50, function () {
           $(this).remove();
         });
       }
@@ -3457,25 +9653,25 @@
         if (url.match(/\[page\]/)) {
           url = url.replace(/\[page\]/g, this._page);
         } else {
-          var paramPage = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('page') ? this._options.requestParams.page : 'page';
+          var paramPage = Utils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('page') ? this._options.requestParams.page : 'page';
           params[paramPage] = this._page;
         }
         if (url.match(/\[count\]/)) {
           url = url.replace(/\[count\]/g, this._recordsPerPage);
         } else {
-          var paramCount = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('count') ? this._options.requestParams.count : 'count';
+          var paramCount = Utils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('count') ? this._options.requestParams.count : 'count';
           params[paramCount] = this._recordsPerPage;
         }
         if (url.match(/\[start\]/)) {
           url = url.replace(/\[start\]/g, (this._page - 1) * this._recordsPerPage + 1);
         } else {
-          var paramStart = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('start') ? this._options.requestParams.start : 'start';
+          var paramStart = Utils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('start') ? this._options.requestParams.start : 'start';
           params[paramStart] = (this._page - 1) * this._recordsPerPage + 1;
         }
         if (url.match(/\[end\]/)) {
           url = url.replace(/\[end\]/g, (this._page - 1) * this._recordsPerPage + Number(this._recordsPerPage));
         } else {
-          var paramEnd = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('end') ? this._options.requestParams.end : 'end';
+          var paramEnd = Utils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('end') ? this._options.requestParams.end : 'end';
           params[paramEnd] = (this._page - 1) * this._recordsPerPage + Number(this._recordsPerPage);
         }
         var searchData = this.getSearchData();
@@ -3486,14 +9682,14 @@
           });
         }
         if (searchData.length > 0) {
-          var paramSearch = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('search') && typeof this._options.requestParams.search === 'string' ? this._options.requestParams.search : 'search';
+          var paramSearch = Utils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('search') && typeof this._options.requestParams.search === 'string' ? this._options.requestParams.search : 'search';
           params[paramSearch] = {};
           searchData.map(function (searchItem) {
             params[paramSearch][searchItem.field] = searchItem.value;
           });
         }
         if (this._sort.length > 0) {
-          var paramSort = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('sort') && typeof this._options.requestParams.sort === 'string' ? this._options.requestParams.sort : 'sort';
+          var paramSort = Utils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('sort') && typeof this._options.requestParams.sort === 'string' ? this._options.requestParams.sort : 'sort';
           params[paramSort] = this._sort;
         }
         $.ajax({
@@ -3502,11 +9698,11 @@
           dataType: "json",
           data: params,
           beforeSend: function beforeSend(xhr) {
-            TablePrivate._trigger(that, 'records_load_start', [that, xhr]);
+            Private._trigger(that, 'records_load_start', [that, xhr]);
           },
           success: function success(result) {
             if (result.hasOwnProperty('records') && _typeof(result.records) === 'object' && Array.isArray(result.records)) {
-              var total = result.hasOwnProperty('total') && TableUtils.isNumeric(result.total) ? result.total : null;
+              var total = result.hasOwnProperty('total') && Utils.isNumeric(result.total) ? result.total : null;
               that.setRecords(result.records, total);
             } else {
               that.setRecords([]);
@@ -3514,11 +9710,11 @@
           },
           error: function error(xhr, textStatus, errorThrown) {
             that.setRecords([]);
-            TablePrivate._trigger(that, 'records_load_error', [that, xhr, textStatus, errorThrown]);
+            Private._trigger(that, 'records_load_error', [that, xhr, textStatus, errorThrown]);
           },
           complete: function complete(xhr, textStatus) {
             that.unlock();
-            TablePrivate._trigger(that, 'records_load_end', [that, xhr, textStatus]);
+            Private._trigger(that, 'records_load_end', [that, xhr, textStatus]);
           }
         });
       }
@@ -3532,10 +9728,10 @@
       value: function loadByFunction(callback) {
         var that = this;
         var params = {};
-        var paramPage = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('page') ? this._options.requestParams.page : 'page';
-        var paramCount = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('count') ? this._options.requestParams.count : 'count';
-        var paramStart = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('start') ? this._options.requestParams.start : 'start';
-        var paramEnd = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('end') ? this._options.requestParams.end : 'end';
+        var paramPage = Utils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('page') ? this._options.requestParams.page : 'page';
+        var paramCount = Utils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('count') ? this._options.requestParams.count : 'count';
+        var paramStart = Utils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('start') ? this._options.requestParams.start : 'start';
+        var paramEnd = Utils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('end') ? this._options.requestParams.end : 'end';
         params[paramCount] = this._recordsPerPage;
         params[paramPage] = this._page;
         params[paramStart] = (this._page - 1) * this._recordsPerPage + 1;
@@ -3548,14 +9744,14 @@
           });
         }
         if (searchData.length > 0) {
-          var paramSearch = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('search') && typeof this._options.requestParams.search === 'string' ? this._options.requestParams.search : 'search';
+          var paramSearch = Utils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('search') && typeof this._options.requestParams.search === 'string' ? this._options.requestParams.search : 'search';
           params[paramSearch] = {};
           searchData.map(function (searchItem) {
             params[paramSearch][searchItem.field] = searchItem.value;
           });
         }
         if (this._sort.length > 0) {
-          var paramSort = TableUtils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('sort') && typeof this._options.requestParams.sort === 'string' ? this._options.requestParams.sort : 'sort';
+          var paramSort = Utils.isObject(this._options.requestParams) && this._options.requestParams.hasOwnProperty('sort') && typeof this._options.requestParams.sort === 'string' ? this._options.requestParams.sort : 'sort';
           params[paramSort] = this._sort;
         }
         var result = callback(params, this);
@@ -3566,7 +9762,7 @@
          */
         function setRecords(data) {
           if (data.hasOwnProperty('records') && _typeof(data.records) === 'object' && Array.isArray(data.records)) {
-            var total = data.hasOwnProperty('total') && TableUtils.isNumeric(data.total) ? data.total : null;
+            var total = data.hasOwnProperty('total') && Utils.isNumeric(data.total) ? data.total : null;
             that.setRecords(data.records, total);
           } else {
             that.setRecords([]);
@@ -3606,10 +9802,10 @@
     }, {
       key: "refresh",
       value: function refresh() {
-        var table = TableRender.renderTable(this);
-        TableElements.getTable(this.getId()).replaceWith(table);
-        TablePrivate._trigger(this, 'table_show', [this]);
-        TablePrivate._trigger(this, 'records_show', [this]);
+        var table = Render.renderTable(this);
+        Elements.getTable(this.getId()).replaceWith(table);
+        Private._trigger(this, 'table_show', [this]);
+        Private._trigger(this, 'records_show', [this]);
       }
 
       /**
@@ -3620,7 +9816,7 @@
       key: "setPageSize",
       value: function setPageSize(recordsPerPage) {
         this._recordsPerPage = recordsPerPage;
-        TablePrivate._trigger(this, 'page_size_update');
+        Private._trigger(this, 'page_size_update');
       }
 
       /**
@@ -3629,8 +9825,8 @@
     }, {
       key: "selectAll",
       value: function selectAll() {
-        TableElements.selectTrAll(this.getId());
-        TablePrivate._trigger(this, 'record_select_all');
+        Elements.selectTrAll(this.getId());
+        Private._trigger(this, 'record_select_all');
       }
 
       /**
@@ -3639,8 +9835,8 @@
     }, {
       key: "unselectAll",
       value: function unselectAll() {
-        TableElements.unselectTrAll(this.getId());
-        TablePrivate._trigger(this, 'record_unselect_all');
+        Elements.unselectTrAll(this.getId());
+        Private._trigger(this, 'record_unselect_all');
       }
 
       /**
@@ -3654,12 +9850,12 @@
         if (!record) {
           return;
         }
-        var tr = TableElements.getTrByIndex(this.getId(), record.index);
+        var tr = Elements.getTrByIndex(this.getId(), record.index);
         if (tr.length === 0) {
           return;
         }
-        TableElements.selectTr(tr);
-        TablePrivate._trigger(this, 'record_select', [record]);
+        Elements.selectTr(tr);
+        Private._trigger(this, 'record_select', [record]);
       }
 
       /**
@@ -3673,12 +9869,12 @@
         if (!record) {
           return;
         }
-        var tr = TableElements.getTrByIndex(this.getId(), record.index);
+        var tr = Elements.getTrByIndex(this.getId(), record.index);
         if (tr.length === 0) {
           return;
         }
-        TableElements.selectTr(tr);
-        TablePrivate._trigger(this, 'record_select', [record]);
+        Elements.selectTr(tr);
+        Private._trigger(this, 'record_select', [record]);
       }
 
       /**
@@ -3692,12 +9888,12 @@
         if (!record) {
           return;
         }
-        var tr = TableElements.getTrByIndex(this.getId(), record.index);
+        var tr = Elements.getTrByIndex(this.getId(), record.index);
         if (!tr) {
           return;
         }
-        TableElements.unselectTr(tr);
-        TablePrivate._trigger(this, 'record_unselect', [record.data]);
+        Elements.unselectTr(tr);
+        Private._trigger(this, 'record_unselect', [record.data]);
       }
 
       /**
@@ -3710,7 +9906,7 @@
         var records = [];
         var that = this;
         var field = this._options.primaryKey;
-        $.each(TableElements.getSelectedIndexes(this.getId()), function (key, index) {
+        $.each(Elements.getSelectedIndexes(this.getId()), function (key, index) {
           var record = that.getRecordByIndex(index);
           if (!record || !record.data.hasOwnProperty(field)) {
             return;
@@ -3729,7 +9925,7 @@
       value: function getSelectedRecords() {
         var records = [];
         var that = this;
-        $.each(TableElements.getSelectedIndexes(this.getId()), function (key, index) {
+        $.each(Elements.getSelectedIndexes(this.getId()), function (key, index) {
           var record = that.getRecordByIndex(index);
           if (!record) {
             return;
@@ -3766,17 +9962,6 @@
           records.push($.extend(true, {}, record));
         });
         return records;
-      }
-
-      /**
-       * Получение данных из существующих записей
-       * @return {Array}
-       * @deprecated getRecordsData
-       */
-    }, {
-      key: "getData",
-      value: function getData() {
-        return this.getRecordsData();
       }
 
       /**
@@ -3903,7 +10088,7 @@
           }
         });
         if (isChange) {
-          TablePrivate._trigger(this, 'columns_change');
+          Private._trigger(this, 'columns_change');
           this.refresh();
         }
       }
@@ -3932,7 +10117,7 @@
           }
         });
         if (isChange) {
-          TablePrivate._trigger(this, 'columns_change');
+          Private._trigger(this, 'columns_change');
           this.refresh();
         }
       }
@@ -3961,7 +10146,7 @@
           }
         });
         if (isChange) {
-          TablePrivate._trigger(this, 'columns_change');
+          Private._trigger(this, 'columns_change');
           this.refresh();
         }
       }
@@ -4039,11 +10224,11 @@
             this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
           }
         } else {
-          TablePrivate.searchLocalRecords(this);
+          Private.searchLocalRecords(this);
           this.refresh();
         }
-        TablePrivate._trigger(this, 'filters_change', [filterData]);
-        TablePrivate._trigger(this, 'search_change', [searchData]);
+        Private._trigger(this, 'filters_change', [filterData]);
+        Private._trigger(this, 'search_change', [searchData]);
       }
 
       /**
@@ -4179,7 +10364,7 @@
         var columnsConverters = {};
         this._sort = [];
         $.each(sorting, function (key, sort) {
-          if (!TableUtils.isObject(sort) || !sort.hasOwnProperty('field') || !sort.hasOwnProperty('order') || typeof sort.field !== 'string' || typeof sort.order !== 'string' || !sort.field || !sort.order) {
+          if (!Utils.isObject(sort) || !sort.hasOwnProperty('field') || !sort.hasOwnProperty('order') || typeof sort.field !== 'string' || typeof sort.order !== 'string' || !sort.field || !sort.order) {
             return;
           }
           var columnSortable = false;
@@ -4208,13 +10393,13 @@
             } else {
               this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
             }
-            TablePrivate.setColumnsSort(this, this._sort);
+            Private.setColumnsSort(this, this._sort);
           } else {
-            this._records = TablePrivate.sortRecordsByFields(this._records, this._sort, columnsConverters);
+            this._records = Private.sortRecordsByFields(this._records, this._sort, columnsConverters);
             this.refresh();
           }
         }
-        TablePrivate._trigger(this, 'records_sort', [this]);
+        Private._trigger(this, 'records_sort', [this]);
       }
 
       /**
@@ -4230,12 +10415,12 @@
           } else {
             this.load(this._options.recordsRequest.url, this._options.recordsRequest.method);
           }
-          TablePrivate.setColumnsSort(this);
+          Private.setColumnsSort(this);
         } else {
-          this._records = TablePrivate.sortRecordsBySeq(this._records);
+          this._records = Private.sortRecordsBySeq(this._records);
           this.refresh();
         }
-        TablePrivate._trigger(this, 'records_sort', [this]);
+        Private._trigger(this, 'records_sort', [this]);
       }
 
       /**
@@ -4255,13 +10440,14 @@
         if (recordKey !== null && recordKey >= 0) {
           this._records.splice(recordKey, 1);
           var that = this;
-          var tr = TableElements.getTrByIndex(this.getId(), index);
+          var tr = Elements.getTrByIndex(this.getId(), index);
           if (tr.length >= 0) {
+            var emptyRecords = that._records.length === 0;
             tr.fadeOut('fast', function () {
               tr.remove();
-              if (that._records.length === 0) {
-                var tbody = TableElements.getTableTbody(that.getId());
-                tbody.append(TableUtils.render(tpl['table/record/empty.html'], {
+              if (emptyRecords) {
+                var tbody = Elements.getTableTbody(that.getId());
+                tbody.append(Utils.render(tpl['table/record/empty.html'], {
                   columnsCount: that._countColumnsShow,
                   lang: that.getLang()
                 }));
@@ -4280,12 +10466,12 @@
     }, {
       key: "addRecordAfterIndex",
       value: function addRecordAfterIndex(recordData, index) {
-        var tr = TableElements.getTrByIndex(this.getId(), index);
+        var tr = Elements.getTrByIndex(this.getId(), index);
         if (tr.length >= 0) {
-          var record = TablePrivate.addRecord(this, recordData, index);
+          var record = Private.addRecord(this, recordData, index);
           if (record) {
-            TableElements.getTrEmpty(this.getId()).remove();
-            tr.after(TableRender.renderRecord(this, record));
+            Elements.getTrEmpty(this.getId()).remove();
+            tr.after(Render.renderRecord(this, record));
             this._recordsNumber++;
           }
         }
@@ -4299,12 +10485,12 @@
     }, {
       key: "addRecordBeforeIndex",
       value: function addRecordBeforeIndex(recordData, index) {
-        var tr = TableElements.getTrByIndex(this.getId(), index);
+        var tr = Elements.getTrByIndex(this.getId(), index);
         if (tr.length >= 0) {
-          var record = TablePrivate.addRecordBefore(this, recordData, index);
+          var record = Private.addRecordBefore(this, recordData, index);
           if (record) {
-            TableElements.getTrEmpty(this.getId()).remove();
-            tr.before(TableRender.renderRecord(this, record));
+            Elements.getTrEmpty(this.getId()).remove();
+            tr.before(Render.renderRecord(this, record));
             this._recordsNumber++;
           }
         }
@@ -4317,12 +10503,12 @@
     }, {
       key: "addRecordFirst",
       value: function addRecordFirst(recordData) {
-        var tbody = TableElements.getTableTbody(this.getId());
+        var tbody = Elements.getTableTbody(this.getId());
         if (tbody.length >= 0) {
-          var record = TablePrivate.addRecord(this, recordData, 0);
+          var record = Private.addRecord(this, recordData, 0);
           if (record) {
-            TableElements.getTrEmpty(this.getId()).remove();
-            tbody.prepend(TableRender.renderRecord(this, record));
+            Elements.getTrEmpty(this.getId()).remove();
+            tbody.prepend(Render.renderRecord(this, record));
             this._recordsNumber++;
           }
         }
@@ -4335,12 +10521,12 @@
     }, {
       key: "addRecordLast",
       value: function addRecordLast(recordData) {
-        var tbody = TableElements.getTableTbody(this.getId());
+        var tbody = Elements.getTableTbody(this.getId());
         if (tbody.length >= 0) {
-          var record = TablePrivate.addRecord(this, recordData);
+          var record = Private.addRecord(this, recordData);
           if (record) {
-            TableElements.getTrEmpty(this.getId()).remove();
-            tbody.append(TableRender.renderRecord(this, record));
+            Elements.getTrEmpty(this.getId()).remove();
+            tbody.append(Render.renderRecord(this, record));
             this._recordsNumber++;
           }
         }
@@ -4357,18 +10543,18 @@
         if (!Array.isArray(records)) {
           return;
         }
-        this._recordsTotal = TableUtils.isNumeric(total) ? parseInt(total) : records.length;
-        TablePrivate.setRecords(this, records);
+        this._recordsTotal = Utils.isNumeric(total) ? parseInt(total) : records.length;
+        Private.setRecords(this, records);
         if (records.length > 0) {
           this._recordsNumber = this._page === 1 ? 1 : (this._page - 1) * this._recordsPerPage + 1;
         }
-        var recordsElements = TableRender.renderRecords(this, this._records);
-        var tableBody = TableElements.getTableTbody(this.getId());
+        var recordsElements = Render.renderRecords(this, this._records);
+        var tableBody = Elements.getTableTbody(this.getId());
         tableBody.html('');
         $.each(recordsElements, function (key, recordElement) {
           tableBody.append(recordElement);
         });
-        TablePrivate._trigger(this, 'records_show', [this]);
+        Private._trigger(this, 'records_show', [this]);
       }
 
       /**
@@ -4400,23 +10586,23 @@
     }, {
       key: "expandRecordContent",
       value: function expandRecordContent(recordIndex, content, isRebuild) {
-        var recordElement = TableElements.getTrByIndex(this.getId(), recordIndex);
-        var recordExpanded = TableElements.getExpandRow(recordElement);
+        var recordElement = Elements.getTrByIndex(this.getId(), recordIndex);
+        var recordExpanded = Elements.getExpandRow(recordElement);
         if (recordElement.hasClass('record-expanded')) {
           if (recordExpanded) {
             if (isRebuild === undefined || isRebuild) {
-              TableElements.removeExpandRow(recordExpanded);
+              Elements.removeExpandRow(recordExpanded);
             } else {
-              TableElements.hideExpandRow(recordExpanded);
+              Elements.hideExpandRow(recordExpanded);
             }
           }
           recordElement.removeClass('record-expanded');
-          TablePrivate._trigger(this, 'record_expand_hide', [recordIndex]);
+          Private._trigger(this, 'record_expand_hide', [recordIndex]);
         } else {
           if (recordExpanded) {
-            TableElements.showExpandRow(recordExpanded);
+            Elements.showExpandRow(recordExpanded);
             recordElement.addClass('record-expanded');
-            TablePrivate._trigger(this, 'record_expand_show', [recordIndex]);
+            Private._trigger(this, 'record_expand_show', [recordIndex]);
           } else {
             var _recordIndex = recordElement.data('record-index');
             if (typeof content === 'function') {
@@ -4424,19 +10610,19 @@
               if (callbackResult instanceof Promise) {
                 var that = this;
                 callbackResult.then(function (result) {
-                  TableElements.addExpandRow(that, recordElement, result);
-                  TablePrivate._trigger(that, 'record_expand_show', [_recordIndex]);
+                  Elements.addExpandRow(that, recordElement, result);
+                  Private._trigger(that, 'record_expand_show', [_recordIndex]);
                 })["catch"](function () {
-                  TableElements.addExpandRow(that, recordElement, '');
-                  TablePrivate._trigger(that, 'record_expand_show', [_recordIndex]);
+                  Elements.addExpandRow(that, recordElement, '');
+                  Private._trigger(that, 'record_expand_show', [_recordIndex]);
                 });
               } else {
-                TableElements.addExpandRow(this, recordElement, callbackResult);
-                TablePrivate._trigger(this, 'record_expand_show', [_recordIndex]);
+                Elements.addExpandRow(this, recordElement, callbackResult);
+                Private._trigger(this, 'record_expand_show', [_recordIndex]);
               }
             } else {
-              TableElements.addExpandRow(this, recordElement, content);
-              TablePrivate._trigger(this, 'record_expand_show', [_recordIndex]);
+              Elements.addExpandRow(this, recordElement, content);
+              Private._trigger(this, 'record_expand_show', [_recordIndex]);
             }
           }
         }
@@ -4481,33 +10667,148 @@
           });
         }, isRebuild);
       }
+
+      /**
+       * @return {Object}
+       */
+    }, {
+      key: "addHeaderOut",
+      value: function addHeaderOut() {
+        return this.addHeader('out');
+      }
+
+      /**
+       * @return {Object}
+       */
+    }, {
+      key: "addHeaderIn",
+      value: function addHeaderIn() {
+        return this.addHeader('in');
+      }
+
+      /**
+       * @param {string} type
+       * @return {ToolBox}
+       */
+    }, {
+      key: "addHeader",
+      value: function addHeader(type) {
+        if (!Array.isArray(this._options.header)) {
+          this._options.header = [];
+        }
+        var toolBox = new ToolBox(type);
+
+        //this._options.header = this._options.header.slice();
+        this._options.header.unshift(toolBox);
+        return toolBox;
+      }
+
+      /**
+       * @return {ToolBox}
+       */
+    }, {
+      key: "addFooterOut",
+      value: function addFooterOut() {
+        return this.addFooter('out');
+      }
+
+      /**
+       * @return {ToolBox}
+       */
+    }, {
+      key: "addFooterIn",
+      value: function addFooterIn() {
+        return this.addFooter('in');
+      }
+
+      /**
+       * @param {string} type
+       * @return {ToolBox}
+       */
+    }, {
+      key: "addFooter",
+      value: function addFooter(type) {
+        if (!Array.isArray(this._options.footer)) {
+          this._options.footer = [];
+        }
+        var toolBox = new ToolBox(type);
+        this._options.footer.push(toolBox);
+        return toolBox;
+      }
+
+      /**
+       *
+       * @param width
+       */
+    }, {
+      key: "setSearchLabelWidth",
+      value: function setSearchLabelWidth(width) {
+        if (!Utils.isObject(this._options.search)) {
+          this._options.search = {};
+        }
+        this._options.search.labelWidth = width;
+      }
+
+      /**
+       * @param {Array} fields
+       */
+    }, {
+      key: "addSearch",
+      value: function addSearch(fields) {
+        if (Array.isArray(fields) && fields.length > 0) {
+          var that = this;
+          fields.map(function (field, i) {
+            if (field instanceof Search) {
+              that._options.search.controls.push(field.toObject());
+            } else if (Utils.isObject(field)) {
+              that._options.search.controls.push(field);
+            }
+          });
+        }
+      }
+
+      /**
+       * @param {Array} columns
+       */
+    }, {
+      key: "addColumns",
+      value: function addColumns(columns) {
+        if (Array.isArray(columns) && columns.length > 0) {
+          var that = this;
+          columns.map(function (column, i) {
+            if (column instanceof Column) {
+              that._options.columns.push(column.toObject());
+            } else if (Utils.isObject(column)) {
+              that._options.columns.push(column);
+            }
+          });
+        }
+      }
     }]);
   }();
 
-  var Table = {
+  var Controller = {
     columns: {},
     controls: {},
     filters: {},
     search: {},
     lang: {},
+    _helpers: {
+      columns: {},
+      controls: {},
+      filters: {},
+      search: {}
+    },
     _instances: {},
     _settings: {
       lang: 'en'
     },
     /**
      * @param {object} options
-     * @returns {object}
+     * @returns {Table}
      */
     create: function create(options) {
-      if (!options.hasOwnProperty('lang') || typeof options.lang !== 'string') {
-        options.lang = this.getSetting('lang');
-      }
-      var langItems = this.lang.hasOwnProperty(options.lang) ? this.lang[options.lang] : {};
-      options.langItems = options.hasOwnProperty('langItems') && TableUtils.isObject(options.langItems) ? $.extend(true, {}, langItems, options.langItems) : langItems;
-      var instance = new TableInstance(this, options instanceof Object ? options : {});
-      var tableId = instance.getId();
-      this._instances[tableId] = instance;
-      return instance;
+      return new Table(options instanceof Object ? options : {});
     },
     /**
      * @param {string} id
@@ -4540,6 +10841,54 @@
         value = this._settings[name];
       }
       return value;
+    },
+    /**
+     * Регистрация нового типа колонки
+     * @param {string}       type
+     * @param {Class|Object} column
+     * @param {function}     callbackHelper
+     */
+    regColumn: function regColumn(type, column, callbackHelper) {
+      this.columns[type] = column;
+      if (typeof callbackHelper === 'function') {
+        this._helpers.columns[type] = callbackHelper;
+      }
+    },
+    /**
+     * Регистрация нового типа контрола
+     * @param {string}       type
+     * @param {Class|Object} control
+     * @param {function}     callbackHelper
+     */
+    regControl: function regControl(type, control, callbackHelper) {
+      this.controls[type] = control;
+      if (typeof callbackHelper === 'function') {
+        this._helpers.controls[type] = callbackHelper;
+      }
+    },
+    /**
+     * Регистрация нового типа фильтров
+     * @param {string}       type
+     * @param {Class|Object} filter
+     * @param {function}     callbackHelper
+     */
+    regFilter: function regFilter(type, filter, callbackHelper) {
+      this.filters[type] = filter;
+      if (typeof callbackHelper === 'function') {
+        this._helpers.filters[type] = callbackHelper;
+      }
+    },
+    /**
+     * Регистрация нового типа поиска
+     * @param {string}       type
+     * @param {Class|Object} search
+     * @param {function}     callbackHelper
+     */
+    regSearch: function regSearch(type, search, callbackHelper) {
+      this.search[type] = search;
+      if (typeof callbackHelper === 'function') {
+        this._helpers.search[type] = callbackHelper;
+      }
     }
   };
 
@@ -4589,7 +10938,7 @@
       });
       this._table = table;
       this._options = $.extend(true, this._options, options);
-      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : TableUtils.hashCode();
+      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : Utils.hashCode();
     }
 
     /**
@@ -4641,7 +10990,7 @@
   var ControlLink = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function ControlLink(table, options) {
@@ -4674,7 +11023,7 @@
             }
           });
         }
-        var link = $(TableUtils.render(tpl['controls/link.html'], {
+        var link = $(Utils.render(tpl['controls/link.html'], {
           url: this._options.url,
           content: this._options.content,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
@@ -4716,7 +11065,7 @@
   var ControlButton = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function ControlButton(table, options) {
@@ -4742,14 +11091,14 @@
       key: "render",
       value: function render() {
         var attributes = [];
-        if (TableUtils.isObject(this._options.attr)) {
+        if (Utils.isObject(this._options.attr)) {
           $.each(this._options.attr, function (name, value) {
             if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
               attributes.push(name + '="' + value + '"');
             }
           });
         }
-        var btn = $(TableUtils.render(tpl['controls/button.html'], {
+        var btn = $(Utils.render(tpl['controls/button.html'], {
           content: this._options.content,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
@@ -4791,7 +11140,7 @@
   var ControlDropdown = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function ControlDropdown(table, options) {
@@ -4823,10 +11172,10 @@
         var attributes = [];
         if (Array.isArray(options.items)) {
           options.items.map(function (item) {
-            if (TableUtils.isObject(item) && typeof item.type === 'string') {
+            if (Utils.isObject(item) && typeof item.type === 'string') {
               if (item.type === 'link') {
                 if (item.hasOwnProperty('url') && item.hasOwnProperty('content') && typeof item.url === 'string' && typeof item.content === 'string') {
-                  var link = TableUtils.render(tpl['controls/dropdown/link.html'], {
+                  var link = Utils.render(tpl['controls/dropdown/link.html'], {
                     url: item.url,
                     content: item.content
                   });
@@ -4834,7 +11183,7 @@
                 }
               } else if (item.type === 'button') {
                 if (item.hasOwnProperty('content') && typeof item.content === 'string') {
-                  var button = $(TableUtils.render(tpl['controls/dropdown/button.html'], {
+                  var button = $(Utils.render(tpl['controls/dropdown/button.html'], {
                     url: item.url,
                     content: item.content
                   }));
@@ -4861,7 +11210,7 @@
             }
           });
         }
-        if (TableUtils.isObject(options.attr)) {
+        if (Utils.isObject(options.attr)) {
           if (options.attr.hasOwnProperty('type')) {
             delete options.attr.type;
           }
@@ -4875,7 +11224,7 @@
             attributes.push(name + '="' + value + '"');
           });
         }
-        var dropdown = $(TableUtils.render(tpl['controls/dropdown.html'], {
+        var dropdown = $(Utils.render(tpl['controls/dropdown.html'], {
           content: options.content,
           position: options.hasOwnProperty('position') && typeof options.position === 'string' ? options.position : 'end',
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
@@ -4908,7 +11257,7 @@
   var ControlButtonGroup = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function ControlButtonGroup(table, options) {
@@ -4958,7 +11307,7 @@
             var result = null;
             if (link.hasOwnProperty('url') && link.hasOwnProperty('content') && typeof link.url === 'string' && typeof link.content === 'string') {
               var attributes = [];
-              if (!TableUtils.isObject(link.attr)) {
+              if (!Utils.isObject(link.attr)) {
                 link.attr = {};
               }
               if (link.attr.hasOwnProperty('href')) {
@@ -4972,7 +11321,7 @@
                   attributes.push(name + '="' + value + '"');
                 }
               });
-              result = TableUtils.render(tpl['controls/button_group/link.html'], {
+              result = Utils.render(tpl['controls/button_group/link.html'], {
                 url: link.url,
                 attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
                 content: link.content
@@ -4988,7 +11337,7 @@
             var result = null;
             if (button.hasOwnProperty('content') && typeof button.content === 'string') {
               var attributes = [];
-              if (!TableUtils.isObject(button.attr)) {
+              if (!Utils.isObject(button.attr)) {
                 button.attr = {};
               }
               if (button.attr.hasOwnProperty('type')) {
@@ -5002,7 +11351,7 @@
                   attributes.push(name + '="' + value + '"');
                 }
               });
-              result = $(TableUtils.render(tpl['controls/button_group/button.html'], {
+              result = $(Utils.render(tpl['controls/button_group/button.html'], {
                 content: button.content,
                 attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
               }));
@@ -5034,17 +11383,17 @@
               var attributes = [];
               var items = [];
               button.items.map(function (item) {
-                if (TableUtils.isObject(item) && typeof item.type === 'string') {
+                if (Utils.isObject(item) && typeof item.type === 'string') {
                   if (item.type === 'link') {
                     if (item.hasOwnProperty('url') && item.hasOwnProperty('content') && typeof item.url === 'string' && typeof item.content === 'string' && item.url) {
-                      items.push(TableUtils.render(tpl['controls/button_group/dropdown/link.html'], {
+                      items.push(Utils.render(tpl['controls/button_group/dropdown/link.html'], {
                         url: item.url,
                         content: item.content
                       }));
                     }
                   } else if (item.type === 'button') {
                     if (item.hasOwnProperty('content') && typeof item.content === 'string') {
-                      var btn = $(TableUtils.render(tpl['controls/button_group/dropdown/button.html'], {
+                      var btn = $(Utils.render(tpl['controls/button_group/dropdown/button.html'], {
                         content: item.content
                       }));
                       if (item.hasOwnProperty('onClick') && ['string', 'function'].indexOf(_typeof(item.onClick)) >= 0) {
@@ -5069,7 +11418,7 @@
                   }
                 }
               });
-              if (!TableUtils.isObject(button.attr)) {
+              if (!Utils.isObject(button.attr)) {
                 button.attr = {};
               }
               if (button.attr.hasOwnProperty('type')) {
@@ -5083,7 +11432,7 @@
                   attributes.push(name + '="' + value + '"');
                 }
               });
-              result = $(TableUtils.render(tpl['controls/button_group/dropdown.html'], {
+              result = $(Utils.render(tpl['controls/button_group/dropdown.html'], {
                 attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
                 position: button.hasOwnProperty('position') && typeof button.position === 'string' ? button.position : 'end',
                 content: button.content
@@ -5098,7 +11447,7 @@
             return result;
           };
           options.buttons.map(function (button) {
-            if (TableUtils.isObject(button) && typeof button.type === 'string') {
+            if (Utils.isObject(button) && typeof button.type === 'string') {
               if (button.type === 'link') {
                 var linkElement = makeLink(button);
                 if (linkElement) {
@@ -5144,7 +11493,7 @@
   var ControlCustom = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function ControlCustom(table, options) {
@@ -5194,7 +11543,7 @@
   var ControlPageSize = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function ControlPageSize(table, options) {
@@ -5208,8 +11557,8 @@
         },
         list: [25, 50, 100, 1000]
       };
-      if (options.hasOwnProperty('attr') && TableUtils.isObject(options.attr)) {
-        options.attr = TableUtils.mergeAttr(optionsOriginal.attr, options.attr);
+      if (options.hasOwnProperty('attr') && Utils.isObject(options.attr)) {
+        options.attr = Utils.mergeAttr(optionsOriginal.attr, options.attr);
       }
       options = $.extend(true, optionsOriginal, options);
       _this2 = _callSuper$N(this, ControlPageSize, [table, options]);
@@ -5232,14 +11581,14 @@
       value: function render() {
         var attributes = [];
         var table = this._table;
-        if (TableUtils.isObject(this._options.attr)) {
+        if (Utils.isObject(this._options.attr)) {
           $.each(this._options.attr, function (name, value) {
             if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
               attributes.push(name + '="' + value + '"');
             }
           });
         }
-        var control = $(TableUtils.render(tpl['controls/page-size.html'], {
+        var control = $(Utils.render(tpl['controls/page-size.html'], {
           recordsPerPageList: this._options.list,
           recordsPerPage: table._recordsPerPage,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
@@ -5275,7 +11624,7 @@
   var ControlPageJump = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function ControlPageJump(table, options) {
@@ -5287,8 +11636,8 @@
           "class": 'input-group'
         }
       };
-      if (options.hasOwnProperty('attr') && TableUtils.isObject(options.attr)) {
-        options.attr = TableUtils.mergeAttr(optionsOriginal.attr, options.attr);
+      if (options.hasOwnProperty('attr') && Utils.isObject(options.attr)) {
+        options.attr = Utils.mergeAttr(optionsOriginal.attr, options.attr);
       }
       options = $.extend(true, optionsOriginal, options);
       return _callSuper$M(this, ControlPageJump, [table, options]);
@@ -5304,14 +11653,14 @@
       value: function render() {
         var attributes = [];
         var table = this._table;
-        if (TableUtils.isObject(this._options.attr)) {
+        if (Utils.isObject(this._options.attr)) {
           $.each(this._options.attr, function (name, value) {
             if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
               attributes.push(name + '="' + value + '"');
             }
           });
         }
-        var control = $(TableUtils.render(tpl['controls/page-jump.html'], {
+        var control = $(Utils.render(tpl['controls/page-jump.html'], {
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
         var input = $('input', control);
@@ -5332,7 +11681,7 @@
   var controlPages = {
     /**
      * Формирование контрола
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {object}              options
      * @return {jQuery}
      */
@@ -5346,14 +11695,14 @@
       var showPageLast = false;
       var pages = [];
       var pagesTotal = table._recordsTotal > 0 && table._recordsPerPage > 0 ? Math.ceil(table._recordsTotal / table._recordsPerPage) : 1;
-      if (TableUtils.isObject(options.attr)) {
+      if (Utils.isObject(options.attr)) {
         $.each(options.attr, function (name, value) {
           if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
             attributes.push(name + '="' + value + '"');
           }
         });
       }
-      if (table._recordsTotal > 0 && options.count > 0 && TableUtils.isNumeric(options.count)) {
+      if (table._recordsTotal > 0 && options.count > 0 && Utils.isNumeric(options.count)) {
         var count = Math.min(options.count, pagesTotal);
         var countHalf = Math.max(0, Math.floor(count / 2));
         if (count % 2 === 0) {
@@ -5385,7 +11734,7 @@
           showPageLast = true;
         }
       }
-      var control = $(TableUtils.render(tpl['controls/pages.html'], {
+      var control = $(Utils.render(tpl['controls/pages.html'], {
         currentPage: table._page,
         isActivePrev: table._page > 1,
         isActiveNext: table._page < pagesTotal,
@@ -5448,7 +11797,7 @@
   var ControlPages = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}        options
      */
     function ControlPages(table, options) {
@@ -5464,8 +11813,8 @@
           "class": 'pagination mb-0'
         }
       };
-      if (options.hasOwnProperty('attr') && TableUtils.isObject(options.attr)) {
-        options.attr = TableUtils.mergeAttr(optionsOriginal.attr, options.attr);
+      if (options.hasOwnProperty('attr') && Utils.isObject(options.attr)) {
+        options.attr = Utils.mergeAttr(optionsOriginal.attr, options.attr);
       }
       options = $.extend(true, optionsOriginal, options);
       _this2 = _callSuper$L(this, ControlPages, [table, options]);
@@ -5512,7 +11861,7 @@
   var ControlTotal = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function ControlTotal(table, options) {
@@ -5523,8 +11872,8 @@
           "class": 'px-1'
         }
       };
-      if (options.hasOwnProperty('attr') && TableUtils.isObject(options.attr)) {
-        options.attr = TableUtils.mergeAttr(optionsOriginal.attr, options.attr);
+      if (options.hasOwnProperty('attr') && Utils.isObject(options.attr)) {
+        options.attr = Utils.mergeAttr(optionsOriginal.attr, options.attr);
       }
       options = $.extend(true, optionsOriginal, options);
       return _callSuper$K(this, ControlTotal, [table, options]);
@@ -5540,14 +11889,14 @@
       value: function render() {
         var attributes = [];
         var table = this._table;
-        if (TableUtils.isObject(this._options.attr)) {
+        if (Utils.isObject(this._options.attr)) {
           $.each(this._options.attr, function (name, value) {
             if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
               attributes.push(name + '="' + value + '"');
             }
           });
         }
-        var control = $(TableUtils.render(tpl['controls/total.html'], {
+        var control = $(Utils.render(tpl['controls/total.html'], {
           recordsTotal: table._recordsTotal,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
           lang: table.getLang()
@@ -5577,7 +11926,7 @@
   var ControlSearch = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function ControlSearch(table, options) {
@@ -5604,19 +11953,19 @@
         }
       }, options);
       _this2 = _callSuper$J(this, ControlSearch, [table, options]);
-      if (!TableUtils.isObject(_this2._options.btn)) {
+      if (!Utils.isObject(_this2._options.btn)) {
         _this2._options.btn = {};
       }
       if (!_this2._options.btn.hasOwnProperty('content') || typeof _this2._options.btn.content !== 'string') {
         _this2._options.btn.content = '<i class="bi bi-search"></i> ' + table.getLang().search;
       }
-      if (!TableUtils.isObject(_this2._options.btnClear)) {
+      if (!Utils.isObject(_this2._options.btnClear)) {
         _this2._options.btnClear = {};
       }
       if (!_this2._options.btnClear.hasOwnProperty('content') || typeof _this2._options.btnClear.content !== 'string') {
         _this2._options.btnClear.content = table.getLang().clear;
       }
-      if (!TableUtils.isObject(_this2._options.btnComplete)) {
+      if (!Utils.isObject(_this2._options.btnComplete)) {
         _this2._options.btnComplete = {};
       }
       if (!_this2._options.btnComplete.hasOwnProperty('content') || typeof _this2._options.btnComplete.content !== 'string') {
@@ -5638,10 +11987,10 @@
         var btnClear = '';
         var that = this;
         var table = this._table;
-        if (!TableUtils.isObject(this._options.btn)) {
+        if (!Utils.isObject(this._options.btn)) {
           this._options.btn = {};
         }
-        if (!TableUtils.isObject(this._options.btn.attr)) {
+        if (!Utils.isObject(this._options.btn.attr)) {
           this._options.btn.attr = {};
         }
         if (!this._options.btn.attr.hasOwnProperty('class') || typeof this._options.btn.attr["class"] !== 'string') {
@@ -5658,7 +12007,7 @@
         if (this._table.getSearchData().length > 0) {
           btnClear = this._renderBtnClear();
         }
-        var control = $(TableUtils.render(tpl['controls/search.html'], {
+        var control = $(Utils.render(tpl['controls/search.html'], {
           btnContent: btnContent,
           btnAttr: btnAttr.length > 0 ? ' ' + btnAttr.join(' ') : '',
           btnClear: btnClear
@@ -5666,8 +12015,8 @@
         var buttonToggle = control.find('.btn-search-toggle');
         var buttonClear = control.find('.btn-clear');
         buttonToggle.click(function () {
-          var container = TableElements.getSearchContainer(table.getId());
-          var columnsContainer = TableElements.getColumnsContainer(table.getId());
+          var container = Elements.getSearchContainer(table.getId());
+          var columnsContainer = Elements.getColumnsContainer(table.getId());
           if (columnsContainer[0]) {
             columnsContainer.hide();
           }
@@ -5683,7 +12032,7 @@
               var options = searchControl.getOptions();
               if (options.hasOwnProperty('field') && typeof options.field === 'string' && options.field) {
                 var descriptionLabel = options.hasOwnProperty('descriptionLabel') && options.descriptionLabel ? options.descriptionLabel : null;
-                var controlContainer = $(TableUtils.render(tpl['controls/search/control.html'], {
+                var controlContainer = $(Utils.render(tpl['controls/search/control.html'], {
                   labelWidth: labelWidth + (typeof labelWidth === 'number' ? 'px' : ''),
                   descriptionLabel: descriptionLabel,
                   label: options.hasOwnProperty('label') && typeof options.label === 'string' ? options.label : '',
@@ -5694,10 +12043,10 @@
                 controls.push(controlContainer);
               }
             });
-            if (!TableUtils.isObject(that._options.btnComplete)) {
+            if (!Utils.isObject(that._options.btnComplete)) {
               that._options.btnComplete = {};
             }
-            if (!TableUtils.isObject(that._options.btnComplete.attr)) {
+            if (!Utils.isObject(that._options.btnComplete.attr)) {
               that._options.btnComplete.attr = {};
             }
             if (that._options.btnComplete.attr.hasOwnProperty('type')) {
@@ -5708,7 +12057,7 @@
             } else {
               that._options.btnComplete.attr["class"] += ' btn-complete';
             }
-            if (TableUtils.isObject(that._options.btnComplete.attr)) {
+            if (Utils.isObject(that._options.btnComplete.attr)) {
               $.each(that._options.btnComplete.attr, function (name, value) {
                 if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
                   btnCompleteAttr.push(name + '="' + value + '"');
@@ -5718,14 +12067,14 @@
             if (typeof that._options.btnComplete.content === 'string') {
               btnCompleteContent = that._options.btnComplete.content;
             }
-            var searchContainer = $(TableUtils.render(tpl['controls/search/container.html'], {
+            var searchContainer = $(Utils.render(tpl['controls/search/container.html'], {
               labelWidth: labelWidth + (typeof labelWidth === 'number' ? 'px' : ''),
               btnCompleteAttr: btnCompleteAttr.length > 0 ? ' ' + btnCompleteAttr.join(' ') : '',
               btnCompleteContent: btnCompleteContent
             }));
             $('.btn-complete', searchContainer).click(function () {
               table.searchRecords();
-              var container = TableElements.getSearchContainer(table.getId());
+              var container = Elements.getSearchContainer(table.getId());
               if (container[0]) {
                 container.fadeOut(200);
               }
@@ -5736,13 +12085,13 @@
                 searchControls.append(control);
               });
             }
-            var wrapper = TableElements.getWrapper(table.getId());
+            var wrapper = Elements.getWrapper(table.getId());
             wrapper.before(searchContainer);
           }
         });
         buttonClear.click(function () {
           table.clearSearch();
-          var container = TableElements.getSearchContainer(table.getId());
+          var container = Elements.getSearchContainer(table.getId());
           if (container[0]) {
             container.fadeOut('fast');
           }
@@ -5755,7 +12104,7 @@
               var _btnClear = $(that._renderBtnClear());
               _btnClear.click(function () {
                 table.clearSearch();
-                var container = TableElements.getSearchContainer(table.getId());
+                var container = Elements.getSearchContainer(table.getId());
                 if (container[0]) {
                   container.fadeOut('fast');
                 }
@@ -5765,7 +12114,7 @@
             }
           } else {
             buttonClear.remove();
-            var container = TableElements.getSearchContainer(table.getId());
+            var container = Elements.getSearchContainer(table.getId());
             if (container[0]) {
               container.fadeOut('fast');
             }
@@ -5783,10 +12132,10 @@
       value: function _renderBtnClear() {
         var attributes = [];
         var content = '';
-        if (!TableUtils.isObject(this._options.btnClear)) {
+        if (!Utils.isObject(this._options.btnClear)) {
           this._options.btnClear = {};
         }
-        if (!TableUtils.isObject(this._options.btnClear.attr)) {
+        if (!Utils.isObject(this._options.btnClear.attr)) {
           this._options.btnClear.attr = {};
         }
         if (!this._options.btnClear.attr.hasOwnProperty('class') || typeof this._options.btnClear.attr["class"] !== 'string') {
@@ -5800,7 +12149,7 @@
         if (typeof this._options.btnClear.content === 'string') {
           content = this._options.btnClear.content;
         }
-        return TableUtils.render(tpl['controls/search/clear.html'], {
+        return Utils.render(tpl['controls/search/clear.html'], {
           content: content,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         });
@@ -5825,7 +12174,7 @@
   var ControlColumns = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function ControlColumns(table, options) {
@@ -5848,13 +12197,13 @@
         }
       }, options);
       _this2 = _callSuper$I(this, ControlColumns, [table, options]);
-      if (!TableUtils.isObject(_this2._options.btn)) {
+      if (!Utils.isObject(_this2._options.btn)) {
         _this2._options.btn = {};
       }
-      if (!TableUtils.isObject(_this2._options.btnComplete)) {
+      if (!Utils.isObject(_this2._options.btnComplete)) {
         _this2._options.btnComplete = {};
       }
-      if (TableUtils.isObject(_this2._options.btnComplete) && typeof _this2._options.btnComplete.content !== 'string') {
+      if (Utils.isObject(_this2._options.btnComplete) && typeof _this2._options.btnComplete.content !== 'string') {
         _this2._options.btnComplete.content = table.getLang().complete;
       }
       return _this2;
@@ -5871,20 +12220,20 @@
         var that = this;
         var table = this._table;
         var attributes = [];
-        if (TableUtils.isObject(this._options.btn.attr)) {
+        if (Utils.isObject(this._options.btn.attr)) {
           $.each(this._options.btn.attr, function (name, value) {
             if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
               attributes.push(name + '="' + value + '"');
             }
           });
         }
-        var btn = $(TableUtils.render(tpl['controls/columns.html'], {
+        var btn = $(Utils.render(tpl['controls/columns.html'], {
           btnContent: this._options.btn.content,
           btnAttr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
         btn.click(function () {
-          var container = TableElements.getColumnsContainer(table.getId());
-          var containerSearch = TableElements.getSearchContainer(table.getId());
+          var container = Elements.getColumnsContainer(table.getId());
+          var containerSearch = Elements.getSearchContainer(table.getId());
           if (containerSearch[0]) {
             containerSearch.hide();
           }
@@ -5895,7 +12244,7 @@
             var showAll = true;
             var btnCompleteAttr = [];
             var btnCompleteContent = '';
-            var wrapper = TableElements.getWrapper(table.getId());
+            var wrapper = Elements.getWrapper(table.getId());
             table._columns.map(function (column) {
               var options = column.getOptions();
               if (options.hasOwnProperty('field') && typeof options.field === 'string' && options.field) {
@@ -5911,10 +12260,10 @@
               }
             });
             var options = that.getOptions();
-            if (!TableUtils.isObject(options.btnComplete)) {
+            if (!Utils.isObject(options.btnComplete)) {
               options.btnComplete = {};
             }
-            if (!TableUtils.isObject(options.btnComplete.attr)) {
+            if (!Utils.isObject(options.btnComplete.attr)) {
               options.btnComplete.attr = {};
             }
             if (options.btnComplete.attr.hasOwnProperty('type')) {
@@ -5925,7 +12274,7 @@
             } else {
               options.btnComplete.attr["class"] += ' btn-complete';
             }
-            if (TableUtils.isObject(options.btnComplete.attr)) {
+            if (Utils.isObject(options.btnComplete.attr)) {
               $.each(options.btnComplete.attr, function (name, value) {
                 if (['string', 'number'].indexOf(_typeof(value)) >= 0) {
                   btnCompleteAttr.push(name + '="' + value + '"');
@@ -5935,7 +12284,7 @@
             if (typeof options.btnComplete.content === 'string') {
               btnCompleteContent = options.btnComplete.content;
             }
-            var containerList = $(TableUtils.render(tpl['controls/columns/list.html'], {
+            var containerList = $(Utils.render(tpl['controls/columns/list.html'], {
               showAll: showAll,
               columns: columns,
               btnCompleteAttr: btnCompleteAttr.length > 0 ? ' ' + btnCompleteAttr.join(' ') : '',
@@ -5978,7 +12327,7 @@
   var ControlCaption = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function ControlCaption(table, options) {
@@ -6001,7 +12350,7 @@
     return _createClass(ControlCaption, [{
       key: "render",
       value: function render() {
-        return TableUtils.render(tpl['controls/caption.html'], {
+        return Utils.render(tpl['controls/caption.html'], {
           title: this._options.title,
           description: this._options.description,
           value: this._options.value
@@ -6027,7 +12376,7 @@
   var ControlFilterClear = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function ControlFilterClear(table, options) {
@@ -6058,7 +12407,7 @@
       value: function render() {
         var options = this.getOptions();
         var table = this._table;
-        if (!TableUtils.isObject(options.attr)) {
+        if (!Utils.isObject(options.attr)) {
           options.attr = {};
         }
         if (options.attr.hasOwnProperty('type')) {
@@ -6078,7 +12427,7 @@
             attr.push(name + '="' + value + '"');
           }
         });
-        var button = $(TableUtils.render(tpl['controls/filter_clear.html'], {
+        var button = $(Utils.render(tpl['controls/filter_clear.html'], {
           attr: attr.length > 0 ? ' ' + attr.join(' ') : '',
           content: options.content ? options.content : ''
         }));
@@ -6114,7 +12463,7 @@
   var ControlDivider = /*#__PURE__*/function (_Control) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function ControlDivider(table, options) {
@@ -6140,7 +12489,7 @@
       key: "render",
       value: function render() {
         var attributes = [];
-        this._options.attr = TableUtils.mergeAttr(this._options.attr, {
+        this._options.attr = Utils.mergeAttr(this._options.attr, {
           style: 'width:' + this._options.width + 'px'
         });
         $.each(this._options.attr, function (name, value) {
@@ -6148,7 +12497,7 @@
             attributes.push(name + '="' + value + '"');
           }
         });
-        return TableUtils.render(tpl['controls/divider.html'], {
+        return Utils.render(tpl['controls/divider.html'], {
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
           text: typeof this._options.text === 'string' && this._options.text !== '' ? this._options.text : ''
         });
@@ -6175,7 +12524,7 @@
       });
       this._table = table;
       this._options = $.extend(true, this._options, options);
-      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : TableUtils.hashCode();
+      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : Utils.hashCode();
     }
 
     /**
@@ -6266,7 +12615,7 @@
   var FilterText = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function FilterText(table, options) {
@@ -6337,10 +12686,10 @@
       value: function render() {
         var options = this.getOptions();
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        if (!TableUtils.isObject(options.attr)) {
+        if (!Utils.isObject(options.attr)) {
           options.attr = {};
         }
-        if (options.hasOwnProperty('width') && TableUtils.isNumeric(options.width)) {
+        if (options.hasOwnProperty('width') && Utils.isNumeric(options.width)) {
           if (options.attr.hasOwnProperty('style')) {
             options.attr['style'] += ';width:' + options.width + 'px';
           } else {
@@ -6351,10 +12700,10 @@
         if (options.attr.hasOwnProperty('type')) {
           delete options.attr.type;
         }
-        if (!TableUtils.isObject(options.btn)) {
+        if (!Utils.isObject(options.btn)) {
           options.btn = {};
         }
-        if (!TableUtils.isObject(options.btn.attr)) {
+        if (!Utils.isObject(options.btn.attr)) {
           options.btn.attr = {};
         }
         if (options.btn.attr.hasOwnProperty('type')) {
@@ -6369,7 +12718,7 @@
         $.each(options.btn.attr, function (name, value) {
           attrBtn.push(name + '="' + value + '"');
         });
-        this._control = $(TableUtils.render(tpl['filters/text.html'], {
+        this._control = $(Utils.render(tpl['filters/text.html'], {
           attr: attr.length > 0 ? ' ' + attr.join(' ') : '',
           label: label,
           btnAttr: attrBtn.length > 0 ? ' ' + attrBtn.join(' ') : '',
@@ -6407,7 +12756,7 @@
   var FilterNumber = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function FilterNumber(table, options) {
@@ -6446,7 +12795,7 @@
       key: "setValue",
       value: function setValue(value) {
         if (value) {
-          if (!TableUtils.isObject(value)) {
+          if (!Utils.isObject(value)) {
             return;
           }
           var numberStart = null;
@@ -6474,7 +12823,7 @@
           if (this._value === null) {
             inputStart.val('');
             inputEnd.val('');
-          } else if (TableUtils.isObject(this._value)) {
+          } else if (Utils.isObject(this._value)) {
             inputStart.val(_typeof(this._value.start) !== null ? this._value.start : '');
             inputEnd.val(_typeof(this._value.end) !== null ? this._value.end : '');
           }
@@ -6515,7 +12864,7 @@
     }, {
       key: "filter",
       value: function filter(fieldValue, searchValue) {
-        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !TableUtils.isObject(searchValue) || ['string', 'number'].indexOf(_typeof(searchValue.start)) < 0 && ['string', 'number'].indexOf(_typeof(searchValue.end)) < 0) {
+        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !Utils.isObject(searchValue) || ['string', 'number'].indexOf(_typeof(searchValue.start)) < 0 && ['string', 'number'].indexOf(_typeof(searchValue.end)) < 0) {
           return false;
         }
         var issetStart = ['string', 'number'].indexOf(_typeof(searchValue.start)) >= 0;
@@ -6538,10 +12887,10 @@
       value: function render() {
         var options = this.getOptions();
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        if (!TableUtils.isObject(options.attr)) {
+        if (!Utils.isObject(options.attr)) {
           options.attr = {};
         }
-        if (options.hasOwnProperty('width') && TableUtils.isNumeric(options.width)) {
+        if (options.hasOwnProperty('width') && Utils.isNumeric(options.width)) {
           if (options.attr.hasOwnProperty('style')) {
             options.attr['style'] += ';width:' + options.width + 'px';
           } else {
@@ -6579,10 +12928,10 @@
         }
         startAttr.push('value="' + (this._value ? this._value.start : '') + '"');
         endAttr.push('value="' + (this._value ? this._value.end : '') + '"');
-        if (!TableUtils.isObject(options.btn)) {
+        if (!Utils.isObject(options.btn)) {
           options.btn = {};
         }
-        if (!TableUtils.isObject(options.btn.attr)) {
+        if (!Utils.isObject(options.btn.attr)) {
           options.btn.attr = {};
         }
         if (options.btn.attr.hasOwnProperty('type')) {
@@ -6591,7 +12940,7 @@
         $.each(options.btn.attr, function (name, value) {
           attrBtn.push(name + '="' + value + '"');
         });
-        this._control = $(TableUtils.render(tpl['filters/number.html'], {
+        this._control = $(Utils.render(tpl['filters/number.html'], {
           attrStart: startAttr.length > 0 ? ' ' + startAttr.join(' ') : '',
           attrEnd: endAttr.length > 0 ? ' ' + endAttr.join(' ') : '',
           label: label,
@@ -6628,7 +12977,7 @@
   var FilterDate = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function FilterDate(table, options) {
@@ -6710,10 +13059,10 @@
       value: function render() {
         var options = this.getOptions();
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        if (!TableUtils.isObject(options.attr)) {
+        if (!Utils.isObject(options.attr)) {
           options.attr = {};
         }
-        if (options.hasOwnProperty('width') && TableUtils.isNumeric(options.width)) {
+        if (options.hasOwnProperty('width') && Utils.isNumeric(options.width)) {
           if (options.attr.hasOwnProperty('style')) {
             options.attr['style'] += ';width:' + options.width + 'px';
           } else {
@@ -6729,7 +13078,7 @@
         $.each(options.attr, function (name, value) {
           attr.push(name + '="' + value + '"');
         });
-        this._control = $(TableUtils.render(tpl['filters/date.html'], {
+        this._control = $(Utils.render(tpl['filters/date.html'], {
           attr: attr.length > 0 ? ' ' + attr.join(' ') : '',
           label: label
         }));
@@ -6758,7 +13107,7 @@
   var FilterDatetime = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function FilterDatetime(table, options) {
@@ -6840,10 +13189,10 @@
       value: function render() {
         var options = this.getOptions();
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        if (!TableUtils.isObject(options.attr)) {
+        if (!Utils.isObject(options.attr)) {
           options.attr = {};
         }
-        if (options.hasOwnProperty('width') && TableUtils.isNumeric(options.width)) {
+        if (options.hasOwnProperty('width') && Utils.isNumeric(options.width)) {
           if (options.attr.hasOwnProperty('style')) {
             options.attr['style'] += ';width:' + options.width + 'px';
           } else {
@@ -6859,7 +13208,7 @@
         $.each(options.attr, function (name, value) {
           attr.push(name + '="' + value + '"');
         });
-        this._control = $(TableUtils.render(tpl['filters/datetime.html'], {
+        this._control = $(Utils.render(tpl['filters/datetime.html'], {
           attr: attr.length > 0 ? ' ' + attr.join(' ') : '',
           label: label
         }));
@@ -6888,7 +13237,7 @@
   var FilterDateMonth = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function FilterDateMonth(table, options) {
@@ -6970,10 +13319,10 @@
       value: function render() {
         var options = this.getOptions();
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        if (!TableUtils.isObject(options.attr)) {
+        if (!Utils.isObject(options.attr)) {
           options.attr = {};
         }
-        if (options.hasOwnProperty('width') && TableUtils.isNumeric(options.width)) {
+        if (options.hasOwnProperty('width') && Utils.isNumeric(options.width)) {
           if (options.attr.hasOwnProperty('style')) {
             options.attr['style'] += ';width:' + options.width + 'px';
           } else {
@@ -6989,7 +13338,7 @@
         $.each(options.attr, function (name, value) {
           attr.push(name + '="' + value + '"');
         });
-        this._control = $(TableUtils.render(tpl['filters/date_month.html'], {
+        this._control = $(Utils.render(tpl['filters/date_month.html'], {
           attr: attr.length > 0 ? ' ' + attr.join(' ') : '',
           label: label
         }));
@@ -7018,7 +13367,7 @@
   var FilterDateRange = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function FilterDateRange(table, options) {
@@ -7051,7 +13400,7 @@
       key: "setValue",
       value: function setValue(value) {
         if (value) {
-          if (!TableUtils.isObject(value)) {
+          if (!Utils.isObject(value)) {
             return;
           }
           var dateStart = null;
@@ -7079,7 +13428,7 @@
           if (this._value === null) {
             inputStart.val('');
             inputEnd.val('');
-          } else if (TableUtils.isObject(this._value)) {
+          } else if (Utils.isObject(this._value)) {
             inputStart.val(_typeof(this._value.start) !== null ? this._value.start : '');
             inputEnd.val(_typeof(this._value.end) !== null ? this._value.end : '');
           }
@@ -7120,7 +13469,7 @@
     }, {
       key: "filter",
       value: function filter(fieldValue, searchValue) {
-        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !TableUtils.isObject(searchValue) || typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string') {
+        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !Utils.isObject(searchValue) || typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string') {
           return false;
         }
         var issetStart = ['string', 'number'].indexOf(_typeof(searchValue.start)) >= 0;
@@ -7143,10 +13492,10 @@
       value: function render() {
         var options = this.getOptions();
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        if (!TableUtils.isObject(options.attr)) {
+        if (!Utils.isObject(options.attr)) {
           options.attr = {};
         }
-        if (options.hasOwnProperty('width') && TableUtils.isNumeric(options.width)) {
+        if (options.hasOwnProperty('width') && Utils.isNumeric(options.width)) {
           if (options.attr.hasOwnProperty('style')) {
             options.attr['style'] += ';width:' + options.width + 'px';
           } else {
@@ -7183,7 +13532,7 @@
         }
         startAttr.push('value="' + (this._value ? this._value.start : '') + '"');
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
-        var control = $(TableUtils.render(tpl['filters/date_range.html'], {
+        var control = $(Utils.render(tpl['filters/date_range.html'], {
           label: label,
           startAttr: startAttr.length > 0 ? ' ' + startAttr.join(' ') : '',
           endAttr: startEnd.length > 0 ? ' ' + startEnd.join(' ') : ''
@@ -7223,7 +13572,7 @@
   var FilterDatetimeRange = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function FilterDatetimeRange(table, options) {
@@ -7256,7 +13605,7 @@
       key: "setValue",
       value: function setValue(value) {
         if (value) {
-          if (!TableUtils.isObject(value)) {
+          if (!Utils.isObject(value)) {
             return;
           }
           var dateStart = null;
@@ -7284,7 +13633,7 @@
           if (this._value === null) {
             inputStart.val('');
             inputEnd.val('');
-          } else if (TableUtils.isObject(this._value)) {
+          } else if (Utils.isObject(this._value)) {
             inputStart.val(_typeof(this._value.start) !== null ? this._value.start : '');
             inputEnd.val(_typeof(this._value.end) !== null ? this._value.end : '');
           }
@@ -7325,7 +13674,7 @@
     }, {
       key: "filter",
       value: function filter(fieldValue, searchValue) {
-        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !TableUtils.isObject(searchValue) || typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string') {
+        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !Utils.isObject(searchValue) || typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string') {
           return false;
         }
         var issetStart = ['string', 'number'].indexOf(_typeof(searchValue.start)) >= 0;
@@ -7348,10 +13697,10 @@
       value: function render() {
         var options = this.getOptions();
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        if (!TableUtils.isObject(options.attr)) {
+        if (!Utils.isObject(options.attr)) {
           options.attr = {};
         }
-        if (options.hasOwnProperty('width') && TableUtils.isNumeric(options.width)) {
+        if (options.hasOwnProperty('width') && Utils.isNumeric(options.width)) {
           if (options.attr.hasOwnProperty('style')) {
             options.attr['style'] += ';width:' + options.width + 'px';
           } else {
@@ -7388,7 +13737,7 @@
         }
         startAttr.push('value="' + (this._value ? this._value.start : '') + '"');
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
-        var control = $(TableUtils.render(tpl['filters/datetime_range.html'], {
+        var control = $(Utils.render(tpl['filters/datetime_range.html'], {
           label: label,
           startAttr: startAttr.length > 0 ? ' ' + startAttr.join(' ') : '',
           endAttr: startEnd.length > 0 ? ' ' + startEnd.join(' ') : ''
@@ -7428,7 +13777,7 @@
   var FilterCheckbox = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function FilterCheckbox(table, options) {
@@ -7537,7 +13886,7 @@
         var items = [];
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
         $.each(options.options, function (key, option) {
-          if (!TableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
+          if (!Utils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
             return;
           }
           var checked = Array.isArray(that._value) ? that._value.indexOf(option.value) >= 0 : false;
@@ -7549,7 +13898,7 @@
             checked: checked
           });
         });
-        this._control = $(TableUtils.render(tpl['filters/checkbox.html'], {
+        this._control = $(Utils.render(tpl['filters/checkbox.html'], {
           label: label,
           items: items,
           field: field + this.getId(),
@@ -7580,7 +13929,7 @@
   var FilterRadio = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function FilterRadio(table, options) {
@@ -7670,7 +14019,7 @@
         var items = [];
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
         $.each(options.options, function (key, option) {
-          if (!TableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
+          if (!Utils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
             return;
           }
           var text = option.hasOwnProperty('text') ? option.text : option.value;
@@ -7681,7 +14030,7 @@
             checked: option.value == that._value
           });
         });
-        this._control = $(TableUtils.render(tpl['filters/radio.html'], {
+        this._control = $(Utils.render(tpl['filters/radio.html'], {
           label: label,
           items: items,
           field: field + this.getId(),
@@ -7712,7 +14061,7 @@
   var FilterSelect = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function FilterSelect(table, options) {
@@ -7829,14 +14178,14 @@
         var attributes = [];
         var table = this._table;
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        if (!options.hasOwnProperty('attr') || !TableUtils.isObject(options.attr)) {
+        if (!options.hasOwnProperty('attr') || !Utils.isObject(options.attr)) {
           options.attr = {};
         }
         if (options.field) {
           options.attr.name = this._options.field;
         }
         if (options.width) {
-          options.attr = TableUtils.mergeAttr({
+          options.attr = Utils.mergeAttr({
             style: 'width:' + options.width + 'px'
           }, options.attr);
         }
@@ -7848,13 +14197,13 @@
                 value: key,
                 text: option
               }));
-            } else if (TableUtils.isObject(option)) {
+            } else if (Utils.isObject(option)) {
               var type = option.hasOwnProperty('type') && typeof option.type === 'string' ? option.type : 'option';
               if (type === 'group') {
                 var renderAttr = [];
                 var groupAttr = {};
                 var groupOptions = [];
-                if (option.hasOwnProperty('attr') && TableUtils.isObject(option.attr)) {
+                if (option.hasOwnProperty('attr') && Utils.isObject(option.attr)) {
                   groupAttr = option.attr;
                 }
                 if (option.hasOwnProperty('label') && ['string', 'number'].indexOf(_typeof(option.label)) >= 0) {
@@ -7882,7 +14231,7 @@
         $.each(options.attr, function (name, value) {
           attributes.push(name + '="' + value + '"');
         });
-        this._control = $(TableUtils.render(tpl['filters/select.html'], {
+        this._control = $(Utils.render(tpl['filters/select.html'], {
           label: label,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
           options: selectOptions
@@ -7945,7 +14294,7 @@
   var FilterSwitch = /*#__PURE__*/function (_Filter) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function FilterSwitch(table, options) {
@@ -8030,7 +14379,7 @@
         var options = this.getOptions();
         var valueY = typeof options.valueY === 'string' || typeof options.valueY === 'number' ? options.valueY : '';
         var label = typeof options.label === 'string' || typeof options.label === 'number' ? options.label : '';
-        this._control = $(TableUtils.render(tpl['filters/switch.html'], {
+        this._control = $(Utils.render(tpl['filters/switch.html'], {
           id: this._id,
           valueY: valueY,
           field: typeof options.field === 'string' ? options.field : '',
@@ -8044,100 +14393,6 @@
       }
     }]);
   }(Filter);
-
-  var Search = /*#__PURE__*/function () {
-    /**
-     * Инициализация
-     * @param {object} table
-     * @param {object} options
-     */
-    function Search(table, options) {
-      _classCallCheck(this, Search);
-      _defineProperty(this, "_id", null);
-      _defineProperty(this, "_table", null);
-      _defineProperty(this, "_value", null);
-      _defineProperty(this, "_control", null);
-      _defineProperty(this, "_options", {
-        id: '',
-        type: '',
-        field: null,
-        label: null
-      });
-      this._table = table;
-      this._options = $.extend(true, this._options, options);
-      this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id ? this._options.id : TableUtils.hashCode();
-    }
-
-    /**
-     * Получение параметров
-     * @returns {object}
-     */
-    return _createClass(Search, [{
-      key: "getOptions",
-      value: function getOptions() {
-        return $.extend(true, {}, this._options);
-      }
-
-      /**
-       * Получение id
-       * @returns {string}
-       */
-    }, {
-      key: "getId",
-      value: function getId() {
-        return this._id;
-      }
-
-      /**
-       * Установка значения
-       * @param {string} value
-       */
-    }, {
-      key: "setValue",
-      value: function setValue(value) {}
-
-      /**
-       * Получение значения
-       * @returns {string|null}
-       */
-    }, {
-      key: "getValue",
-      value: function getValue() {}
-
-      /**
-       * Получение название поля
-       * @returns {string|null}
-       */
-    }, {
-      key: "getField",
-      value: function getField() {
-        return this._options.field;
-      }
-
-      /**
-       * Фильтрация данных
-       * @returns {string} fieldValue
-       * @returns {string} searchValue
-       * @returns {boolean}
-       */
-    }, {
-      key: "filter",
-      value: function filter(fieldValue, searchValue) {
-        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || ['string', 'number'].indexOf(_typeof(searchValue)) < 0) {
-          return false;
-        }
-        return fieldValue.toString().toLowerCase().indexOf(searchValue.toString().toLowerCase()) >= 0;
-      }
-
-      /**
-       * Формирование контента
-       * @returns {jQuery|string}
-       */
-    }, {
-      key: "render",
-      value: function render() {}
-    }]);
-  }();
 
   function _callSuper$t(_this, derived, args) {
     function isNativeReflectConstruct() {
@@ -8156,7 +14411,7 @@
   var SearchText = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function SearchText(table, options) {
@@ -8218,10 +14473,10 @@
     }, {
       key: "render",
       value: function render() {
-        if (!TableUtils.isObject(this._options.attr)) {
+        if (!Utils.isObject(this._options.attr)) {
           this._options.attr = {};
         }
-        if (this._options.hasOwnProperty('width') && TableUtils.isNumeric(this._options.width)) {
+        if (this._options.hasOwnProperty('width') && Utils.isNumeric(this._options.width)) {
           if (this._options.attr.hasOwnProperty('style')) {
             this._options.attr['style'] += ';width:' + this._options.width + 'px';
           } else {
@@ -8239,13 +14494,13 @@
             attributes.push(name + '="' + value + '"');
           }
         });
-        this._control = $(TableUtils.render(tpl['search/text.html'], {
+        this._control = $(Utils.render(tpl['search/text.html'], {
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
         $('input', this._control).keyup(function (e) {
           if (e.key === 'Enter' || e.keyCode === 13) {
             table.searchRecords();
-            var container = TableElements.getSearchContainer(table.getId());
+            var container = Elements.getSearchContainer(table.getId());
             container.fadeOut('fast');
           }
         });
@@ -8271,7 +14526,7 @@
   var SearchNumber = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function SearchNumber(table, options) {
@@ -8304,7 +14559,7 @@
       key: "setValue",
       value: function setValue(value) {
         if (value) {
-          if (!TableUtils.isObject(value)) {
+          if (!Utils.isObject(value)) {
             return;
           }
           var numberStart = null;
@@ -8332,7 +14587,7 @@
           if (this._value === null) {
             inputStart.val('');
             inputEnd.val('');
-          } else if (TableUtils.isObject(this._value)) {
+          } else if (Utils.isObject(this._value)) {
             inputStart.val(_typeof(this._value.start) !== null ? this._value.start : '');
             inputEnd.val(_typeof(this._value.end) !== null ? this._value.end : '');
           }
@@ -8373,7 +14628,7 @@
     }, {
       key: "filter",
       value: function filter(fieldValue, searchValue) {
-        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !TableUtils.isObject(searchValue) || ['string', 'number'].indexOf(_typeof(searchValue.start)) < 0 && ['string', 'number'].indexOf(_typeof(searchValue.end)) < 0) {
+        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !Utils.isObject(searchValue) || ['string', 'number'].indexOf(_typeof(searchValue.start)) < 0 && ['string', 'number'].indexOf(_typeof(searchValue.end)) < 0) {
           return false;
         }
         var issetStart = ['string', 'number'].indexOf(_typeof(searchValue.start)) >= 0;
@@ -8394,10 +14649,10 @@
     }, {
       key: "render",
       value: function render() {
-        if (!TableUtils.isObject(this._options.attr)) {
+        if (!Utils.isObject(this._options.attr)) {
           this._options.attr = {};
         }
-        if (this._options.hasOwnProperty('width') && TableUtils.isNumeric(this._options.width)) {
+        if (this._options.hasOwnProperty('width') && Utils.isNumeric(this._options.width)) {
           if (this._options.attr.hasOwnProperty('style')) {
             this._options.attr['style'] += ';width:' + this._options.width + 'px';
           } else {
@@ -8434,14 +14689,14 @@
         }
         startAttr.push('value="' + (this._value ? this._value.start : '') + '"');
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
-        this._control = $(TableUtils.render(tpl['search/number.html'], {
+        this._control = $(Utils.render(tpl['search/number.html'], {
           startAttr: startAttr.length > 0 ? ' ' + startAttr.join(' ') : '',
           endAttr: startEnd.length > 0 ? ' ' + startEnd.join(' ') : ''
         }));
         $('input.number-start, input.number-end', this._control).keyup(function (e) {
           if (e.key === 'Enter' || e.keyCode === 13) {
             table.searchRecords();
-            var container = TableElements.getSearchContainer(table.getId());
+            var container = Elements.getSearchContainer(table.getId());
             container.fadeOut('fast');
           }
         });
@@ -8467,7 +14722,7 @@
   var SearchDate = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}        options
      */
     function SearchDate(table, options) {
@@ -8547,10 +14802,10 @@
     }, {
       key: "render",
       value: function render() {
-        if (!TableUtils.isObject(this._options.attr)) {
+        if (!Utils.isObject(this._options.attr)) {
           this._options.attr = {};
         }
-        if (this._options.hasOwnProperty('width') && TableUtils.isNumeric(this._options.width)) {
+        if (this._options.hasOwnProperty('width') && Utils.isNumeric(this._options.width)) {
           if (this._options.attr.hasOwnProperty('style')) {
             this._options.attr['style'] += ';width:' + this._options.width + 'px';
           } else {
@@ -8566,13 +14821,13 @@
         $.each(this._options.attr, function (name, value) {
           attributes.push(name + '="' + value + '"');
         });
-        this._control = $(TableUtils.render(tpl['search/date.html'], {
+        this._control = $(Utils.render(tpl['search/date.html'], {
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
         this._control.keyup(function (e) {
           if (e.key === 'Enter' || e.keyCode === 13) {
             table.searchRecords();
-            var container = TableElements.getSearchContainer(table.getId());
+            var container = Elements.getSearchContainer(table.getId());
             container.fadeOut('fast');
           }
         });
@@ -8598,7 +14853,7 @@
   var SearchDateMonth = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function SearchDateMonth(table, options) {
@@ -8678,10 +14933,10 @@
     }, {
       key: "render",
       value: function render() {
-        if (!TableUtils.isObject(this._options.attr)) {
+        if (!Utils.isObject(this._options.attr)) {
           this._options.attr = {};
         }
-        if (this._options.hasOwnProperty('width') && TableUtils.isNumeric(this._options.width)) {
+        if (this._options.hasOwnProperty('width') && Utils.isNumeric(this._options.width)) {
           if (this._options.attr.hasOwnProperty('style')) {
             this._options.attr['style'] += ';width:' + this._options.width + 'px';
           } else {
@@ -8697,13 +14952,13 @@
         $.each(this._options.attr, function (name, value) {
           attributes.push(name + '="' + value + '"');
         });
-        this._control = $(TableUtils.render(tpl['search/date_month.html'], {
+        this._control = $(Utils.render(tpl['search/date_month.html'], {
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
         this._control.keyup(function (e) {
           if (e.key === 'Enter' || e.keyCode === 13) {
             table.searchRecords();
-            var container = TableElements.getSearchContainer(table.getId());
+            var container = Elements.getSearchContainer(table.getId());
             container.fadeOut('fast');
           }
         });
@@ -8729,7 +14984,7 @@
   var SearchDatetime = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function SearchDatetime(table, options) {
@@ -8809,10 +15064,10 @@
     }, {
       key: "render",
       value: function render() {
-        if (!TableUtils.isObject(this._options.attr)) {
+        if (!Utils.isObject(this._options.attr)) {
           this._options.attr = {};
         }
-        if (this._options.hasOwnProperty('width') && TableUtils.isNumeric(this._options.width)) {
+        if (this._options.hasOwnProperty('width') && Utils.isNumeric(this._options.width)) {
           if (this._options.attr.hasOwnProperty('style')) {
             this._options.attr['style'] += ';width:' + this._options.width + 'px';
           } else {
@@ -8830,13 +15085,13 @@
             attributes.push(name + '="' + value + '"');
           }
         });
-        this._control = $(TableUtils.render(tpl['search/datetime.html'], {
+        this._control = $(Utils.render(tpl['search/datetime.html'], {
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
         this._control.keyup(function (e) {
           if (e.key === 'Enter' || e.keyCode === 13) {
             table.searchRecords();
-            var container = TableElements.getSearchContainer(table.getId());
+            var container = Elements.getSearchContainer(table.getId());
             container.fadeOut('fast');
           }
         });
@@ -8862,7 +15117,7 @@
   var SearchDateRange = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function SearchDateRange(table, options) {
@@ -8895,7 +15150,7 @@
       key: "setValue",
       value: function setValue(value) {
         if (value) {
-          if (!TableUtils.isObject(value)) {
+          if (!Utils.isObject(value)) {
             return;
           }
           var dateStart = null;
@@ -8923,7 +15178,7 @@
           if (this._value === null) {
             inputStart.val('');
             inputEnd.val('');
-          } else if (TableUtils.isObject(this._value)) {
+          } else if (Utils.isObject(this._value)) {
             inputStart.val(_typeof(this._value.start) !== null ? this._value.start : '');
             inputEnd.val(_typeof(this._value.end) !== null ? this._value.end : '');
           }
@@ -8964,7 +15219,7 @@
     }, {
       key: "filter",
       value: function filter(fieldValue, searchValue) {
-        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !TableUtils.isObject(searchValue) || typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string') {
+        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !Utils.isObject(searchValue) || typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string') {
           return false;
         }
         var issetStart = ['string', 'number'].indexOf(_typeof(searchValue.start)) >= 0;
@@ -8986,10 +15241,10 @@
       key: "render",
       value: function render() {
         var options = this.getOptions();
-        if (!TableUtils.isObject(options.attr)) {
+        if (!Utils.isObject(options.attr)) {
           options.attr = {};
         }
-        if (options.hasOwnProperty('width') && TableUtils.isNumeric(options.width)) {
+        if (options.hasOwnProperty('width') && Utils.isNumeric(options.width)) {
           if (options.attr.hasOwnProperty('style')) {
             options.attr['style'] += ';width:' + options.width + 'px';
           } else {
@@ -9020,7 +15275,7 @@
         }
         startAttr.push('value="' + (this._value ? this._value.start : '') + '"');
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
-        var control = $(TableUtils.render(tpl['search/date_range.html'], {
+        var control = $(Utils.render(tpl['search/date_range.html'], {
           startAttr: startAttr.length > 0 ? ' ' + startAttr.join(' ') : '',
           endAttr: startEnd.length > 0 ? ' ' + startEnd.join(' ') : ''
         }));
@@ -9056,7 +15311,7 @@
   var SearchDatetimeRange = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function SearchDatetimeRange(table, options) {
@@ -9089,7 +15344,7 @@
       key: "setValue",
       value: function setValue(value) {
         if (value) {
-          if (!TableUtils.isObject(value)) {
+          if (!Utils.isObject(value)) {
             return;
           }
           var dateStart = null;
@@ -9117,7 +15372,7 @@
           if (this._value === null) {
             inputStart.val('');
             inputEnd.val('');
-          } else if (TableUtils.isObject(this._value)) {
+          } else if (Utils.isObject(this._value)) {
             inputStart.val(_typeof(this._value.start) !== null ? this._value.start : '');
             inputEnd.val(_typeof(this._value.end) !== null ? this._value.end : '');
           }
@@ -9158,7 +15413,7 @@
     }, {
       key: "filter",
       value: function filter(fieldValue, searchValue) {
-        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !TableUtils.isObject(searchValue) || typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string') {
+        if (['string', 'number'].indexOf(_typeof(fieldValue)) < 0 || !Utils.isObject(searchValue) || typeof searchValue.start !== 'string' && typeof searchValue.end !== 'string') {
           return false;
         }
         var issetStart = ['string', 'number'].indexOf(_typeof(searchValue.start)) >= 0;
@@ -9179,10 +15434,10 @@
     }, {
       key: "render",
       value: function render() {
-        if (!TableUtils.isObject(this._options.attr)) {
+        if (!Utils.isObject(this._options.attr)) {
           this._options.attr = {};
         }
-        if (this._options.hasOwnProperty('width') && TableUtils.isNumeric(this._options.width)) {
+        if (this._options.hasOwnProperty('width') && Utils.isNumeric(this._options.width)) {
           if (this._options.attr.hasOwnProperty('style')) {
             this._options.attr['style'] += ';width:' + this._options.width + 'px';
           } else {
@@ -9214,7 +15469,7 @@
         }
         startAttr.push('value="' + (this._value ? this._value.start : '') + '"');
         startEnd.push('value="' + (this._value ? this._value.end : '') + '"');
-        var control = $(TableUtils.render(tpl['search/datetime_range.html'], {
+        var control = $(Utils.render(tpl['search/datetime_range.html'], {
           startAttr: startAttr.length > 0 ? ' ' + startAttr.join(' ') : '',
           endAttr: startEnd.length > 0 ? ' ' + startEnd.join(' ') : ''
         }));
@@ -9250,7 +15505,7 @@
   var SearchCheckbox = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function SearchCheckbox(table, options) {
@@ -9362,7 +15617,7 @@
               checked: checked
             });
           } else {
-            if (!TableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
+            if (!Utils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
               return;
             }
             var _checked = Array.isArray(that._value) ? that._value.indexOf(option.value) >= 0 : false;
@@ -9374,7 +15629,7 @@
             });
           }
         });
-        this._control = $(TableUtils.render(tpl['search/checkbox.html'], {
+        this._control = $(Utils.render(tpl['search/checkbox.html'], {
           options: options
         }));
         return this._control;
@@ -9399,7 +15654,7 @@
   var SearchCheckboxBtn = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function SearchCheckboxBtn(table, options) {
@@ -9511,10 +15766,10 @@
               value: key,
               checked: checked,
               optionsClass: that._options.optionsClass,
-              hash: TableUtils.hashCode()
+              hash: Utils.hashCode()
             });
           } else {
-            if (!TableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
+            if (!Utils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
               return;
             }
             var _checked = Array.isArray(that._value) ? that._value.indexOf(option.value) >= 0 : false;
@@ -9524,11 +15779,11 @@
               value: option.value,
               checked: _checked,
               optionsClass: that._options.optionsClass,
-              hash: TableUtils.hashCode()
+              hash: Utils.hashCode()
             });
           }
         });
-        this._control = $(TableUtils.render(tpl['search/checkbox-btn.html'], {
+        this._control = $(Utils.render(tpl['search/checkbox-btn.html'], {
           options: options
         }));
         return this._control;
@@ -9553,7 +15808,7 @@
   var SearchRadio = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function SearchRadio(table, options) {
@@ -9653,7 +15908,7 @@
               checked: checked
             });
           } else {
-            if (!TableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
+            if (!Utils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
               return;
             }
             var _checked = option.value == that._value;
@@ -9668,10 +15923,10 @@
             });
           }
         });
-        this._control = $(TableUtils.render(tpl['search/radio.html'], {
+        this._control = $(Utils.render(tpl['search/radio.html'], {
           options: options,
           checkedAll: checkedAll,
-          field: TableUtils.hashCode(),
+          field: Utils.hashCode(),
           lang: this._table.getLang()
         }));
         return this._control;
@@ -9696,7 +15951,7 @@
   var SearchRadioBtn = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function SearchRadioBtn(table, options) {
@@ -9796,10 +16051,10 @@
               value: key,
               checked: checked,
               optionsClass: that._options.optionsClass,
-              hash: TableUtils.hashCode()
+              hash: Utils.hashCode()
             });
           } else {
-            if (!TableUtils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
+            if (!Utils.isObject(option) || !option.hasOwnProperty('value') || ['string', 'numeric'].indexOf(_typeof(option.value)) === -1) {
               return;
             }
             var _checked = option.value == that._value;
@@ -9812,16 +16067,16 @@
               value: option.value,
               checked: _checked,
               optionsClass: that._options.optionsClass,
-              hash: TableUtils.hashCode()
+              hash: Utils.hashCode()
             });
           }
         });
-        this._control = $(TableUtils.render(tpl['search/radio-btn.html'], {
+        this._control = $(Utils.render(tpl['search/radio-btn.html'], {
           options: options,
           checkedAll: checkedAll,
-          optionAllHash: TableUtils.hashCode(),
+          optionAllHash: Utils.hashCode(),
           optionOptionsClass: that._options.optionsClass,
-          field: TableUtils.hashCode(),
+          field: Utils.hashCode(),
           lang: this._table.getLang()
         }));
         return this._control;
@@ -9846,7 +16101,7 @@
   var SearchSelect = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function SearchSelect(table, options) {
@@ -9960,14 +16215,14 @@
         var options = this.getOptions();
         var selectOptions = [];
         var attributes = [];
-        if (!options.hasOwnProperty('attr') || !TableUtils.isObject(options.attr)) {
+        if (!options.hasOwnProperty('attr') || !Utils.isObject(options.attr)) {
           options.attr = {};
         }
         if (options.field) {
           options.attr.name = this._options.field;
         }
         if (options.width) {
-          options.attr = TableUtils.mergeAttr({
+          options.attr = Utils.mergeAttr({
             style: 'width:' + options.width + 'px'
           }, options.attr);
         }
@@ -9979,13 +16234,13 @@
                 value: key,
                 text: option
               }));
-            } else if (TableUtils.isObject(option)) {
+            } else if (Utils.isObject(option)) {
               var type = option.hasOwnProperty('type') && typeof option.type === 'string' ? option.type : 'option';
               if (type === 'group') {
                 var renderAttr = [];
                 var groupAttr = {};
                 var groupOptions = [];
-                if (option.hasOwnProperty('attr') && TableUtils.isObject(option.attr)) {
+                if (option.hasOwnProperty('attr') && Utils.isObject(option.attr)) {
                   groupAttr = option.attr;
                 }
                 if (option.hasOwnProperty('label') && ['string', 'number'].indexOf(_typeof(option.label)) >= 0) {
@@ -10013,7 +16268,7 @@
         $.each(options.attr, function (name, value) {
           attributes.push(name + '="' + value + '"');
         });
-        this._control = $(TableUtils.render(tpl['search/select.html'], {
+        this._control = $(Utils.render(tpl['search/select.html'], {
           field: options,
           value: this._value,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
@@ -10074,7 +16329,7 @@
   var SearchSwitch = /*#__PURE__*/function (_Search) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     function SearchSwitch(table, options) {
@@ -10156,7 +16411,7 @@
       value: function render() {
         var options = this.getOptions();
         var valueY = typeof options.valueY === 'string' || typeof options.valueY === 'number' ? options.valueY : '';
-        this._control = $(TableUtils.render(tpl['search/switch.html'], {
+        this._control = $(Utils.render(tpl['search/switch.html'], {
           id: this._id,
           valueY: valueY,
           field: typeof options.field === 'string' ? options.field : '',
@@ -10166,83 +16421,6 @@
       }
     }]);
   }(Search);
-
-  var Column = /*#__PURE__*/function () {
-    /**
-     * Инициализация
-     * @param {TableInstance} table
-     * @param {Object}              options
-     */
-    function Column(table, options) {
-      _classCallCheck(this, Column);
-      _defineProperty(this, "_table", null);
-      _defineProperty(this, "_options", {
-        type: '',
-        field: null,
-        label: null,
-        show: true,
-        showLabel: true,
-        width: null,
-        minWidth: null,
-        maxWidth: null,
-        attr: null,
-        attrHeader: null,
-        render: null
-      });
-      this._table = table;
-      this._options = $.extend(true, this._options, options);
-    }
-
-    /**
-     * Установка видимости колонки
-     * @param {boolean} isShow
-     */
-    return _createClass(Column, [{
-      key: "setShow",
-      value: function setShow(isShow) {
-        this._options.show = !!isShow;
-      }
-
-      /**
-       * Видимости колонки
-       */
-    }, {
-      key: "isShow",
-      value: function isShow() {
-        return !!this._options.show;
-      }
-
-      /**
-       * Получение параметров
-       * @returns {object}
-       */
-    }, {
-      key: "getOptions",
-      value: function getOptions() {
-        return $.extend({}, this._options);
-      }
-
-      /**
-       * Получение имени поля
-       * @returns {string|null}
-       */
-    }, {
-      key: "getField",
-      value: function getField() {
-        return typeof this._options.field === 'string' ? this._options.field : null;
-      }
-
-      /**
-       * Формирование контента
-       * @param {*}      content
-       * @param {object} record
-       * @returns {string}
-       */
-    }, {
-      key: "render",
-      value: function render(content, record) {}
-    }]);
-  }();
 
   function _callSuper$g(_this, derived, args) {
     function isNativeReflectConstruct() {
@@ -10258,14 +16436,14 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsDate = /*#__PURE__*/function (_Column) {
+  var ColumnDate = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsDate(table, options) {
-      _classCallCheck(this, ColumnsDate);
+    function ColumnDate(table, options) {
+      _classCallCheck(this, ColumnDate);
       options = $.extend(true, {
         type: 'date',
         field: null,
@@ -10277,7 +16455,7 @@
         attrHeader: {},
         render: null
       }, options);
-      return _callSuper$g(this, ColumnsDate, [table, options]);
+      return _callSuper$g(this, ColumnDate, [table, options]);
     }
 
     /**
@@ -10286,8 +16464,8 @@
      * @param {object} record
      * @returns {string}
      */
-    _inherits(ColumnsDate, _Column);
-    return _createClass(ColumnsDate, [{
+    _inherits(ColumnDate, _Column);
+    return _createClass(ColumnDate, [{
       key: "render",
       value: function render(content, record) {
         if (typeof content !== 'string') {
@@ -10297,9 +16475,10 @@
           if (content !== '') {
             var lang = this._table.getLang();
             var date = new Date(content);
-            content = this._options.format.replace(/YYYY/g, TableUtils.strPadLeft(date.getFullYear(), 4)).replace(/MMMM/g, lang.monthNames[date.getMonth() + 1]).replace(/MMM/g, lang.monthNamesShort[date.getMonth() + 1]).replace(/MM/g, TableUtils.strPadLeft(date.getMonth() + 1, 2)).replace(/M/g, date.getMonth() + 1).replace(/DD/g, TableUtils.strPadLeft(date.getDate(), 2)).replace(/D/g, date.getDate()).replace(/dddd/g, lang.dayNames[date.getMonth() + 1]).replace(/ddd/g, lang.dayNamesMin[date.getMonth() + 1]);
+            content = this._options.format.replace(/YYYY/g, Utils.strPadLeft(date.getFullYear(), 4)).replace(/MMMM/g, lang.monthNames[date.getMonth() + 1]).replace(/MMM/g, lang.monthNamesShort[date.getMonth() + 1]).replace(/MM/g, Utils.strPadLeft(date.getMonth() + 1, 2)).replace(/M/g, date.getMonth() + 1).replace(/DD/g, Utils.strPadLeft(date.getDate(), 2)).replace(/D/g, date.getDate()).replace(/dddd/g, lang.dayNames[date.getMonth() + 1]).replace(/ddd/g, lang.dayNamesMin[date.getMonth() + 1]);
           }
         } catch (e) {
+          console.warn(e);
           content = '';
         }
         return content;
@@ -10321,14 +16500,14 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsDatetime = /*#__PURE__*/function (_Column) {
+  var ColumnDatetime = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsDatetime(table, options) {
-      _classCallCheck(this, ColumnsDatetime);
+    function ColumnDatetime(table, options) {
+      _classCallCheck(this, ColumnDatetime);
       options = $.extend(true, {
         type: 'datetime',
         field: null,
@@ -10340,7 +16519,7 @@
         attrHeader: {},
         render: null
       }, options);
-      return _callSuper$f(this, ColumnsDatetime, [table, options]);
+      return _callSuper$f(this, ColumnDatetime, [table, options]);
     }
 
     /**
@@ -10349,8 +16528,8 @@
      * @param {object} record
      * @returns {string}
      */
-    _inherits(ColumnsDatetime, _Column);
-    return _createClass(ColumnsDatetime, [{
+    _inherits(ColumnDatetime, _Column);
+    return _createClass(ColumnDatetime, [{
       key: "render",
       value: function render(content, record) {
         if (typeof content !== 'string') {
@@ -10360,9 +16539,10 @@
           if (content !== '') {
             var lang = this._table.getLang();
             var date = new Date(content);
-            content = this._options.format.replace(/YYYY/g, TableUtils.strPadLeft(date.getFullYear(), 4)).replace(/MMMM/g, lang.monthNames[date.getMonth() + 1]).replace(/MMM/g, lang.monthNamesShort[date.getMonth() + 1]).replace(/MM/g, TableUtils.strPadLeft(date.getMonth() + 1, 2)).replace(/M/g, date.getMonth() + 1).replace(/DD/g, TableUtils.strPadLeft(date.getDate(), 2)).replace(/D/g, date.getDate()).replace(/dddd/g, lang.dayNames[date.getMonth() + 1]).replace(/ddd/g, lang.dayNamesMin[date.getMonth() + 1]).replace(/hh/g, TableUtils.strPadLeft(date.getHours(), 2)).replace(/mm/g, TableUtils.strPadLeft(date.getMinutes(), 2)).replace(/m/g, date.getMinutes()).replace(/ss/g, TableUtils.strPadLeft(date.getSeconds(), 2)).replace(/s/g, date.getSeconds());
+            content = this._options.format.replace(/YYYY/g, Utils.strPadLeft(date.getFullYear(), 4)).replace(/MMMM/g, lang.monthNames[date.getMonth() + 1]).replace(/MMM/g, lang.monthNamesShort[date.getMonth() + 1]).replace(/MM/g, Utils.strPadLeft(date.getMonth() + 1, 2)).replace(/M/g, date.getMonth() + 1).replace(/DD/g, Utils.strPadLeft(date.getDate(), 2)).replace(/D/g, date.getDate()).replace(/dddd/g, lang.dayNames[date.getMonth() + 1]).replace(/ddd/g, lang.dayNamesMin[date.getMonth() + 1]).replace(/hh/g, Utils.strPadLeft(date.getHours(), 2)).replace(/mm/g, Utils.strPadLeft(date.getMinutes(), 2)).replace(/m/g, date.getMinutes()).replace(/ss/g, Utils.strPadLeft(date.getSeconds(), 2)).replace(/s/g, date.getSeconds());
           }
         } catch (e) {
+          console.warn(e);
           content = '';
         }
         return content;
@@ -15153,15 +21333,15 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsDateHuman = /*#__PURE__*/function (_Column) {
+  var ColumnDateHuman = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsDateHuman(table, options) {
+    function ColumnDateHuman(table, options) {
       var _this2;
-      _classCallCheck(this, ColumnsDateHuman);
+      _classCallCheck(this, ColumnDateHuman);
       options = $.extend(true, {
         type: 'dateHuman',
         field: null,
@@ -15172,7 +21352,7 @@
         attrHeader: {},
         render: null
       }, options);
-      _this2 = _callSuper$e(this, ColumnsDateHuman, [table, options]);
+      _this2 = _callSuper$e(this, ColumnDateHuman, [table, options]);
       _defineProperty(_this2, "_lang", null);
       _this2._lang = table.getOptions().lang;
       return _this2;
@@ -15184,15 +21364,15 @@
      * @param {object} record
      * @returns {string}
      */
-    _inherits(ColumnsDateHuman, _Column);
-    return _createClass(ColumnsDateHuman, [{
+    _inherits(ColumnDateHuman, _Column);
+    return _createClass(ColumnDateHuman, [{
       key: "render",
       value: function render(content, record) {
-        if (['string', 'number'].indexOf(_typeof(content)) < 0 || !(content instanceof Date)) {
+        if (['string', 'number'].indexOf(_typeof(content)) < 0 && !(content instanceof Date)) {
           return '';
         }
         try {
-          if (content !== '') {
+          if (content) {
             var dateContent = content instanceof Date ? content : new Date(content);
             var dateFormat = hooks(dateContent).format('MM.DD.yyyy HH:mm:ss');
             content = hooks(dateContent).locale(this._lang).fromNow();
@@ -15200,6 +21380,7 @@
           }
         } catch (e) {
           console.warn(e);
+          content = '';
         }
         return content;
       }
@@ -15220,15 +21401,15 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsHtml = /*#__PURE__*/function (_Column) {
+  var ColumnHtml = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsHtml(table, options) {
+    function ColumnHtml(table, options) {
       var _this2;
-      _classCallCheck(this, ColumnsHtml);
+      _classCallCheck(this, ColumnHtml);
       options = $.extend(true, {
         type: 'html',
         field: null,
@@ -15243,7 +21424,7 @@
         attrHeader: {},
         render: null
       }, options);
-      _this2 = _callSuper$d(this, ColumnsHtml, [table, options]);
+      _this2 = _callSuper$d(this, ColumnHtml, [table, options]);
       var tableOptions = _this2._table.getOptions();
       if (_this2._options.noWrap || _this2._options.noWrap === null && tableOptions.noWrap) {
         if (!_this2._options.attr) {
@@ -15251,7 +21432,7 @@
             "class": 'coreui_table__no-wrap'
           };
         } else {
-          _this2._options.attr = TableUtils.mergeAttr(_this2._options.attr, {
+          _this2._options.attr = Utils.mergeAttr(_this2._options.attr, {
             "class": 'coreui_table__no-wrap'
           });
         }
@@ -15268,8 +21449,8 @@
      * @param {*} columnValue
      * @returns {string}
      */
-    _inherits(ColumnsHtml, _Column);
-    return _createClass(ColumnsHtml, [{
+    _inherits(ColumnHtml, _Column);
+    return _createClass(ColumnHtml, [{
       key: "convertToString",
       value: function convertToString(columnValue) {
         if (['string', 'number'].indexOf(_typeof(columnValue)) >= 0) {
@@ -15316,15 +21497,15 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsNumber = /*#__PURE__*/function (_Column) {
+  var ColumnNumber = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsNumber(table, options) {
+    function ColumnNumber(table, options) {
       var _this2;
-      _classCallCheck(this, ColumnsNumber);
+      _classCallCheck(this, ColumnNumber);
       options = $.extend(true, {
         type: 'number',
         field: null,
@@ -15339,7 +21520,7 @@
         attrHeader: {},
         render: null
       }, options);
-      _this2 = _callSuper$c(this, ColumnsNumber, [table, options]);
+      _this2 = _callSuper$c(this, ColumnNumber, [table, options]);
       var tableOptions = _this2._table.getOptions();
       if (_this2._options.noWrap || _this2._options.noWrap === null && tableOptions.noWrap) {
         if (!_this2._options.attr) {
@@ -15347,7 +21528,7 @@
             "class": 'coreui_table__no-wrap'
           };
         } else {
-          _this2._options.attr = TableUtils.mergeAttr(_this2._options.attr, {
+          _this2._options.attr = Utils.mergeAttr(_this2._options.attr, {
             "class": 'coreui_table__no-wrap'
           });
         }
@@ -15365,8 +21546,8 @@
      * @param {object} record
      * @returns {string}
      */
-    _inherits(ColumnsNumber, _Column);
-    return _createClass(ColumnsNumber, [{
+    _inherits(ColumnNumber, _Column);
+    return _createClass(ColumnNumber, [{
       key: "render",
       value: function render(content, record) {
         if (['string', 'bigint', 'symbol', 'number'].indexOf(_typeof(content)) < 0) {
@@ -15398,15 +21579,15 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsMoney = /*#__PURE__*/function (_Column) {
+  var ColumnMoney = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsMoney(table, options) {
+    function ColumnMoney(table, options) {
       var _this2;
-      _classCallCheck(this, ColumnsMoney);
+      _classCallCheck(this, ColumnMoney);
       options = $.extend(true, {
         type: 'money',
         field: null,
@@ -15426,7 +21607,7 @@
         },
         render: null
       }, options);
-      _this2 = _callSuper$b(this, ColumnsMoney, [table, options]);
+      _this2 = _callSuper$b(this, ColumnMoney, [table, options]);
       var tableOptions = _this2._table.getOptions();
       if (_this2._options.noWrap || _this2._options.noWrap === null && tableOptions.noWrap) {
         if (!_this2._options.attr) {
@@ -15434,7 +21615,7 @@
             "class": 'coreui_table__no-wrap'
           };
         } else {
-          _this2._options.attr = TableUtils.mergeAttr(_this2._options.attr, {
+          _this2._options.attr = Utils.mergeAttr(_this2._options.attr, {
             "class": 'coreui_table__no-wrap'
           });
         }
@@ -15451,8 +21632,8 @@
      * @param {*} columnValue
      * @returns {string}
      */
-    _inherits(ColumnsMoney, _Column);
-    return _createClass(ColumnsMoney, [{
+    _inherits(ColumnMoney, _Column);
+    return _createClass(ColumnMoney, [{
       key: "convertToString",
       value: function convertToString(columnValue) {
         var content = '';
@@ -15513,14 +21694,14 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsNumbers = /*#__PURE__*/function (_Column) {
+  var ColumnNumbers = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsNumbers(table, options) {
-      _classCallCheck(this, ColumnsNumbers);
+    function ColumnNumbers(table, options) {
+      _classCallCheck(this, ColumnNumbers);
       options = $.extend(true, {
         type: 'numbers',
         label: '№',
@@ -15530,7 +21711,7 @@
         },
         attrHeader: null
       }, options);
-      return _callSuper$a(this, ColumnsNumbers, [table, options]);
+      return _callSuper$a(this, ColumnNumbers, [table, options]);
     }
 
     /**
@@ -15539,8 +21720,8 @@
      * @param {object} record
      * @returns {string}
      */
-    _inherits(ColumnsNumbers, _Column);
-    return _createClass(ColumnsNumbers, [{
+    _inherits(ColumnNumbers, _Column);
+    return _createClass(ColumnNumbers, [{
       key: "render",
       value: function render(content, record) {
         return this._table._recordsNumber;
@@ -15562,15 +21743,15 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsSelect = /*#__PURE__*/function (_Column) {
+  var ColumnSelect = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsSelect(table, options) {
+    function ColumnSelect(table, options) {
       var _this2;
-      _classCallCheck(this, ColumnsSelect);
+      _classCallCheck(this, ColumnSelect);
       var originalOptions = {
         type: 'select',
         field: null,
@@ -15585,19 +21766,19 @@
         }
       };
       if (options.hasOwnProperty('attr')) {
-        options.attr = TableUtils.mergeAttr(originalOptions.attr, options.attr);
+        options.attr = Utils.mergeAttr(originalOptions.attr, options.attr);
       }
       if (options.hasOwnProperty('attrHeader')) {
-        options.attrHeader = TableUtils.mergeAttr(originalOptions.attrHeader, options.attrHeader);
+        options.attrHeader = Utils.mergeAttr(originalOptions.attrHeader, options.attrHeader);
       }
       options = $.extend(true, originalOptions, options);
-      _this2 = _callSuper$9(this, ColumnsSelect, [table, options]);
+      _this2 = _callSuper$9(this, ColumnSelect, [table, options]);
       _this2._options.label = tpl['columns/select_label.html'];
 
       // Показ строк
       table.on('records_show', function () {
-        var selects = TableElements.getRowsSelects(table.getId());
-        var selectAll = TableElements.getRowsSelectAll(table.getId());
+        var selects = Elements.getRowsSelects(table.getId());
+        var selectAll = Elements.getRowsSelectAll(table.getId());
 
         // Отмена обработки нажатия в select колонках
         $(selects).click(function (event) {
@@ -15622,8 +21803,8 @@
      * @param {string} field
      * @param {object} record
      */
-    _inherits(ColumnsSelect, _Column);
-    return _createClass(ColumnsSelect, [{
+    _inherits(ColumnSelect, _Column);
+    return _createClass(ColumnSelect, [{
       key: "getActions",
       value: function getActions(content, field, record) {
         return {
@@ -15649,23 +21830,23 @@
     }, {
       key: "render",
       value: function render(content, record) {
-        var select = $(TableUtils.render(tpl['columns/select.html'], {
+        var select = $(Utils.render(tpl['columns/select.html'], {
           index: record.index
         }));
         var that = this;
 
         // Выбор строки
         select.click(function () {
-          var tr = TableElements.getTrByIndex(that._table.getId(), record.index);
+          var tr = Elements.getTrByIndex(that._table.getId(), record.index);
           if (!tr) {
             return;
           }
           if ($(this).is(':checked')) {
             $(tr).addClass('table-primary');
-            TablePrivate._trigger(that._table, 'record_select', [record]);
+            Private._trigger(that._table, 'record_select', [record]);
           } else {
             $(tr).removeClass('table-primary');
-            TablePrivate._trigger(that._table, 'record_unselect', [record]);
+            Private._trigger(that._table, 'record_unselect', [record]);
           }
         });
         return select;
@@ -15687,15 +21868,15 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsSwitch = /*#__PURE__*/function (_Column) {
+  var ColumnSwitch = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsSwitch(table, options) {
+    function ColumnSwitch(table, options) {
       var _this2;
-      _classCallCheck(this, ColumnsSwitch);
+      _classCallCheck(this, ColumnSwitch);
       options = $.extend(true, {
         type: 'switch',
         label: '',
@@ -15711,11 +21892,11 @@
         attrHeader: {},
         onChange: null
       }, options);
-      _this2 = _callSuper$8(this, ColumnsSwitch, [table, options]);
+      _this2 = _callSuper$8(this, ColumnSwitch, [table, options]);
 
       // Показ строк
       table.on('records_show', function () {
-        var containers = TableElements.getRowsSwitches(table.getId());
+        var containers = Elements.getRowsSwitches(table.getId());
 
         // Отмена обработки нажатия в switch колонках
         containers.click(function (event) {
@@ -15731,8 +21912,8 @@
      * @param {string} field
      * @param {object} record
      */
-    _inherits(ColumnsSwitch, _Column);
-    return _createClass(ColumnsSwitch, [{
+    _inherits(ColumnSwitch, _Column);
+    return _createClass(ColumnSwitch, [{
       key: "getActions",
       value: function getActions(content, field, record) {
         return {
@@ -15765,7 +21946,7 @@
       key: "render",
       value: function render(content, record) {
         var isChecked = content === this._options.valueY;
-        var formSwitch = $(TableUtils.render(tpl['columns/switch.html'], {
+        var formSwitch = $(Utils.render(tpl['columns/switch.html'], {
           index: record.index,
           field: this._options.field,
           disabled: this._options.disabled,
@@ -15818,15 +21999,15 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsText = /*#__PURE__*/function (_Column) {
+  var ColumnText = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsText(table, options) {
+    function ColumnText(table, options) {
       var _this2;
-      _classCallCheck(this, ColumnsText);
+      _classCallCheck(this, ColumnText);
       options = $.extend(true, {
         type: 'text',
         field: null,
@@ -15842,7 +22023,7 @@
         attrHeader: null,
         render: null
       }, options);
-      _this2 = _callSuper$7(this, ColumnsText, [table, options]);
+      _this2 = _callSuper$7(this, ColumnText, [table, options]);
       var tableOptions = _this2._table.getOptions();
       if (_this2._options.noWrap || _this2._options.noWrap === null && tableOptions.noWrap) {
         if (!_this2._options.attr) {
@@ -15850,7 +22031,7 @@
             "class": 'coreui_table__no-wrap'
           };
         } else {
-          _this2._options.attr = TableUtils.mergeAttr(_this2._options.attr, {
+          _this2._options.attr = Utils.mergeAttr(_this2._options.attr, {
             "class": 'coreui_table__no-wrap'
           });
         }
@@ -15868,8 +22049,8 @@
      * @param {object} record
      * @returns {string}
      */
-    _inherits(ColumnsText, _Column);
-    return _createClass(ColumnsText, [{
+    _inherits(ColumnText, _Column);
+    return _createClass(ColumnText, [{
       key: "render",
       value: function render(content, record) {
         if (['string', 'bigint', 'symbol', 'number'].indexOf(_typeof(content)) < 0) {
@@ -15901,14 +22082,14 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsButton = /*#__PURE__*/function (_Column) {
+  var ColumnButton = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsButton(table, options) {
-      _classCallCheck(this, ColumnsButton);
+    function ColumnButton(table, options) {
+      _classCallCheck(this, ColumnButton);
       options = $.extend(true, {
         type: 'button',
         field: null,
@@ -15918,7 +22099,7 @@
         minWidth: null,
         maxWidth: null
       }, options);
-      return _callSuper$6(this, ColumnsButton, [table, options]);
+      return _callSuper$6(this, ColumnButton, [table, options]);
     }
 
     /**
@@ -15927,14 +22108,14 @@
      * @param {object} record
      * @returns {string}
      */
-    _inherits(ColumnsButton, _Column);
-    return _createClass(ColumnsButton, [{
+    _inherits(ColumnButton, _Column);
+    return _createClass(ColumnButton, [{
       key: "render",
       value: function render(content, record) {
-        if (!TableUtils.isObject(content)) {
+        if (!Utils.isObject(content)) {
           return '';
         }
-        if (!TableUtils.isObject(content.attr)) {
+        if (!Utils.isObject(content.attr)) {
           content.attr = {};
         }
         if (!content.attr.hasOwnProperty('class')) {
@@ -15949,7 +22130,7 @@
             attributes.push(name + '="' + value + '"');
           }
         });
-        var btn = $(TableUtils.render(tpl['columns/button.html'], {
+        var btn = $(Utils.render(tpl['columns/button.html'], {
           content: content.content,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
@@ -16005,14 +22186,14 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsLink = /*#__PURE__*/function (_Column) {
+  var ColumnLink = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsLink(table, options) {
-      _classCallCheck(this, ColumnsLink);
+    function ColumnLink(table, options) {
+      _classCallCheck(this, ColumnLink);
       options = $.extend(true, {
         type: 'link',
         field: null,
@@ -16022,7 +22203,7 @@
         minWidth: null,
         maxWidth: null
       }, options);
-      return _callSuper$5(this, ColumnsLink, [table, options]);
+      return _callSuper$5(this, ColumnLink, [table, options]);
     }
 
     /**
@@ -16030,8 +22211,8 @@
      * @param {*} columnValue
      * @returns {string}
      */
-    _inherits(ColumnsLink, _Column);
-    return _createClass(ColumnsLink, [{
+    _inherits(ColumnLink, _Column);
+    return _createClass(ColumnLink, [{
       key: "convertToString",
       value: function convertToString(columnValue) {
         if (['string', 'number'].indexOf(_typeof(columnValue)) >= 0) {
@@ -16052,7 +22233,7 @@
     }, {
       key: "render",
       value: function render(content, record) {
-        if ((typeof content !== 'string' || !content) && (!TableUtils.isObject(content) || !content.hasOwnProperty('url') || typeof content.url !== 'string' || !content.url)) {
+        if ((typeof content !== 'string' || !content) && (!Utils.isObject(content) || !content.hasOwnProperty('url') || typeof content.url !== 'string' || !content.url)) {
           return '';
         }
         var linkContent = '';
@@ -16061,7 +22242,7 @@
           attr.href = content;
           linkContent = content;
         } else {
-          if (content.hasOwnProperty('attr') && TableUtils.isObject(content.attr)) {
+          if (content.hasOwnProperty('attr') && Utils.isObject(content.attr)) {
             attr = content.attr;
           }
           if (attr.hasOwnProperty('href')) {
@@ -16080,7 +22261,7 @@
             attributes.push(name + '="' + value + '"');
           }
         });
-        var link = $(TableUtils.render(tpl['columns/link.html'], {
+        var link = $(Utils.render(tpl['columns/link.html'], {
           content: linkContent,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         }));
@@ -16107,14 +22288,14 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsMenu = /*#__PURE__*/function (_Column) {
+  var ColumnMenu = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsMenu(table, options) {
-      _classCallCheck(this, ColumnsMenu);
+    function ColumnMenu(table, options) {
+      _classCallCheck(this, ColumnMenu);
       options = $.extend(true, {
         type: 'menu',
         field: null,
@@ -16124,7 +22305,7 @@
         minWidth: null,
         maxWidth: null
       }, options);
-      return _callSuper$4(this, ColumnsMenu, [table, options]);
+      return _callSuper$4(this, ColumnMenu, [table, options]);
     }
 
     /**
@@ -16133,22 +22314,22 @@
      * @param {object}        record
      * @returns {string}
      */
-    _inherits(ColumnsMenu, _Column);
-    return _createClass(ColumnsMenu, [{
+    _inherits(ColumnMenu, _Column);
+    return _createClass(ColumnMenu, [{
       key: "render",
       value: function render(content, record) {
-        if (!TableUtils.isObject(content) || !content.hasOwnProperty('items') || !Array.isArray(content.items) || content.items.length === 0) {
+        if (!Utils.isObject(content) || !content.hasOwnProperty('items') || !Array.isArray(content.items) || content.items.length === 0) {
           return '';
         }
         var items = [];
         var attr = {};
         if (Array.isArray(content.items)) {
           $.each(content.items, function (key, item) {
-            if (TableUtils.isObject(item) && typeof item.type === 'string') {
+            if (Utils.isObject(item) && typeof item.type === 'string') {
               if (item.type === 'link') {
                 if (item.hasOwnProperty('url') && item.hasOwnProperty('content') && typeof item.url === 'string' && typeof item.content === 'string') {
                   var linkAttr = {};
-                  if (item.hasOwnProperty('attr') || TableUtils.isObject(item.attr)) {
+                  if (item.hasOwnProperty('attr') || Utils.isObject(item.attr)) {
                     linkAttr = item.attr;
                   }
                   if (linkAttr.hasOwnProperty('href')) {
@@ -16175,7 +22356,7 @@
               } else if (item.type === 'button') {
                 if (item.hasOwnProperty('content') && item.hasOwnProperty('onClick') && typeof item.content === 'string' && ['string', 'function'].indexOf(_typeof(item.onClick)) >= 0) {
                   var btnAttr = {};
-                  if (item.hasOwnProperty('attr') || TableUtils.isObject(item.attr)) {
+                  if (item.hasOwnProperty('attr') || Utils.isObject(item.attr)) {
                     btnAttr = item.attr;
                   }
                   if (btnAttr.hasOwnProperty('type')) {
@@ -16197,7 +22378,7 @@
                   });
                   items.push({
                     type: 'button',
-                    id: TableUtils.hashCode(),
+                    id: Utils.hashCode(),
                     content: item.content,
                     onClick: item.onClick,
                     attr: btnAttributes.length > 0 ? ' ' + btnAttributes.join(' ') : ''
@@ -16218,7 +22399,7 @@
             }
           });
         }
-        if (content.hasOwnProperty('attr') && TableUtils.isObject(content.attr)) {
+        if (content.hasOwnProperty('attr') && Utils.isObject(content.attr)) {
           attr = content.attr;
         }
         if (!attr.hasOwnProperty('class') || ['string', 'number'].indexOf(_typeof(attr["class"])) < 0) {
@@ -16238,7 +22419,7 @@
         });
         var menuContent = content.hasOwnProperty('content') && typeof content.content === 'string' && content.content ? content.content : '<i class="bi bi-three-dots-vertical"></i>';
         var position = content.hasOwnProperty('position') && typeof content.position === 'string' && content.position ? content.position : 'end';
-        var menu = $(TableUtils.render(tpl['columns/menu.html'], {
+        var menu = $(Utils.render(tpl['columns/menu.html'], {
           content: menuContent,
           position: position,
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : '',
@@ -16266,7 +22447,7 @@
         if (Array.isArray(items)) {
           var that = this;
           $.each(items, function (key, item) {
-            if (TableUtils.isObject(item) && typeof item.type === 'string') {
+            if (Utils.isObject(item) && typeof item.type === 'string') {
               if (item.type === 'button') {
                 if (item.hasOwnProperty('content') && item.hasOwnProperty('onClick') && ['string', 'function'].indexOf(_typeof(item.onClick)) >= 0 && typeof item.content === 'string') {
                   $('button#btn-dropdown-' + item.id, menu).click(function (event) {
@@ -16305,14 +22486,14 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsBadge = /*#__PURE__*/function (_Column) {
+  var ColumnBadge = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsBadge(table, options) {
-      _classCallCheck(this, ColumnsBadge);
+    function ColumnBadge(table, options) {
+      _classCallCheck(this, ColumnBadge);
       options = $.extend(true, {
         type: 'badge',
         field: null,
@@ -16322,7 +22503,7 @@
         minWidth: null,
         maxWidth: null
       }, options);
-      return _callSuper$3(this, ColumnsBadge, [table, options]);
+      return _callSuper$3(this, ColumnBadge, [table, options]);
     }
 
     /**
@@ -16330,8 +22511,8 @@
      * @param {*} columnValue
      * @returns {string}
      */
-    _inherits(ColumnsBadge, _Column);
-    return _createClass(ColumnsBadge, [{
+    _inherits(ColumnBadge, _Column);
+    return _createClass(ColumnBadge, [{
       key: "convertToString",
       value: function convertToString(columnValue) {
         if (typeof columnValue === 'string') {
@@ -16359,13 +22540,13 @@
             type: 'secondary',
             text: content
           };
-        } else if (!TableUtils.isObject(content) || !content.hasOwnProperty('type') || !content.hasOwnProperty('text') || typeof content.type !== 'string' || typeof content.text !== 'string' || !content.text) {
+        } else if (!Utils.isObject(content) || !content.hasOwnProperty('type') || !content.hasOwnProperty('text') || typeof content.type !== 'string' || typeof content.text !== 'string' || !content.text) {
           return '';
         }
         if (content.type === '' || content.type === 'none') {
           return content.text;
         }
-        return TableUtils.render(tpl['columns/badge.html'], {
+        return Utils.render(tpl['columns/badge.html'], {
           type: content.type,
           text: content.text
         });
@@ -16387,14 +22568,14 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsComponent = /*#__PURE__*/function (_Column) {
+  var ColumnComponent = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsComponent(table, options) {
-      _classCallCheck(this, ColumnsComponent);
+    function ColumnComponent(table, options) {
+      _classCallCheck(this, ColumnComponent);
       options = $.extend(true, {
         type: 'component',
         field: null,
@@ -16404,7 +22585,7 @@
         minWidth: null,
         maxWidth: null
       }, options);
-      return _callSuper$2(this, ColumnsComponent, [table, options]);
+      return _callSuper$2(this, ColumnComponent, [table, options]);
     }
 
     /**
@@ -16413,14 +22594,14 @@
      * @param {object}        record
      * @returns {string}
      */
-    _inherits(ColumnsComponent, _Column);
-    return _createClass(ColumnsComponent, [{
+    _inherits(ColumnComponent, _Column);
+    return _createClass(ColumnComponent, [{
       key: "render",
       value: function render(content, record) {
-        if (!TableUtils.isObject(content) || !content.hasOwnProperty('component') || typeof content.component !== 'string' || !content.component) {
+        if (!Utils.isObject(content) || !content.hasOwnProperty('component') || typeof content.component !== 'string' || !content.component) {
           return '';
         }
-        return TableRender.renderComponents(this._table, content, 'records_show');
+        return Render.renderComponents(this._table, content, 'records_show');
       }
     }]);
   }(Column);
@@ -16439,14 +22620,14 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsProgress = /*#__PURE__*/function (_Column) {
+  var ColumnProgress = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsProgress(table, options) {
-      _classCallCheck(this, ColumnsProgress);
+    function ColumnProgress(table, options) {
+      _classCallCheck(this, ColumnProgress);
       options = $.extend(true, {
         type: 'progress',
         field: null,
@@ -16461,7 +22642,7 @@
         barWidth: null,
         barHeight: null
       }, options);
-      return _callSuper$1(this, ColumnsProgress, [table, options]);
+      return _callSuper$1(this, ColumnProgress, [table, options]);
     }
 
     /**
@@ -16469,8 +22650,8 @@
      * @param {*} columnValue
      * @returns {string}
      */
-    _inherits(ColumnsProgress, _Column);
-    return _createClass(ColumnsProgress, [{
+    _inherits(ColumnProgress, _Column);
+    return _createClass(ColumnProgress, [{
       key: "convertToString",
       value: function convertToString(columnValue) {
         if (['string', 'number'].indexOf(_typeof(columnValue)) >= 0) {
@@ -16491,7 +22672,7 @@
     }, {
       key: "render",
       value: function render(content, record) {
-        if (!TableUtils.isNumeric(content) && (!TableUtils.isObject(content) || !content.hasOwnProperty('percent') || !TableUtils.isNumeric(content.percent))) {
+        if (!Utils.isNumeric(content) && (!Utils.isObject(content) || !content.hasOwnProperty('percent') || !Utils.isNumeric(content.percent))) {
           return '';
         }
         var description = null;
@@ -16499,22 +22680,22 @@
         var percentText = '';
         var color = typeof this._options.barColor === 'string' ? this._options.barColor : 'primary';
         var attr = this._options.attr;
-        attr = TableUtils.mergeAttr(attr, {
+        attr = Utils.mergeAttr(attr, {
           "class": 'progress me-1'
         });
         if (this._options.barWidth) {
-          var barWidth = TableUtils.isNumeric(this._options.barWidth) ? this._options.barWidth + 'px' : this._options.barWidth;
-          attr = TableUtils.mergeAttr(attr, {
+          var barWidth = Utils.isNumeric(this._options.barWidth) ? this._options.barWidth + 'px' : this._options.barWidth;
+          attr = Utils.mergeAttr(attr, {
             style: 'width:' + barWidth
           });
         }
         if (this._options.barHeight) {
-          var barHeight = TableUtils.isNumeric(this._options.barHeight) ? this._options.barHeight + 'px' : this._options.barHeight;
-          attr = TableUtils.mergeAttr(attr, {
+          var barHeight = Utils.isNumeric(this._options.barHeight) ? this._options.barHeight + 'px' : this._options.barHeight;
+          attr = Utils.mergeAttr(attr, {
             style: 'height:' + barHeight
           });
         }
-        if (TableUtils.isNumeric(content)) {
+        if (Utils.isNumeric(content)) {
           if (content < 0) {
             percent = 0;
           } else if (content > 100) {
@@ -16546,7 +22727,7 @@
             attributes.push(name + '="' + value + '"');
           }
         });
-        return TableUtils.render(tpl['columns/progress.html'], {
+        return Utils.render(tpl['columns/progress.html'], {
           description: description,
           percent: percent,
           percentText: percentText,
@@ -16571,15 +22752,15 @@
     derived = _getPrototypeOf(derived);
     return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
   }
-  var ColumnsImage = /*#__PURE__*/function (_Column) {
+  var ColumnImage = /*#__PURE__*/function (_Column) {
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
-    function ColumnsImage(table, options) {
+    function ColumnImage(table, options) {
       var _this2;
-      _classCallCheck(this, ColumnsImage);
+      _classCallCheck(this, ColumnImage);
       options = $.extend(true, {
         type: 'image',
         field: null,
@@ -16594,7 +22775,7 @@
         imgBorder: null,
         imgStyle: null
       }, options);
-      _this2 = _callSuper(this, ColumnsImage, [table, options]);
+      _this2 = _callSuper(this, ColumnImage, [table, options]);
       _this2._table = table;
       _this2._options = $.extend(true, {}, _this2._options, options);
       return _this2;
@@ -16606,8 +22787,8 @@
      * @param {object} record
      * @returns {string}
      */
-    _inherits(ColumnsImage, _Column);
-    return _createClass(ColumnsImage, [{
+    _inherits(ColumnImage, _Column);
+    return _createClass(ColumnImage, [{
       key: "render",
       value: function render(content, record) {
         if (typeof content !== 'string' || content === '') {
@@ -16616,36 +22797,36 @@
         var attr = this._options.attr;
         attr.src = content;
         if (this._options.imgWidth) {
-          var imgWidth = TableUtils.isNumeric(this._options.imgWidth) ? this._options.imgWidth + 'px' : this._options.imgWidth;
-          attr = TableUtils.mergeAttr(attr, {
+          var imgWidth = Utils.isNumeric(this._options.imgWidth) ? this._options.imgWidth + 'px' : this._options.imgWidth;
+          attr = Utils.mergeAttr(attr, {
             style: 'width:' + imgWidth
           });
         }
         if (this._options.imgHeight) {
-          var imgHeight = TableUtils.isNumeric(this._options.imgHeight) ? this._options.imgHeight + 'px' : this._options.imgHeight;
-          attr = TableUtils.mergeAttr(attr, {
+          var imgHeight = Utils.isNumeric(this._options.imgHeight) ? this._options.imgHeight + 'px' : this._options.imgHeight;
+          attr = Utils.mergeAttr(attr, {
             style: 'height:' + imgHeight
           });
         }
         if (this._options.imgBorder) {
-          attr = TableUtils.mergeAttr(attr, {
+          attr = Utils.mergeAttr(attr, {
             "class": 'border border-secondary-subtle'
           });
         }
         if (this._options.imgStyle && typeof this._options.imgStyle === 'string') {
           switch (this._options.imgStyle) {
             case 'circle':
-              attr = TableUtils.mergeAttr(attr, {
+              attr = Utils.mergeAttr(attr, {
                 "class": 'rounded-circle'
               });
               break;
             case 'thumb':
-              attr = TableUtils.mergeAttr(attr, {
+              attr = Utils.mergeAttr(attr, {
                 "class": 'img-thumbnail'
               });
               break;
             case 'rounded':
-              attr = TableUtils.mergeAttr(attr, {
+              attr = Utils.mergeAttr(attr, {
                 "class": 'rounded'
               });
               break;
@@ -16657,71 +22838,71 @@
             attributes.push(name + '="' + value + '"');
           }
         });
-        return TableUtils.render(tpl['columns/image.html'], {
+        return Utils.render(tpl['columns/image.html'], {
           attr: attributes.length > 0 ? ' ' + attributes.join(' ') : ''
         });
       }
     }]);
   }(Column);
 
-  Table.lang.ru = langRu;
-  Table.lang.en = langEn;
-  Table.controls.link = ControlLink;
-  Table.controls.button = ControlButton;
-  Table.controls.dropdown = ControlDropdown;
-  Table.controls.buttonGroup = ControlButtonGroup;
-  Table.controls.custom = ControlCustom;
-  Table.controls.pageSize = ControlPageSize;
-  Table.controls.pageJump = ControlPageJump;
-  Table.controls.pages = ControlPages;
-  Table.controls.total = ControlTotal;
-  Table.controls.search = ControlSearch;
-  Table.controls.columns = ControlColumns;
-  Table.controls.caption = ControlCaption;
-  Table.controls.filterClear = ControlFilterClear;
-  Table.controls.divider = ControlDivider;
-  Table.filters.text = FilterText;
-  Table.filters.number = FilterNumber;
-  Table.filters.date = FilterDate;
-  Table.filters.datetime = FilterDatetime;
-  Table.filters.dateMonth = FilterDateMonth;
-  Table.filters.dateRange = FilterDateRange;
-  Table.filters.datetimeRange = FilterDatetimeRange;
-  Table.filters.checkbox = FilterCheckbox;
-  Table.filters.radio = FilterRadio;
-  Table.filters.select = FilterSelect;
-  Table.filters["switch"] = FilterSwitch;
-  Table.search.text = SearchText;
-  Table.search.number = SearchNumber;
-  Table.search.date = SearchDate;
-  Table.search.dateMonth = SearchDateMonth;
-  Table.search.datetime = SearchDatetime;
-  Table.search.dateRange = SearchDateRange;
-  Table.search.datetimeRange = SearchDatetimeRange;
-  Table.search.checkbox = SearchCheckbox;
-  Table.search.checkboxBtn = SearchCheckboxBtn;
-  Table.search.radio = SearchRadio;
-  Table.search.radioBtn = SearchRadioBtn;
-  Table.search.select = SearchSelect;
-  Table.search["switch"] = SearchSwitch;
-  Table.columns.date = ColumnsDate;
-  Table.columns.datetime = ColumnsDatetime;
-  Table.columns.dateHuman = ColumnsDateHuman;
-  Table.columns.html = ColumnsHtml;
-  Table.columns.number = ColumnsNumber;
-  Table.columns.money = ColumnsMoney;
-  Table.columns.numbers = ColumnsNumbers;
-  Table.columns.select = ColumnsSelect;
-  Table.columns["switch"] = ColumnsSwitch;
-  Table.columns.text = ColumnsText;
-  Table.columns.button = ColumnsButton;
-  Table.columns.link = ColumnsLink;
-  Table.columns.menu = ColumnsMenu;
-  Table.columns.badge = ColumnsBadge;
-  Table.columns.component = ColumnsComponent;
-  Table.columns.progress = ColumnsProgress;
-  Table.columns.image = ColumnsImage;
+  Controller.lang.ru = langRu;
+  Controller.lang.en = langEn;
+  Controller.controls.link = ControlLink;
+  Controller.controls.button = ControlButton;
+  Controller.controls.dropdown = ControlDropdown;
+  Controller.controls.buttonGroup = ControlButtonGroup;
+  Controller.controls.custom = ControlCustom;
+  Controller.controls.pageSize = ControlPageSize;
+  Controller.controls.pageJump = ControlPageJump;
+  Controller.controls.pages = ControlPages;
+  Controller.controls.total = ControlTotal;
+  Controller.controls.search = ControlSearch;
+  Controller.controls.columns = ControlColumns;
+  Controller.controls.caption = ControlCaption;
+  Controller.controls.filterClear = ControlFilterClear;
+  Controller.controls.divider = ControlDivider;
+  Controller.filters.text = FilterText;
+  Controller.filters.number = FilterNumber;
+  Controller.filters.date = FilterDate;
+  Controller.filters.datetime = FilterDatetime;
+  Controller.filters.dateMonth = FilterDateMonth;
+  Controller.filters.dateRange = FilterDateRange;
+  Controller.filters.datetimeRange = FilterDatetimeRange;
+  Controller.filters.checkbox = FilterCheckbox;
+  Controller.filters.radio = FilterRadio;
+  Controller.filters.select = FilterSelect;
+  Controller.filters["switch"] = FilterSwitch;
+  Controller.search.text = SearchText;
+  Controller.search.number = SearchNumber;
+  Controller.search.date = SearchDate;
+  Controller.search.dateMonth = SearchDateMonth;
+  Controller.search.datetime = SearchDatetime;
+  Controller.search.dateRange = SearchDateRange;
+  Controller.search.datetimeRange = SearchDatetimeRange;
+  Controller.search.checkbox = SearchCheckbox;
+  Controller.search.checkboxBtn = SearchCheckboxBtn;
+  Controller.search.radio = SearchRadio;
+  Controller.search.radioBtn = SearchRadioBtn;
+  Controller.search.select = SearchSelect;
+  Controller.search["switch"] = SearchSwitch;
+  Controller.columns.date = ColumnDate;
+  Controller.columns.datetime = ColumnDatetime;
+  Controller.columns.dateHuman = ColumnDateHuman;
+  Controller.columns.html = ColumnHtml;
+  Controller.columns.number = ColumnNumber;
+  Controller.columns.money = ColumnMoney;
+  Controller.columns.numbers = ColumnNumbers;
+  Controller.columns.select = ColumnSelect;
+  Controller.columns["switch"] = ColumnSwitch;
+  Controller.columns.text = ColumnText;
+  Controller.columns.button = ColumnButton;
+  Controller.columns.link = ColumnLink;
+  Controller.columns.menu = ColumnMenu;
+  Controller.columns.badge = ColumnBadge;
+  Controller.columns.component = ColumnComponent;
+  Controller.columns.progress = ColumnProgress;
+  Controller.columns.image = ColumnImage;
 
-  return Table;
+  return Controller;
 
 }));

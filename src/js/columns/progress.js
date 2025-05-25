@@ -1,13 +1,13 @@
-import TableUtils from "../table.utils";
-import TableTpl   from "../table.tpl";
-import Column           from "../abstract/Column";
+import Utils  from "../utils";
+import Tpl    from "../tpl";
+import Column from "../abstract/Column";
 
 
-class ColumnsProgress extends Column {
+class ColumnProgress extends Column {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -63,11 +63,11 @@ class ColumnsProgress extends Column {
     render(content, record) {
 
         if (
-            ( ! TableUtils.isNumeric(content)) &&
+            ( ! Utils.isNumeric(content)) &&
             (
-                ! TableUtils.isObject(content) ||
+                ! Utils.isObject(content) ||
                 ! content.hasOwnProperty('percent') ||
-                ! TableUtils.isNumeric(content.percent)
+                ! Utils.isNumeric(content.percent)
             )
         ) {
             return '';
@@ -79,24 +79,24 @@ class ColumnsProgress extends Column {
         let color       = typeof this._options.barColor === 'string' ? this._options.barColor : 'primary';
         let attr        = this._options.attr;
 
-        attr = TableUtils.mergeAttr(attr, { class: 'progress me-1' });
+        attr = Utils.mergeAttr(attr, { class: 'progress me-1' });
 
         if (this._options.barWidth) {
-            let barWidth = TableUtils.isNumeric(this._options.barWidth)
+            let barWidth = Utils.isNumeric(this._options.barWidth)
                 ? (this._options.barWidth + 'px')
                 : this._options.barWidth;
-            attr = TableUtils.mergeAttr(attr, { style: 'width:' + barWidth });
+            attr = Utils.mergeAttr(attr, { style: 'width:' + barWidth });
         }
 
         if (this._options.barHeight) {
-            let barHeight = TableUtils.isNumeric(this._options.barHeight)
+            let barHeight = Utils.isNumeric(this._options.barHeight)
                 ? (this._options.barHeight + 'px')
                 : this._options.barHeight;
-            attr = TableUtils.mergeAttr(attr, { style: 'height:' + barHeight });
+            attr = Utils.mergeAttr(attr, { style: 'height:' + barHeight });
         }
 
 
-        if (TableUtils.isNumeric(content)) {
+        if (Utils.isNumeric(content)) {
             if (content < 0 ) {
                 percent = 0;
 
@@ -145,7 +145,7 @@ class ColumnsProgress extends Column {
         });
 
 
-        return TableUtils.render(TableTpl['columns/progress.html'], {
+        return Utils.render(Tpl['columns/progress.html'], {
             description: description,
             percent: percent,
             percentText: percentText,
@@ -155,4 +155,4 @@ class ColumnsProgress extends Column {
     }
 }
 
-export default ColumnsProgress;
+export default ColumnProgress;

@@ -1,6 +1,6 @@
 
-import TableUtils from '../table.utils';
-import TableTpl   from "../table.tpl";
+import Utils from '../utils';
+import Tpl   from "../tpl";
 import Control          from "../abstract/Control";
 
 
@@ -8,7 +8,7 @@ class ControlPageJump extends Control {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -21,8 +21,8 @@ class ControlPageJump extends Control {
             },
         };
 
-        if (options.hasOwnProperty('attr') && TableUtils.isObject(options.attr)) {
-            options.attr = TableUtils.mergeAttr(optionsOriginal.attr, options.attr);
+        if (options.hasOwnProperty('attr') && Utils.isObject(options.attr)) {
+            options.attr = Utils.mergeAttr(optionsOriginal.attr, options.attr);
         }
 
         options = $.extend(true, optionsOriginal, options);
@@ -40,7 +40,7 @@ class ControlPageJump extends Control {
         let attributes = [];
         let table      = this._table;
 
-        if (TableUtils.isObject(this._options.attr)) {
+        if (Utils.isObject(this._options.attr)) {
             $.each(this._options.attr, function (name, value) {
                 if (['string', 'number'].indexOf(typeof value) >= 0) {
                     attributes.push(name + '="' + value + '"');
@@ -48,7 +48,7 @@ class ControlPageJump extends Control {
             });
         }
 
-        let control = $(TableUtils.render(TableTpl['controls/page-jump.html'], {
+        let control = $(Utils.render(Tpl['controls/page-jump.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : ''
         }));
 

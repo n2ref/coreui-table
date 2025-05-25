@@ -1,7 +1,7 @@
 
 import 'ejs/ejs.min';
 
-let TableUtils = {
+let Utils = {
 
     _templates: {},
 
@@ -72,6 +72,20 @@ let TableUtils = {
 
 
     /**
+     * Проверка, что переменная является классом
+     * @param variable
+     * @return {boolean}
+     */
+    isClass: function isClass(variable) {
+
+        return (
+            typeof variable === 'function' &&
+            variable.prototype
+        );
+    },
+
+
+    /**
      * @param str
      * @returns {number}
      */
@@ -133,4 +147,4 @@ let TableUtils = {
 }
 
 
-export default TableUtils;
+export default Utils;

@@ -1,14 +1,14 @@
 
-import TableTpl      from "../table.tpl";
-import TableUtils    from '../table.utils';
-import TableElements from "../table.elements";
+import Tpl      from "../tpl";
+import Utils    from '../utils';
+import Elements from "../elements";
 import Control             from "../abstract/Control";
 
 class ControlTotal extends Control {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -20,8 +20,8 @@ class ControlTotal extends Control {
             }
         };
 
-        if (options.hasOwnProperty('attr') && TableUtils.isObject(options.attr)) {
-            options.attr = TableUtils.mergeAttr(optionsOriginal.attr, options.attr);
+        if (options.hasOwnProperty('attr') && Utils.isObject(options.attr)) {
+            options.attr = Utils.mergeAttr(optionsOriginal.attr, options.attr);
         }
 
         options = $.extend(true, optionsOriginal, options);
@@ -39,7 +39,7 @@ class ControlTotal extends Control {
         let attributes = [];
         let table      = this._table;
 
-        if (TableUtils.isObject(this._options.attr)) {
+        if (Utils.isObject(this._options.attr)) {
             $.each(this._options.attr, function (name, value) {
                 if (['string', 'number'].indexOf(typeof value) >= 0) {
                     attributes.push(name + '="' + value + '"');
@@ -47,7 +47,7 @@ class ControlTotal extends Control {
             });
         }
 
-        let control = $(TableUtils.render(TableTpl['controls/total.html'], {
+        let control = $(Utils.render(Tpl['controls/total.html'], {
             recordsTotal: table._recordsTotal,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             lang: table.getLang(),

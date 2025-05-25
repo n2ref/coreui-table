@@ -1,14 +1,14 @@
 
-import TableTpl      from "../table.tpl";
-import TableUtils    from "../table.utils";
-import TableElements from "../table.elements";
+import Tpl      from "../tpl";
+import Utils    from "../utils";
+import Elements from "../elements";
 import Search        from "../abstract/Search";
 
 class SearchDate extends Search {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}        options
      */
     constructor(table, options) {
@@ -106,12 +106,12 @@ class SearchDate extends Search {
      */
     render() {
 
-        if ( ! TableUtils.isObject(this._options.attr)) {
+        if ( ! Utils.isObject(this._options.attr)) {
             this._options.attr = {};
         }
 
         if (this._options.hasOwnProperty('width') &&
-            TableUtils.isNumeric(this._options.width)
+            Utils.isNumeric(this._options.width)
         ) {
             if (this._options.attr.hasOwnProperty('style')) {
                 this._options.attr['style'] += ';width:' + this._options.width + 'px';
@@ -135,7 +135,7 @@ class SearchDate extends Search {
             attributes.push(name + '="' + value + '"');
         });
 
-        this._control = $(TableUtils.render(TableTpl['search/date.html'], {
+        this._control = $(Utils.render(Tpl['search/date.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         }));
 
@@ -144,7 +144,7 @@ class SearchDate extends Search {
             if (e.key === 'Enter' || e.keyCode === 13) {
                 table.searchRecords();
 
-                let container = TableElements.getSearchContainer(table.getId());
+                let container = Elements.getSearchContainer(table.getId());
                 container.fadeOut('fast');
             }
         });

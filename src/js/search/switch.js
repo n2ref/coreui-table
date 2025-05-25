@@ -1,13 +1,13 @@
 
-import TableTpl   from "../table.tpl";
-import TableUtils from "../table.utils";
+import Tpl   from "../tpl";
+import Utils from "../utils";
 import Search           from "../abstract/Search";
 
 class SearchSwitch extends Search {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -110,7 +110,7 @@ class SearchSwitch extends Search {
             ? options.valueY
             : ''
 
-        this._control = $(TableUtils.render(TableTpl['search/switch.html'], {
+        this._control = $(Utils.render(Tpl['search/switch.html'], {
             id: this._id,
             valueY: valueY,
             field: typeof options.field === 'string' ? options.field : '',

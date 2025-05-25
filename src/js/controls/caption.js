@@ -1,13 +1,13 @@
 
-import TableTpl   from '../table.tpl';
-import TableUtils from '../table.utils';
+import Tpl   from '../tpl';
+import Utils from '../utils';
 import Control          from "../abstract/Control";
 
 class ControlCaption extends Control {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -30,7 +30,7 @@ class ControlCaption extends Control {
      */
     render() {
 
-        return TableUtils.render(TableTpl['controls/caption.html'], {
+        return Utils.render(Tpl['controls/caption.html'], {
             title: this._options.title,
             description: this._options.description,
             value: this._options.value,

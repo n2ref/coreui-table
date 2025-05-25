@@ -1,4 +1,4 @@
-import TableUtils from "../table.utils";
+import Utils from "../utils";
 
 
 class Filter {
@@ -25,7 +25,7 @@ class Filter {
         this._options = $.extend(true, this._options, options);
         this._id      = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
             ? this._options.id
-            : TableUtils.hashCode();
+            : Utils.hashCode();
     }
 
 

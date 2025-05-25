@@ -1,6 +1,6 @@
 
-import TableTpl   from '../table.tpl';
-import TableUtils from '../table.utils';
+import Tpl   from '../tpl';
+import Utils from '../utils';
 import Control          from "../abstract/Control";
 
 class ControlButtonGroup extends Control {
@@ -20,7 +20,7 @@ class ControlButtonGroup extends Control {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -63,7 +63,7 @@ class ControlButtonGroup extends Control {
                 ) {
                     let attributes = [];
 
-                    if ( ! TableUtils.isObject(link.attr)) {
+                    if ( ! Utils.isObject(link.attr)) {
                         link.attr = {};
                     }
 
@@ -81,7 +81,7 @@ class ControlButtonGroup extends Control {
                         }
                     });
 
-                    result = TableUtils.render(TableTpl['controls/button_group/link.html'], {
+                    result = Utils.render(Tpl['controls/button_group/link.html'], {
                         url: link.url,
                         attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
                         content: link.content
@@ -105,7 +105,7 @@ class ControlButtonGroup extends Control {
                 ) {
                     let attributes = [];
 
-                    if ( ! TableUtils.isObject(button.attr)) {
+                    if ( ! Utils.isObject(button.attr)) {
                         button.attr = {};
                     }
 
@@ -124,7 +124,7 @@ class ControlButtonGroup extends Control {
                     });
 
 
-                    result = $(TableUtils.render(TableTpl['controls/button_group/button.html'], {
+                    result = $(Utils.render(Tpl['controls/button_group/button.html'], {
                         content: button.content,
                         attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
                     }));
@@ -169,7 +169,7 @@ class ControlButtonGroup extends Control {
                     let items      = [];
 
                     button.items.map(function (item) {
-                        if (TableUtils.isObject(item) && typeof item.type === 'string') {
+                        if (Utils.isObject(item) && typeof item.type === 'string') {
 
                             if (item.type === 'link') {
                                 if (item.hasOwnProperty('url') &&
@@ -178,7 +178,7 @@ class ControlButtonGroup extends Control {
                                     typeof item.content === 'string' &&
                                     item.url
                                 ) {
-                                    items.push(TableUtils.render(TableTpl['controls/button_group/dropdown/link.html'], {
+                                    items.push(Utils.render(Tpl['controls/button_group/dropdown/link.html'], {
                                         url: item.url,
                                         content: item.content,
                                     }));
@@ -188,7 +188,7 @@ class ControlButtonGroup extends Control {
                                 if (item.hasOwnProperty('content') &&
                                     typeof item.content === 'string'
                                 ) {
-                                    let btn = $(TableUtils.render(TableTpl['controls/button_group/dropdown/button.html'], {
+                                    let btn = $(Utils.render(Tpl['controls/button_group/dropdown/button.html'], {
                                         content: item.content,
                                     }));
 
@@ -217,13 +217,13 @@ class ControlButtonGroup extends Control {
 
 
                             } else if (item.type === 'divider') {
-                                items.push(TableTpl['controls/button_group/dropdown/divider.html']);
+                                items.push(Tpl['controls/button_group/dropdown/divider.html']);
                             }
                         }
                     });
 
 
-                    if ( ! TableUtils.isObject(button.attr)) {
+                    if ( ! Utils.isObject(button.attr)) {
                         button.attr = {};
                     }
 
@@ -242,7 +242,7 @@ class ControlButtonGroup extends Control {
                         }
                     });
 
-                    result = $(TableUtils.render(TableTpl['controls/button_group/dropdown.html'], {
+                    result = $(Utils.render(Tpl['controls/button_group/dropdown.html'], {
                         attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
                         position: button.hasOwnProperty('position') && typeof button.position === 'string' ? button.position : 'end',
                         content: button.content,
@@ -262,7 +262,7 @@ class ControlButtonGroup extends Control {
 
 
             options.buttons.map(function (button) {
-                if (TableUtils.isObject(button) && typeof button.type === 'string') {
+                if (Utils.isObject(button) && typeof button.type === 'string') {
 
 
                     if (button.type === 'link') {
@@ -291,7 +291,7 @@ class ControlButtonGroup extends Control {
         }
 
 
-        let btnGroup = $(TableTpl['controls/button_group.html']);
+        let btnGroup = $(Tpl['controls/button_group.html']);
 
         buttons.map(function (button) {
             btnGroup.append(button);

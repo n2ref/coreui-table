@@ -1,13 +1,13 @@
 
-import TableTpl   from "../table.tpl";
-import TableUtils from "../table.utils";
+import Tpl   from "../tpl";
+import Utils from "../utils";
 import Filter           from "../abstract/Filter";
 
 class FilterNumber extends Filter {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -44,7 +44,7 @@ class FilterNumber extends Filter {
     setValue(value) {
 
         if (value) {
-            if ( ! TableUtils.isObject(value)) {
+            if ( ! Utils.isObject(value)) {
                 return;
             }
 
@@ -90,7 +90,7 @@ class FilterNumber extends Filter {
                 inputStart.val('');
                 inputEnd.val('');
 
-            } else if (TableUtils.isObject(this._value)) {
+            } else if (Utils.isObject(this._value)) {
                 inputStart.val(typeof this._value.start !== null ? this._value.start : '');
                 inputEnd.val(typeof this._value.end !== null ? this._value.end : '');
             }
@@ -140,7 +140,7 @@ class FilterNumber extends Filter {
     filter(fieldValue, searchValue) {
 
         if (['string', 'number'].indexOf(typeof fieldValue) < 0 ||
-            ! TableUtils.isObject(searchValue) ||
+            ! Utils.isObject(searchValue) ||
             (
                 ['string', 'number'].indexOf(typeof searchValue.start) < 0 &&
                 ['string', 'number'].indexOf(typeof searchValue.end) < 0
@@ -176,12 +176,12 @@ class FilterNumber extends Filter {
             ? options.label
             : '';
 
-        if ( ! TableUtils.isObject(options.attr)) {
+        if ( ! Utils.isObject(options.attr)) {
             options.attr = {};
         }
 
         if (options.hasOwnProperty('width') &&
-            TableUtils.isNumeric(options.width)
+            Utils.isNumeric(options.width)
         ) {
             if (options.attr.hasOwnProperty('style')) {
                 options.attr['style'] += ';width:' + options.width + 'px';
@@ -238,10 +238,10 @@ class FilterNumber extends Filter {
 
 
 
-        if ( ! TableUtils.isObject(options.btn)) {
+        if ( ! Utils.isObject(options.btn)) {
             options.btn = {};
         }
-        if ( ! TableUtils.isObject(options.btn.attr)) {
+        if ( ! Utils.isObject(options.btn.attr)) {
             options.btn.attr = {};
         }
 
@@ -254,7 +254,7 @@ class FilterNumber extends Filter {
             attrBtn.push(name + '="' + value + '"');
         });
 
-        this._control = $(TableUtils.render(TableTpl['filters/number.html'], {
+        this._control = $(Utils.render(Tpl['filters/number.html'], {
             attrStart: startAttr.length > 0 ? (' ' + startAttr.join(' ')) : '',
             attrEnd: endAttr.length > 0 ? (' ' + endAttr.join(' ')) : '',
             label: label,

@@ -1,13 +1,13 @@
 
-import TableTpl   from '../table.tpl';
-import TableUtils from '../table.utils';
+import Tpl   from '../tpl';
+import Utils from '../utils';
 import Control    from "../abstract/Control";
 
 class ControlDropdown extends Control {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -41,7 +41,7 @@ class ControlDropdown extends Control {
 
         if (Array.isArray(options.items)) {
             options.items.map(function (item) {
-                if (TableUtils.isObject(item) && typeof item.type === 'string') {
+                if (Utils.isObject(item) && typeof item.type === 'string') {
 
                     if (item.type === 'link') {
                         if (item.hasOwnProperty('url') &&
@@ -49,7 +49,7 @@ class ControlDropdown extends Control {
                             typeof item.url === 'string' &&
                             typeof item.content === 'string'
                         ) {
-                            let link = TableUtils.render(TableTpl['controls/dropdown/link.html'], {
+                            let link = Utils.render(Tpl['controls/dropdown/link.html'], {
                                 url: item.url,
                                 content: item.content,
                             });
@@ -61,7 +61,7 @@ class ControlDropdown extends Control {
                         if (item.hasOwnProperty('content') &&
                             typeof item.content === 'string'
                         ) {
-                            let button = $(TableUtils.render(TableTpl['controls/dropdown/button.html'], {
+                            let button = $(Utils.render(Tpl['controls/dropdown/button.html'], {
                                 url: item.url,
                                 content: item.content,
                             }));
@@ -91,13 +91,13 @@ class ControlDropdown extends Control {
 
 
                     } else if (item.type === 'divider') {
-                        items.push(TableTpl['controls/dropdown/divider.html']);
+                        items.push(Tpl['controls/dropdown/divider.html']);
                     }
                 }
             });
         }
 
-        if (TableUtils.isObject(options.attr)) {
+        if (Utils.isObject(options.attr)) {
             if (options.attr.hasOwnProperty('type')) {
                 delete options.attr.type;
             }
@@ -113,7 +113,7 @@ class ControlDropdown extends Control {
             });
         }
 
-        let dropdown = $(TableUtils.render(TableTpl['controls/dropdown.html'], {
+        let dropdown = $(Utils.render(Tpl['controls/dropdown.html'], {
             content: options.content,
             position: options.hasOwnProperty('position') && typeof options.position === 'string' ? options.position : 'end',
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',

@@ -1,6 +1,6 @@
 
-import TableTpl   from "../table.tpl";
-import TableUtils from "../table.utils";
+import Tpl   from "../tpl";
+import Utils from "../utils";
 import Control          from "../abstract/Control";
 
 
@@ -8,7 +8,7 @@ class ControlFilterClear extends Control {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -41,7 +41,7 @@ class ControlFilterClear extends Control {
         let options = this.getOptions();
         let table   = this._table;
 
-        if ( ! TableUtils.isObject(options.attr)) {
+        if ( ! Utils.isObject(options.attr)) {
             options.attr = {};
         }
 
@@ -68,7 +68,7 @@ class ControlFilterClear extends Control {
         });
 
 
-        let button = $(TableUtils.render(TableTpl['controls/filter_clear.html'], {
+        let button = $(Utils.render(Tpl['controls/filter_clear.html'], {
             attr: attr.length > 0 ? (' ' + attr.join(' ')) : '',
             content: options.content ? options.content : '',
         }));

@@ -1,12 +1,12 @@
-import TableUtils from "../table.utils";
-import TableTpl   from "../table.tpl";
-import Column           from "../abstract/Column";
+import Utils  from "../utils";
+import Tpl    from "../tpl";
+import Column from "../abstract/Column";
 
-class ColumnsBadge extends Column {
+class ColumnBadge extends Column {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -61,7 +61,7 @@ class ColumnsBadge extends Column {
         if (['string', 'number'].indexOf(typeof content) >= 0) {
             content = { type: 'secondary', text: content };
 
-        } else if ( ! TableUtils.isObject(content) ||
+        } else if ( ! Utils.isObject(content) ||
              ! content.hasOwnProperty('type') ||
              ! content.hasOwnProperty('text') ||
              typeof content.type !== 'string' ||
@@ -75,11 +75,11 @@ class ColumnsBadge extends Column {
             return content.text;
         }
 
-        return TableUtils.render(TableTpl['columns/badge.html'], {
+        return Utils.render(Tpl['columns/badge.html'], {
             type: content.type,
             text: content.text
         });
     }
 }
 
-export default ColumnsBadge;
+export default ColumnBadge;

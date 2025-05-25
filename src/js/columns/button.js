@@ -1,14 +1,14 @@
 
-import TableUtils from "../table.utils";
-import TableTpl   from "../table.tpl";
+import Utils from "../utils";
+import Tpl   from "../tpl";
 import Column           from "../abstract/Column";
 
 
-class ColumnsButton extends Column {
+class ColumnButton extends Column {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -35,12 +35,12 @@ class ColumnsButton extends Column {
      */
     render(content, record) {
 
-        if ( ! TableUtils.isObject(content)) {
+        if ( ! Utils.isObject(content)) {
             return '';
         }
 
 
-        if ( ! TableUtils.isObject(content.attr)) {
+        if ( ! Utils.isObject(content.attr)) {
             content.attr = {}
         }
 
@@ -62,7 +62,7 @@ class ColumnsButton extends Column {
         });
 
         let btn = $(
-            TableUtils.render(TableTpl['columns/button.html'], {
+            Utils.render(Tpl['columns/button.html'], {
                 content: content.content,
                 attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             })
@@ -117,4 +117,4 @@ class ColumnsButton extends Column {
     }
 }
 
-export default ColumnsButton;
+export default ColumnButton;

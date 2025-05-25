@@ -1,14 +1,14 @@
 
-import TableTpl      from "../table.tpl";
-import TableUtils    from "../table.utils";
-import TableElements from "../table.elements";
+import Tpl      from "../tpl";
+import Utils    from "../utils";
+import Elements from "../elements";
 import Filter              from "../abstract/Filter";
 
 class FilterDateMonth extends Filter {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -113,12 +113,12 @@ class FilterDateMonth extends Filter {
             ? options.label
             : '';
 
-        if ( ! TableUtils.isObject(options.attr)) {
+        if ( ! Utils.isObject(options.attr)) {
             options.attr = {};
         }
 
         if (options.hasOwnProperty('width') &&
-            TableUtils.isNumeric(options.width)
+            Utils.isNumeric(options.width)
         ) {
             if (options.attr.hasOwnProperty('style')) {
                 options.attr['style'] += ';width:' + options.width + 'px';
@@ -143,7 +143,7 @@ class FilterDateMonth extends Filter {
             attr.push(name + '="' + value + '"');
         });
 
-        this._control = $(TableUtils.render(TableTpl['filters/date_month.html'], {
+        this._control = $(Utils.render(Tpl['filters/date_month.html'], {
             attr: attr.length > 0 ? (' ' + attr.join(' ')) : '',
             label: label
         }));

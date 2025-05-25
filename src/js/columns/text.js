@@ -1,13 +1,13 @@
 
-import TableUtils from "../table.utils";
-import Column           from "../abstract/Column";
+import Utils  from "../utils";
+import Column from "../abstract/Column";
 
 
-class ColumnsText extends Column {
+class ColumnText extends Column {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -39,7 +39,7 @@ class ColumnsText extends Column {
                 this._options.attr = { class : 'coreui_table__no-wrap' };
 
             } else {
-                this._options.attr = TableUtils.mergeAttr(this._options.attr, {
+                this._options.attr = Utils.mergeAttr(this._options.attr, {
                     class: 'coreui_table__no-wrap'
                 });
             }
@@ -84,4 +84,4 @@ class ColumnsText extends Column {
 }
 
 
-export default ColumnsText;
+export default ColumnText;

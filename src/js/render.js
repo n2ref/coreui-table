@@ -1,14 +1,14 @@
 
-import TableTpl   from './table.tpl';
-import TableUtils from "./table.utils";
+import Tpl   from './tpl';
+import Utils from "./utils";
 
 
-let TableRender = {
+let Render = {
 
 
     /**
      * Сборка таблицы
-     * @param {TableInstance} table
+     * @param {Table} table
      * @private
      */
     renderTable: function (table) {
@@ -18,7 +18,7 @@ let TableRender = {
         let columnsHeader   = '';
         let columnsFooter   = '';
         let colGroups       = [];
-        let columnElements  = $(TableTpl['table/columns/tr.html']);
+        let columnElements  = $(Tpl['table/columns/tr.html']);
 
 
         // Колонки
@@ -36,24 +36,24 @@ let TableRender = {
                 let menuPosition   = 'end';
 
                 if (columnOptions.hasOwnProperty('field') && typeof columnOptions.field === 'string') {
-                    columnOptions.attrHeader = TableUtils.mergeAttr(columnOptions.attrHeader, {
+                    columnOptions.attrHeader = Utils.mergeAttr(columnOptions.attrHeader, {
                         "data-field": columnOptions.field
                     });
                 }
 
                 if (columnOptions.hasOwnProperty('fixed') && typeof columnOptions.fixed === 'string') {
-                    columnOptions.attrHeader = TableUtils.mergeAttr(columnOptions.attrHeader, {
+                    columnOptions.attrHeader = Utils.mergeAttr(columnOptions.attrHeader, {
                         class: 'coreui-table__fixed_' + columnOptions.fixed
                     });
 
-                    columnOptions.attr = TableUtils.mergeAttr(columnOptions.attr, {
+                    columnOptions.attr = Utils.mergeAttr(columnOptions.attr, {
                         class: 'coreui-table__fixed_' + columnOptions.fixed
                     });
                 }
 
                 if (columnOptions.type !== 'numbers') {
                     if (columnOptions.hasOwnProperty('sortable') && columnOptions.sortable) {
-                        columnOptions.attrHeader = TableUtils.mergeAttr(columnOptions.attrHeader, {
+                        columnOptions.attrHeader = Utils.mergeAttr(columnOptions.attrHeader, {
                             class: 'coreui-table__sortable'
                         });
                     }
@@ -81,7 +81,7 @@ let TableRender = {
 
                 if (options.showHeaders &&
                     columnOptions.hasOwnProperty('menu') &&
-                    TableUtils.isObject(columnOptions.menu) &&
+                    Utils.isObject(columnOptions.menu) &&
                     columnOptions.menu.hasOwnProperty('items') &&
                     Array.isArray(columnOptions.menu.items)
                 ) {
@@ -96,7 +96,7 @@ let TableRender = {
 
                     columnOptions.menu.items.map(function (item) {
 
-                        if (TableUtils.isObject(item) &&
+                        if (Utils.isObject(item) &&
                             item.hasOwnProperty('type') &&
                             typeof item.type === 'string' &&
                             item.type
@@ -115,15 +115,15 @@ let TableRender = {
                                             class: 'dropdown-item',
                                         };
 
-                                        if (item.hasOwnProperty('attr') && TableUtils.isObject(item.attr)) {
-                                            attr = TableUtils.mergeAttr(attr, item.attr);
+                                        if (item.hasOwnProperty('attr') && Utils.isObject(item.attr)) {
+                                            attr = Utils.mergeAttr(attr, item.attr);
                                         }
 
                                         $.each(attr, function (name, value) {
                                             attrItem.push(name + '="' + value + '"');
                                         });
 
-                                        let menuElement = $(TableUtils.render(TableTpl['table/columns/menu/button.html'], {
+                                        let menuElement = $(Utils.render(Tpl['table/columns/menu/button.html'], {
                                             text: item.text,
                                             attr: attrItem.join(' '),
                                         }));
@@ -160,15 +160,15 @@ let TableRender = {
                                             class: 'dropdown-item',
                                         };
 
-                                        if (item.hasOwnProperty('attr') && TableUtils.isObject(item.attr)) {
-                                            attr = TableUtils.mergeAttr(attr, item.attr);
+                                        if (item.hasOwnProperty('attr') && Utils.isObject(item.attr)) {
+                                            attr = Utils.mergeAttr(attr, item.attr);
                                         }
 
                                         $.each(attr, function (name, value) {
                                             attrItem.push(name + '="' + value + '"');
                                         });
 
-                                        menuElements.push($(TableUtils.render(TableTpl['table/columns/menu/link.html'], {
+                                        menuElements.push($(Utils.render(Tpl['table/columns/menu/link.html'], {
                                             text: item.text,
                                             attr: attrItem.join(' '),
                                         })));
@@ -176,11 +176,11 @@ let TableRender = {
                                     break;
 
                                 case 'divider':
-                                    menuElements.push($(TableTpl['table/columns/menu/divider.html']));
+                                    menuElements.push($(Tpl['table/columns/menu/divider.html']));
                                     break;
 
                                 case 'header':
-                                    menuElements.push($(TableUtils.render(TableTpl['table/columns/menu/header.html'], {
+                                    menuElements.push($(Utils.render(Tpl['table/columns/menu/header.html'], {
                                         text: item.text
                                     })));
                                     break;
@@ -189,7 +189,7 @@ let TableRender = {
                     });
                 }
 
-                if (columnOptions.attrHeader && TableUtils.isObject(columnOptions.attrHeader)) {
+                if (columnOptions.attrHeader && Utils.isObject(columnOptions.attrHeader)) {
                     $.each(columnOptions.attrHeader, function (name, value) {
                         attributes.push(name + '="' + value + '"');
                     });
@@ -240,7 +240,7 @@ let TableRender = {
                         description = columnOptions.description;
                     }
 
-                    let columnElement = $(TableUtils.render(TableTpl['table/columns/td.html'], {
+                    let columnElement = $(Utils.render(Tpl['table/columns/td.html'], {
                         attr          : attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
                         label         : label,
                         description   : description,
@@ -276,9 +276,9 @@ let TableRender = {
                 ? 1
                 : ((table._page - 1) * table._recordsPerPage) + 1;
 
-            recordsElements = TableRender.renderRecords(table, table._records);
+            recordsElements = Render.renderRecords(table, table._records);
         } else {
-            recordsElements = TableRender.renderRecords(table, []);
+            recordsElements = Render.renderRecords(table, []);
         }
 
 
@@ -294,10 +294,10 @@ let TableRender = {
                     let cells = [];
 
                     headerRow.map(function (headerColumn) {
-                        if (TableUtils.isObject(headerColumn)) {
+                        if (Utils.isObject(headerColumn)) {
                             let attributes = [];
 
-                            if (headerColumn.hasOwnProperty('attr') && TableUtils.isObject(headerColumn.attr)) {
+                            if (headerColumn.hasOwnProperty('attr') && Utils.isObject(headerColumn.attr)) {
                                 $.each(headerColumn.attr, function (name, value) {
                                     attributes.push(name + '="' + value + '"');
                                 });
@@ -311,7 +311,7 @@ let TableRender = {
                         }
                     });
 
-                    rows.push(TableUtils.render(TableTpl['table/columns/header.html'], {
+                    rows.push(Utils.render(Tpl['table/columns/header.html'], {
                         columns: cells,
                     }));
                 }
@@ -331,10 +331,10 @@ let TableRender = {
                     let cells = [];
 
                     $.each(footerRow, function (key, footerColumn) {
-                        if (TableUtils.isObject(footerColumn)) {
+                        if (Utils.isObject(footerColumn)) {
                             let attributes = [];
 
-                            if (footerColumn.hasOwnProperty('attr') && TableUtils.isObject(footerColumn.attr)) {
+                            if (footerColumn.hasOwnProperty('attr') && Utils.isObject(footerColumn.attr)) {
                                 $.each(footerColumn.attr, function (name, value) {
                                     attributes.push(name + '="' + value + '"');
                                 });
@@ -349,7 +349,7 @@ let TableRender = {
                     });
 
                     rows.push(
-                        TableUtils.render(TableTpl['table/columns/footer.html'], {
+                        Utils.render(Tpl['table/columns/footer.html'], {
                             columns: cells,
                         })
                     );
@@ -376,11 +376,11 @@ let TableRender = {
         if (options.hasOwnProperty('theadTop') &&
             ['string', 'number'].indexOf(typeof options.theadTop) >= 0
         ) {
-            let unit = TableUtils.isNumeric(options.theadTop) ? 'px' : '';
+            let unit = Utils.isNumeric(options.theadTop) ? 'px' : '';
             theadAttr.push('style="top:' + options.theadTop + unit + '"');
         }
 
-        let tableElement = $(TableUtils.render(TableTpl['table.html'], {
+        let tableElement = $(Utils.render(Tpl['table.html'], {
             classes: classes.join(' '),
             theadAttr: theadAttr.length > 0 ? theadAttr.join(' ') : '',
             showHeaders: options.showHeaders,
@@ -419,7 +419,7 @@ let TableRender = {
             let that    = this;
             let options = table.getOptions();
             let group   = options.hasOwnProperty('group') &&
-                          TableUtils.isObject(options.group) &&
+                          Utils.isObject(options.group) &&
                           options.group.hasOwnProperty('field') &&
                           typeof options.group.field === 'string' &&
                           options.group.field
@@ -482,7 +482,7 @@ let TableRender = {
 
         if (renderRecords.length === 0) {
             renderRecords = [
-                $(TableUtils.render(TableTpl['table/record/empty.html'], {
+                $(Utils.render(Tpl['table/record/empty.html'], {
                     columnsCount: table._countColumnsShow,
                     lang: table.getLang(),
                 }))
@@ -495,7 +495,7 @@ let TableRender = {
 
     /**
      * Сборка записи таблицы
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {object}        record
      * @returns {{ attr: (string), fields: (object) }}}
      * @private
@@ -528,7 +528,7 @@ let TableRender = {
         }
 
         if (record.meta) {
-            recordAttr = TableUtils.mergeAttr(recordAttr, record.meta.attr);
+            recordAttr = Utils.mergeAttr(recordAttr, record.meta.attr);
         }
 
         let attributes = [];
@@ -537,7 +537,7 @@ let TableRender = {
             attributes.push(name + '="' + value + '"');
         });
 
-        let recordElement = $(TableUtils.render(TableTpl['table/record.html'], {
+        let recordElement = $(Utils.render(Tpl['table/record.html'], {
             attr  : attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             index : record.index,
             fields: fields
@@ -553,7 +553,7 @@ let TableRender = {
 
     /**
      * Сборка ячейки таблицы
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Column}              column
      * @param {object}              record
      * @returns {{ attr: (string), content: (string) }}
@@ -567,22 +567,22 @@ let TableRender = {
         let fieldProps    = record.meta && record.meta.hasOwnProperty('fields') && record.meta.fields.hasOwnProperty(columnField)
             ? record.meta.fields[columnField]
             : null;
-        let fieldAttr = columnOptions.hasOwnProperty('attr') && TableUtils.isObject(columnOptions.attr)
+        let fieldAttr = columnOptions.hasOwnProperty('attr') && Utils.isObject(columnOptions.attr)
             ? columnOptions.attr
             : {};
 
-        if (fieldProps && TableUtils.isObject(fieldProps)) {
+        if (fieldProps && Utils.isObject(fieldProps)) {
             if (fieldProps && fieldProps.hasOwnProperty('show') && ! fieldProps.show) {
                 return null;
             }
 
-            if (TableUtils.isObject(fieldProps.attr)) {
-                fieldAttr = TableUtils.mergeAttr(fieldAttr, fieldProps.attr);
+            if (Utils.isObject(fieldProps.attr)) {
+                fieldAttr = Utils.mergeAttr(fieldAttr, fieldProps.attr);
             }
         }
 
         if (columnOptions.hasOwnProperty('fixed') && typeof columnOptions.fixed === 'string') {
-            fieldAttr = TableUtils.mergeAttr(fieldAttr, {
+            fieldAttr = Utils.mergeAttr(fieldAttr, {
                 class: 'coreui-table__fixed_' + columnOptions.fixed
             });
         }
@@ -605,7 +605,7 @@ let TableRender = {
         if (typeof column.getActions === 'function') {
             let actions = column.getActions(content, columnField, record);
 
-            if (TableUtils.isObject(actions)) {
+            if (Utils.isObject(actions)) {
                 record.fields[columnField] = actions;
             }
         }
@@ -625,7 +625,7 @@ let TableRender = {
 
     /**
      * Сборка записи-группы
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {object}              group
      * @param {object}              record
      * @param {Array}               renderRecords
@@ -634,7 +634,7 @@ let TableRender = {
      */
     renderGroup: function (table, group, record, renderRecords) {
 
-        let attr = group.hasOwnProperty('attr') && TableUtils.isObject(group.attr)
+        let attr = group.hasOwnProperty('attr') && Utils.isObject(group.attr)
             ? group.attr
             : {};
 
@@ -654,7 +654,7 @@ let TableRender = {
 
         let isCollapsing = group.hasOwnProperty('isCollapsing') ? !! group.isCollapsing : false;
 
-        let groupElement = $(TableUtils.render(TableTpl['table/record/group.html'], {
+        let groupElement = $(Utils.render(Tpl['table/record/group.html'], {
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
             colspan: table._countColumnsShow,
             isCollapsing: isCollapsing
@@ -724,11 +724,11 @@ let TableRender = {
     renderExpand: function (table, content) {
 
         if (typeof content === 'object') {
-            content = TableRender.renderComponents(table, content, 'record_expand_show');
+            content = Render.renderComponents(table, content, 'record_expand_show');
         }
 
 
-        let expandRecord = $(TableUtils.render(TableTpl['table/record/expand.html'], {
+        let expandRecord = $(Utils.render(Tpl['table/record/expand.html'], {
             colspan: table._countColumnsShow,
         }));
 
@@ -759,8 +759,8 @@ let TableRender = {
      */
     renderControl: function (table, control) {
 
-        if (TableUtils.isObject(control)) {
-            let controlElement = $(TableUtils.render(TableTpl['table/control.html'], {
+        if (Utils.isObject(control)) {
+            let controlElement = $(Utils.render(Tpl['table/control.html'], {
                 id: control.getId()
             }));
 
@@ -801,14 +801,14 @@ let TableRender = {
                         table.on(eventName, components[i].initEvents, components[i], true);
                     }
 
-                } else if (TableUtils.isObject(components[i]) &&
+                } else if (Utils.isObject(components[i]) &&
                     components[i].hasOwnProperty('component') &&
                     components[i].component.substring(0, 6) === 'coreui'
                 ) {
                     let name = components[i].component.split('.')[1];
 
                     if (CoreUI.hasOwnProperty(name) &&
-                        TableUtils.isObject(CoreUI[name])
+                        Utils.isObject(CoreUI[name])
                     ) {
                         let instance = CoreUI[name].create(components[i]);
                         result.push(instance.render());
@@ -826,4 +826,4 @@ let TableRender = {
     }
 }
 
-export default TableRender;
+export default Render;

@@ -1,14 +1,14 @@
 
-import TableTpl      from "../table.tpl";
-import TableUtils    from "../table.utils";
-import TableElements from "../table.elements";
+import Tpl      from "../tpl";
+import Utils    from "../utils";
+import Elements from "../elements";
 import Filter              from "../abstract/Filter";
 
 class FilterDatetime extends Filter {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -111,12 +111,12 @@ class FilterDatetime extends Filter {
             ? options.label
             : '';
 
-        if ( ! TableUtils.isObject(options.attr)) {
+        if ( ! Utils.isObject(options.attr)) {
             options.attr = {};
         }
 
         if (options.hasOwnProperty('width') &&
-            TableUtils.isNumeric(options.width)
+            Utils.isNumeric(options.width)
         ) {
             if (options.attr.hasOwnProperty('style')) {
                 options.attr['style'] += ';width:' + options.width + 'px';
@@ -141,7 +141,7 @@ class FilterDatetime extends Filter {
             attr.push(name + '="' + value + '"');
         });
 
-        this._control = $(TableUtils.render(TableTpl['filters/datetime.html'], {
+        this._control = $(Utils.render(Tpl['filters/datetime.html'], {
             attr: attr.length > 0 ? (' ' + attr.join(' ')) : '',
             label: label
         }));

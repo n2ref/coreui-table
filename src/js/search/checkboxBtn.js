@@ -1,13 +1,13 @@
 
-import TableTpl   from "../table.tpl";
-import TableUtils from "../table.utils";
+import Tpl   from "../tpl";
+import Utils from "../utils";
 import Search           from "../abstract/Search";
 
 class SearchCheckboxBtn extends Search {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -139,11 +139,11 @@ class SearchCheckboxBtn extends Search {
                     value:   key,
                     checked: checked,
                     optionsClass: that._options.optionsClass,
-                    hash: TableUtils.hashCode()
+                    hash: Utils.hashCode()
                 });
 
             } else {
-                if ( ! TableUtils.isObject(option) ||
+                if ( ! Utils.isObject(option) ||
                     ! option.hasOwnProperty('value') ||
                     ['string', 'numeric'].indexOf(typeof option.value) === -1
                 ) {
@@ -160,12 +160,12 @@ class SearchCheckboxBtn extends Search {
                     value:   option.value,
                     checked: checked,
                     optionsClass: that._options.optionsClass,
-                    hash: TableUtils.hashCode(),
+                    hash: Utils.hashCode(),
                 });
             }
         });
 
-        this._control = $(TableUtils.render(TableTpl['search/checkbox-btn.html'], {
+        this._control = $(Utils.render(Tpl['search/checkbox-btn.html'], {
             options: options
         }));
 

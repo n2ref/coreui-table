@@ -5,13 +5,13 @@ import 'moment/src/locale/ru'
 
 
 
-class ColumnsDateHuman extends Column {
+class ColumnDateHuman extends Column {
 
     _lang = null;
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -41,13 +41,12 @@ class ColumnsDateHuman extends Column {
      */
     render(content, record) {
 
-        if (['string', 'number'].indexOf(typeof content) < 0 || ! (content instanceof Date)) {
+        if (['string', 'number'].indexOf(typeof content) < 0 && ! (content instanceof Date)) {
             return '';
         }
 
-
         try {
-            if (content !== '') {
+            if (content) {
                 let dateContent = content instanceof Date ? content : new Date(content);
                 let dateFormat  = moment(dateContent).format('MM.DD.yyyy HH:mm:ss');
 
@@ -57,6 +56,7 @@ class ColumnsDateHuman extends Column {
 
         } catch (e) {
             console.warn(e)
+            content = '';
         }
 
 
@@ -65,4 +65,4 @@ class ColumnsDateHuman extends Column {
 }
 
 
-export default ColumnsDateHuman;
+export default ColumnDateHuman;

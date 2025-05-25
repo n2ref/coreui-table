@@ -1,14 +1,14 @@
 
-import TableUtils from "../table.utils";
-import TableTpl   from "../table.tpl";
+import Utils from "../utils";
+import Tpl   from "../tpl";
 import Column     from "../abstract/Column";
 
 
-class ColumnsMenu extends Column {
+class ColumnMenu extends Column {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -35,7 +35,7 @@ class ColumnsMenu extends Column {
      */
     render(content, record) {
 
-        if ( ! TableUtils.isObject(content) ||
+        if ( ! Utils.isObject(content) ||
              ! content.hasOwnProperty('items') ||
              ! Array.isArray(content.items) ||
             content.items.length === 0
@@ -48,7 +48,7 @@ class ColumnsMenu extends Column {
 
         if (Array.isArray(content.items)) {
             $.each(content.items, function (key, item) {
-                if (TableUtils.isObject(item) && typeof item.type === 'string') {
+                if (Utils.isObject(item) && typeof item.type === 'string') {
 
                     if (item.type === 'link') {
                         if (item.hasOwnProperty('url') &&
@@ -59,7 +59,7 @@ class ColumnsMenu extends Column {
                             let linkAttr = {};
 
                             if (item.hasOwnProperty('attr') ||
-                                TableUtils.isObject(item.attr)
+                                Utils.isObject(item.attr)
                             ) {
                                 linkAttr = item.attr;
                             }
@@ -100,7 +100,7 @@ class ColumnsMenu extends Column {
                             let btnAttr = {};
 
                             if (item.hasOwnProperty('attr') ||
-                                TableUtils.isObject(item.attr)
+                                Utils.isObject(item.attr)
                             ) {
                                 btnAttr = item.attr;
                             }
@@ -130,7 +130,7 @@ class ColumnsMenu extends Column {
 
                             items.push({
                                 type: 'button',
-                                id: TableUtils.hashCode(),
+                                id: Utils.hashCode(),
                                 content: item.content,
                                 onClick: item.onClick,
                                 attr: btnAttributes.length > 0 ? (' ' + btnAttributes.join(' ')) : '',
@@ -157,7 +157,7 @@ class ColumnsMenu extends Column {
         }
 
         if (content.hasOwnProperty('attr') &&
-            TableUtils.isObject(content.attr)
+            Utils.isObject(content.attr)
         ) {
             attr = content.attr;
         }
@@ -199,7 +199,7 @@ class ColumnsMenu extends Column {
             : 'end';
 
 
-        let menu = $(TableUtils.render(TableTpl['columns/menu.html'], {
+        let menu = $(Utils.render(Tpl['columns/menu.html'], {
             content: menuContent,
             position: position,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
@@ -238,7 +238,7 @@ class ColumnsMenu extends Column {
             let that = this;
 
             $.each(items, function (key, item) {
-                if (TableUtils.isObject(item) && typeof item.type === 'string') {
+                if (Utils.isObject(item) && typeof item.type === 'string') {
 
                     if (item.type === 'button') {
                         if (item.hasOwnProperty('content') &&
@@ -273,4 +273,4 @@ class ColumnsMenu extends Column {
 }
 
 
-export default ColumnsMenu;
+export default ColumnMenu;

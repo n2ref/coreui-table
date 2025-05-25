@@ -2,11 +2,11 @@
 import Column from "../abstract/Column";
 
 
-class ColumnsNumbers extends Column {
+class ColumnNumbers extends Column {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -35,4 +35,4 @@ class ColumnsNumbers extends Column {
     }
 }
 
-export default ColumnsNumbers;
+export default ColumnNumbers;

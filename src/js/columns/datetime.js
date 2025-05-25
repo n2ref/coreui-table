@@ -1,19 +1,20 @@
 
 import Column           from "../abstract/Column";
-import TableUtils from "../table.utils";
+import Utils from "../utils";
 
 
-class ColumnsDatetime extends Column {
+class ColumnDatetime extends Column {
 
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
 
-        options = $.extend(true, { type: 'datetime',
+        options = $.extend(true, {
+            type: 'datetime',
             field: null,
             label: null,
             show: true,
@@ -46,23 +47,24 @@ class ColumnsDatetime extends Column {
                 let date = new Date(content);
 
                 content = this._options.format
-                    .replace(/YYYY/g, TableUtils.strPadLeft(date.getFullYear(), 4))
+                    .replace(/YYYY/g, Utils.strPadLeft(date.getFullYear(), 4))
                     .replace(/MMMM/g, lang.monthNames[date.getMonth() + 1])
                     .replace(/MMM/g, lang.monthNamesShort[date.getMonth() + 1])
-                    .replace(/MM/g, TableUtils.strPadLeft(date.getMonth() + 1, 2))
+                    .replace(/MM/g, Utils.strPadLeft(date.getMonth() + 1, 2))
                     .replace(/M/g, date.getMonth() + 1)
-                    .replace(/DD/g, TableUtils.strPadLeft(date.getDate(), 2))
+                    .replace(/DD/g, Utils.strPadLeft(date.getDate(), 2))
                     .replace(/D/g, date.getDate())
                     .replace(/dddd/g, lang.dayNames[date.getMonth() + 1])
                     .replace(/ddd/g, lang.dayNamesMin[date.getMonth() + 1])
-                    .replace(/hh/g, TableUtils.strPadLeft(date.getHours(), 2))
-                    .replace(/mm/g, TableUtils.strPadLeft(date.getMinutes(), 2))
+                    .replace(/hh/g, Utils.strPadLeft(date.getHours(), 2))
+                    .replace(/mm/g, Utils.strPadLeft(date.getMinutes(), 2))
                     .replace(/m/g, date.getMinutes())
-                    .replace(/ss/g, TableUtils.strPadLeft(date.getSeconds(), 2))
+                    .replace(/ss/g, Utils.strPadLeft(date.getSeconds(), 2))
                     .replace(/s/g, date.getSeconds());
             }
 
         } catch (e) {
+            console.warn(e);
             content = '';
         }
 
@@ -70,4 +72,4 @@ class ColumnsDatetime extends Column {
     }
 }
 
-export default ColumnsDatetime;
+export default ColumnDatetime;

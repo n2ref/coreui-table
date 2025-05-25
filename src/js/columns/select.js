@@ -1,15 +1,15 @@
 
-import TableElements from "../table.elements";
-import TablePrivate  from "../table.private";
-import TableTpl      from "../table.tpl";
-import TableUtils    from "../table.utils";
+import Elements from "../elements";
+import Private  from "../private";
+import Tpl      from "../tpl";
+import Utils    from "../utils";
 import Column              from "../abstract/Column";
 
-class ColumnsSelect extends Column {
+class ColumnSelect extends Column {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -25,10 +25,10 @@ class ColumnsSelect extends Column {
         };
 
         if (options.hasOwnProperty('attr')) {
-            options.attr = TableUtils.mergeAttr(originalOptions.attr, options.attr);
+            options.attr = Utils.mergeAttr(originalOptions.attr, options.attr);
         }
         if (options.hasOwnProperty('attrHeader')) {
-            options.attrHeader = TableUtils.mergeAttr(originalOptions.attrHeader, options.attrHeader);
+            options.attrHeader = Utils.mergeAttr(originalOptions.attrHeader, options.attrHeader);
         }
 
         options = $.extend(true, originalOptions, options);
@@ -36,13 +36,13 @@ class ColumnsSelect extends Column {
         super(table, options);
 
 
-        this._options.label = TableTpl['columns/select_label.html'];
+        this._options.label = Tpl['columns/select_label.html'];
 
         // Показ строк
         table.on('records_show', function () {
 
-            let selects   = TableElements.getRowsSelects(table.getId());
-            let selectAll = TableElements.getRowsSelectAll(table.getId());
+            let selects   = Elements.getRowsSelects(table.getId());
+            let selectAll = Elements.getRowsSelectAll(table.getId());
 
             // Отмена обработки нажатия в select колонках
             $(selects).click(function (event) {
@@ -93,7 +93,7 @@ class ColumnsSelect extends Column {
      */
     render(content, record) {
 
-        let select = $(TableUtils.render(TableTpl['columns/select.html'], {
+        let select = $(Utils.render(Tpl['columns/select.html'], {
             index: record.index
         }));
 
@@ -101,7 +101,7 @@ class ColumnsSelect extends Column {
 
         // Выбор строки
         select.click(function () {
-            let tr = TableElements.getTrByIndex(that._table.getId(), record.index);
+            let tr = Elements.getTrByIndex(that._table.getId(), record.index);
 
             if ( ! tr) {
                 return;
@@ -110,11 +110,11 @@ class ColumnsSelect extends Column {
             if ($(this).is(':checked')) {
                 $(tr).addClass('table-primary');
 
-                TablePrivate._trigger(that._table, 'record_select', [ record ]);
+                Private._trigger(that._table, 'record_select', [record ]);
             } else {
                 $(tr).removeClass('table-primary');
 
-                TablePrivate._trigger(that._table, 'record_unselect', [ record ]);
+                Private._trigger(that._table, 'record_unselect', [record ]);
             }
         });
 
@@ -122,4 +122,4 @@ class ColumnsSelect extends Column {
     }
 }
 
-export default ColumnsSelect;
+export default ColumnSelect;

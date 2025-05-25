@@ -1,15 +1,15 @@
 
-import TableUtils    from '../table.utils';
-import TableTpl      from "../table.tpl";
-import TableElements from "../table.elements";
-import Control       from "../abstract/Control";
+import Utils    from '../utils';
+import Tpl      from "../tpl";
+import Elements from "../elements";
+import Control  from "../abstract/Control";
 
 
 class ControlSearch extends Control {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -32,7 +32,7 @@ class ControlSearch extends Control {
         super(table, options);
 
 
-        if ( ! TableUtils.isObject(this._options.btn)) {
+        if ( ! Utils.isObject(this._options.btn)) {
             this._options.btn = {};
         }
 
@@ -43,7 +43,7 @@ class ControlSearch extends Control {
         }
 
 
-        if ( ! TableUtils.isObject(this._options.btnClear)) {
+        if ( ! Utils.isObject(this._options.btnClear)) {
             this._options.btnClear = {};
         }
 
@@ -54,7 +54,7 @@ class ControlSearch extends Control {
         }
 
 
-        if ( ! TableUtils.isObject(this._options.btnComplete)) {
+        if ( ! Utils.isObject(this._options.btnComplete)) {
             this._options.btnComplete = {};
         }
 
@@ -79,10 +79,10 @@ class ControlSearch extends Control {
         let table      = this._table;
 
 
-        if ( ! TableUtils.isObject(this._options.btn)) {
+        if ( ! Utils.isObject(this._options.btn)) {
             this._options.btn = {};
         }
-        if ( ! TableUtils.isObject(this._options.btn.attr)) {
+        if ( ! Utils.isObject(this._options.btn.attr)) {
             this._options.btn.attr = {};
         }
 
@@ -109,7 +109,7 @@ class ControlSearch extends Control {
         }
 
 
-        let control = $(TableUtils.render(TableTpl['controls/search.html'], {
+        let control = $(Utils.render(Tpl['controls/search.html'], {
             btnContent: btnContent,
             btnAttr: btnAttr.length > 0 ? (' ' + btnAttr.join(' ')) : '',
             btnClear: btnClear
@@ -119,8 +119,8 @@ class ControlSearch extends Control {
         let buttonClear  = control.find('.btn-clear');
 
         buttonToggle.click(function () {
-            let container        = TableElements.getSearchContainer(table.getId());
-            let columnsContainer = TableElements.getColumnsContainer(table.getId());
+            let container        = Elements.getSearchContainer(table.getId());
+            let columnsContainer = Elements.getColumnsContainer(table.getId());
 
             if (columnsContainer[0]) {
                 columnsContainer.hide();
@@ -149,7 +149,7 @@ class ControlSearch extends Control {
                             ? options.descriptionLabel
                             : null;
 
-                        let controlContainer = $(TableUtils.render(TableTpl['controls/search/control.html'], {
+                        let controlContainer = $(Utils.render(Tpl['controls/search/control.html'], {
                             labelWidth:       labelWidth + (typeof labelWidth === 'number' ? 'px' : ''),
                             descriptionLabel: descriptionLabel,
                             label:            options.hasOwnProperty('label') && typeof options.label === 'string' ? options.label : '',
@@ -165,11 +165,11 @@ class ControlSearch extends Control {
 
 
 
-                if ( ! TableUtils.isObject(that._options.btnComplete)) {
+                if ( ! Utils.isObject(that._options.btnComplete)) {
                     that._options.btnComplete = {};
                 }
 
-                if ( ! TableUtils.isObject(that._options.btnComplete.attr)) {
+                if ( ! Utils.isObject(that._options.btnComplete.attr)) {
                     that._options.btnComplete.attr = {};
                 }
 
@@ -185,7 +185,7 @@ class ControlSearch extends Control {
                     that._options.btnComplete.attr.class += ' btn-complete';
                 }
 
-                if (TableUtils.isObject(that._options.btnComplete.attr)) {
+                if (Utils.isObject(that._options.btnComplete.attr)) {
                     $.each(that._options.btnComplete.attr, function (name, value) {
                         if (['string', 'number'].indexOf(typeof value) >= 0) {
                             btnCompleteAttr.push(name + '="' + value + '"');
@@ -196,7 +196,7 @@ class ControlSearch extends Control {
                     btnCompleteContent = that._options.btnComplete.content;
                 }
 
-                let searchContainer = $(TableUtils.render(TableTpl['controls/search/container.html'], {
+                let searchContainer = $(Utils.render(Tpl['controls/search/container.html'], {
                     labelWidth: labelWidth + (typeof labelWidth === 'number' ? 'px' : ''),
                     btnCompleteAttr:    btnCompleteAttr.length > 0 ? (' ' + btnCompleteAttr.join(' ')) : '',
                     btnCompleteContent: btnCompleteContent,
@@ -205,7 +205,7 @@ class ControlSearch extends Control {
                 $('.btn-complete', searchContainer).click(function () {
                     table.searchRecords();
 
-                    let container = TableElements.getSearchContainer(table.getId());
+                    let container = Elements.getSearchContainer(table.getId());
 
                     if (container[0]) {
                         container.fadeOut(200);
@@ -220,7 +220,7 @@ class ControlSearch extends Control {
                     })
                 }
 
-                let wrapper = TableElements.getWrapper(table.getId());
+                let wrapper = Elements.getWrapper(table.getId());
                 wrapper.before(searchContainer);
             }
         });
@@ -229,7 +229,7 @@ class ControlSearch extends Control {
         buttonClear.click(function () {
             table.clearSearch();
 
-            let container = TableElements.getSearchContainer(table.getId());
+            let container = Elements.getSearchContainer(table.getId());
 
             if (container[0]) {
                 container.fadeOut('fast');
@@ -248,7 +248,7 @@ class ControlSearch extends Control {
                     btnClear.click(function () {
                         table.clearSearch();
 
-                        let container = TableElements.getSearchContainer(table.getId());
+                        let container = Elements.getSearchContainer(table.getId());
 
                         if (container[0]) {
                             container.fadeOut('fast');
@@ -262,7 +262,7 @@ class ControlSearch extends Control {
             } else {
                 buttonClear.remove();
 
-                let container = TableElements.getSearchContainer(table.getId());
+                let container = Elements.getSearchContainer(table.getId());
 
                 if (container[0]) {
                     container.fadeOut('fast');
@@ -284,10 +284,10 @@ class ControlSearch extends Control {
         let attributes = [];
         let content    = '';
 
-        if ( ! TableUtils.isObject(this._options.btnClear)) {
+        if ( ! Utils.isObject(this._options.btnClear)) {
             this._options.btnClear = {};
         }
-        if ( ! TableUtils.isObject(this._options.btnClear.attr)) {
+        if ( ! Utils.isObject(this._options.btnClear.attr)) {
             this._options.btnClear.attr = {};
         }
 
@@ -308,7 +308,7 @@ class ControlSearch extends Control {
         }
 
 
-        return TableUtils.render(TableTpl['controls/search/clear.html'], {
+        return Utils.render(Tpl['controls/search/clear.html'], {
             content: content,
             attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
         });

@@ -1,13 +1,13 @@
 
-import TableTpl   from "../table.tpl";
-import TableUtils from "../table.utils";
+import Tpl   from "../tpl";
+import Utils from "../utils";
 import Filter           from "../abstract/Filter";
 
 class FilterSwitch extends Filter {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -116,7 +116,7 @@ class FilterSwitch extends Filter {
             : '';
 
 
-        this._control = $(TableUtils.render(TableTpl['filters/switch.html'], {
+        this._control = $(Utils.render(Tpl['filters/switch.html'], {
             id: this._id,
             valueY: valueY,
             field: typeof options.field === 'string' ? options.field : '',

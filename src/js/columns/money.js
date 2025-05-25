@@ -1,12 +1,12 @@
 
-import TableUtils from "../table.utils";
+import Utils from "../utils";
 import Column           from "../abstract/Column";
 
-class ColumnsMoney extends Column {
+class ColumnMoney extends Column {
 
     /**
      * Инициализация
-     * @param {TableInstance} table
+     * @param {Table} table
      * @param {Object}              options
      */
     constructor(table, options) {
@@ -42,7 +42,7 @@ class ColumnsMoney extends Column {
                 this._options.attr = { class : 'coreui_table__no-wrap' };
 
             } else {
-                this._options.attr = TableUtils.mergeAttr(this._options.attr, {
+                this._options.attr = Utils.mergeAttr(this._options.attr, {
                     class: 'coreui_table__no-wrap'
                 });
             }
@@ -124,4 +124,4 @@ class ColumnsMoney extends Column {
 }
 
 
-export default ColumnsMoney;
+export default ColumnMoney;
