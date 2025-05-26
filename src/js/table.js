@@ -2276,7 +2276,7 @@ class Table {
 
             fields.map(function (field, i) {
 
-                if (field instanceof Search) {
+                if (Utils.isClass(field)) {
                     that._options.search.controls.push(field.toObject());
 
                 } else if (Utils.isObject(field)) {
@@ -2297,7 +2297,7 @@ class Table {
 
             columns.map(function (column, i) {
 
-                if (column instanceof Column) {
+                if (Utils.isClass(column)) {
                     that._options.columns.push(column.toObject());
 
                 } else if (Utils.isObject(column)) {
