@@ -217,10 +217,12 @@ class Table {
         switch:        function (field, label, id) { return new HelperSearchSwitch(field, label, id) },
     };
 
+    _controller = null;
+
 
     /**
      * Инициализация
-     * @param {Object}     options
+     * @param {Object} options
      * @private
      */
     constructor(options) {
@@ -229,23 +231,28 @@ class Table {
             this._options = $.extend(true, {}, this._options, options);
         }
 
+        this._id = this._options.hasOwnProperty('id') && typeof this._options.id === 'string' && this._options.id
+            ? this._options.id
+            : Utils.hashCode();
 
-        if (Controller._helpers) {
-            if (Object.keys(Controller._helpers.columns).length > 0) {
+        this._controller = Controller;
 
-                for (const [name, helper] of Object.entries(Controller._helpers.columns)) {
+        if (this._controller._helpers) {
+            if (Object.keys(this._controller._helpers.columns).length > 0) {
+
+                for (const [name, helper] of Object.entries(this._controller._helpers.columns)) {
                     this.columns[name] = helper;
                 }
             }
-            if (Object.keys(Controller._helpers.controls).length > 0) {
+            if (Object.keys(this._controller._helpers.controls).length > 0) {
 
-                for (const [name, helper] of Object.entries(Controller._helpers.controls)) {
+                for (const [name, helper] of Object.entries(this._controller._helpers.controls)) {
                     this.controls[name] = helper;
                 }
             }
-            if (Object.keys(Controller._helpers.controls).length > 0) {
+            if (Object.keys(this._controller._helpers.controls).length > 0) {
 
-                for (const [name, helper] of Object.entries(Controller._helpers.controls)) {
+                for (const [name, helper] of Object.entries(this._controller._helpers.controls)) {
                     this.controls[name] = helper;
                 }
             }
@@ -480,7 +487,7 @@ class Table {
      */
     render(element) {
 
-        Private.init(Controller, this);
+        Private.init(this);
 
         let that        = this;
         let widthSizes  = [];
@@ -804,9 +811,6 @@ class Table {
 
         containerElement.find('.coreui-table__wrapper').html(tableElement);
 
-
-
-        Controller._instances[this.getId()] = this;
 
 
         if (element === undefined) {

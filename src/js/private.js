@@ -6,15 +6,11 @@ import ToolBox from "./toolbox";
 let Private = {
 
     /**
-     * @param {Controller} controller
-     * @param {Table}      table
+     * @param {Table} table
      */
-    init: function (controller, table) {
+    init: function (table) {
 
-        table._id = table._options.hasOwnProperty('id') && typeof table._options.id === 'string' && table._options.id
-            ? table._options.id
-            : Utils.hashCode();
-
+        let controller = this._controller;
 
         if ( ! table._options.hasOwnProperty('lang') || typeof table._options.lang !== 'string') {
             table._options.lang = controller.getSetting('lang');

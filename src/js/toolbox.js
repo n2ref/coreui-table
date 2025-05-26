@@ -45,9 +45,7 @@ class ToolBox {
 
         controls.map(function (control) {
 
-            if (control instanceof Control ||
-                control instanceof Filter
-            ) {
+            if (Utils.isClass(control)) {
                 left.push(control.toObject())
 
             } else if (Utils.isObject(control)) {
@@ -74,9 +72,7 @@ class ToolBox {
 
         controls.map(function (control) {
 
-            if (control instanceof Control ||
-                control instanceof Filter
-            ) {
+            if (Utils.isClass(control)) {
                 center.push(control.toObject())
 
             } else if (Utils.isObject(control)) {
@@ -103,9 +99,7 @@ class ToolBox {
 
         controls.map(function (control) {
 
-            if (control instanceof Control ||
-                control instanceof Filter
-            ) {
+            if (Utils.isClass(control)) {
                 right.push(control.toObject())
 
             } else if (Utils.isObject(control)) {

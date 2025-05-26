@@ -79,8 +79,8 @@ let Utils = {
     isClass: function isClass(variable) {
 
         return (
-            typeof variable === 'function' &&
-            variable.prototype
+            (typeof variable === 'function' && variable.prototype) ||
+            (typeof variable === 'object' && variable.constructor)
         );
     },
 
