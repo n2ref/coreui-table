@@ -10,7 +10,7 @@ let Private = {
      */
     init: function (table) {
 
-        let controller = this._controller;
+        let controller = table._controller;
 
         if ( ! table._options.hasOwnProperty('lang') || typeof table._options.lang !== 'string') {
             table._options.lang = controller.getSetting('lang');
