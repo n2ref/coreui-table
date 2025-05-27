@@ -6,8 +6,6 @@ import Elements   from "./elements";
 import Private    from "./private";
 import Controller from "./controller";
 import ToolBox    from "./toolbox";
-import Search     from "./abstract/Search";
-import Column     from "./abstract/Column";
 
 
 import HelperControlSearch       from "./helpers/controls/search";
@@ -76,7 +74,7 @@ class Table {
         id: null,
         class: '',
         primaryKey: 'id',
-        lang: 'en',
+        lang: null,
         langItems: {},
         width: null,
         minWidth: null,
