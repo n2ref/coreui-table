@@ -13,7 +13,7 @@ class HelperControlFilterClear extends HelperControl {
      */
     constructor(content, id) {
 
-        super('filter_clear', id);
+        super('filterClear', id);
 
         if (content) {
             this.setContent(content);
