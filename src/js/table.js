@@ -2276,7 +2276,7 @@ class Table {
 
             fields.map(function (field, i) {
 
-                if (Utils.isClass(field)) {
+                if (Utils.isClass(field) || (Utils.isObject(field) && typeof field.toObject === 'function')) {
                     that._options.search.controls.push(field.toObject());
 
                 } else if (Utils.isObject(field)) {
@@ -2297,7 +2297,7 @@ class Table {
 
             columns.map(function (column, i) {
 
-                if (Utils.isClass(column)) {
+                if (Utils.isClass(column) || (Utils.isObject(column) && typeof column.toObject === 'function')) {
                     that._options.columns.push(column.toObject());
 
                 } else if (Utils.isObject(column)) {

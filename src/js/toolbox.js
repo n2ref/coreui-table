@@ -45,7 +45,7 @@ class ToolBox {
 
         controls.map(function (control) {
 
-            if (Utils.isClass(control)) {
+            if (Utils.isClass(control) || (Utils.isObject(control) && typeof control.toObject === 'function')) {
                 left.push(control.toObject())
 
             } else if (Utils.isObject(control)) {
@@ -72,7 +72,7 @@ class ToolBox {
 
         controls.map(function (control) {
 
-            if (Utils.isClass(control)) {
+            if (Utils.isClass(control) || (Utils.isObject(control) && typeof control.toObject === 'function')) {
                 center.push(control.toObject())
 
             } else if (Utils.isObject(control)) {
@@ -99,7 +99,7 @@ class ToolBox {
 
         controls.map(function (control) {
 
-            if (Utils.isClass(control)) {
+            if (Utils.isClass(control) || (Utils.isObject(control) && typeof control.toObject === 'function')) {
                 right.push(control.toObject())
 
             } else if (Utils.isObject(control)) {
