@@ -2209,8 +2209,7 @@ class Table {
 
         let toolBox = new ToolBox(type);
 
-        //this._options.header = this._options.header.slice();
-        this._options.header.unshift(toolBox);
+        this._options.header.push(toolBox);
 
         return toolBox;
     }
