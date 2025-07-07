@@ -100,6 +100,10 @@ class HelperFilterText extends HelperFilter {
      */
     setAttrPlaceholder(text) {
 
+        if ( ! Utils.isObject(this._attr)) {
+            this._attr = {};
+        }
+
         this._attr.placeholder = text;
         return this;
     }
