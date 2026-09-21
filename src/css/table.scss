@@ -1,4 +1,4 @@
-
+@use 'variable' as *;
 :root {
     --coreui-table-thead-bg: #{$coreui-table-thead-bg};
     --coreui-table-tbody-bg: #{$coreui-table-tbody-bg};

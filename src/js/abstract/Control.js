@@ -1,5 +1,4 @@
 import Utils from "../utils";
-import Elements from "../elements";
 
 
 class Control {
