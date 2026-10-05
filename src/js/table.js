@@ -136,6 +136,7 @@ class Table {
     _recordsNumber     = 1;
     _seq               = 1;
     _isRecordsRequest  = false;
+    _isLoadError       = false;
     _countColumnsShow  = 0;
     _records           = [];
     _sort              = [];
@@ -950,6 +951,7 @@ class Table {
             dataType: "json",
             data: params,
             beforeSend: function(xhr) {
+                that._isLoadError = false;
                 Private._trigger(that, 'records_load_start', [that, xhr ]);
             },
             success: function (result) {
@@ -964,10 +966,12 @@ class Table {
                     that.setRecords(result.records, total);
 
                 } else {
+                    that._isLoadError = true;
                     that.setRecords([]);
                 }
             },
             error: function(xhr, textStatus, errorThrown) {
+                that._isLoadError = true;
                 that.setRecords([]);
                 Private._trigger(that, 'records_load_error', [that, xhr, textStatus, errorThrown ]);
             },
@@ -1071,6 +1075,7 @@ class Table {
 
         if (result instanceof Promise) {
             this.lock();
+            that._isLoadError = false;
 
             result
                 .then(function (data) {
@@ -1079,6 +1084,7 @@ class Table {
                     setRecords(data);
                 })
                 .catch(function () {
+                    that._isLoadError = true;
                     that.unlock();
                 })
 
@@ -2079,6 +2085,15 @@ class Table {
         }
 
         return count;
+    }
+
+
+    /**
+     * Проверка наличия ошибки загрузки
+     * @return {boolean}
+     */
+    isLoadError() {
+        return this._isLoadError;
     }
 
 

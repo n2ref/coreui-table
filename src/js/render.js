@@ -504,11 +504,17 @@ let Render = {
             }
 
             // Render container template (without field values)
+            let lang = table.getLang();
+            let message = table.isLoadError() && lang.loadError
+                ? lang.loadError
+                : lang.emptyRecords;
+            let mobileLang = { ...lang, emptyRecords: message };
+            
             tableElement = $(Utils.render(Tpl['table/mobile/container.html'], {
                 classes: classes.join(' '),
                 sortSelect: sortSelectData,
                 records: recordsData,
-                lang: table.getLang()
+                lang: mobileLang
             }));
 
             // Now render field values with proper HTML element handling
@@ -682,10 +688,15 @@ let Render = {
         }
 
         if (renderRecords.length === 0) {
+            let lang = table.getLang();
+            let message = table.isLoadError() && lang.loadError
+                ? lang.loadError
+                : lang.emptyRecords;
+            
             renderRecords = [
                 $(Utils.render(Tpl['table/record/empty.html'], {
                     columnsCount: table._countColumnsShow,
-                    lang: table.getLang(),
+                    lang: { ...lang, emptyRecords: message },
                 }))
             ];
         }

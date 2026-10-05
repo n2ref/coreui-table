@@ -1,6 +1,7 @@
 
 let langRu = {
     "emptyRecords": "Нет записей",
+    "loadError": "Ошибка загрузки данных",
     "loading": "Загрузка...",
     "total": "Всего",
     "all": "Все",

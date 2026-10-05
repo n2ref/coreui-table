@@ -1,6 +1,7 @@
 
 let langEn = {
     "emptyRecords": "No records",
+    "loadError": "Error load data",
     "loading": "Loading...",
     "total": "Total",
     "all": "All",
