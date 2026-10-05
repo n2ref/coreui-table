@@ -13,16 +13,72 @@ let Render = {
      */
     renderTable: function (table) {
 
+        let that = this;
         let options         = table.getOptions();
+        let isMobile        = options.mobile === true;
         let recordsElements = [];
         let columnsHeader   = '';
         let columnsFooter   = '';
         let colGroups       = [];
         let columnElements  = $(Tpl['table/columns/tr.html']);
+        let mobileSortSelect = null;
 
+        // Get sortable columns for mobile sort select
+        let sortableFields = [];
+        if (isMobile) {
+            table._columns.map(function (column) {
+                let columnOptions = column.getOptions();
+                if (columnOptions.hasOwnProperty('sortable') && columnOptions.sortable &&
+                    columnOptions.hasOwnProperty('field') && columnOptions.field &&
+                    column.isShow()) {
+                    sortableFields.push({
+                        field: columnOptions.field,
+                        label: columnOptions.label || columnOptions.field
+                    });
+                }
+            });
+        }
 
-        // Колонки
-        if (table._columns.length > 0) {
+        // Build mobile sort select if there are sortable fields
+        if (isMobile && sortableFields.length > 0) {
+            mobileSortSelect = $(Utils.render(Tpl['table/mobile/sort-select.html'], {
+                fields: sortableFields,
+                currentSort: table._sort,
+                lang: table.getLang()
+            }));
+
+            // Add event handler for sort select
+            mobileSortSelect.find('select').on('change', function() {
+                let field = $(this).val();
+                if (field) {
+                    let currentOrder = null;
+                    $.each(table._sort, function(key, sortField) {
+                        if (field === sortField.field) {
+                            currentOrder = sortField.order;
+                            return false;
+                        }
+                    });
+
+                    let sorting = [];
+                    if (currentOrder === null) {
+                        sorting.push({ field: field, order: 'asc' });
+                    } else if (currentOrder === 'asc') {
+                        sorting.push({ field: field, order: 'desc' });
+                    }
+
+                    if (sorting.length === 0) {
+                        table.sortDefault();
+                    } else {
+                        table.sortFields(sorting);
+                    }
+                } else {
+                    table.sortDefault();
+                }
+            });
+        }
+
+        // Колонки (only for non-mobile)
+        if (!isMobile && table._columns.length > 0) {
             table._columns.map(function (column) {
                 if ( ! column.isShow()) {
                     return;
@@ -222,7 +278,6 @@ let Render = {
                 });
 
 
-
                 if (options.showHeaders) {
                     let label = '';
                     let description = '';
@@ -276,9 +331,13 @@ let Render = {
                 ? 1
                 : ((table._page - 1) * table._recordsPerPage) + 1;
 
-            recordsElements = Render.renderRecords(table, table._records);
+            if (!isMobile) {
+                recordsElements = Render.renderRecords(table, table._records);
+            }
         } else {
-            recordsElements = Render.renderRecords(table, []);
+            if (!isMobile) {
+                recordsElements = Render.renderRecords(table, []);
+            }
         }
 
 
@@ -360,11 +419,13 @@ let Render = {
         }
 
 
-
         let classes = [];
 
         if (typeof options.class === 'string' && options.class) {
             classes.push(options.class);
+        }
+        if (isMobile) {
+            classes.push('coreui-table__mobile');
         }
 
         if ( ! columnsFooter) {
@@ -380,26 +441,166 @@ let Render = {
             theadAttr.push('style="top:' + options.theadTop + unit + '"');
         }
 
-        let tableElement = $(Utils.render(Tpl['table.html'], {
-            classes: classes.join(' '),
-            theadAttr: theadAttr.length > 0 ? theadAttr.join(' ') : '',
-            showHeaders: options.showHeaders,
-            columnsHeader : columnsHeader,
-            colGroups : colGroups,
-            columnsFooter : columnsFooter,
-        }));
+        let tableElement;
+        if (isMobile) {
+
+            // Mobile view: render cards container
+            // Build records data for template
+            let recordsData = table._records.filter(r => r.show).map(record => {
+                let fields = [];
+                table._columns.map(function (column) {
+                    if (!column.isShow()) {
+                        return;
+                    }
+                    // Skip select column in mobile view
+                    let columnOptions = column.getOptions();
+                    if (columnOptions.type === 'select') {
+                        return;
+                    }
+                    let fieldContent = that.renderField(table, column, record);
+                    if (fieldContent) {
+                        fields.push({
+                            label: columnOptions.label || columnOptions.field,
+                            value: fieldContent.content,
+                            attr: fieldContent.attr
+                        });
+                    }
+                });
+
+                let recordAttr = {
+                    class: 'coreui-table__mobile-card card m-2'
+                };
+
+                if ((typeof options.onClickUrl === 'string' && options.onClickUrl) ||
+                    options.onClick
+                ) {
+                    recordAttr.class += ' coreui-table_pointer';
+                }
+
+                if (record.meta) {
+                    recordAttr = Utils.mergeAttr(recordAttr, record.meta.attr);
+                }
+
+                let attributes = [];
+                $.each(recordAttr, function (name, value) {
+                    attributes.push(name + '="' + value + '"');
+                });
+
+                return {
+                    attr: attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
+                    index: record.index,
+                    fields: fields
+                };
+            });
+
+            // Pass sort select data to template for inline rendering
+            let sortSelectData = null;
+            if (sortableFields.length > 0) {
+                sortSelectData = {
+                    fields: sortableFields,
+                    currentSort: table._sort,
+                    lang: table.getLang()
+                };
+            }
+
+            // Render container template (without field values)
+            tableElement = $(Utils.render(Tpl['table/mobile/container.html'], {
+                classes: classes.join(' '),
+                sortSelect: sortSelectData,
+                records: recordsData,
+                lang: table.getLang()
+            }));
+
+            // Now render field values with proper HTML element handling
+            let cardsContainer = tableElement.find('.coreui-table__mobile-cards');
+            if (recordsData.length > 0) {
+                recordsData.forEach(recordData => {
+                    let cardElement = cardsContainer.find('[data-record-index="' + recordData.index + '"]');
+                    let cardBody = cardElement.find('.card-body');
+                    cardBody.empty();
+                    
+                    recordData.fields.forEach((field, index) => {
+                        let fieldElement = $(Utils.render(Tpl['table/mobile/field.html'], {
+                            label: field.label,
+                            attr: field.attr
+                        }));
+                        
+                        // Remove border-bottom from last field
+                        if (index === recordData.fields.length - 1) {
+                            fieldElement.removeClass('border-bottom');
+                        }
+                        
+                        let valueContainer = fieldElement.find('.coreui-table__mobile-field-value');
+                        
+                        // Handle HTML elements, jQuery objects, or strings/numbers
+                        let value = field.value;
+                        if (value instanceof HTMLElement) {
+                            valueContainer.append(value);
+                        } else if (window.hasOwnProperty('jQuery') && value instanceof jQuery) {
+                            valueContainer.append(value);
+                        } else if (typeof value === 'string' || typeof value === 'number' || typeof value === 'bigint') {
+                            valueContainer.html(value);
+                        }
+                        
+                        cardBody.append(fieldElement);
+                    });
+                });
+            }
+
+            // Attach sort select change handler
+            if (sortSelectData) {
+                tableElement.find('.coreui-table__mobile-sort-select').on('change', function() {
+
+                    let field = $(this).val();
+                    if (field) {
+                        let currentOrder = null;
+                        $.each(table._sort, function(key, sortField) {
+                            if (field === sortField.field) {
+                                currentOrder = sortField.order;
+                                return false;
+                            }
+                        });
+
+                        let sorting = [];
+                        if (currentOrder === null) {
+                            sorting.push({ field: field, order: 'asc' });
+                        } else if (currentOrder === 'asc') {
+                            sorting.push({ field: field, order: 'desc' });
+                        }
+
+                        if (sorting.length === 0) {
+                            table.sortDefault();
+                        } else {
+                            table.sortFields(sorting);
+                        }
+                    } else {
+                        table.sortDefault();
+                    }
+                });
+            }
+        } else {
+            // Desktop view: existing table rendering
+            tableElement = $(Utils.render(Tpl['table.html'], {
+                classes: classes.join(' '),
+                theadAttr: theadAttr.length > 0 ? theadAttr.join(' ') : '',
+                showHeaders: options.showHeaders,
+                columnsHeader : columnsHeader,
+                colGroups : colGroups,
+                columnsFooter : columnsFooter,
+            }));
 
 
-        if (options.showHeaders) {
-            tableElement.find('thead').append(columnElements);
+            if (options.showHeaders) {
+                tableElement.find('thead').append(columnElements);
+            }
+
+
+            let tbody = tableElement.find('tbody');
+
+            recordsElements.map(function (recordElement) {
+                tbody.append(recordElement);
+            });
         }
-
-
-        let tbody = tableElement.find('tbody');
-
-        recordsElements.map(function (recordElement) {
-            tbody.append(recordElement);
-        });
 
         return tableElement
     },

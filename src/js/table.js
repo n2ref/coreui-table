@@ -91,6 +91,7 @@ class Table {
         noWrapToggle: false,
         showHeaders: true,
         showScrollShadow: false,
+        mobile: false,
 
         recordsRequest: {
             method: 'GET',
@@ -1109,7 +1110,12 @@ class Table {
 
         let table = Render.renderTable(this);
 
-        Elements.getTable(this.getId()).replaceWith(table);
+        if (this._options.mobile) {
+            Elements.getTableMobile(this.getId()).replaceWith(table);
+
+        } else {
+            Elements.getTable(this.getId()).replaceWith(table);
+        }
 
         Private._trigger(this, 'table_show', [this ]);
         Private._trigger(this, 'records_show', [this ]);
@@ -2033,14 +2039,19 @@ class Table {
                 : ((this._page - 1) * this._recordsPerPage) + 1;
         }
 
-        let recordsElements = Render.renderRecords(this, this._records);
-        let tableBody       = Elements.getTableTbody(this.getId());
+        // For mobile view, use refresh to re-render the entire table
+        if (this._options.mobile) {
+            this.refresh();
+        } else {
+            let recordsElements = Render.renderRecords(this, this._records);
+            let tableBody       = Elements.getTableTbody(this.getId());
 
-        tableBody.html('');
+            tableBody.html('');
 
-        $.each(recordsElements, function (key, recordElement) {
-            tableBody.append(recordElement);
-        });
+            $.each(recordsElements, function (key, recordElement) {
+                tableBody.append(recordElement);
+            });
+        }
 
 
         Private._trigger(this, 'records_show', [this ]);

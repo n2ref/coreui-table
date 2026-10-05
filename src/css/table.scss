@@ -329,3 +329,57 @@
         cursor: help;
     }
 }
+
+/* Mobile view styles */
+.coreui-table__mobile {
+    display: block;
+}
+
+.coreui-table__mobile-cards {
+    display: flex;
+    flex-direction: column;
+}
+
+.coreui-table__mobile-card {
+    transition: box-shadow 0.2s;
+}
+
+.coreui-table__mobile-card.coreui-table_pointer:hover {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    cursor: pointer;
+}
+
+.coreui-table__mobile-field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--bs-border-color-translucent);
+}
+
+.coreui-table__mobile-field:last-child {
+    border-bottom: none;
+}
+
+.coreui-table__mobile-field-label {
+    font-weight: 600;
+    color: var(--bs-secondary-color);
+    font-size: 0.875rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.coreui-table__mobile-field-value {
+    color: var(--bs-body-color);
+    text-align: right;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.coreui-table__mobile-sort {
+    max-width: 300px;
+}
+
+.coreui-table__mobile-empty {
+    color: var(--bs-secondary-color);
+}

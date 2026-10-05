@@ -95,6 +95,17 @@ let Elements = {
 
 
     /**
+     * Получение таблицы
+     * @param {string} tableId
+     * @return {jQuery}
+     */
+    getTableMobile: function (tableId) {
+
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile');
+    },
+
+
+    /**
      * Получение тела таблицы
      * @param {string} tableId
      * @return {jQuery}
