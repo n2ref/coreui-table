@@ -1,8 +1,7 @@
 
-import Utils    from '../utils';
-import Tpl      from "../tpl";
-import Elements from "../elements";
-import Control  from "../abstract/Control";
+import Utils   from '../utils';
+import Tpl     from "../tpl";
+import Control from "../abstract/Control";
 
 
 class ControlSearch extends Control {
@@ -119,8 +118,8 @@ class ControlSearch extends Control {
         let buttonClear  = control.find('.btn-clear');
 
         buttonToggle.click(function () {
-            let container        = Elements.getSearchContainer(table.getId());
-            let columnsContainer = Elements.getColumnsContainer(table.getId());
+            let container        = table._elements.getSearchContainer(table.getId());
+            let columnsContainer = table._elements.getColumnsContainer(table.getId());
 
             if (columnsContainer[0]) {
                 columnsContainer.hide();
@@ -205,7 +204,7 @@ class ControlSearch extends Control {
                 $('.btn-complete', searchContainer).click(function () {
                     table.searchRecords();
 
-                    let container = Elements.getSearchContainer(table.getId());
+                    let container = table._elements.getSearchContainer(table.getId());
 
                     if (container[0]) {
                         container.fadeOut(200);
@@ -220,7 +219,7 @@ class ControlSearch extends Control {
                     })
                 }
 
-                let wrapper = Elements.getWrapper(table.getId());
+                let wrapper = table._elements.getWrapper(table.getId());
                 wrapper.before(searchContainer);
             }
         });
@@ -229,7 +228,7 @@ class ControlSearch extends Control {
         buttonClear.click(function () {
             table.clearSearch();
 
-            let container = Elements.getSearchContainer(table.getId());
+            let container = table._elements.getSearchContainer(table.getId());
 
             if (container[0]) {
                 container.fadeOut('fast');
@@ -248,7 +247,7 @@ class ControlSearch extends Control {
                     btnClear.click(function () {
                         table.clearSearch();
 
-                        let container = Elements.getSearchContainer(table.getId());
+                        let container = table._elements.getSearchContainer(table.getId());
 
                         if (container[0]) {
                             container.fadeOut('fast');
@@ -262,7 +261,7 @@ class ControlSearch extends Control {
             } else {
                 buttonClear.remove();
 
-                let container = Elements.getSearchContainer(table.getId());
+                let container = table._elements.getSearchContainer(table.getId());
 
                 if (container[0]) {
                     container.fadeOut('fast');

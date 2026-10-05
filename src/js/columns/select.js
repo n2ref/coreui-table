@@ -1,9 +1,8 @@
 
-import Elements from "../elements";
-import Private  from "../private";
-import Tpl      from "../tpl";
-import Utils    from "../utils";
-import Column              from "../abstract/Column";
+import Private from "../private";
+import Tpl     from "../tpl";
+import Utils   from "../utils";
+import Column  from "../abstract/Column";
 
 class ColumnSelect extends Column {
 
@@ -41,8 +40,8 @@ class ColumnSelect extends Column {
         // Показ строк
         table.on('records_show', function () {
 
-            let selects   = Elements.getRowsSelects(table.getId());
-            let selectAll = Elements.getRowsSelectAll(table.getId());
+            let selects   = table._elements.getRowsSelects(table.getId());
+            let selectAll = table._elements.getRowsSelectAll(table.getId());
 
             // Отмена обработки нажатия в select колонках
             $(selects).click(function (event) {
@@ -101,7 +100,7 @@ class ColumnSelect extends Column {
 
         // Выбор строки
         select.click(function () {
-            let tr = Elements.getTrByIndex(that._table.getId(), record.index);
+            let tr = that._table._elements.getTrByIndex(that._table.getId(), record.index);
 
             if ( ! tr) {
                 return;

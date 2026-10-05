@@ -1,8 +1,7 @@
 
-import Tpl      from "../tpl";
-import Utils    from '../utils';
-import Elements from "../elements";
-import Control             from "../abstract/Control";
+import Tpl     from "../tpl";
+import Utils   from '../utils';
+import Control from "../abstract/Control";
 
 class ControlTotal extends Control {
 

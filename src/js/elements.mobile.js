@@ -2,7 +2,7 @@
 import Render from "./render";
 
 
-let Elements = {
+let ElementsMobile = {
 
     /**
      * Получение контейнера таблицы
@@ -90,7 +90,7 @@ let Elements = {
      */
     getTable: function (tableId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > table');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile');
     },
 
 
@@ -101,7 +101,7 @@ let Elements = {
      */
     getTableTbody: function (tableId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > table > tbody');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile-cards');
     },
 
 
@@ -112,7 +112,7 @@ let Elements = {
      */
     getTableThead: function (tableId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > table > thead');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile-cards > .coreui-table__mobile-card > .card-body > .coreui-table__mobile-field > .coreui-table__mobile-field-label');
     },
 
 
@@ -123,7 +123,7 @@ let Elements = {
      */
     getTableSortable: function (tableId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > table > thead > tr > td.coreui-table__sortable');
+        return $();
     },
 
 
@@ -134,7 +134,7 @@ let Elements = {
      */
     getTrRecords: function (tableId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr.coreui-table__record');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile > .coreui-table__mobile-cards > .coreui-table__mobile-card');
     },
 
 
@@ -146,7 +146,7 @@ let Elements = {
      */
     getTrByIndex: function (tableId, index) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr[data-record-index="' + index + '"]');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile > .coreui-table__mobile-cards > .coreui-table__mobile-card[data-record-index="' + index + '"]');
     },
 
 
@@ -157,7 +157,7 @@ let Elements = {
      */
     getTrEmpty: function (tableId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr.coreui-table__record-empty');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile > .coreui-table__mobile-cards > .coreui-table__mobile-empty');
     },
 
 
@@ -284,7 +284,7 @@ let Elements = {
      */
     getNoWrapToggles: function (tableId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper  > table > tbody > tr > td.coreui_table__no-wrap > i.toggle');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile-cards > .coreui-table__mobile-card > .card-body > .coreui-table__mobile-field > .coreui-table__mobile-field-value > i.toggle');
     },
 
 
@@ -396,4 +396,4 @@ let Elements = {
     }
 }
 
-export default Elements;
+export default ElementsMobile;

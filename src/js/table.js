@@ -1,11 +1,12 @@
 
-import Tpl        from './tpl';
-import Utils      from "./utils";
-import Render     from "./render";
-import Elements   from "./elements";
-import Private    from "./private";
-import Controller from "./controller";
-import ToolBox    from "./toolbox";
+import Tpl            from './tpl';
+import Utils          from "./utils";
+import Render         from "./render";
+import Elements       from "./elements";
+import ElementsMobile from "./elements.mobile";
+import Private        from "./private";
+import Controller     from "./controller";
+import ToolBox        from "./toolbox";
 
 
 import HelperControlSearch       from "./helpers/controls/search";
@@ -66,7 +67,6 @@ import HelperColumnNumbers      from "./helpers/columns/numbers";
 import HelperColumnProgress     from "./helpers/columns/progress";
 import HelperColumnSelect       from "./helpers/columns/select";
 import HelperColumnSwitch       from "./helpers/columns/switch";
-
 
 class Table {
 
@@ -149,6 +149,7 @@ class Table {
         footer: [],
     }
     _events = {};
+    _elements = {};
 
     columns = {
         select:    function ()                    { return new HelperColumnSelect() },
@@ -257,6 +258,8 @@ class Table {
                 }
             }
         }
+
+        this._elements = this._options.mobile ? ElementsMobile : Elements;
     }
 
 
@@ -272,7 +275,7 @@ class Table {
 
             // Переход по ссылке
             if (typeof table._options.onClickUrl === 'string' && table._options.onClickUrl) {
-                Elements.getTrRecords(table.getId()).click(function () {
+                table._elements.getTrRecords(table.getId()).click(function () {
                     let recordKey = $(this).data('record-index');
                     let record    = table.getRecordByIndex(recordKey);
 
@@ -297,9 +300,8 @@ class Table {
             }
 
             // Событие нажатия на строку
-            if (['function', 'string'].indexOf(typeof table._options.onClick)) {
-
-                Elements.getTrRecords(table.getId()).click(function (event) {
+            if (['function', 'string'].indexOf(typeof table._options.onClick) >= 0) {
+                table._elements.getTrRecords(table.getId()).click(function (event) {
                     let recordKey = $(this).data('record-index');
                     let record    = table.getRecordByIndex(recordKey);
 
@@ -324,7 +326,7 @@ class Table {
             }
 
             // Раскрытие строки
-            Elements.getNoWrapToggles(table.getId()).click(function (event) {
+            table._elements.getNoWrapToggles(table.getId()).click(function (event) {
 
                 event.cancelBubble = true;
                 event.preventDefault();
@@ -343,15 +345,15 @@ class Table {
             });
 
             // Фиксация колонок
-            Elements.fixedColsLeft(table.getId())
-            Elements.fixedColsRight(table.getId())
+            table._elements.fixedColsLeft(table.getId())
+            table._elements.fixedColsRight(table.getId())
         });
 
 
         // Показ таблицы
         this.on('table_show', function () {
 
-            let sortableColumns = Elements.getTableSortable(table.getId());
+            let sortableColumns = table._elements.getTableSortable(table.getId());
             if (sortableColumns[0]) {
                 sortableColumns.click(function (event) {
                     let field = $(this).data('field');
@@ -395,7 +397,7 @@ class Table {
 
 
             if (window.hasOwnProperty('bootstrap') && bootstrap.hasOwnProperty('Tooltip')) {
-                $('.coreui-table__column-description', Elements.getTableThead(table.getId())).each(function () {
+                $('.coreui-table__column-description', table._elements.getTableThead(table.getId())).each(function () {
                     new bootstrap.Tooltip(this);
                 });
             }
@@ -839,7 +841,7 @@ class Table {
      */
     lock() {
 
-        let container = Elements.getContainer(this.getId());
+        let container = this._elements.getContainer(this.getId());
 
         if (container[0] && ! container.find('.coreui-table-lock')[0]) {
             let html =  Utils.render(Tpl['table/loader.html'], {
@@ -856,7 +858,7 @@ class Table {
      */
     unlock() {
 
-        Elements.getLock(this.getId()).hide(50, function () {
+        this._elements.getLock(this.getId()).hide(50, function () {
             $(this).remove()
         });
     }
@@ -1116,12 +1118,7 @@ class Table {
 
         let table = Render.renderTable(this);
 
-        if (this._options.mobile) {
-            Elements.getTableMobile(this.getId()).replaceWith(table);
-
-        } else {
-            Elements.getTable(this.getId()).replaceWith(table);
-        }
+        this._elements.getTable(this.getId()).replaceWith(table);
 
         Private._trigger(this, 'table_show', [this ]);
         Private._trigger(this, 'records_show', [this ]);
@@ -1145,7 +1142,7 @@ class Table {
      */
     selectAll() {
 
-        Elements.selectTrAll(this.getId())
+        this._elements.selectTrAll(this.getId())
 
         Private._trigger(this, 'record_select_all');
     }
@@ -1156,7 +1153,7 @@ class Table {
      */
     unselectAll() {
 
-        Elements.unselectTrAll(this.getId())
+        this._elements.unselectTrAll(this.getId())
 
         Private._trigger(this, 'record_unselect_all');
     }
@@ -1174,13 +1171,13 @@ class Table {
             return;
         }
 
-        let tr = Elements.getTrByIndex(this.getId(), record.index);
+        let tr = this._elements.getTrByIndex(this.getId(), record.index);
 
         if (tr.length === 0) {
             return;
         }
 
-        Elements.selectTr(tr)
+        this._elements.selectTr(tr)
 
         Private._trigger(this, 'record_select', [record ]);
     }
@@ -1198,13 +1195,13 @@ class Table {
             return;
         }
 
-        let tr = Elements.getTrByIndex(this.getId(), record.index);
+        let tr = this._elements.getTrByIndex(this.getId(), record.index);
 
         if (tr.length === 0) {
             return;
         }
 
-        Elements.selectTr(tr)
+        this._elements.selectTr(tr)
 
         Private._trigger(this, 'record_select', [record ]);
     }
@@ -1222,13 +1219,13 @@ class Table {
             return;
         }
 
-        let tr = Elements.getTrByIndex(this.getId(), record.index);
+        let tr = this._elements.getTrByIndex(this.getId(), record.index);
 
         if ( ! tr) {
             return;
         }
 
-        Elements.unselectTr(tr)
+        this._elements.unselectTr(tr)
 
         Private._trigger(this, 'record_unselect', [record.data ]);
     }
@@ -1244,7 +1241,7 @@ class Table {
         let that    = this;
         let field   = this._options.primaryKey;
 
-        $.each(Elements.getSelectedIndexes(this.getId()), function (key, index) {
+        $.each(this._elements.getSelectedIndexes(this.getId()), function (key, index) {
             let record = that.getRecordByIndex(index);
 
             if ( ! record || ! record.data.hasOwnProperty(field)) {
@@ -1267,7 +1264,7 @@ class Table {
         let records = [];
         let that    = this;
 
-        $.each(Elements.getSelectedIndexes(this.getId()), function (key, index) {
+        $.each(this._elements.getSelectedIndexes(this.getId()), function (key, index) {
             let record = that.getRecordByIndex(index);
 
             if ( ! record) {
@@ -1904,7 +1901,7 @@ class Table {
             this._records.splice(recordKey, 1);
 
             let that = this;
-            let tr   = Elements.getTrByIndex(this.getId(), index);
+            let tr   = this._elements.getTrByIndex(this.getId(), index);
 
             if (tr.length >= 0) {
                 let emptyRecords = that._records.length === 0;
@@ -1913,7 +1910,7 @@ class Table {
                     tr.remove();
 
                     if (emptyRecords) {
-                        let tbody = Elements.getTableTbody(that.getId());
+                        let tbody = that._elements.getTableTbody(that.getId());
 
                         tbody.append(
                             Utils.render(Tpl['table/record/empty.html'], {
@@ -1937,13 +1934,13 @@ class Table {
      */
     addRecordAfterIndex(recordData, index) {
 
-        let tr = Elements.getTrByIndex(this.getId(), index);
+        let tr = this._elements.getTrByIndex(this.getId(), index);
 
         if (tr.length >= 0) {
             let record = Private.addRecord(this, recordData, index);
 
             if (record) {
-                Elements.getTrEmpty(this.getId()).remove();
+                this._elements.getTrEmpty(this.getId()).remove();
 
                 tr.after(
                     Render.renderRecord(this, record)
@@ -1961,13 +1958,13 @@ class Table {
      */
     addRecordBeforeIndex(recordData, index) {
 
-        let tr = Elements.getTrByIndex(this.getId(), index);
+        let tr = this._elements.getTrByIndex(this.getId(), index);
 
         if (tr.length >= 0) {
             let record = Private.addRecordBefore(this, recordData, index);
 
             if (record) {
-                Elements.getTrEmpty(this.getId()).remove();
+                this._elements.getTrEmpty(this.getId()).remove();
 
                 tr.before(
                     Render.renderRecord(this, record)
@@ -1984,13 +1981,13 @@ class Table {
      */
     addRecordFirst(recordData) {
 
-        let tbody = Elements.getTableTbody(this.getId());
+        let tbody = this._elements.getTableTbody(this.getId());
 
         if (tbody.length >= 0) {
             let record = Private.addRecord(this, recordData, 0);
 
             if (record) {
-                Elements.getTrEmpty(this.getId()).remove();
+                this._elements.getTrEmpty(this.getId()).remove();
 
                 tbody.prepend(
                     Render.renderRecord(this, record)
@@ -2007,13 +2004,13 @@ class Table {
      */
     addRecordLast(recordData) {
 
-        let tbody = Elements.getTableTbody(this.getId());
+        let tbody = this._elements.getTableTbody(this.getId());
 
         if (tbody.length >= 0) {
             let record = Private.addRecord(this, recordData);
 
             if (record) {
-                Elements.getTrEmpty(this.getId()).remove();
+                this._elements.getTrEmpty(this.getId()).remove();
 
                 tbody.append(
                     Render.renderRecord(this, record)
@@ -2050,7 +2047,7 @@ class Table {
             this.refresh();
         } else {
             let recordsElements = Render.renderRecords(this, this._records);
-            let tableBody       = Elements.getTableTbody(this.getId());
+            let tableBody       = this._elements.getTableTbody(this.getId());
 
             tableBody.html('');
 
@@ -2105,16 +2102,16 @@ class Table {
      */
     expandRecordContent(recordIndex, content, isRebuild) {
 
-        let recordElement  = Elements.getTrByIndex(this.getId(), recordIndex);
-        let recordExpanded = Elements.getExpandRow(recordElement);
+        let recordElement  = this._elements.getTrByIndex(this.getId(), recordIndex);
+        let recordExpanded = this._elements.getExpandRow(recordElement);
 
         if (recordElement.hasClass('record-expanded')) {
 
             if (recordExpanded) {
                 if (isRebuild === undefined || isRebuild) {
-                    Elements.removeExpandRow(recordExpanded);
+                    this._elements.removeExpandRow(recordExpanded);
                 } else {
-                    Elements.hideExpandRow(recordExpanded);
+                    this._elements.hideExpandRow(recordExpanded);
                 }
             }
 
@@ -2123,7 +2120,7 @@ class Table {
 
         } else {
             if (recordExpanded) {
-                Elements.showExpandRow(recordExpanded);
+                this._elements.showExpandRow(recordExpanded);
                 recordElement.addClass('record-expanded');
                 Private._trigger(this, 'record_expand_show', [recordIndex]);
 
@@ -2138,21 +2135,21 @@ class Table {
 
                         callbackResult
                             .then(function (result) {
-                                Elements.addExpandRow(that, recordElement, result);
+                                this._elements.addExpandRow(that, recordElement, result);
                                 Private._trigger(that, 'record_expand_show', [recordIndex]);
 
                             }).catch(function () {
-                                Elements.addExpandRow(that, recordElement, '');
+                            this._elements.addExpandRow(that, recordElement, '');
                                 Private._trigger(that, 'record_expand_show', [recordIndex]);
                             });
 
                     } else{
-                        Elements.addExpandRow(this, recordElement, callbackResult);
+                        this._elements.addExpandRow(this, recordElement, callbackResult);
                         Private._trigger(this, 'record_expand_show', [recordIndex]);
                     }
 
                 } else {
-                    Elements.addExpandRow(this, recordElement, content);
+                    this._elements.addExpandRow(this, recordElement, content);
                     Private._trigger(this, 'record_expand_show', [recordIndex]);
                 }
             }

@@ -1,8 +1,7 @@
 
-import Utils    from '../utils';
-import Tpl      from "../tpl";
-import Elements from "../elements";
-import Control       from "../abstract/Control";
+import Utils   from '../utils';
+import Tpl     from "../tpl";
+import Control from "../abstract/Control";
 
 
 class ControlColumns extends Control {
@@ -73,8 +72,8 @@ class ControlColumns extends Control {
 
 
         btn.click(function () {
-            let container       = Elements.getColumnsContainer(table.getId());
-            let containerSearch = Elements.getSearchContainer(table.getId());
+            let container       = table._elements.getColumnsContainer(table.getId());
+            let containerSearch = table._elements.getSearchContainer(table.getId());
 
             if (containerSearch[0]) {
                 containerSearch.hide();
@@ -88,7 +87,7 @@ class ControlColumns extends Control {
                 let showAll            = true;
                 let btnCompleteAttr    = [];
                 let btnCompleteContent = '';
-                let wrapper            = Elements.getWrapper(table.getId());
+                let wrapper            = table._elements.getWrapper(table.getId());
 
                 table._columns.map(function (column) {
                     let options = column.getOptions();

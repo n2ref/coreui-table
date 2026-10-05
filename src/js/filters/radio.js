@@ -1,8 +1,7 @@
 
-import Tpl      from "../tpl";
-import Utils    from "../utils";
-import Elements from "../elements";
-import Filter              from "../abstract/Filter";
+import Tpl    from "../tpl";
+import Utils  from "../utils";
+import Filter from "../abstract/Filter";
 
 class FilterRadio extends Filter {
 

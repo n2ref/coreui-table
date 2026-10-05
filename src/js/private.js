@@ -1,5 +1,4 @@
-import Utils    from "./utils";
-import Elements from "./elements";
+import Utils   from "./utils";
 import ToolBox from "./toolbox";
 
 
@@ -789,7 +788,7 @@ let Private = {
      */
     setColumnsSort: function (table, sort) {
 
-        let thead = Elements.getTableThead(table.getId());
+        let thead = table._elements.getTableThead(table.getId());
 
         $.each(table._columns, function (key, column) {
             let options = column.getOptions();

@@ -1,8 +1,7 @@
 
-import Elements from "../elements";
-import Tpl      from "../tpl";
-import Utils    from "../utils";
-import Column              from "../abstract/Column";
+import Tpl    from "../tpl";
+import Utils  from "../utils";
+import Column from "../abstract/Column";
 
 class ColumnSwitch extends Column {
 
@@ -33,7 +32,7 @@ class ColumnSwitch extends Column {
         // Показ строк
         table.on('records_show', function () {
 
-            let containers = Elements.getRowsSwitches(table.getId());
+            let containers = table._elements.getRowsSwitches(table.getId());
 
             // Отмена обработки нажатия в switch колонках
             containers.click(function (event) {

@@ -1,8 +1,7 @@
 
-import Tpl      from "../tpl";
-import Utils    from "../utils";
-import Elements from "../elements";
-import Search              from "../abstract/Search";
+import Tpl    from "../tpl";
+import Utils  from "../utils";
+import Search from "../abstract/Search";
 
 class SearchNumber extends Search {
 
@@ -235,7 +234,7 @@ class SearchNumber extends Search {
             if (e.key === 'Enter' || e.keyCode === 13) {
                 table.searchRecords();
 
-                let container = Elements.getSearchContainer(table.getId());
+                let container = table._elements.getSearchContainer(table.getId());
                 container.fadeOut('fast');
             }
         });
