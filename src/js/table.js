@@ -1910,12 +1910,16 @@ class Table {
                     tr.remove();
 
                     if (emptyRecords) {
-                        let tbody = that._elements.getTableTbody(that.getId());
+                        let tbody   = that._elements.getTableTbody(that.getId());
+                        let lang    = table.getLang();
+                        let message = table.isLoadError() && lang.loadError
+                            ? lang.loadError
+                            : lang.emptyRecords;
 
                         tbody.append(
                             Utils.render(Tpl['table/record/empty.html'], {
                                 columnsCount: that._countColumnsShow,
-                                lang: that.getLang(),
+                                message: message,
                             })
                         );
                     }
@@ -2042,20 +2046,14 @@ class Table {
                 : ((this._page - 1) * this._recordsPerPage) + 1;
         }
 
-        // For mobile view, use refresh to re-render the entire table
-        if (this._options.mobile) {
-            this.refresh();
-        } else {
-            let recordsElements = Render.renderRecords(this, this._records);
-            let tableBody       = this._elements.getTableTbody(this.getId());
+        let recordsElements = Render.renderRecords(this, this._records);
+        let tableBody       = this._elements.getTableTbody(this.getId());
 
-            tableBody.html('');
+        tableBody.html('');
 
-            $.each(recordsElements, function (key, recordElement) {
-                tableBody.append(recordElement);
-            });
-        }
-
+        $.each(recordsElements, function (key, recordElement) {
+            tableBody.append(recordElement);
+        });
 
         Private._trigger(this, 'records_show', [this ]);
     }
@@ -2135,11 +2133,11 @@ class Table {
 
                         callbackResult
                             .then(function (result) {
-                                this._elements.addExpandRow(that, recordElement, result);
+                                that._elements.addExpandRow(that, recordElement, result);
                                 Private._trigger(that, 'record_expand_show', [recordIndex]);
 
                             }).catch(function () {
-                            this._elements.addExpandRow(that, recordElement, '');
+                                that._elements.addExpandRow(that, recordElement, '');
                                 Private._trigger(that, 'record_expand_show', [recordIndex]);
                             });
 

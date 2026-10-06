@@ -101,7 +101,7 @@ let ElementsMobile = {
      */
     getTableTbody: function (tableId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile-cards');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile > .coreui-table__mobile-cards');
     },
 
 
@@ -112,7 +112,7 @@ let ElementsMobile = {
      */
     getTableThead: function (tableId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile-cards > .coreui-table__mobile-card > .card-body > .coreui-table__mobile-field > .coreui-table__mobile-field-label');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile > .coreui-table__mobile-cards > .coreui-table__record > .card-body > .coreui-table__mobile-field > .coreui-table__mobile-field-label');
     },
 
 
@@ -134,7 +134,7 @@ let ElementsMobile = {
      */
     getTrRecords: function (tableId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile > .coreui-table__mobile-cards > .coreui-table__mobile-card');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile > .coreui-table__mobile-cards > .coreui-table__record');
     },
 
 
@@ -146,7 +146,7 @@ let ElementsMobile = {
      */
     getTrByIndex: function (tableId, index) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile > .coreui-table__mobile-cards > .coreui-table__mobile-card[data-record-index="' + index + '"]');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile > .coreui-table__mobile-cards > .coreui-table__record[data-record-index="' + index + '"]');
     },
 
 
@@ -284,7 +284,7 @@ let ElementsMobile = {
      */
     getNoWrapToggles: function (tableId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile-cards > .coreui-table__mobile-card > .card-body > .coreui-table__mobile-field > .coreui-table__mobile-field-value > i.toggle');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile-cards > .coreui-table__record > .card-body > .coreui-table__mobile-field > .coreui-table__mobile-field-value > i.toggle');
     },
 
 

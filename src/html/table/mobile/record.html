@@ -1,0 +1,10 @@
+<div<%- attr %> data-record-index="<%= index %>">
+    <div class="card-body py-3">
+        <% fields.map(function(field, i) { %>
+            <div class="coreui-table__mobile-field d-flex align-items-center justify-content-between py-2<% if (i !== fields.length - 1) { %> border-bottom<% } %>"<%- field.attr %>>
+                <span class="coreui-table__mobile-field-label fw-medium text-secondary mb-0 me-3"><%- field.label %>:</span>
+                <span class="coreui-table__mobile-field-value text-body text-end flex-grow-1"></span>
+            </div>
+        <% }); %>
+    </div>
+</div>

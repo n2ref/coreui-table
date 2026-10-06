@@ -1,4 +1,4 @@
-<div class="coreui-table__mobile-sort mb-3">
+<div class="coreui-table__mobile-sort text-start mb-3">
     <label class="form-label"><%= lang.sortBy %></label>
     <select class="form-select">
         <option value=""><%= lang.defaultSort %></option>
@@ -9,7 +9,7 @@
                     else if (sort.field === field.field && sort.order === "desc") { %> selected<% } 
                 }); %>
             >
-                <%= field.label %> (<%= field.field %>)
+                <%= field.label %>
             </option>
         <% }); %>
     </select>
