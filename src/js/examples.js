@@ -1109,7 +1109,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Sorting
     CoreUI.table.create({
-        mobile:true,
         id: 'sort',
         saveState: true,
         sort: [ { field: 'fname', order: 'asc' } ],
