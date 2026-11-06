@@ -305,11 +305,11 @@ let ElementsMobile = {
      */
     selectTrAll(tableId) {
 
-        let tableContainer = '#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > table';
+        let tableContainer = '#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile > .coreui-table__mobile-cards';
 
-        $(tableContainer + ' > thead > tr > td > .coreui-table__select-all').prop('checked', true);
-        $(tableContainer + ' > tbody > tr.coreui-table__record').addClass('table-primary');
-        $(tableContainer + ' > tbody > tr.coreui-table__record > td > .coreui-table__select').prop('checked', true);
+        $(tableContainer + ' > .coreui-table__record > .coreui-table__select-all').prop('checked', true);
+        $(tableContainer + ' > .coreui-table__record').addClass('table-primary');
+        $(tableContainer + ' > .coreui-table__record .coreui-table__select').prop('checked', true);
     },
 
 
@@ -330,11 +330,11 @@ let ElementsMobile = {
      */
     unselectTrAll(tableId) {
 
-        let tableContainer = '#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > table';
+        let tableContainer = '#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile > .coreui-table__mobile-cards';
 
-        $(tableContainer + ' > thead > tr > td > .coreui-table__select-all').prop('checked', false);
-        $(tableContainer + ' > tbody > tr.coreui-table__record').removeClass('table-primary');
-        $(tableContainer + ' > tbody > tr.coreui-table__record > td.coreui-table__select_container > .coreui-table__select').prop('checked', false);
+        $(tableContainer + ' > .coreui-table__record > .coreui-table__select-all').prop('checked', false);
+        $(tableContainer + ' > .coreui-table__record').removeClass('table-primary');
+        $(tableContainer + ' > .coreui-table__record .coreui-table__select').prop('checked', false);
     },
 
 
