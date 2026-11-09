@@ -237,8 +237,9 @@ let Render = {
 
 
                 if (options.showHeaders) {
-                    let label = '';
-                    let description = '';
+                    let label            = '';
+                    let description      = '';
+                    let descriptionLabel = '';
 
                     if (columnOptions.hasOwnProperty('label') &&
                         typeof columnOptions.label === 'string' &&
@@ -253,14 +254,21 @@ let Render = {
                         description = columnOptions.description;
                     }
 
+                    if (columnOptions.hasOwnProperty('descriptionLabel') &&
+                        typeof columnOptions.label === 'string'
+                    ) {
+                        descriptionLabel = columnOptions.descriptionLabel;
+                    }
+
                     let columnElement = $(Utils.render(Tpl['table/columns/td.html'], {
-                        attr          : attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
-                        label         : label,
-                        description   : description,
-                        sortable      : sortable,
-                        issetMenu     : menuElements.length > 0,
-                        menuPosition  : menuPosition,
-                        menuShowAlways: menuShowAlways ? ' ' + menuShowAlways : '',
+                        attr             : attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
+                        label            : label,
+                        description      : description,
+                        descriptionLabel : descriptionLabel,
+                        sortable         : sortable,
+                        issetMenu        : menuElements.length > 0,
+                        menuPosition     : menuPosition,
+                        menuShowAlways   : menuShowAlways ? ' ' + menuShowAlways : '',
                     }));
 
                     if (menuElements.length) {

@@ -7,6 +7,14 @@
          title="<%= description %>" data-bs-toggle="tooltip" data-bs-placement="bottom"></small>
   <% } %>
 
+  <% if (descriptionLabel) { %>
+    <div>
+      <small class="coreui-table__column-description-label text-body-tertiary">
+        <%= descriptionLabel %>
+      </small>
+    </div>
+  <% } %>
+
   <% if (sortable === 'asc') { %>
     <i class="coreui-table__column-sort bi bi-sort-down-alt"></i>
   <% } else if (sortable === 'desc') { %>
