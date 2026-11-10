@@ -119,7 +119,6 @@ class ColumnLink extends Column {
 
         link.click(function (event) {
             event.cancelBubble = true;
-            event.preventDefault();
         });
 
         return link;
