@@ -78,6 +78,7 @@
                                     <li><a href="#example-simple">Simple table</a></li>
                                     <li><a href="#example-empty">Empty table</a></li>
                                     <li><a href="#example-controls-basic">Controls basic</a></li>
+                                    <li><a href="#example-mobile">Mobile view</a></li>
                                     <li><a href="#example-controls-buttons">Controls buttons</a></li>
                                     <li><a href="#example-controls-advanced">Controls advanced</a></li>
                                     <li><a href="#example-ajax-records">Ajax records</a></li>
@@ -234,6 +235,53 @@
                 { id: "3", name: 'Jin Franson',    email: 'peter@gmail.com', sdate: '2023-02-03' }
             ]
         }).render('table-controls-basic');
+    &lt;/script&gt;
+                                </code></pre>
+                            </div>
+                        </div>
+
+
+                        <div id="example-mobile" class="mb-5">
+                            <h3>Mobile view</h3>
+                            <div class="content-example">
+                                <div id="table-mobile"></div>
+                            </div>
+                            <div class="content-markup">
+                                <pre><code class="html">
+    &lt;div id="table-mobile"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        CoreUI.table.create({
+            mobile: true,
+            primaryKey: 'id',
+            header: [
+                {
+                    type: 'out',
+                    left: [
+                        { type: "button", content: "Select row 2", attr: { class: 'btn btn-secondary' },
+                            onClick: function (prop) {
+                                prop.table.selectRecord('2');
+                            }
+                        },
+                        { type: "button", content: "Unselect row 2", attr: { class: 'btn btn-secondary' },
+                            onClick: function (prop) {
+                                prop.table.unselectRecord('2');
+                            }
+                        }
+                    ]
+                }
+            ],
+            columns: [
+                { field: 'name',  label: 'Name',       sortable: true },
+                { field: 'email', label: 'Email',      width: 150 },
+                { field: 'sdate', label: 'Start Date', width: 150, type: 'date', format: 'DD.MM.YYYY', sortable: true }
+            ],
+            records: [
+                { id: "1", name: 'Jane Doe',       email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
+                { id: "2", name: 'Stuart Motzart', email: 'frank@gmail.com', sdate: '2023-04-03' },
+                { id: "3", name: 'Jin Franson',    email: 'peter@gmail.com', sdate: '2023-02-03' }
+            ]
+        }).render('table-mobile');
     &lt;/script&gt;
                                 </code></pre>
                             </div>

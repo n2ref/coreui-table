@@ -63,6 +63,41 @@ document.addEventListener('DOMContentLoaded', function () {
     }).render('table-controls-basic');
 
 
+    // Mobile
+    CoreUI.table.create({
+        mobile: true,
+        primaryKey: 'id',
+        header: [
+            {
+                type: 'out',
+                left: [
+                    { type: "button", content: "Select row 2", attr: { class: 'btn btn-secondary' },
+                        onClick: function (prop) {
+                            prop.table.selectRecord('2');
+                        }
+                    },
+                    { type: "button", content: "Unselect row 2", attr: { class: 'btn btn-secondary' },
+                        onClick: function (prop) {
+                            prop.table.unselectRecord('2');
+                        }
+                    }
+                ]
+            }
+        ],
+        columns: [
+            { type: 'select' },
+            { field: 'name',  label: 'Name',       sortable: true },
+            { field: 'email', label: 'Email',      width: 150 },
+            { field: 'sdate', label: 'Start Date', width: 150, type: 'date', format: 'DD.MM.YYYY', sortable: true }
+        ],
+        records: [
+            { id: "1", name: 'Jane Doe',       email: 'jdoe@gmail.com',  sdate: '2023-09-03' },
+            { id: "2", name: 'Stuart Motzart', email: 'frank@gmail.com', sdate: '2023-04-03' },
+            { id: "3", name: 'Jin Franson',    email: 'peter@gmail.com', sdate: '2023-02-03' }
+        ]
+    }).render('table-mobile');
+
+
     // Controls buttons
     CoreUI.table.create({
         primaryKey: 'id',
