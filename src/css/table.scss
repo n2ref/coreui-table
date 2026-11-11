@@ -360,6 +360,13 @@
         border-bottom: none;
     }
 }
+.coreui-table__mobile-select {
+    flex: none;
+    padding-top: 0.75rem;
+}
+.coreui-table__mobile-fields {
+    min-width: 0;
+}
 .coreui-table__mobile-field-label {
     font-weight: 600;
     color: var(--bs-secondary-color);

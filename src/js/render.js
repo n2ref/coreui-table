@@ -655,10 +655,11 @@ let Render = {
      */
     renderRecord: function (table, record) {
 
-        let that       = this;
-        let options    = table.getOptions();
-        let fields     = [];
-        let recordAttr = {
+        let that         = this;
+        let options      = table.getOptions();
+        let fields       = [];
+        let selectFields = [];
+        let recordAttr   = {
             class: 'coreui-table__record'
         };
 
@@ -670,7 +671,13 @@ let Render = {
             let fieldContent = that.renderField(table, column, record);
 
             if (fieldContent) {
-                fields.push(fieldContent);
+                let columnOptions = column.getOptions();
+
+                if (table._options.mobile && columnOptions.type === 'select') {
+                    selectFields.push(fieldContent);
+                } else {
+                    fields.push(fieldContent);
+                }
             }
         });
 
@@ -700,12 +707,25 @@ let Render = {
             recordElement = $(Utils.render(Tpl['table/mobile/record.html'], {
                 attr  : attributes.length > 0 ? (' ' + attributes.join(' ')) : '',
                 index : record.index,
-                fields: fields
+                fields: fields,
+                select: selectFields.length > 0
             }));
 
+            let fieldElements = recordElement[0].querySelectorAll('.coreui-table__mobile-field');
+
             fields.map(function (field, key) {
-                $(recordElement[0].querySelector(':scope > .card-body > .coreui-table__mobile-field:nth-child(' + (key + 1) + ') > .coreui-table__mobile-field-value')).append(field.content)
+                $(fieldElements[key]).children('.coreui-table__mobile-field-value').append(field.content)
             });
+
+            if (selectFields.length > 0) {
+                let selectElement = recordElement[0].querySelector('.coreui-table__mobile-select');
+
+                if (selectElement) {
+                    selectFields.map(function (field) {
+                        $(selectElement).append(field.content);
+                    });
+                }
+            }
 
         } else {
             recordElement = $(Utils.render(Tpl['table/record.html'], {

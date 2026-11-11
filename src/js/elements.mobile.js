@@ -235,7 +235,7 @@ let ElementsMobile = {
 
         let indexes = [];
 
-        $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > table > tbody > tr.coreui-table__record > td.coreui-table__select_container > .coreui-table__select:checked')
+        $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile > .coreui-table__mobile-cards > .coreui-table__record .coreui-table__select:checked')
             .each(function (key, element) {
                 indexes.push($(element).val());
             });
@@ -262,7 +262,7 @@ let ElementsMobile = {
      */
     getRowsSelects: function (tableId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper  > table > tbody > tr.coreui-table__record > td.coreui-table__select_container');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile > .coreui-table__mobile-cards > .coreui-table__record .coreui-table__mobile-select');
     },
 
 
@@ -273,7 +273,7 @@ let ElementsMobile = {
      */
     getRowsSelectAll: function (tableId) {
 
-        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper  > table > thead > tr > td .coreui-table__select-all');
+        return $('#coreui-table-' + tableId + ' > .coreui-table__container > .coreui-table__wrapper > .coreui-table__mobile > .coreui-table__mobile-cards > .coreui-table__record .coreui-table__select-all');
     },
 
 
